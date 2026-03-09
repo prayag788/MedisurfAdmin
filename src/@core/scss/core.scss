@@ -1,0 +1,646 @@
+@import './base/bootstrap.scss';
+@import './base/bootstrap-extended.scss';
+@import './base/colors.scss';
+@import './base/components.scss';
+
+// Utilities
+@import './base/utilities/spacing-fixes.scss';
+
+// Pages
+@import './base/pages/report-creation.scss';
+
+// Themes
+@import './base/themes/dark-layout.scss';
+@import './base/themes/bordered-layout.scss';
+@import './base/themes/semi-dark-layout.scss';
+// @import './base/custom-rtl.scss';
+
+// React Specific
+@import 'react/index';
+
+#cell-notes-undefined div {
+  overflow: inherit !important;
+}
+
+#permanentExpiryDate,
+#report {
+  margin-left: 0px !important;
+}
+.gap-5 {
+  gap: 5px;
+  height: 30px;
+}
+
+.report-template-preview {
+  max-width: 800px;
+}
+
+.overflowx-scroll {
+  overflow-x: auto;
+}
+
+[dir='ltr'] .select__multi-value,
+[dir='ltr'] .react-select__multi-value {
+  margin: 0 0.7rem 2px 0 !important;
+}
+
+.columnManagement {
+  height: 30px;
+  width: 30px;
+  padding: 0;
+}
+
+.column_fixed {
+  width: 50px;
+
+  .p-column-header-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+#popup_menu_left {
+  padding: 10px;
+}
+
+.dark-layout {
+  #popup_menu_left {
+    background: #283046 !important;
+    color: #dcdcdc !important;
+  }
+
+  tr.p-highlight {
+    background: #7367f0 !important;
+    td {
+      color: white !important;
+    }
+  }
+
+  #react-select-3-input {
+    color: #dcdcdc !important;
+  }
+
+  .crossIcon {
+    content: url('./images/white-close.png');
+  }
+
+  .worklistIcon {
+    content: url('./images/worklistWhite.png');
+  }
+
+  .reportEdit {
+    content: url('./images/reportEditWhite.png');
+  }
+  .assingExamBlack {
+    content: url('./images/Assing_Exam_White.png');
+  }
+  .searchTotal {
+    color: #d0d2d6;
+  }
+}
+.clinic-progress-nav .active,
+.active #StudyListTarget {
+  .worklistIcon {
+    content: url('./images/worklistWhite.png');
+  }
+
+  .assingExamBlack {
+    content: url('./images/Assing_Exam_White.png');
+  }
+
+  .reportEdit {
+    content: url('./images/reportEditWhite.png');
+  }
+}
+.crossIcon {
+  content: url('./images/close.png');
+}
+
+.worklistIcon {
+  content: url('./images/worklist.png');
+}
+
+.reportEdit {
+  content: url('./images/reportEdit.png');
+}
+
+.assingExamBlack {
+  content: url('./images/Assing_Exam_Black.png');
+}
+
+.description {
+  min-width: 9%;
+}
+
+#worksheetBadge .MuiBadge-badge {
+  right: -10px !important;
+}
+
+#dateTimeFormat .css-26l3qy-menu {
+  top: auto !important;
+  bottom: 100%;
+}
+
+.seach_button {
+  // text-align: right;
+  width: 100%;
+  @media (max-width: 991px) {
+    text-align: left;
+    //         // button {
+    //         //     width: 49%;
+    //         // }
+  }
+  @media (max-width: 767px) {
+    // text-align: left;
+    //         // button {
+    //         //     width: 100%;
+    //         // }
+  }
+}
+
+@media (min-width: 992px) {
+  .col-lg-1-5 {
+    flex: 0 0 12.499999995%;
+    max-width: 12.499999995%;
+  }
+  // .seach_button{
+  // display: flex;
+  // justify-content: flex-end;
+  // text-align: initial;
+  // }
+}
+
+.card .p-datatable .p-datatable-tbody .MuiBadge-badge {
+  height: 16px !important;
+  width: 16px !important;
+  min-width: 16px !important;
+  padding: 0 5px;
+}
+
+.navigation > li ul li ul a i,
+.navigation > li ul li ul a svg {
+  height: 13px;
+  width: 13px;
+  font-size: 13px;
+  overflow: visible;
+}
+
+.navigation > li ul li ul a i,
+.navigation > li ul li ul a svg {
+  height: 13px;
+  width: 13px;
+  font-size: 13px;
+  overflow: visible;
+}
+
+.navigation li a i,
+.navigation li a svg {
+  height: 15px;
+  width: 15px;
+  font-size: 11px;
+  overflow: visible;
+}
+
+.main-menu.menu-light .navigation > li ul li ul a,
+.main-menu.menu-dark .navigation > li ul li ul a {
+  padding: 10px 15px 10px 20px;
+}
+
+.vertical-layout.vertical-menu-modern.menu-collapsed
+  .main-menu:not(.expanded)
+  .navigation
+  li.active
+  a {
+  color: whitesmoke !important;
+  background: #7367f0 !important;
+  border-radius: 4px !important;
+}
+
+.vertical-layout .app-content .content-wrapper {
+  .card-report-element {
+    .card-header-report-element {
+      .row {
+        margin-right: 0;
+        margin-left: 0;
+      }
+    }
+    .card-body-report-element {
+      .row {
+        .swiper {
+          > .swiper-pagination-bullets {
+            .swiper-pagination-bullet-active {
+              background: var(--swiper-pagination-color, var(--swiper-theme-color));
+              opacity: var(--swiper-pagination-bullet-inactive-opacity, 1);
+            }
+            span {
+              opacity: var(--swiper-pagination-bullet-inactive-opacity, 0.5);
+              padding: 5px;
+            }
+            bottom: -20px;
+            display: none;
+
+            // display: flex;
+            // overflow-y: hidden;
+            // height: 20px;
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
+
+            // &::-webkit-scrollbar {
+            //     width: 2px;
+            //     height: 2px;
+            // }
+            // &::-moz-scrollbar {
+            //     width: 2px;
+            //     height: 2px;
+            // }
+            // &::-webkit-scrollbar-thumb {
+            //     background-color: #d8d6de;
+            //     border-radius: 5px;
+            //   }
+            // &::-moz-scrollbar-thumb {
+            //     background-color: #d8d6de;
+            //     border-radius: 5px;
+            // }
+          }
+          .swiper-wrapper {
+            overflow: visible;
+          }
+        }
+        margin-right: 0;
+        margin-left: 0;
+      }
+    }
+  }
+  .card {
+    .card-header {
+      padding: 0.5rem 1rem 0.5rem 1rem;
+    }
+    & > .MuiAccordion-root {
+      margin: 0;
+      box-shadow: none;
+      .MuiAccordionDetails-root {
+        padding-bottom: 0;
+        padding-top: 0px;
+        .card-body {
+          padding: 0;
+        }
+      }
+    }
+  }
+}
+
+.dark-layout .vertical-layout .app-content .content-wrapper {
+  .card-report-element .card-body-report-element .row .swiper {
+    > .swiper-pagination-bullets {
+      .swiper-pagination-bullet-active {
+        background: var(--swiper-pagination-color, var(--swiper-theme-color));
+        opacity: var(--swiper-pagination-bullet-inactive-opacity, 1);
+      }
+      span {
+        opacity: var(--swiper-pagination-bullet-inactive-opacity, 0.5);
+        background: var(--swiper-pagination-bullet-inactive-color, #ffffff);
+      }
+    }
+  }
+}
+
+.worksheet_table > div {
+  display: block;
+}
+
+.dark-layout .searchTotal {
+  color: #d0d2d6;
+}
+
+.studyListDiv .MuiAccordionDetails-root {
+  padding: 0px 16px 0px 16px !important;
+}
+
+.studyListDiv .MuiButtonBase-root {
+  min-height: 48px !important;
+}
+
+#editorAddendumRefLabel {
+  font-size: 1.1rem;
+}
+
+body.swal2-height-auto.swal2-shown {
+  height: 100% !important;
+}
+
+.dark-layout .header-navbar .navbar-container ul.navbar-nav li i.ficon,
+.dark-layout .header-navbar .navbar-container ul.navbar-nav li svg.ficon {
+  color: #d0d2d6 !important;
+}
+
+.misc-wrapper {
+  .brand-logo {
+    .brand-logo-span {
+      img {
+        max-width: 157px;
+      }
+    }
+    .brand-text {
+      line-height: revert;
+    }
+  }
+}
+
+.activity-modal .modal-content {
+  > button {
+    max-width: fit-content;
+  }
+  .activity-log-header .user-timeline-title-icon {
+    margin-right: 1.3rem;
+  }
+}
+
+.dark-layout .select__menu .select__option {
+  color: #b4b7bd;
+}
+
+.m-15 {
+  margin: 1.5rem;
+}
+.dark-layout .MuiAccordion-root {
+  background-color: inherit;
+}
+
+.dark-layout .p-datatable-wrapper::-webkit-scrollbar-track,
+.dark-layout #blank_div::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #393d55;
+  -webkit-box-shadow: inset 0 0 9px rgba(184, 184, 184, 0.3);
+}
+
+.dark-layout .p-datatable-wrapper::-webkit-scrollbar,
+.dark-layout #blank_div::-webkit-scrollbar {
+  width: 3px;
+  -webkit-box-shadow: inset 0 0 9px rgba(184, 184, 184, 0.3);
+}
+
+.dark-layout .p-datatable-wrapper::-webkit-scrollbar-thumb,
+.dark-layout #blank_div::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 9px rgba(184, 184, 184, 0.3);
+  background: #a0a4b9;
+}
+
+.dark-layout .p-datatable-wrapper::-webkit-scrollbar-thumb:hover,
+.dark-layout #blank_div::-webkit-scrollbar-thumb:hover {
+  background: #888b9c;
+}
+
+.brand-logo #medisurf-logo {
+  width: 157px;
+}
+
+.menu-expanded .full-logo {
+  display: block;
+}
+
+.menu-expanded .icon-logo {
+  display: none;
+}
+
+.menu-collapsed .full-logo {
+  display: none;
+}
+
+.menu-collapsed .icon-logo {
+  display: block;
+  max-height: 32.06px;
+}
+
+.all-user-count .avatar {
+  cursor: default;
+}
+
+.data-analytics-datatable > .row {
+  margin-right: 1rem;
+  margin-left: 1rem;
+}
+.p-datatable .p-datatable-table .p-datatable-tbody tr.bg-row-stat {
+  background: #ff685d !important;
+}
+
+.dark-layout .p-datatable .p-datatable-table .p-datatable-tbody tr.bg-row-stat {
+  background: #ff685d !important;
+}
+
+.p-datatable .p-datatable-table .p-datatable-tbody tr.bg-row-stat:hover {
+  background: #7367f0 !important;
+}
+
+.p-datatable-resizable-table > .p-datatable-tbody > tr > td {
+  overflow: auto !important;
+}
+
+.dark-layout .p-datatable .p-datatable-table .p-datatable-tbody tr.bg-row-stat:hover {
+  background: #7367f0 !important;
+}
+
+.dark-layout .p-datatable .p-datatable-table .p-datatable-tbody tr.bg-row-stat td {
+  color: #ffffff;
+}
+
+.dark-layout .p-datatable .p-datatable-table .p-datatable-tbody tr:hover td {
+  border-color: #3b4253 !important;
+}
+
+.dark-layout .dropzoneDiv {
+  .dropzone {
+    border: 2px dashed rgba(208, 212, 241, 0.16);
+    .MuiTypography-body1 {
+      color: #d0d4f1ad;
+    }
+  }
+  .pdfListing > .MuiButtonBase-root {
+    color: #b4b7bd;
+  }
+}
+
+.dropzoneDiv {
+  .dropzone {
+    cursor: pointer;
+    padding: 1.5rem;
+    border: 2px dashed rgba(47, 43, 61, 0.16);
+    .MuiTypography-body1 {
+      color: #2f2b3dad;
+      margin-bottom: 0;
+    }
+  }
+  .pdfListing {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    border-radius: 6px;
+    padding: 0.625rem 0.6rem 0.625rem 1.5rem;
+    border: 1px solid rgba(247, 244, 254, 0.14);
+    .file-details {
+      .file-preview {
+        margin-right: 0.9375rem;
+      }
+      display: flex;
+      -webkit-box-align: center;
+      align-items: center;
+      p {
+        margin: 0;
+      }
+    }
+    > .MuiButtonBase-root {
+      color: #6e6b7b;
+    }
+  }
+  .buttons {
+    display: flex;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    margin-top: 1.5625rem;
+  }
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .main-menu,
+  .header-navbar,
+  .navbar,
+  .vertical-layout .main-menu,
+  .vertical-layout .header-navbar,
+  header,
+  .navbar-container,
+  .header-navbar-shadow,
+  nav {
+    display: none !important;
+  }
+
+  .app-content,
+  .vertical-layout .app-content {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .print-qr-page body *,
+  .print-qr-page #root > .wrapper > .app-content > .content-wrapper > .card > .row *,
+  .print-qr-page #root > .wrapper > .main-menu,
+  .print-qr-page #root > .wrapper > .header-navbar,
+  .print-qr-page #root > .wrapper > .app-content > .header-navbar-shadow {
+    display: none;
+  }
+
+  .print-qr-page body {
+    color: #6e6b7b;
+    display: block;
+  }
+
+  .print-qr-page #root,
+  .print-qr-page #root > .wrapper,
+  .print-qr-page #root > .wrapper > .app-content,
+  .print-qr-page #root > .wrapper > .app-content > .content-wrapper,
+  .print-qr-page #root > .wrapper > .app-content > .content-wrapper > .card,
+  .print-qr-page #root > .wrapper > .app-content > .content-wrapper > .card > .printQrUpperDiv,
+  .print-qr-page #root > .wrapper > .app-content > .content-wrapper > .card > .printQrUpperDiv * {
+    display: block;
+  }
+
+  /* Print-specific styles for QR code page */
+  .print-qr-page body.dark-layout {
+    background-color: #f8f8f8;
+    color: #6e6b7b;
+  }
+
+  .print-qr-page .dark-layout .card {
+    background-color: #fff;
+  }
+
+  .print-qr-page .dark-layout h1,
+  .print-qr-page .dark-layout h2,
+  .print-qr-page .dark-layout h3,
+  .print-qr-page .dark-layout h4,
+  .print-qr-page .dark-layout h5,
+  .print-qr-page .dark-layout h6 {
+    color: #5e5873;
+  }
+
+  .print-qr-page
+    #root
+    > .wrapper
+    > .app-content
+    > .content-wrapper
+    > .card
+    > .printQrUpperDiv
+    > .card-body
+    > .row {
+    display: flex;
+  }
+
+  .print-qr-page
+    #root
+    > .wrapper
+    > .app-content
+    > .content-wrapper
+    > .card
+    > .printQrUpperDiv
+    > .card-body
+    > .row
+    > .col
+    b {
+    display: inline;
+  }
+
+  .print-qr-page #root > .wrapper > .app-content {
+    margin-left: 0;
+    padding: calc(2rem + 0.45rem + 0.3rem - 1rem) 2rem 0;
+  }
+}
+
+.react-select .select__menu {
+  z-index: 5;
+}
+
+.dicom-image-label {
+  margin-bottom: 0;
+}
+
+.avatar-image-label {
+  margin-bottom: 0;
+  img {
+    width: 100px;
+  }
+}
+
+.avatar-image-error {
+  width: 100%;
+  font-size: 0.857rem;
+  color: #ea5455;
+}
+
+.tab-pane .swiper {
+  padding-bottom: 25px;
+  margin-left: 0;
+  .swiper-pagination {
+    bottom: 0px;
+  }
+  .swiper-slide {
+    width: 100px !important;
+  }
+}
+
+.forgot-password-text {
+  color: $purple;
+  margin-top: 12px;
+  margin-right: 8px;
+  text-align: right;
+  cursor: pointer;
+}
+
+.staticmodality .select__value-container {
+  max-height: 80px;
+  overflow-y: auto !important;
+}

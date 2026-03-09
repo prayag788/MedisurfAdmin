@@ -1,0 +1,1282 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Version: 2.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+/*================================================================================
+	COMPLETE THEME VARIABLES - From Original Theme Configuration
+================================================================================*/
+
+// Define all theme variables locally (matching the original theme configuration)
+// Color system
+$white: #ffffff !default;
+$gray-50: #f6f6f6 !default;
+$gray-100: #babfc7 !default;
+$gray-200: #ededed !default;
+$gray-300: #dae1e7 !default;
+$gray-400: #636363 !default;
+$gray-500: #adb5bd !default;
+$gray-600: #b8c2cc !default;
+$gray-700: #4e5154 !default;
+$gray-800: #1e1e1e !default;
+$gray-900: #2a2e30 !default;
+$black: #22292f !default;
+
+// Primary color system
+$purple: #7367f0 !default;
+$green: #28c76f !default;
+$blue: #00cfe8 !default;
+$orange: #ff9f43 !default;
+$red: #ea5455 !default;
+
+$primary: $purple !default;
+$secondary: #82868b !default;
+$success: $green !default;
+$info: $blue !default;
+$warning: $orange !default;
+$danger: $red !default;
+$light: $gray-50 !default;
+$dark: #4b4b4b !default;
+
+// Body and text colors
+$body-bg: #f8f8f8 !default;
+$body-color: #6e6b7b !default;
+$text-muted: #b9b9c3 !default;
+$headings-color: #5e5873 !default;
+
+// Typography
+$font-family-sans-serif: 'Montserrat', Helvetica, Arial, serif !default;
+$font-family-monospace: 'Montserrat', Helvetica, Arial, serif !default;
+$font-size-base: 1rem !default;
+$font-weight-normal: 400 !default;
+$font-weight-bold: 500 !default;
+$font-weight-bolder: 600 !default;
+$line-height-base: 1.45 !default;
+
+// Heading sizes
+$h1-font-size: $font-size-base * 2 !default;
+$h2-font-size: $font-size-base * 1.714 !default;
+$h3-font-size: $font-size-base * 1.5 !default;
+$h4-font-size: $font-size-base * 1.286 !default;
+$h5-font-size: $font-size-base * 1.07 !default;
+
+// Links
+$link-color: $primary !default;
+$link-hover-color: darken($link-color, 5%) !default;
+
+// Borders and spacing
+$border-width: 1px !default;
+$border-color: #ebe9f1 !default;
+$border-radius: 0.357rem !default;
+$border-radius-lg: 0.6rem !default;
+$border-radius-sm: 0.25rem !default;
+$box-shadow: 0 4px 24px 0 rgba($black, 0.1) !default;
+
+// Button variables
+$btn-padding-y: 0.786rem !default;
+$btn-padding-x: 1.5rem !default;
+$btn-border-radius: 0.358rem !default;
+$btn-border-radius-lg: 0.358rem !default;
+$btn-border-radius-sm: 0.358rem !default;
+
+// Form variables
+$input-padding-y: 0.438rem !default;
+$input-padding-x: 1rem !default;
+$input-border-color: #d8d6de !default;
+$input-focus-border-color: $primary !default;
+$input-focus-box-shadow: 0 3px 10px 0 rgba($black, 0.1) !default;
+$input-placeholder-color: $text-muted !default;
+$input-height: 2.714rem !default;
+
+// Navigation variables
+$nav-link-padding-y: 0.358rem !default;
+$nav-link-padding-x: 0.5rem !default;
+$nav-link-disabled-color: $text-muted !default;
+$nav-tabs-link-active-color: $primary !default;
+$nav-tabs-link-active-bg: transparent !default;
+$nav-pills-border-radius: $btn-border-radius !default;
+
+// Table variables
+$table-cell-padding: 0.72rem !default;
+$table-accent-bg: #fafafc !default;
+$table-hover-bg: #f6f6f9 !default;
+$table-border-color: $border-color !default;
+$table-head-bg: #f3f2f7 !default;
+$table-head-color: $headings-color !default;
+
+// Dropdown variables
+$dropdown-border-color: rgba($black, 0.05) !default;
+$dropdown-border-radius: 0.358rem !default;
+$dropdown-box-shadow: 0 5px 25px rgba($black, 0.1) !default;
+$dropdown-link-color: $body-color !default;
+$dropdown-link-hover-color: $primary !default;
+$dropdown-link-hover-bg: rgba($primary, 0.12) !default;
+
+// Card variables
+$card-border-radius: 0.428rem !default;
+
+// Alert variables
+$alert-border-radius: 0.358rem !default;
+
+// Override CSS custom properties to use theme variables dynamically
+:root {
+  --primary: #{$primary} !important;
+  --secondary: #{$secondary} !important;
+  --success: #{$success} !important;
+  --info: #{$info} !important;
+  --warning: #{$warning} !important;
+  --danger: #{$danger} !important;
+  --light: #{$light} !important;
+  --dark: #{$dark} !important;
+  --body-bg: #{$body-bg} !important;
+  --body-color: #{$body-color} !important;
+  --text-muted: #{$text-muted} !important;
+  --headings-color: #{$headings-color} !important;
+  --border-color: #{$border-color} !important;
+  --primary-hover: #{darken($primary, 8%)} !important;
+  --primary-focus: #{rgba($primary, 0.5)} !important;
+  --primary-light: #{rgba($primary, 0.12)} !important;
+  --primary-border: #{rgba($primary, 0.2)} !important;
+  --primary-focus-ring: #{rgba($primary, 0.25)} !important;
+
+  /* App surface variables for dynamic theming */
+  --app-card-bg: #{$white} !important;
+  --app-input-bg: #{$white} !important;
+  --app-dropdown-bg: #{$white} !important;
+}
+
+/* Dark mode variable overrides */
+.dark-layout {
+  --body-bg: #161d31 !important;
+  --body-color: #b4b7bd !important;
+  --headings-color: #d0d2d6 !important;
+  --text-muted: #676d7d !important;
+  --border-color: #3b4253 !important;
+  --app-card-bg: #283046 !important;
+  --app-input-bg: #283046 !important;
+  --app-dropdown-bg: #283046 !important;
+}
+
+/*================================================================================
+	COMPREHENSIVE THEME OVERRIDES - Using All Theme Variables
+================================================================================*/
+
+// Override Bootstrap primary button colors using theme variables
+.btn-primary {
+  color: $white !important;
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+.btn-primary:hover {
+  color: $white !important;
+  background-color: darken($primary, 8%) !important;
+  border-color: darken($primary, 8%) !important;
+}
+
+.btn-primary:focus,
+.btn-primary.focus {
+  color: $white !important;
+  background-color: darken($primary, 8%) !important;
+  border-color: darken($primary, 8%) !important;
+  box-shadow: 0 0 0 0.2rem rgba($primary, 0.5) !important;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
+  color: $white !important;
+  background-color: darken($primary, 8%) !important;
+  border-color: darken($primary, 8%) !important;
+}
+
+// Override text primary color using theme variable
+.text-primary {
+  color: $primary !important;
+}
+
+a.text-primary:focus,
+a.text-primary:hover {
+  color: darken($primary, 8%) !important;
+}
+
+// Override border primary color using theme variable
+.border-primary {
+  border-color: $primary !important;
+}
+
+// Override background primary color using theme variable
+.bg-primary {
+  background-color: $primary !important;
+}
+
+a.bg-primary:focus,
+a.bg-primary:hover,
+button.bg-primary:focus,
+button.bg-primary:hover {
+  background-color: darken($primary, 8%) !important;
+}
+
+// Override alert primary using theme variables
+.alert-primary {
+  background: rgba($primary, 0.12) !important;
+  color: $primary !important;
+  border-color: rgba($primary, 0.2) !important;
+}
+
+// Override badge primary using theme variable
+.badge-primary {
+  color: $white !important;
+  background-color: $primary !important;
+}
+
+// Override progress bar primary using theme variable
+.progress-bar {
+  background-color: $primary !important;
+}
+
+// Override form control focus using theme variables (defined later with full input block)
+
+// Override custom checkbox and radio using theme variables
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before,
+.custom-radio .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+// Override pagination using theme variables
+.page-link {
+  color: $primary !important;
+}
+
+.page-item.active .page-link {
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+.page-link:hover {
+  color: darken($primary, 8%) !important;
+}
+
+// Override dropdown using theme variable
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: $primary !important;
+}
+
+// Override list group using theme variable
+.list-group-item.active {
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+// Override menu active states using theme variables
+.navigation-main .nav-item.active > a {
+  background: linear-gradient(118deg, rgba($primary, 1), rgba($primary, 0.7)) !important;
+  box-shadow: 0 0 10px 1px rgba($primary, 0.7) !important;
+  color: $white !important;
+  font-weight: 400 !important;
+  border-radius: 4px !important;
+}
+
+.navigation-main .active {
+  background: linear-gradient(118deg, rgba($primary, 1), rgba($primary, 0.7)) !important;
+  box-shadow: 0 0 10px 1px rgba($primary, 0.7) !important;
+  border-radius: 4px !important;
+  z-index: 1 !important;
+  color: $white !important;
+}
+
+.navigation-main .active > a {
+  color: $white !important;
+}
+
+// Override horizontal menu active states using theme variables
+.horizontal-menu .navbar-nav .nav-item.active > a {
+  background: linear-gradient(118deg, rgba($primary, 1), rgba($primary, 0.7)) !important;
+  box-shadow: 0px 0px 6px 1px rgba($primary, 0.6) !important;
+  color: $white !important;
+  border-radius: 4px !important;
+}
+
+// Override navbar active states using theme variables
+.navbar-dark .nav-item.active > a {
+  border-bottom: 2px solid $primary !important;
+  background-color: var(--app-card-bg) !important;
+}
+
+// Override navigation font family and styles
+.navigation {
+  font-size: 1.1rem !important;
+  font-family: 'Montserrat', Helvetica, Arial, serif !important;
+  font-weight: 400 !important;
+}
+
+.navigation .navigation-header {
+  font-family: 'Montserrat', Helvetica, Arial, serif !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  text-transform: uppercase !important;
+  color: var(--text-muted) !important;
+}
+
+// Override nav-link styles using theme variables
+.nav-link {
+  font-family: 'Montserrat', Helvetica, Arial, serif !important;
+  font-weight: 400 !important;
+}
+.header-navbar .navbar-container ul.navbar-nav li > a.nav-link {
+  color: var(--body-color);
+}
+.nav-link.active {
+  color: $primary !important;
+  font-weight: 400 !important;
+}
+
+// Override horizontal menu dropdown active states using theme variables
+.horizontal-menu .dropdown-menu .active > a {
+  background: $body-bg !important;
+  color: $primary !important;
+  font-weight: 500 !important;
+}
+
+// Override menu item font weights
+.navigation-main .nav-item > a {
+  font-family: 'Montserrat', Helvetica, Arial, serif !important;
+  font-weight: 400 !important;
+}
+
+.navigation-main .nav-item.active > a {
+  font-weight: 400 !important;
+}
+
+// Override menu content active items
+.navigation-main .menu-content .active > a {
+  font-weight: 400 !important;
+}
+
+// Override menu icons sizing
+.navigation-main .nav-item i,
+.navigation-main .nav-item svg {
+  // height: 11px !important;
+  // width: 11px !important;
+  // font-size: 11px !important;
+  // margin-right: 1.38rem !important;
+}
+
+// Override horizontal menu navigation
+.horizontal-menu ul#main-menu-navigation > li {
+  padding-top: 0.857rem !important;
+  padding-bottom: 0.857rem !important;
+}
+
+.horizontal-menu ul#main-menu-navigation > li > a {
+  padding: 0.715rem 1.25rem !important;
+  display: flex !important;
+  margin-right: 0.715rem !important;
+  font-family: 'Montserrat', Helvetica, Arial, serif !important;
+  font-weight: 400 !important;
+}
+
+.horizontal-menu ul#main-menu-navigation > li i,
+.horizontal-menu ul#main-menu-navigation > li svg {
+  margin-right: 0.5rem !important;
+  height: 17px !important;
+  width: 17px !important;
+  font-size: 1.2rem !important;
+}
+
+.horizontal-menu .navigation-header {
+  font-family: inherit !important;
+  color: var(--text-muted) !important;
+  padding: 8px 20px !important;
+  font-size: 1rem !important;
+  text-transform: uppercase !important;
+}
+
+// Override body font family globally
+body {
+  font-family: 'Montserrat', Helvetica, Arial, serif !important;
+}
+
+// Override headings font family
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: inherit !important;
+}
+
+// Override outline button styles using theme variables
+.btn-outline-primary {
+  color: $primary !important;
+  border-color: $primary !important;
+}
+
+.btn-outline-primary:hover {
+  color: $white !important;
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+.btn-outline-primary:focus,
+.btn-outline-primary.focus {
+  box-shadow: 0 0 0 0.2rem rgba($primary, 0.5) !important;
+}
+
+// Override nav-pills styling using theme variables (matching original design)
+.nav-pills .nav-link {
+  padding: 0.786rem 1.5rem !important;
+  border: 1px solid transparent !important;
+}
+
+.nav-pills .nav-link.active {
+  border-color: $primary !important;
+  box-shadow: 0 4px 18px -4px rgba($primary, 0.65) !important;
+  background-color: $primary !important;
+  color: $white !important;
+}
+
+// Override nav-pills hover states
+.nav-pills .nav-link:hover {
+  color: $primary !important;
+}
+
+// Override nav-pills disabled states
+.nav-pills .nav-link.disabled {
+  color: $nav-link-disabled-color !important;
+}
+
+// Override all secondary colors using theme variables
+.btn-secondary {
+  color: $white !important;
+  background-color: $secondary !important;
+  border-color: $secondary !important;
+}
+
+.btn-secondary:hover {
+  color: $white !important;
+  background-color: darken($secondary, 8%) !important;
+  border-color: darken($secondary, 8%) !important;
+}
+
+// Override success colors
+.btn-success {
+  color: $white !important;
+  background-color: $success !important;
+  border-color: $success !important;
+}
+
+.btn-success:hover {
+  color: $white !important;
+  background-color: darken($success, 8%) !important;
+  border-color: darken($success, 8%) !important;
+}
+
+// Override info colors
+.btn-info {
+  color: $white !important;
+  background-color: $info !important;
+  border-color: $info !important;
+}
+
+.btn-info:hover {
+  color: $white !important;
+  background-color: darken($info, 8%) !important;
+  border-color: darken($info, 8%) !important;
+}
+
+// Override warning colors
+.btn-warning {
+  color: $white !important;
+  background-color: $warning !important;
+  border-color: $warning !important;
+}
+
+.btn-warning:hover {
+  color: $white !important;
+  background-color: darken($warning, 8%) !important;
+  border-color: darken($warning, 8%) !important;
+}
+
+// Override danger colors
+.btn-danger {
+  color: $white !important;
+  background-color: $danger !important;
+  border-color: $danger !important;
+}
+
+.btn-danger:hover {
+  color: $white !important;
+  background-color: darken($danger, 8%) !important;
+  border-color: darken($danger, 8%) !important;
+}
+
+// Override text colors using theme variables
+.text-secondary {
+  color: $secondary !important;
+}
+
+.text-success {
+  color: $success !important;
+}
+
+.text-info {
+  color: $info !important;
+}
+
+.text-warning {
+  color: $warning !important;
+}
+
+.text-danger {
+  color: $danger !important;
+}
+
+.text-muted {
+  color: $text-muted !important;
+}
+
+// Override background colors using theme variables
+.bg-secondary {
+  background-color: $secondary !important;
+}
+
+.bg-success {
+  background-color: $success !important;
+}
+
+.bg-info {
+  background-color: $info !important;
+}
+
+.bg-warning {
+  background-color: $warning !important;
+}
+
+.bg-danger {
+  background-color: $danger !important;
+}
+
+// Override border colors using theme variables
+.border-secondary {
+  border-color: $secondary !important;
+}
+
+.border-success {
+  border-color: $success !important;
+}
+
+.border-info {
+  border-color: $info !important;
+}
+
+.border-warning {
+  border-color: $warning !important;
+}
+
+.border-danger {
+  border-color: $danger !important;
+}
+
+// Override alert colors using theme variables
+.alert-secondary {
+  background: rgba($secondary, 0.12) !important;
+  color: $secondary !important;
+  border-color: rgba($secondary, 0.2) !important;
+}
+
+.alert-success {
+  background: rgba($success, 0.12) !important;
+  color: $success !important;
+  border-color: rgba($success, 0.2) !important;
+}
+
+.alert-info {
+  background: rgba($info, 0.12) !important;
+  color: $info !important;
+  border-color: rgba($info, 0.2) !important;
+}
+
+.alert-warning {
+  background: rgba($warning, 0.12) !important;
+  color: $warning !important;
+  border-color: rgba($warning, 0.2) !important;
+}
+
+.alert-danger {
+  background: rgba($danger, 0.12) !important;
+  color: $danger !important;
+  border-color: rgba($danger, 0.2) !important;
+}
+
+// Override badge colors using theme variables
+.badge-secondary {
+  color: $white !important;
+  background-color: $secondary !important;
+}
+
+.badge-success {
+  color: $white !important;
+  background-color: $success !important;
+}
+
+.badge-info {
+  color: $white !important;
+  background-color: $info !important;
+}
+
+.badge-warning {
+  color: $white !important;
+  background-color: $warning !important;
+}
+
+.badge-danger {
+  color: $white !important;
+  background-color: $danger !important;
+}
+
+// Override table styling using theme variables
+.table {
+  color: $body-color !important;
+  border-color: $table-border-color !important;
+}
+
+.table thead th {
+  color: $table-head-color !important;
+  background-color: $table-head-bg !important;
+  border-color: $table-border-color !important;
+}
+
+.table tbody tr:hover {
+  background-color: $table-hover-bg !important;
+}
+
+.table tbody tr:nth-of-type(even) {
+  background-color: $table-accent-bg !important;
+}
+
+// Override form controls using theme variables
+.form-control {
+  color: $body-color !important;
+  background-color: var(--app-input-bg) !important;
+  border-color: var(--border-color) !important;
+  font-size: $font-size-base !important;
+  line-height: $line-height-base !important;
+  height: calc(1.5em + 0.75rem + 7px);
+}
+
+.form-control:focus {
+  color: $body-color !important;
+  background-color: var(--app-input-bg) !important;
+  border-color: $input-focus-border-color !important;
+  box-shadow: $input-focus-box-shadow !important;
+}
+
+// Input group addons align with theme
+.input-group-text {
+  background-color: var(--app-input-bg) !important;
+  color: $body-color !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+// PrimeReact input alignment (search and others)
+.p-inputtext {
+  background-color: var(--app-input-bg) !important;
+  color: $body-color !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.p-inputtext:focus {
+  border-color: $input-focus-border-color !important;
+  box-shadow: $input-focus-box-shadow !important;
+}
+
+// PrimeReact dropdowns
+.p-dropdown,
+.p-multiselect,
+.p-calendar,
+.p-autocomplete {
+  background-color: var(--app-input-bg) !important;
+  color: $body-color !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.form-control::placeholder {
+  color: $input-placeholder-color !important;
+}
+
+// Override custom form controls
+.custom-control-input:checked ~ .custom-control-label::before {
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before,
+.custom-radio .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+// Override pagination using theme variables
+.page-link {
+  color: $body-color !important;
+  background-color: var(--app-card-bg) !important;
+  border-color: $border-color !important;
+}
+
+.page-link:hover {
+  color: $primary !important;
+  background-color: var(--app-card-bg) !important;
+  border-color: $border-color !important;
+}
+
+.page-item.active .page-link {
+  color: $white !important;
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+.page-item.disabled .page-link {
+  color: $text-muted !important;
+  background-color: var(--app-card-bg) !important;
+  border-color: $border-color !important;
+}
+
+// Override dropdown using theme variables
+.dropdown-menu {
+  background-color: var(--app-dropdown-bg) !important;
+  border-color: $dropdown-border-color !important;
+  border-radius: $dropdown-border-radius !important;
+  box-shadow: $dropdown-box-shadow !important;
+}
+
+.dropdown-item {
+  color: $dropdown-link-color !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  color: $dropdown-link-hover-color !important;
+  background-color: $dropdown-link-hover-bg !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  color: $white !important;
+  background-color: $primary !important;
+}
+
+// Override list group using theme variables
+.list-group-item {
+  background-color: var(--app-card-bg) !important;
+  border-color: $border-color !important;
+  color: $body-color !important;
+}
+
+.list-group-item.active {
+  color: $white !important;
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+.list-group-item:hover {
+  background-color: var(--app-card-bg) !important;
+}
+
+// Override card styling using theme variables
+.card {
+  border-radius: $card-border-radius !important;
+  border-color: $border-color !important;
+  background-color: var(--app-card-bg) !important;
+}
+
+.card-header {
+  background-color: var(--app-card-bg) !important;
+  border-bottom-color: $border-color !important;
+}
+
+// Modal title color in dark mode
+.dark-layout .modal-title {
+  color: #d0d2d6 !important;
+}
+
+// Override body and text styling using theme variables
+body {
+  font-family: $font-family-sans-serif !important;
+  font-size: $font-size-base !important;
+  line-height: $line-height-base !important;
+  color: $body-color !important;
+  background-color: var(--body-bg) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: inherit !important;
+  color: $headings-color !important;
+  font-weight: $font-weight-bold !important;
+}
+
+h1,
+.h1 {
+  font-size: $h1-font-size !important;
+}
+h2,
+.h2 {
+  font-size: $h2-font-size !important;
+}
+h3,
+.h3 {
+  font-size: $h3-font-size !important;
+}
+h4,
+.h4 {
+  font-size: $h4-font-size !important;
+}
+h5,
+.h5 {
+  font-size: $h5-font-size !important;
+}
+
+a {
+  // color: $link-color !important;
+}
+
+a:hover {
+  color: $link-hover-color !important;
+}
+
+/*================================================================================
+	BUTTON SPACING & ALIGNMENT - Consistent Button Layout
+================================================================================*/
+
+// Button group spacing - ensure consistent gaps between buttons
+.btn + .btn {
+  margin-left: 0.75rem !important; // 12px gap between buttons
+}
+
+// Modal footer button spacing
+.modal-footer .btn + .btn {
+  margin-left: 0.75rem !important;
+}
+
+// Form button spacing
+.form-actions .btn + .btn,
+.form-group .btn + .btn,
+.d-flex .btn + .btn {
+  margin-left: 0.75rem !important;
+}
+
+// Card header button spacing
+.card-header .btn + .btn {
+  margin-left: 0.75rem !important;
+}
+
+// Override specific spacing classes for consistency
+.btn.ml-1 {
+  margin-left: 0.75rem !important; // Override ml-1 (4px) to use consistent spacing
+}
+
+.btn.ml-2 {
+  margin-left: 0.75rem !important; // Override ml-2 (8px) to use consistent spacing
+}
+
+// Button group with proper spacing
+.btn-group {
+  gap: 0.75rem !important;
+}
+
+.btn-group .btn + .btn {
+  margin-left: 0 !important; // Remove margin in button groups
+}
+
+// Horizontal button layout with flexbox
+.d-flex .btn-group,
+.flex-row .btn-group {
+  gap: 0.75rem !important;
+}
+
+// Ensure buttons in rows have consistent spacing
+.row .btn + .btn {
+  margin-left: 0.75rem !important;
+}
+
+// Table action buttons spacing
+.table .btn + .btn {
+  margin-left: 0.5rem !important; // Smaller gap for table actions
+}
+
+// Compact button groups (for tight spaces)
+.btn-group-compact .btn + .btn {
+  margin-left: 0.5rem !important;
+}
+
+// Large button groups (for prominent actions)
+.btn-group-large .btn + .btn {
+  margin-left: 1rem !important;
+}
+
+// Vertical button spacing
+.btn-group-vertical .btn + .btn {
+  margin-left: 0 !important;
+  margin-top: 0.75rem !important;
+}
+
+// Responsive button spacing
+@media (max-width: 768px) {
+  .btn + .btn {
+    margin-left: 0.5rem !important; // Smaller gap on mobile
+  }
+
+  .modal-footer .btn + .btn {
+    margin-left: 0.5rem !important;
+  }
+}
+
+// Button alignment utilities
+.btn-align-start {
+  justify-content: flex-start !important;
+}
+
+.btn-align-center {
+  justify-content: center !important;
+}
+
+.btn-align-end {
+  justify-content: flex-end !important;
+}
+
+.btn-align-between {
+  justify-content: space-between !important;
+}
+
+// Button wrapper for consistent spacing
+.btn-wrapper {
+  display: flex !important;
+  gap: 0.75rem !important;
+  align-items: center !important;
+}
+
+.btn-wrapper-compact {
+  display: flex !important;
+  gap: 0.5rem !important;
+  align-items: center !important;
+}
+
+.btn-wrapper-large {
+  display: flex !important;
+  gap: 1rem !important;
+  align-items: center !important;
+}
+
+/*================================================================================
+	END THEME COLOR OVERRIDES
+================================================================================*/
+.doc-icon img {
+  display: flex;
+  margin-left: 0.5rem;
+}
+
+.doc-icon img {
+  width: 11px;
+}
+
+.swal2-content > select {
+  width: 100%;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.swal2-actions.swal2-loading {
+  margin: 0 !important;
+}
+
+.unselectable {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+
+  /*
+	  Introduced in IE 10.
+	  See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+	*/
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.loading-initial {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dicom-check-label {
+  padding-top: 0.2em;
+}
+
+.activation-copy {
+  position: absolute;
+  top: 36%;
+  right: 6%;
+  cursor: pointer;
+  &:hover {
+    color: #7367f0;
+  }
+}
+
+.activation-copied {
+  position: absolute;
+  top: 36%;
+  right: 6%;
+  cursor: pointer;
+  &:hover {
+    color: #df1a1a;
+  }
+}
+
+.editor-template {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.license-date {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid #d8d6de;
+  border-radius: 5px;
+  // padding: 0.38rem 0.8rem;
+  padding: 0.57rem 1rem;
+  color: #6e6b7b;
+  &:focus {
+    outline: none;
+  }
+}
+
+.clinic-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.clinic-validation {
+  color: red;
+  font-size: 10px;
+}
+
+.clinic-progress-nav {
+  display: flex;
+  @media screen and (max-width: 500px) {
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #6e6b7b !important;
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #6e6b7b;
+}
+
+/* Change the black to any color in dark mode */
+.dark-layout input:-webkit-autofill,
+.dark-layout input:-webkit-autofill:hover,
+.dark-layout input:-webkit-autofill:focus,
+.dark-layout input:-webkit-autofill:active {
+  -webkit-text-fill-color: #b4b7bd !important;
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #b4b7bd;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #7367f0;
+}
+
+// To remove warning notification from tinymce editor
+.tox-notification.tox-notification--in.tox-notification--warning {
+  display: none;
+}
+
+// Image-checkbox
+.image-checkbox {
+  position: absolute;
+  top: 0;
+  right: 4px;
+}
+
+// width of the editor in modal when creating the report
+.editor-width {
+  // max-width: 1024px;
+  max-width: 768px;
+  width: 700px;
+  padding: 0.3rem;
+  // background-color: #7367f0;
+  border-radius: 5px;
+}
+
+.disabled-ficker.flatpickr-input {
+  background: var(--app-input-bg) !important;
+  cursor: default !important;
+  opacity: 1 !important;
+}
+
+.flatpickr-input[readonly],
+.flatpickr-input ~ .form-control[readonly],
+.flatpickr-human-friendly[readonly],
+.disabled-ficker.flatpickr-input,
+.form-control:disabled,
+.form-control[readonly] {
+  // cursor: none !important;
+  opacity: 1 !important;
+}
+.activity-modal {
+  max-width: 35%;
+  .MuiCardHeader-content.css-11qjisw {
+    font-weight: 500;
+  }
+  .card-user-timeline.card {
+    height: 70vh;
+    overflow-y: auto;
+  }
+  @media screen and (max-width: 768px) {
+    max-width: 70%;
+  }
+  @media screen and (max-width: 425px) {
+    max-width: 100%;
+  }
+}
+
+.statusModal {
+  width: 242px;
+  .modal-content {
+    padding: 0.8rem;
+  }
+  .MuiCardHeader-content.css-11qjisw {
+    font-weight: 500;
+  }
+  .card-user-timeline.card {
+    height: 70vh;
+    overflow-y: auto;
+  }
+  @media screen and (max-width: 768px) {
+    max-width: 70%;
+  }
+  @media screen and (max-width: 425px) {
+    max-width: 100%;
+  }
+}
+
+.studyModal {
+  margin: 1em;
+  padding: 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.statusBtn {
+  font-family: inherit;
+  padding: 0.786rem 1.5rem;
+  outline: none;
+  border: none;
+  background: #82868b;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 500;
+  margin: 0 0.5em 0.3em 0;
+}
+
+.worklist-status {
+  padding: 0.06em;
+  border-radius: 3px;
+  width: 85px;
+  text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+  .study-button-container {
+    flex-wrap: wrap;
+  }
+
+  .study-button-container button {
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 413px) {
+  .sm-top-20vw {
+    padding-top: 22vw;
+    padding-top: 22vw;
+    min-height: 750px;
+  }
+  .fd-col-ip {
+    flex-direction: column;
+    width: 50%;
+  }
+  .fd-col-ip-el {
+    margin-bottom: 1rem !important;
+    margin-right: 0 !important;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .sm-w-100 {
+    width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .sm-mb-1 {
+    margin-bottom: 1rem;
+  }
+}
+
+.flatpickr-time {
+  height: 40px !important;
+}
+
+[dir] .dateinput:disabled,
+[dir] .dateinput[readonly] {
+  background-color: inherit;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border: 1px solid var(--border-color) !important;
+}
+
+
+.swiper-pagination {
+  position: relative;
+}

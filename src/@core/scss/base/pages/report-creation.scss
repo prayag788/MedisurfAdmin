@@ -1,0 +1,119 @@
+.editor-width body,
+.card-body-report-element body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+.editor-width p,
+.card-body-report-element p {
+  margin: 0;
+  padding: 0;
+  margin-block: 0;
+  margin-inline: 0;
+  line-height: normal;
+}
+
+/* Report route styling fixes */
+.card-report-element {
+  margin: 15px;
+  padding: 0;
+}
+
+.card-header-report-element {
+  padding: 20px;
+  margin-bottom: 0;
+}
+
+.card-body-report-element {
+  padding: 20px;
+  margin: 0;
+}
+
+.card-body-report-element .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.card-body-report-element .col,
+.card-body-report-element [class*='col-'] {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.card-body-report-element .form-group {
+  margin-bottom: 1rem;
+}
+
+.card-body-report-element .btn {
+  margin: 4px;
+}
+
+/* Fix for components touching borders */
+.card-body-report-element .form-control,
+.card-body-report-element .react-select__control {
+  margin-bottom: 8px;
+}
+
+/* Tab content spacing */
+.tab-content {
+  // padding: 15px 0;
+}
+
+/* Modal content spacing */
+.modal-body {
+  padding: 20px;
+}
+
+/* Swiper container spacing */
+.mySwiper {
+  padding: 15px 0;
+  margin: 15px 0;
+}
+
+/* Image checkbox spacing */
+.dicom-image-label {
+  margin: 8px;
+  padding: 4px;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.image-checkbox:checked + .dicom-image-label {
+  border-color: #7367f0;
+  background-color: rgba(115, 103, 240, 0.1);
+}
+
+/* Editor container spacing */
+.tox-tinymce {
+  margin: 10px 0;
+}
+
+/* Button group spacing */
+.d-flex .btn {
+  margin-left: 8px;
+}
+
+.d-flex .btn:first-child {
+  margin-left: 0;
+}
+
+/* Worksheet table spacing */
+.worksheet_table {
+  margin: 15px 0;
+}
+
+/* Form row spacing */
+.card-body-report-element .row.form {
+  margin-bottom: 15px;
+}
+
+/* Border spacing fixes */
+.border-top {
+  margin-top: 15px;
+  padding-top: 15px;
+}
+
+.border-bottom {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+}

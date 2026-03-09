@@ -1,0 +1,244 @@
+/* Report Preview Styles */
+.dicom-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 20px 0;
+}
+
+.dicom-image-item {
+  position: relative;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.dicom-image-item:hover {
+  border-color: #007bff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+.dicom-image-item.selected {
+  border-color: #28a745;
+  background: #d4edda;
+}
+
+.dicom-image-item.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #28a745;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.dicom-preview {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Report Editor Styles */
+.report-editor-container {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.template-selector {
+  margin-bottom: 20px;
+}
+
+.template-selector .react-select__control {
+  border-radius: 6px;
+  border-color: #d1d3d4;
+}
+
+.template-selector .react-select__control:hover {
+  border-color: #007bff;
+}
+
+/* Action Buttons */
+.report-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.report-actions .btn {
+  min-width: 120px;
+}
+
+/* Worksheet Panel Styles */
+.worksheet-upload-area {
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.worksheet-upload-area:hover {
+  border-color: #007bff;
+  background: #e7f3ff;
+}
+
+.worksheet-upload-area.dragover {
+  border-color: #28a745;
+  background: #d4edda;
+}
+
+.worksheet-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background: white;
+}
+
+.worksheet-item:hover {
+  background: #f8f9fa;
+}
+
+.worksheet-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.worksheet-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e9ecef;
+  border-radius: 6px;
+}
+
+.worksheet-details h6 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.worksheet-details small {
+  color: #6c757d;
+}
+
+.worksheet-actions {
+  display: flex;
+  gap: 5px;
+}
+
+/* Tab Styles */
+.nav-tabs .nav-link {
+  border: 1px solid transparent;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: #e9ecef #e9ecef #dee2e6;
+  color: #007bff;
+}
+
+.nav-tabs .nav-link.active {
+  color: #007bff;
+  background-color: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+}
+
+/* Loading States */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.page-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dicom-images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+  }
+
+  .dicom-preview {
+    height: 120px;
+  }
+
+  .report-actions {
+    flex-direction: column;
+  }
+
+  .report-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .dicom-images-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .worksheet-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .worksheet-actions {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .report-actions,
+  .nav-tabs,
+  .worksheet-upload-area {
+    display: none !important;
+  }
+
+  .tab-content {
+    border: none !important;
+  }
+}

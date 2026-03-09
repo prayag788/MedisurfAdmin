@@ -1,0 +1,8 @@
+/*!
+ * TinyMCE
+ *
+ * Copyright (c) 2023 Ephox Corporation DBA Tiny Technologies, Inc.
+ * Licensed under the Tiny commercial license. See https://www.tiny.cloud/legal/
+ *
+ * Version: 6.6.2
+ */

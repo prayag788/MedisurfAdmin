@@ -1,0 +1,358 @@
+@import 'https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700';
+
+* {
+  box-sizing: border-box;
+  /* margin: 0;
+    padding: 0; */
+  text-decoration: none;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.content-body .main-login-banner .container .authentication-input-fields:-webkit-autofill,
+.content-body .main-login-banner .container .authentication-input-fields:-webkit-autofill:hover,
+.content-body .main-login-banner .container .authentication-input-fields:-webkit-autofill:focus,
+.content-body .main-login-banner .container .authentication-input-fields:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: white;
+}
+
+.main-login-banner {
+  width: 100%;
+  background-image: url('./banner-img.png');
+  background-size: cover;
+  padding: 40px 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.main-login-banner .footer {
+  position: absolute;
+  bottom: 2%;
+  right: 2%;
+  color: #fff;
+}
+
+.main-login-banner .footer svg {
+  font-size: 1.51rem;
+  color: #ea5455;
+}
+
+.main-login-banner .footer a {
+  color: #fff;
+}
+
+.main-login-banner .footer > p {
+  margin-bottom: 0;
+}
+
+.container {
+  max-width: 950px;
+  width: 100%;
+}
+
+.inner-column-left {
+  width: 100%;
+  text-align: center;
+  padding: 80px;
+}
+.left {
+  width: 100%;
+  text-align: center;
+  padding: 40px 60px;
+}
+.logo-image {
+  padding: 15px 0 30px 0;
+  width: 100%;
+}
+.logo-image img {
+  max-width: 60%;
+  height: auto;
+}
+.right img {
+  max-width: 100%;
+}
+.title {
+  width: 100%;
+}
+.title h3 {
+  color: #fff;
+  font-weight: 600;
+  word-spacing: 2px;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+.form-sec {
+  width: 100%;
+  display: inline-block;
+  text-align: left;
+  padding: 30px 0;
+  color: #fff;
+}
+.form-group-auth {
+  position: relative;
+  margin: 0 0 16px 0;
+}
+.form-group-auth .form-control {
+  background-color: transparent !important;
+  padding: 8px 30px 8px 12px;
+  color: #fff;
+  font-size: 0.95rem;
+}
+.login-btn {
+  width: 100%;
+  display: inline-block;
+}
+.login-btn button.btn.btn-primary {
+  width: 100%;
+  background-color: #27aae1;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  transition: all 0.2s ease;
+}
+.login-btn button.btn.btn-primary:hover {
+  background-color: #1e8bb8;
+  transform: translateY(-1px);
+}
+.login-btn a {
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  padding: 15px 0 0 0;
+}
+.form-group-auth img {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  max-width: 16px;
+  opacity: 0.8;
+}
+.passwordClass {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+}
+.passwordClass svg {
+  cursor: pointer;
+  position: absolute;
+  right: 12px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+.passwordClass svg:hover {
+  opacity: 1;
+}
+@media only screen and (max-width: 1100px) {
+  .title h3 {
+    font-size: 22px;
+  }
+}
+@media only screen and (max-width: 991px) {
+  .col-lg-6.right {
+    display: none;
+  }
+  .title h3 {
+    font-size: 30px;
+  }
+  .inner-column-left {
+    padding: 20px;
+  }
+  .left {
+    padding: 20px 44px;
+  }
+  .logo-image img {
+    max-width: 40%;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .title h3 {
+    font-size: 25px;
+  }
+  .logo-image img {
+    max-width: 75%;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .title h3 {
+    font-size: 20px;
+  }
+}
+
+.custom__control {
+  background-color: transparent;
+}
+
+.custom__control--is-focused {
+  border-color: #7367f0 !important;
+  box-shadow: none !important;
+}
+
+.custom__indicator-separator {
+  display: none !important;
+}
+
+.custom__single-value,
+#react-select-2-input {
+  color: #fff !important;
+}
+
+.custom__menu {
+  background-color: #fff !important;
+  color: #7367f0 !important;
+}
+
+.custom__clear-indicator {
+  display: none !important;
+}
+
+.custom-option {
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-option span {
+  width: 95%;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-new-button {
+  border: none;
+  padding: 0px;
+  height: 16px;
+  width: 16px;
+  background: transparent !important;
+  position: relative;
+  cursor: pointer;
+}
+
+.add-new-button img {
+  position: relative !important;
+  right: 0px;
+  bottom: 0px;
+}
+
+.react-autosuggest__input {
+  background-color: transparent;
+  padding: 8px 30px 8px 12px;
+  color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #d8d6de;
+  border-radius: 6px;
+  display: block;
+  width: 100%;
+  height: 2.4rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.4;
+  transition: border-color 0.2s ease;
+}
+
+.react-autosuggest__input:hover,
+.react-autosuggest__input:focus {
+  border-color: #7367f0;
+}
+
+.react-autosuggest__input--focused {
+  outline: none;
+}
+
+.react-autosuggest__suggestions-list {
+  list-style: none;
+  padding: 5px;
+  position: absolute;
+  background: #fff;
+  width: 100%;
+  color: #7367f0;
+  z-index: 99999;
+  border-bottom-left-radius: 0.357rem;
+  border-bottom-right-radius: 0.357rem;
+}
+
+.suggestion-item {
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.react-autosuggest__input {
+  color: #fff;
+}
+
+.suggestion-item span {
+  width: 95%;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestion-item button {
+  cursor: pointer;
+  /* pointer-events: all !important; */
+}
+
+.react-autosuggest__suggestions-container {
+  display: none;
+}
+
+.react-autosuggest__suggestions-container--open {
+  display: block;
+}
+
+.MuiSvgIcon-root path {
+  fill: #5e5873;
+}
+
+.Mui-checked path {
+  fill: #1976d2;
+}
+
+/* .react-autosuggest__suggestion {
+  pointer-events: none !important;
+} */
+
+/* Toast Text Alignment */
+.toastify-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.toastify-header .title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.toastify-header .toast-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.toastify-body {
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.toastify-body span {
+  display: inline-block;
+  word-wrap: break-word;
+}

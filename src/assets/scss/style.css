@@ -1,0 +1,253 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Version: 2.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+.doc-icon img {
+  display: flex;
+  margin-left: 0.5rem;
+}
+
+.doc-icon img {
+  width: 11px;
+}
+
+.swal2-content > select {
+  width: 100%;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.swal2-actions.swal2-loading {
+  margin: 0 !important;
+}
+
+.unselectable {
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  /*
+    Introduced in IE 10.
+    See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+  */
+  user-select: none;
+  pointer-events: none;
+}
+
+.loading-initial {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dicom-check-label {
+  padding-top: 0.2em;
+}
+
+.activation-copy {
+  position: absolute;
+  top: 36%;
+  right: 6%;
+  cursor: pointer;
+}
+.activation-copy:hover {
+  color: #7367f0;
+}
+
+.activation-copied {
+  position: absolute;
+  top: 36%;
+  right: 6%;
+  cursor: pointer;
+}
+.activation-copied:hover {
+  color: #df1a1a;
+}
+
+.editor-template {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.license-date {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid #d8d6de;
+  border-radius: 5px;
+  padding: 0.57rem 1rem;
+  color: #6e6b7b;
+}
+.license-date:focus {
+  outline: none;
+}
+
+.clinic-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.clinic-validation {
+  color: red;
+  font-size: 10px;
+}
+
+.clinic-progress-nav {
+  display: flex;
+}
+@media screen and (max-width: 500px) {
+  .clinic-progress-nav {
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #000 !important;
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #7367f0;
+}
+
+.tox-notification.tox-notification--in.tox-notification--warning {
+  display: none;
+}
+
+.image-checkbox {
+  position: absolute;
+  top: 0;
+  right: 4px;
+}
+
+.editor-width {
+  max-width: 768px;
+  width: 700px;
+  padding: 0.3rem;
+  background-color: #7367f0;
+  border-radius: 5px;
+}
+
+.disabled-ficker.flatpickr-input {
+  background: #efefef !important;
+  cursor: default !important;
+}
+
+.activity-modal {
+  max-width: 35%;
+}
+.activity-modal .modal-content {
+  padding: 2rem;
+}
+.activity-modal .MuiCardHeader-content.css-11qjisw {
+  font-weight: 500;
+}
+.activity-modal .card-user-timeline.card {
+  height: 70vh;
+  overflow-y: auto;
+}
+@media screen and (max-width: 768px) {
+  .activity-modal {
+    max-width: 70%;
+  }
+}
+@media screen and (max-width: 425px) {
+  .activity-modal {
+    max-width: 100%;
+  }
+}
+
+.statusModal {
+  width: 242px;
+}
+.statusModal .modal-content {
+  padding: 0.8rem;
+}
+.statusModal .MuiCardHeader-content.css-11qjisw {
+  font-weight: 500;
+}
+.statusModal .card-user-timeline.card {
+  height: 70vh;
+  overflow-y: auto;
+}
+@media screen and (max-width: 768px) {
+  .statusModal {
+    max-width: 70%;
+  }
+}
+@media screen and (max-width: 425px) {
+  .statusModal {
+    max-width: 100%;
+  }
+}
+
+.studyModal {
+  margin: 1em;
+  padding: 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.statusBtn {
+  font-family: inherit;
+  padding: 0.786rem 1.5rem;
+  outline: none;
+  border: none;
+  background: #82868b;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 500;
+  margin: 0 0.5em 0.3em 0;
+}
+
+.worklist-status {
+  padding: 0.5em;
+  border-radius: 3px;
+  width: 90px;
+  text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+  .study-button-container {
+    flex-wrap: wrap;
+  }
+  .study-button-container button {
+    margin-bottom: 0.5rem;
+  }
+}
+@media screen and (max-width: 413px) {
+  .sm-top-20vw {
+    padding-top: 22vw;
+    padding-top: 22vw;
+    min-height: 750px;
+  }
+  .fd-col-ip {
+    flex-direction: column;
+    width: 50%;
+  }
+  .fd-col-ip-el {
+    margin-bottom: 1rem !important;
+    margin-right: 0 !important;
+  }
+}
+@media screen and (max-width: 360px) {
+  .sm-w-100 {
+    width: 100% !important;
+  }
+  .sm-mb-1 {
+    margin-bottom: 1rem;
+  }
+} /*# sourceMappingURL=style.css.map */

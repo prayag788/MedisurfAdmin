@@ -1,0 +1,46 @@
+.printQrTitle {
+  font-size: 23px !important;
+  margin: 0 auto;
+}
+
+.printQrUpperDiv {
+  font-size: 17px;
+}
+
+.printQrButton {
+  font-size: 17px;
+}
+
+.swal2-header {
+  padding: 0 !important;
+}
+
+#swal2-title p {
+  margin: 0 auto;
+}
+
+#swal2-title {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#shareCloseBtn {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  top: -15px;
+}
+
+#getEmailValue {
+  width: 70%;
+  margin: 15px;
+  border: 2px solid rgb(130, 130, 130);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+#getEmailValue:focus {
+  border: 2px solid black;
+} /*# sourceMappingURL=print-qr-code.css.map */

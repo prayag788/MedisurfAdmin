@@ -1,0 +1,11 @@
+.img-fluid-new {
+  width: 100%;
+  padding: 2rem 0 0 0;
+  height: auto;
+}
+
+@media (max-width: 576px) {
+  .img-fluid-new {
+    padding: 4rem 0 0 0;
+  }
+} /*# sourceMappingURL=login.css.map */

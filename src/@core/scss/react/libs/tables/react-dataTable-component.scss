@@ -1,0 +1,912 @@
+@import '../../../base/bootstrap-extended/include';
+@import '../../../base/components/include';
+
+.react-dataTable {
+  border-radius: 0;
+  .rdt_TableHead {
+    .rdt_TableHeadRow {
+      background-color: $table-head-bg;
+      border-top: 1px solid;
+      border-color: $border-color;
+      min-height: 0;
+      height: 38px;
+
+      .rdt_TableCol {
+        padding: 0.72rem 0.8rem;
+        .rdt_TableCol_Sortable {
+          color: $body-color;
+          font-weight: bold;
+          font-style: 0.857rem;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          &:hover {
+            color: $body-color;
+          }
+        }
+      }
+    }
+  }
+
+  .rdt_TableBody {
+    .rdt_TableRow {
+      .rdt_TableCell {
+        height: 53px;
+        padding: 0.72rem 0.8rem;
+
+        .column-action {
+          svg {
+            stroke: $body-color;
+          }
+
+          .dropdown-item:hover {
+            svg {
+              stroke: $primary;
+            }
+          }
+
+          .dropdown-item:active {
+            svg {
+              stroke: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+  .rdt_TableRow:hover,
+  .rdt_TableRow:hover a svg,
+  .rdt_TableRow:hover .rdt_TableCell,
+  .rdt_TableRow:hover .rdt_TableCell:nth-child(18) {
+    background-color: #7367f0;
+    color: white;
+  }
+
+  .react-paginate {
+    &.separated-pagination {
+      .page-item:first-child .page-link,
+      .page-item:last-child .page-link {
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+.react-license-dataTable {
+  border-radius: 0;
+  .rdt_TableHead {
+    .rdt_TableHeadRow {
+      background-color: $table-head-bg;
+      border-top: 1px solid;
+      border-color: $border-color;
+      min-height: 0;
+      height: 38px;
+
+      .rdt_TableCol {
+        padding: 0.72rem 0.8rem;
+        .rdt_TableCol_Sortable {
+          color: $body-color;
+          font-weight: bold;
+          font-style: 0.857rem;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          &:hover {
+            color: $body-color;
+          }
+        }
+      }
+    }
+  }
+
+  .rdt_TableBody {
+    .rdt_TableRow {
+      .rdt_TableCell {
+        height: 53px;
+        padding: 0.72rem 0.8rem;
+
+        .column-action {
+          svg {
+            stroke: $body-color;
+          }
+
+          .dropdown-item:hover {
+            svg {
+              stroke: $primary;
+            }
+          }
+
+          .dropdown-item:active {
+            svg {
+              stroke: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+  .rdt_TableRow:hover,
+  .rdt_TableRow:hover a svg,
+  .rdt_TableRow:hover .rdt_TableCell,
+  .rdt_TableRow:hover .rdt_TableCell:nth-child(13) {
+    background-color: #7367f0;
+    color: white;
+  }
+
+  .react-paginate {
+    &.separated-pagination {
+      .page-item:first-child .page-link,
+      .page-item:last-child .page-link {
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+.clinic-react-dataTable {
+  border-radius: 0;
+  .rdt_TableHead {
+    .rdt_TableHeadRow {
+      background-color: $table-head-bg;
+      border-top: 1px solid;
+      border-color: $border-color;
+      min-height: 0;
+      height: 38px;
+
+      .rdt_TableCol {
+        padding: 0.72rem 0.8rem;
+        .rdt_TableCol_Sortable {
+          color: $body-color;
+          font-weight: bold;
+          font-style: 0.857rem;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          &:hover {
+            color: $body-color;
+          }
+        }
+      }
+    }
+  }
+
+  .rdt_TableBody {
+    .rdt_TableRow {
+      .rdt_TableCell {
+        height: 53px;
+        padding: 0.72rem 0.8rem;
+
+        .column-action {
+          svg {
+            stroke: $body-color;
+          }
+
+          .dropdown-item:hover {
+            svg {
+              stroke: $primary;
+            }
+          }
+
+          .dropdown-item:active {
+            svg {
+              stroke: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+  .rdt_TableRow:hover,
+  .rdt_TableRow:hover a svg,
+  .rdt_TableRow:hover .rdt_TableCell,
+  .rdt_TableRow:hover .rdt_TableCell:nth-child(8) {
+    background-color: #7367f0;
+    color: white;
+  }
+
+  .react-paginate {
+    &.separated-pagination {
+      .page-item:first-child .page-link,
+      .page-item:last-child .page-link {
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+.tooltip-react-strap {
+  pointer-events: none;
+}
+
+.cancle-button-swal {
+  margin-right: 10px;
+  margin-top: 10px;
+}
+// study list action column css
+.studyListDiv .react-dataTable .rdt_TableCol:nth-child(18) {
+  background-color: #f3f2f7;
+  position: sticky;
+  right: 0;
+  top: 300px;
+  z-index: 1;
+  border-left: 1px dotted #6e6b7b;
+  justify-content: center;
+}
+
+.studyListDiv .rdt_TableBody .rdt_TableRow .rdt_TableCell:nth-child(18) {
+  background-color: white;
+  color: black;
+  justify-content: center;
+}
+
+.studyListDiv .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell:nth-child(18) {
+  background-color: #7367f0;
+  color: black;
+}
+
+.studyListDiv .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell svg {
+  color: white;
+}
+
+.studyListDivDark .react-dataTable .rdt_TableCol:nth-child(16) {
+  background-color: #343d55;
+  position: sticky;
+  right: 0;
+  top: 300px;
+  z-index: 1;
+  border-left: 1px dotted #6e6b7b;
+  justify-content: center;
+}
+
+.studyListDivDark .rdt_TableBody .rdt_TableRow .rdt_TableCell:nth-child(16) {
+  background-color: #283046;
+  color: black;
+  justify-content: center;
+}
+
+// .studyListDivDark .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell:nth-child(16){
+//   background-color: #7367f0;
+//   color: black;
+// }
+
+// shared study list action column css
+.shared-studyListDiv .shared-react-dataTable .rdt_TableCol:nth-child(9) {
+  background-color: #f3f2f7;
+  position: sticky;
+  right: 0;
+  top: 300px;
+  z-index: 1;
+  border-left: 1px dotted #6e6b7b;
+  justify-content: center;
+}
+
+.shared-studyListDiv .rdt_TableBody .rdt_TableRow .rdt_TableCell:nth-child(9) {
+  background-color: white;
+  color: black;
+  justify-content: center;
+}
+
+.shared-studyListDiv .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell:nth-child(9) {
+  background-color: #7367f0;
+  color: black;
+  .reportEdit {
+    content: url('../../../images/reportEditWhite.png');
+  }
+}
+
+.shared-studyListDiv .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell svg {
+  color: white;
+}
+
+// license list action column css
+.licenseListDiv .react-license-dataTable .rdt_TableCol:nth-child(9) {
+  background-color: #f3f2f7;
+  position: sticky;
+  right: 0;
+  top: 300px;
+  z-index: 1;
+  border-left: 1px dotted #6e6b7b;
+  justify-content: center;
+}
+
+.licenseListDiv .rdt_TableBody .rdt_TableRow .rdt_TableCell:nth-child(9) {
+  background-color: white;
+  color: black;
+  justify-content: center;
+}
+
+.licenseListDiv .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell:nth-child(9) {
+  background-color: #7367f0;
+  color: black;
+}
+
+.licenseListDiv .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell svg {
+  color: white;
+}
+
+// clinic list action column css
+.clinicListDiv .clinic-react-dataTable .rdt_TableCol:nth-child(8) {
+  background-color: #f3f2f7;
+  position: sticky;
+  right: 0;
+  top: 300px;
+  z-index: 1;
+  border-left: 1px dotted #6e6b7b;
+  justify-content: center;
+}
+
+.clinicListDiv .rdt_TableBody .rdt_TableRow .rdt_TableCell:nth-child(8) {
+  background-color: white;
+  color: black;
+  justify-content: center;
+}
+
+.clinicListDiv .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell:nth-child(8) {
+  background-color: #7367f0;
+  color: black;
+}
+
+.clinicListDiv .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell svg {
+  color: white;
+}
+
+.rdt_Pagination {
+  select {
+    min-width: 30px;
+    &:focus,
+    &:active {
+      outline: 0;
+    }
+  }
+}
+
+.dataTable-filter {
+  max-width: 220px;
+}
+
+.dataTable-select {
+  width: 5rem;
+  &:not([multiple='multiple']) {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    background-position:
+      calc(100% - 12px) 10px,
+      calc(100% - 20px) 12px,
+      100% 0;
+    background-size:
+      10px 10px,
+      10px 10px;
+  }
+}
+
+.dark-layout {
+  .app-user-list {
+    header {
+      background-color: $theme-dark-card-bg;
+    }
+  }
+
+  .react-dataTable {
+    .rdt_TableCol:nth-child(18) {
+      background-color: $theme-dark-table-header-bg;
+    }
+    .hlidmt {
+      background-color: $theme-dark-card-bg;
+    }
+    .khKjDK {
+      background-color: $theme-dark-card-bg;
+      color: $theme-dark-body-color;
+    }
+
+    .rdt_Table {
+      background: $theme-dark-table-header-bg;
+      color: $theme-dark-body-color;
+    }
+    .rdt_TableHead {
+      .rdt_TableHeadRow {
+        background-color: $theme-dark-table-header-bg;
+        border-color: $theme-dark-border-color;
+        .rdt_TableCol {
+          color: $theme-dark-body-color;
+          div[role='button'] {
+            color: $theme-dark-body-color;
+          }
+        }
+        .rdt_TableCol_Sortable,
+        .rdt_TableCol_Sortable:hover {
+          color: $theme-dark-headings-color;
+          svg {
+            stroke: $theme-dark-headings-color;
+          }
+        }
+      }
+    }
+    .rdt_TableBody {
+      .expandable-content {
+        background-color: $theme-dark-table-bg;
+        color: $theme-dark-body-color;
+      }
+      .rdt_TableRow {
+        background-color: $theme-dark-table-bg;
+        color: $theme-dark-body-color;
+        border-color: $theme-dark-border-color;
+        .rdt_TableCell {
+          color: $theme-dark-body-color;
+          svg {
+            color: #b4b7bd;
+          }
+        }
+        .rdt_TableCell:nth-child(18) {
+          background-color: $theme-dark-table-bg;
+          color: $theme-dark-body-color;
+        }
+        &:hover {
+          background-color: #eeeeee;
+          color: rgba(0, 0, 0, 0.87);
+          .rdt_TableCell {
+            color: rgba(0, 0, 0, 0.87);
+          }
+        }
+        button {
+          &:hover:not(:disabled) {
+            background-color: $theme-dark-body-bg;
+          }
+          svg {
+            color: $theme-dark-body-color;
+          }
+        }
+      }
+      .rdt_TableRow:hover .rdt_TableCell,
+      .rdt_TableRow:hover .rdt_TableCell svg {
+        color: white !important;
+      }
+      .rdt_TableRow:hover {
+        background-color: #7367f0;
+        color: black !important;
+      }
+      .rdt_TableRow:hover .rdt_TableCell:nth-child(18) {
+        background-color: #7367f0;
+        color: white;
+      }
+    }
+    .rdt_Pagination {
+      background-color: $theme-dark-table-bg;
+      color: $theme-dark-body-color;
+
+      svg {
+        fill: $theme-dark-body-color;
+      }
+    }
+  }
+
+  // shared study list action column css
+  .shared-react-dataTable {
+    .rdt_TableCol:nth-child(9) {
+      background-color: $theme-dark-table-header-bg;
+    }
+    .hlidmt {
+      background-color: $theme-dark-card-bg;
+    }
+    .khKjDK {
+      background-color: $theme-dark-card-bg;
+      color: $theme-dark-body-color;
+    }
+
+    .rdt_Table {
+      background: $theme-dark-table-header-bg;
+      color: $theme-dark-body-color;
+    }
+    .rdt_TableHead {
+      .rdt_TableHeadRow {
+        background-color: $theme-dark-table-header-bg;
+        border-color: $theme-dark-border-color;
+        .rdt_TableCol {
+          color: $theme-dark-body-color;
+          div[role='button'] {
+            color: $theme-dark-body-color;
+          }
+        }
+        .rdt_TableCol_Sortable,
+        .rdt_TableCol_Sortable:hover {
+          color: $theme-dark-headings-color;
+          svg {
+            stroke: $theme-dark-headings-color;
+          }
+        }
+      }
+    }
+    .rdt_TableBody {
+      .expandable-content {
+        background-color: $theme-dark-table-bg;
+        color: $theme-dark-body-color;
+      }
+      .rdt_TableRow {
+        background-color: $theme-dark-table-bg;
+        color: $theme-dark-body-color;
+        border-color: $theme-dark-border-color;
+        .rdt_TableCell {
+          color: $theme-dark-body-color;
+          svg {
+            color: #b4b7bd;
+          }
+        }
+        .rdt_TableCell:nth-child(9) {
+          background-color: $theme-dark-table-bg;
+          color: $theme-dark-body-color;
+        }
+        &:hover {
+          background-color: #eeeeee;
+          color: rgba(0, 0, 0, 0.87);
+          .rdt_TableCell {
+            color: rgba(0, 0, 0, 0.87);
+          }
+        }
+        button {
+          &:hover:not(:disabled) {
+            background-color: $theme-dark-body-bg;
+          }
+          svg {
+            color: $theme-dark-body-color;
+          }
+        }
+      }
+      .rdt_TableRow:hover .rdt_TableCell,
+      .rdt_TableRow:hover .rdt_TableCell svg {
+        color: white !important;
+      }
+      .rdt_TableRow:hover {
+        background-color: #7367f0;
+        color: black !important;
+      }
+      .rdt_TableRow:hover .rdt_TableCell:nth-child(9) {
+        background-color: #7367f0;
+        color: white;
+      }
+    }
+    .rdt_Pagination {
+      background-color: $theme-dark-table-bg;
+      color: $theme-dark-body-color;
+
+      svg {
+        fill: $theme-dark-body-color;
+      }
+    }
+  }
+
+  // license list action column css
+  .react-license-dataTable {
+    .rdt_TableCol:nth-child(9) {
+      background-color: $theme-dark-table-header-bg;
+    }
+    .hlidmt {
+      background-color: $theme-dark-card-bg;
+    }
+    .khKjDK {
+      background-color: $theme-dark-card-bg;
+      color: $theme-dark-body-color;
+    }
+
+    .rdt_Table {
+      background: $theme-dark-table-header-bg;
+      color: $theme-dark-body-color;
+    }
+    .rdt_TableHead {
+      .rdt_TableHeadRow {
+        background-color: $theme-dark-table-header-bg;
+        border-color: $theme-dark-border-color;
+        .rdt_TableCol {
+          color: $theme-dark-body-color;
+          div[role='button'] {
+            color: $theme-dark-body-color;
+          }
+        }
+        .rdt_TableCol_Sortable,
+        .rdt_TableCol_Sortable:hover {
+          color: $theme-dark-headings-color;
+          svg {
+            stroke: $theme-dark-headings-color;
+          }
+        }
+      }
+    }
+    .rdt_TableBody {
+      .expandable-content {
+        background-color: $theme-dark-table-bg;
+        color: $theme-dark-body-color;
+      }
+      .rdt_TableRow {
+        background-color: $theme-dark-table-bg;
+        color: $theme-dark-body-color;
+        border-color: $theme-dark-border-color;
+        .rdt_TableCell {
+          color: $theme-dark-body-color;
+          svg {
+            color: #b4b7bd;
+          }
+        }
+        .rdt_TableCell:nth-child(9) {
+          background-color: $theme-dark-table-bg;
+          color: $theme-dark-body-color;
+        }
+        &:hover {
+          background-color: #eeeeee;
+          color: rgba(0, 0, 0, 0.87);
+          .rdt_TableCell {
+            color: rgba(0, 0, 0, 0.87);
+          }
+        }
+        button {
+          &:hover:not(:disabled) {
+            background-color: $theme-dark-body-bg;
+          }
+          svg {
+            color: $theme-dark-body-color;
+          }
+        }
+      }
+      .rdt_TableRow:hover .rdt_TableCell,
+      .rdt_TableRow:hover .rdt_TableCell svg {
+        color: white !important;
+      }
+      .rdt_TableRow:hover {
+        background-color: #7367f0;
+        color: black !important;
+      }
+      .rdt_TableRow:hover .rdt_TableCell:nth-child(9) {
+        background-color: #7367f0;
+        color: white;
+      }
+    }
+    .rdt_Pagination {
+      background-color: $theme-dark-table-bg;
+      color: $theme-dark-body-color;
+
+      svg {
+        fill: $theme-dark-body-color;
+      }
+    }
+  }
+
+  // clinic list action column css
+  .clinic-react-dataTable {
+    .rdt_TableCol:nth-child(8) {
+      background-color: $theme-dark-table-header-bg;
+    }
+    .hlidmt {
+      background-color: $theme-dark-card-bg;
+    }
+    .khKjDK {
+      background-color: $theme-dark-card-bg;
+      color: $theme-dark-body-color;
+    }
+
+    .rdt_Table {
+      background: $theme-dark-table-header-bg;
+      color: $theme-dark-body-color;
+    }
+    .rdt_TableHead {
+      .rdt_TableHeadRow {
+        background-color: $theme-dark-table-header-bg;
+        border-color: $theme-dark-border-color;
+        .rdt_TableCol {
+          color: $theme-dark-body-color;
+          div[role='button'] {
+            color: $theme-dark-body-color;
+          }
+        }
+        .rdt_TableCol_Sortable,
+        .rdt_TableCol_Sortable:hover {
+          color: $theme-dark-headings-color;
+          svg {
+            stroke: $theme-dark-headings-color;
+          }
+        }
+      }
+    }
+    .rdt_TableBody {
+      .expandable-content {
+        background-color: $theme-dark-table-bg;
+        color: $theme-dark-body-color;
+      }
+      .rdt_TableRow {
+        background-color: $theme-dark-table-bg;
+        color: $theme-dark-body-color;
+        border-color: $theme-dark-border-color;
+        .rdt_TableCell {
+          color: $theme-dark-body-color;
+          svg {
+            color: #b4b7bd;
+          }
+        }
+        .rdt_TableCell:nth-child(8) {
+          background-color: $theme-dark-table-bg;
+          color: $theme-dark-body-color;
+        }
+        &:hover {
+          background-color: #eeeeee;
+          color: rgba(0, 0, 0, 0.87);
+          .rdt_TableCell {
+            color: rgba(0, 0, 0, 0.87);
+          }
+        }
+        button {
+          &:hover:not(:disabled) {
+            background-color: $theme-dark-body-bg;
+          }
+          svg {
+            color: $theme-dark-body-color;
+          }
+        }
+      }
+      .rdt_TableRow:hover .rdt_TableCell,
+      .rdt_TableRow:hover .rdt_TableCell svg {
+        color: white !important;
+      }
+      .rdt_TableRow:hover {
+        background-color: #7367f0;
+        color: black !important;
+      }
+      .rdt_TableRow:hover .rdt_TableCell:nth-child(8) {
+        background-color: #7367f0;
+        color: white;
+      }
+    }
+    .rdt_Pagination {
+      background-color: $theme-dark-table-bg;
+      color: $theme-dark-body-color;
+
+      svg {
+        fill: $theme-dark-body-color;
+      }
+    }
+  }
+
+  .rdt_Pagination {
+    color: $theme-dark-body-color;
+    background-color: $theme-dark-card-bg;
+    button {
+      svg {
+        fill: $theme-dark-body-color;
+      }
+      &[disabled] svg {
+        fill: $theme-dark-text-muted-color;
+      }
+    }
+  }
+}
+
+.studyListDiv.SuperAdmin {
+  .dVrMrf,
+  .UXnxA,
+  .send_dicom {
+    display: none;
+  }
+}
+
+.p-datatable {
+  .p-datatable-tbody > tr.p-highlight {
+    .assingExamBlack {
+      content: url('../../../images/Assing_Exam_Purple.png');
+    }
+    .reportEdit {
+      content: url('../../../images/reportEditPurple.png');
+    }
+  }
+}
+.dark-layout {
+  .p-datatable {
+    .p-datatable-tbody > tr.p-highlight {
+      .assingExamBlack {
+        content: url('../../../images/Assing_Exam_White.png');
+      }
+      .reportEdit {
+        content: url('../../../images/reportEditWhite.png');
+      }
+    }
+  }
+}
+
+.p-datatable {
+  .p-datatable-tbody {
+    tr:nth-child(odd) {
+      background: #f0f0f0 !important;
+    }
+    tr {
+      td {
+        border-color: #3b4253;
+        padding: 0.4rem 0.5rem !important;
+      }
+
+      &:hover {
+        background: #7367f0 !important;
+
+        td {
+          border-color: #b4b7bd !important;
+          color: #fff !important;
+          .reportEdit {
+            content: url('../../../images/reportEditWhite.png');
+          }
+          .assingExamBlack {
+            content: url('../../../images/Assing_Exam_White.png');
+          }
+        }
+      }
+    }
+  }
+}
+
+.dark-layout {
+  #panel-header-1 .MuiAccordionSummary-expandIconWrapper {
+    color: #d0d2d6;
+  }
+  .p-datatable {
+    .p-datatable-thead {
+      tr {
+        th {
+          background: #343d55;
+          border-color: #3b4253;
+          color: #b4b7bd;
+
+          .p-sortable-column-icon {
+            svg {
+              color: #b4b7bd;
+            }
+          }
+        }
+
+        th:hover,
+        th:focus {
+          background: #343d55 !important;
+          border-color: #3b4253 !important;
+          color: #fff !important;
+          box-shadow: unset !important;
+          .p-sortable-column-icon {
+            svg {
+              color: #fff !important;
+            }
+          }
+        }
+      }
+    }
+
+    .p-datatable-tbody {
+      tr:nth-child(odd) {
+        background: #29324b !important;
+      }
+      tr {
+        background: #343d55;
+
+        td {
+          border-color: #3b4253;
+          color: #b4b7bd;
+        }
+
+        &:hover {
+          background: #7367f0 !important;
+
+          td {
+            border-color: #7367f0 !important;
+            color: #fff !important;
+          }
+        }
+      }
+    }
+
+    .p-paginator {
+      background: #343d55;
+      border-color: #3b4253;
+    }
+
+    .p-dropdown {
+      background: #343d55;
+      border-color: #3b4253;
+      .p-dropdown-label,
+      .p-dropdown-trigger {
+        background: #343d55;
+        color: #fff;
+      }
+
+      &:hover {
+        border-color: #7367f0 !important;
+        color: #fff !important;
+      }
+    }
+  }
+}

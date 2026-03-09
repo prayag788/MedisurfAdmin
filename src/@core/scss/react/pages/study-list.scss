@@ -1,0 +1,57 @@
+.accordionSummary .MuiAccordionSummary-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordionSummary .MuiAccordionSummary-content p {
+  margin: 0;
+}
+
+.noteHeader {
+  border-bottom: 2px solid black;
+}
+
+.noteDiv {
+  max-height: 30vh;
+  overflow-y: auto;
+  border-bottom: 1px solid #d5d5d5;
+}
+
+.noteDiv-other {
+  max-height: 70vh;
+  overflow-y: auto;
+  border-bottom: 1px solid #d5d5d5;
+}
+
+.noteAction {
+  margin: 0 2px;
+}
+
+.MuiAccordionSummary-content .actionButtons {
+  @media (max-width: 450px) {
+    width: 25%;
+  }
+}
+
+.noteModelHeader {
+  font-weight: bold;
+}
+
+.dark-layout {
+  .noteDiv * {
+    color: #d0d2d6;
+  }
+}
+
+@media print {
+  .main-menu,
+  .header-navbar {
+    display: none !important;
+  }
+
+  .app-content {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+  }
+}

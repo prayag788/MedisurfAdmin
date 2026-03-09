@@ -1,0 +1,48 @@
+// Multi-select horizontal scrolling styles
+.react-select.staticmodality {
+  .select__control {
+    // Only apply fixed height when there are selected values
+    &.select__control--has-value {
+      min-height: 60px !important;
+      max-height: 60px !important;
+    }
+  }
+
+  .select__value-container {
+    &.select__value-container--is-multi {
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      cursor: grab !important;
+      user-select: none !important;
+      
+      &:active {
+        cursor: grabbing !important;
+      }
+
+      // Custom scrollbar
+      &::-webkit-scrollbar {
+        height: 8px !important;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1 !important;
+        border-radius: 4px !important;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #c1c1c1 !important;
+        border-radius: 4px !important;
+        
+        &:hover {
+          background: #a8a8a8 !important;
+        }
+      }
+    }
+  }
+
+  .select__multi-value {
+    flex-shrink: 0 !important;
+    user-select: none !important;
+  }
+}

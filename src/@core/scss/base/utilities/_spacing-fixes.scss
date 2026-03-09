@@ -1,0 +1,292 @@
+/* Global Spacing and Border Fixes */
+/* This file contains utility classes to fix common spacing issues across the project */
+
+/* Container spacing fixes */
+.container,
+.container-fluid {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Card content spacing */
+.card {
+  margin-bottom: 1.5rem;
+
+  .card-header {
+    padding: 1.25rem 1.5rem;
+
+    > * {
+      margin: 0.25rem;
+    }
+
+    > *:first-child {
+      margin-left: 0;
+    }
+
+    > *:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .card-body {
+    padding: 1.5rem;
+
+    > .row:first-child {
+      margin-top: 0;
+    }
+
+    > .row:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .card-footer {
+    padding: 1rem 1.5rem;
+
+    .btn {
+      margin: 0.25rem;
+    }
+
+    .btn:first-child {
+      margin-left: 0;
+    }
+
+    .btn:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+/* Form spacing fixes */
+.form-group {
+  margin-bottom: 1.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.form-control,
+.custom-select,
+.react-select__control {
+  margin-bottom: 0.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Button spacing fixes */
+.btn {
+  margin: 0.25rem;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+/* Button group overrides */
+.btn-group .btn,
+.btn-toolbar .btn {
+  margin: 0;
+}
+
+/* Row and column spacing */
+.row {
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+
+  .col,
+  [class*='col-'] {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* Modal spacing fixes */
+.modal-header {
+  padding: 1.25rem 1.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+
+  .btn {
+    margin: 0.25rem;
+  }
+
+  .btn:first-child {
+    margin-left: 0;
+  }
+
+  .btn:last-child {
+    margin-right: 0;
+  }
+}
+
+/* Table spacing fixes */
+.table {
+  margin-bottom: 1rem;
+
+  th,
+  td {
+    padding: 0.75rem;
+    vertical-align: middle;
+  }
+}
+
+/* Navigation spacing */
+.nav-tabs {
+  margin-bottom: 1.5rem;
+
+  .nav-link {
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Alert spacing */
+.alert {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+}
+
+/* List group spacing */
+.list-group {
+  margin-bottom: 1.5rem;
+
+  .list-group-item {
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+/* Input group spacing */
+.input-group {
+  margin-bottom: 1rem;
+}
+
+/* Breadcrumb spacing */
+.breadcrumb {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Badge spacing */
+.badge {
+  margin: 0.125rem;
+}
+
+/* Progress bar spacing */
+.progress {
+  margin-bottom: 1rem;
+}
+
+/* Dropdown spacing */
+.dropdown-menu {
+  padding: 0.5rem 0;
+
+  .dropdown-item {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Pagination spacing */
+.pagination {
+  margin-bottom: 1rem;
+}
+
+/* Utility classes for common spacing issues */
+.no-border-touch {
+  margin: 0.5rem;
+}
+
+.content-spacing {
+  padding: 1rem;
+}
+
+.element-spacing > * {
+  margin: 0.5rem;
+}
+
+.element-spacing > *:first-child {
+  margin-left: 0;
+}
+
+.element-spacing > *:last-child {
+  margin-right: 0;
+}
+
+/* Responsive spacing adjustments */
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 1rem;
+
+    .card-header,
+    .card-body,
+    .card-footer {
+      padding: 1rem;
+    }
+  }
+
+  .btn {
+    margin: 0.125rem;
+    font-size: 0.875rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .row {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+
+    .col,
+    [class*='col-'] {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  }
+}
+
+/* Specific fixes for common problematic components */
+.react-select__control {
+  margin-bottom: 0.5rem !important;
+}
+
+.flatpickr-input {
+  margin-bottom: 0.5rem !important;
+}
+
+.tox-tinymce {
+  margin: 1rem 0 !important;
+}
+
+.swiper {
+  margin: 1rem 0 !important;
+  padding: 0.5rem !important;
+}
+
+.data-table {
+  margin: 1rem 0 !important;
+}
+
+/* Fix for components directly touching container borders */
+.container > *:first-child,
+.card-body > *:first-child,
+.modal-body > *:first-child {
+  margin-top: 0;
+}
+
+.container > *:last-child,
+.card-body > *:last-child,
+.modal-body > *:last-child {
+  margin-bottom: 0;
+}

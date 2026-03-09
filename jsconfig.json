@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "utility/*": ["utility/*"],
+      "@utility/*": ["utility/*"],
+      "utils/*": ["utils/*"],
+      "@utils": ["utils/index.js"],
+      "components/*": ["components/*"],
+      "@core/*": ["@core/*"],
+      "assets/*": ["assets/*"],
+      "configs/*": ["configs/*"],
+      "layouts/*": ["layouts/*"],
+      "navigation/*": ["navigation/*"],
+      "redux/*": ["redux/*"],
+      "router/*": ["router/*"],
+      "views/*": ["views/*"],
+      "@fake-db/*": ["@fake-db/*"]
+    }
+  },
+  "include": ["src"]
+}

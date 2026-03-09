@@ -1,0 +1,67 @@
+@media print {
+  /* Preserve colors and styling */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    background: white !important;
+    margin: 0.5in !important;
+  }
+
+  /* Hide UI elements only */
+  .navbar,
+  .sidebar,
+  .menu,
+  .header,
+  .footer,
+  .btn:not(.print-visible),
+  button:not(.print-visible),
+  .pagination,
+  .breadcrumb,
+  .dropdown-menu,
+  .modal-backdrop,
+  .tooltip,
+  .popover {
+    display: none !important;
+  }
+
+  /* Ensure content is visible */
+  .print-visible {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* Preserve typography styling */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid !important;
+  }
+
+  /* Images */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Page breaks */
+  .page-break {
+    page-break-before: always !important;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid !important;
+  }
+
+  /* Remove shadows and effects */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}

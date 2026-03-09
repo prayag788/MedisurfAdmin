@@ -1,0 +1,128 @@
+// var for box shadow of gradient buttons
+// Buttons
+.btn {
+  box-shadow: none;
+  font-weight: 500;
+  margin: 0.25rem;
+
+  // Ensure first button doesn't have left margin
+  &:first-child {
+    margin-left: 0;
+  }
+
+  // Ensure last button doesn't have right margin
+  &:last-child {
+    margin-right: 0;
+  }
+
+  // Button groups should have proper spacing
+  .btn-group &,
+  .btn-toolbar & {
+    margin: 0;
+  }
+
+  // gradient button on hover transition
+  &[class*='bg-gradient-'] {
+    transition: all 0.2s ease;
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  // Icon button padding
+  &.btn-icon {
+    padding: 0.715rem 0.736rem;
+  }
+  &.btn-sm {
+    &.btn-icon {
+      padding: 0.5rem;
+      line-height: 0.5;
+    }
+  }
+  &.btn-lg {
+    &.btn-icon {
+      padding: 1rem;
+      line-height: 0.75;
+    }
+  }
+
+  &:focus,
+  &.focus,
+  &:active,
+  &.active {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &:not(:disabled):not(.disabled):active:focus,
+  &:not(:disabled):not(.disabled).active:focus {
+    box-shadow: none !important;
+  }
+
+  // feather icons inside btn
+  .feather {
+    vertical-align: bottom;
+  }
+}
+
+// For Waves Input Padding
+.btn.waves-input-wrapper {
+  padding: 0;
+}
+
+@include media-breakpoint-down(sm) {
+  .btn-sm-block {
+    display: block;
+    width: 100%;
+    margin: 0.25rem 0;
+  }
+
+  // Responsive button spacing
+  .btn {
+    margin: 0.125rem;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+// Button container spacing
+.d-flex .btn,
+.btn-toolbar .btn,
+.card-footer .btn,
+.card-header .btn {
+  margin: 0.25rem;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+// Form button spacing
+.form-actions .btn,
+.border-top .btn {
+  margin: 0.5rem 0.25rem;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+// Remove cursor-pointer from button if button is disabled
+// * setting it to inherit will auto adept cursor
+.waves-effect {
+  cursor: inherit;
+}
