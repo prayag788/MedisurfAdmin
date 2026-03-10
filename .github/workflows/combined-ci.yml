@@ -11,20 +11,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pr_agent:
+  code_review:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
       contents: read
     steps:
-      - name: PR Agent Review
-        uses: qodo-ai/pr-agent@main
+      - uses: actions/checkout@v4
+      
+      - name: Free Code Review
+        uses: github/super-linter@v4
         env:
-          OPENAI_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
-          OPENAI_API_BASE: https://api.cerebras.ai/v1
-          OPENAI_MODEL: llama3.1-70b
+          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_TYPESCRIPT_ES: true
+          VALIDATE_CSS: true
+          VALIDATE_HTML: true
+          VALIDATE_JSON: true
+          VALIDATE_YAML: true
+          
+      - name: ESLint Review
+        uses: github/eslint-action@v1
+        with:
+          files: 'src/**/*.{js,jsx,ts,tsx}'
+        continue-on-error: true
 
   format:
     runs-on: ubuntu-latest
