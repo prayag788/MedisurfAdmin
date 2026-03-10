@@ -20,13 +20,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Test Cerebras API
+        run: |
+          curl -X POST "https://api.cerebras.ai/v1/chat/completions" \
+            -H "Authorization: Bearer ${{ secrets.CEREBRAS_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "model": "llama3.1-70b",
+              "messages": [{"role": "user", "content": "Hello"}],
+              "max_tokens": 10
+            }' || echo "Cerebras API test failed"
+      
       - name: PR Agent Review
         uses: qodo-ai/pr-agent@main
         env:
           OPENAI_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
           OPENAI_API_BASE: https://api.cerebras.ai/v1
-          OPENAI_MODEL: llama3.1-70b
+          OPENAI_MODEL: llama3.1-8b
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONFIG.VERBOSITY: "2"
+          CONFIG.PR_REVIEWER.AUTO_REVIEW: "true"
+          CONFIG.PR_REVIEWER.INLINE_CODE_COMMENTS: "true"
           
       - name: Debug PR Agent
         if: always()
