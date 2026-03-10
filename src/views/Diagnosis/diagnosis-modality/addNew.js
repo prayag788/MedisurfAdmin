@@ -10,7 +10,16 @@ import { toast } from 'react-toastify'
 import Avatar from '@components/avatar'
 
 // ** Third Party Components
-import { Row, Col, Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Button,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap'
 
 import Breadcrumbs from '@components/breadcrumbs'
 
@@ -82,11 +91,11 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     },
   })
 
-  const inputHandler = async e => {
+  const inputHandler = async (e) => {
     const name = e.target.name
     const value = e.target.value
 
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: value }
     })
 
@@ -95,11 +104,14 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     await trigger(name)
   }
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       showLoadingAlert()
       data.status = form_data.status
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/diagnosis/modality`, data)
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/diagnosis/modality`,
+        data
+      )
       hideLoadingAlert()
       showToastSuccess(res.data?.success?.message)
       navigate('/diagnosis')
@@ -133,7 +145,9 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                 value={form_data.name}
                 onChange={inputHandler}
               />
-              {errors?.name && <FormFeedback>{errors.name.message}</FormFeedback>}
+              {errors?.name && (
+                <FormFeedback>{errors.name.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -149,13 +163,15 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                 onChange={inputHandler}
                 value={form_data.status}
               >
-                {STATUS_OPTIONS.map(option => (
+                {STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </Input>
-              {errors?.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+              {errors?.status && (
+                <FormFeedback>{errors.status.message}</FormFeedback>
+              )}
             </FormGroup>
             <Button color="primary" type="submit">
               Save

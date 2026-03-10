@@ -249,7 +249,11 @@ General purpose error display component.
 Displays all form errors in a summary format.
 
 ```javascript
-<FormErrorSummary errors={errors} title="Please fix the following errors:" dismissible={false} />
+<FormErrorSummary
+  errors={errors}
+  title="Please fix the following errors:"
+  dismissible={false}
+/>
 ```
 
 #### `FieldError`
@@ -302,7 +306,7 @@ You can add custom validation rules:
   control={control}
   validation={{
     validate: {
-      customRule: value => value === 'expected' || 'Custom error message',
+      customRule: (value) => value === 'expected' || 'Custom error message',
     },
   }}
 />
@@ -419,7 +423,7 @@ const CustomField = ({ name, control, errors, ...props }) => {
       errors={errors}
       validation={{
         validate: {
-          customRule: value => customValidation(value),
+          customRule: (value) => customValidation(value),
         },
       }}
       {...props}

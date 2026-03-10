@@ -1,4 +1,15 @@
-import { Form, FormGroup, Row, Col, Card, Button, Input, Label, Spinner, FormFeedback } from 'reactstrap'
+import {
+  Form,
+  FormGroup,
+  Row,
+  Col,
+  Card,
+  Button,
+  Input,
+  Label,
+  Spinner,
+  FormFeedback,
+} from 'reactstrap'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { showErrorAlert, showSuccessAlert } from '../../../utils/alerts'
@@ -21,7 +32,8 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
   })
 
   const getAuthHeaders = () => {
-    const token = localStorage.getItem('accessToken') || localStorage.getItem('authToken')
+    const token =
+      localStorage.getItem('accessToken') || localStorage.getItem('authToken')
     return {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token || ''}`,
@@ -32,7 +44,9 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
     const fetchWebsetup = async () => {
       try {
         const apiUrl = process.env.REACT_APP_API_URL
-        const response = await fetch(`${apiUrl}/websetup`, { headers: getAuthHeaders() })
+        const response = await fetch(`${apiUrl}/websetup`, {
+          headers: getAuthHeaders(),
+        })
         const result = await response.json()
         const data = result?.data || {}
 
@@ -75,7 +89,8 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
     }
 
     if (!formData.from_name) newErrors.from_name = 'From name is required'
-    if (!formData.from_address) newErrors.from_address = 'From address is required'
+    if (!formData.from_address)
+      newErrors.from_address = 'From address is required'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -83,12 +98,12 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }))
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }))
+      setErrors((prev) => ({ ...prev, [name]: '' }))
     }
   }
 
@@ -121,7 +136,8 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
         })
 
         const result = await response.json()
-        if (!response.ok) throw new Error(result.error || 'Failed to save Gmail config')
+        if (!response.ok)
+          throw new Error(result.error || 'Failed to save Gmail config')
         showSuccessAlert('Gmail configuration saved successfully!')
       } else if (emailType === 'mailgun') {
         const mailgunData = {
@@ -143,7 +159,8 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
         })
 
         const result = await response.json()
-        if (!response.ok) throw new Error(result.error || 'Failed to save Mailgun config')
+        if (!response.ok)
+          throw new Error(result.error || 'Failed to save Mailgun config')
         showSuccessAlert('Mailgun configuration saved successfully!')
       }
     } catch (err) {
@@ -178,7 +195,9 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
                 checked={emailType === option}
                 onChange={(e) => setEmailType(e.target.value)}
               />
-              <Label for={`${option}Radio`}>{option.charAt(0).toUpperCase() + option.slice(1)}</Label>
+              <Label for={`${option}Radio`}>
+                {option.charAt(0).toUpperCase() + option.slice(1)}
+              </Label>
             </FormGroup>
           ))}
         </Col>
@@ -198,7 +217,9 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
                   onChange={handleInputChange}
                   invalid={!!errors.api_key}
                 />
-                {errors.api_key && <FormFeedback>{errors.api_key}</FormFeedback>}
+                {errors.api_key && (
+                  <FormFeedback>{errors.api_key}</FormFeedback>
+                )}
               </FormGroup>
             </Col>
           </Row>
@@ -301,7 +322,9 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
                   value={true}
                   id="secureTrue"
                   checked={formData.secure === true}
-                  onChange={() => setFormData(prev => ({ ...prev, secure: true }))}
+                  onChange={() =>
+                    setFormData((prev) => ({ ...prev, secure: true }))
+                  }
                 />
                 <Label for="secureTrue">True</Label>
               </FormGroup>
@@ -312,7 +335,9 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
                   value={false}
                   id="secureFalse"
                   checked={formData.secure === false}
-                  onChange={() => setFormData(prev => ({ ...prev, secure: false }))}
+                  onChange={() =>
+                    setFormData((prev) => ({ ...prev, secure: false }))
+                  }
                 />
                 <Label for="secureFalse">False</Label>
               </FormGroup>
@@ -333,7 +358,9 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
               onChange={handleInputChange}
               invalid={!!errors.from_name}
             />
-            {errors.from_name && <FormFeedback>{errors.from_name}</FormFeedback>}
+            {errors.from_name && (
+              <FormFeedback>{errors.from_name}</FormFeedback>
+            )}
           </FormGroup>
         </Col>
       </Row>
@@ -349,14 +376,21 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
               onChange={handleInputChange}
               invalid={!!errors.from_address}
             />
-            {errors.from_address && <FormFeedback>{errors.from_address}</FormFeedback>}
+            {errors.from_address && (
+              <FormFeedback>{errors.from_address}</FormFeedback>
+            )}
           </FormGroup>
         </Col>
       </Row>
 
       <Row>
         <Col className="mt-1" sm="12">
-          <Button.Ripple className="mr-1 sm-mb-1" color="secondary" outline onClick={() => navigate(-1)}>
+          <Button.Ripple
+            className="mr-1 sm-mb-1"
+            color="secondary"
+            outline
+            onClick={() => navigate(-1)}
+          >
             Cancel
           </Button.Ripple>
           <Button.Ripple type="submit" className="mr-1 sm-mb-1" color="primary">

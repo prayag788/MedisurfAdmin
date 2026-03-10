@@ -9,7 +9,7 @@ const Tabs = ({
   worksheetDataLength,
   isFinalReportEditable,
 }) => {
-  const toggle = tab => {
+  const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab)
   }
 

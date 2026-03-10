@@ -279,7 +279,11 @@ button.bg-primary:hover {
 
 // Override menu active states using theme variables
 .navigation-main .nav-item.active > a {
-  background: linear-gradient(118deg, rgba($primary, 1), rgba($primary, 0.7)) !important;
+  background: linear-gradient(
+    118deg,
+    rgba($primary, 1),
+    rgba($primary, 0.7)
+  ) !important;
   box-shadow: 0 0 10px 1px rgba($primary, 0.7) !important;
   color: $white !important;
   font-weight: 400 !important;
@@ -287,7 +291,11 @@ button.bg-primary:hover {
 }
 
 .navigation-main .active {
-  background: linear-gradient(118deg, rgba($primary, 1), rgba($primary, 0.7)) !important;
+  background: linear-gradient(
+    118deg,
+    rgba($primary, 1),
+    rgba($primary, 0.7)
+  ) !important;
   box-shadow: 0 0 10px 1px rgba($primary, 0.7) !important;
   border-radius: 4px !important;
   z-index: 1 !important;
@@ -300,7 +308,11 @@ button.bg-primary:hover {
 
 // Override horizontal menu active states using theme variables
 .horizontal-menu .navbar-nav .nav-item.active > a {
-  background: linear-gradient(118deg, rgba($primary, 1), rgba($primary, 0.7)) !important;
+  background: linear-gradient(
+    118deg,
+    rgba($primary, 1),
+    rgba($primary, 0.7)
+  ) !important;
   box-shadow: 0px 0px 6px 1px rgba($primary, 0.6) !important;
   color: $white !important;
   border-radius: 4px !important;
@@ -1275,7 +1287,6 @@ input:-webkit-autofill:active {
 .p-datatable .p-datatable-tbody > tr > td {
   border: 1px solid var(--border-color) !important;
 }
-
 
 .swiper-pagination {
   position: relative;

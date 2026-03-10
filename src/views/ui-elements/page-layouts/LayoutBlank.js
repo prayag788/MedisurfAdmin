@@ -11,7 +11,8 @@ const LayoutBlank = () => {
             <div className="alert-body">
               <span className="font-weight-bold">Info: </span>
               <span>
-                This layout is used in Authentication & Miscellaneous page. Please check the{' '}
+                This layout is used in Authentication & Miscellaneous page.
+                Please check the{' '}
                 <a
                   href="https://pixinvent.com/demo/vuexy-react-admin-dashboard-template/documentation/development/page-layouts"
                   target="_blank"

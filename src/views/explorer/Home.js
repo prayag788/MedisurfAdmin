@@ -14,7 +14,11 @@ import {
 } from 'reactstrap'
 import moment from 'moment'
 import axios from 'axios'
-import { extractErrorMessage, flattenObj, openExplorer } from '../../utility/Utils'
+import {
+  extractErrorMessage,
+  flattenObj,
+  openExplorer,
+} from '../../utility/Utils'
 import {
   showErrorAlert,
   showSuccessAlert,
@@ -44,7 +48,9 @@ const Home = () => {
   const [lookupResult, setLookupResult] = useState([])
   const [lookupResultTotal, setLookupResultTotal] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('lookuprow') ? JSON.parse(localStorage.getItem('lookuprow')) : 7
+    localStorage.getItem('lookuprow')
+      ? JSON.parse(localStorage.getItem('lookuprow'))
+      : 7
   )
   const [refreshLoading, setRefreshLoading] = useState(false)
   const [sortField, setSortField] = useState(null)
@@ -57,7 +63,7 @@ const Home = () => {
 
   const tableRef = useRef(null)
 
-  const calculateFinalDate = value => {
+  const calculateFinalDate = (value) => {
     if (value !== '*') {
       const [days, op] = value.split('-')
       return (Number(days) === 0 || Number(days) === 1) && op === 'days'
@@ -86,12 +92,12 @@ const Home = () => {
 
       const studyData = response.data.studyData || []
       setLookupResult(() => {
-        return studyData.map(obj => {
+        return studyData.map((obj) => {
           return flattenObj(obj)
         })
       })
       setPage(pageVal++)
-      setRowsPerPage(prev => rowsPerPageVal)
+      setRowsPerPage((prev) => rowsPerPageVal)
 
       // Show message only if no studies found
       if (studyData.length === 0) {
@@ -103,7 +109,10 @@ const Home = () => {
         // Scroll to results if they exist
         setTimeout(() => {
           if (tableRef.current) {
-            tableRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            tableRef.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            })
           }
         }, 100)
       }
@@ -124,24 +133,24 @@ const Home = () => {
     }
   }
 
-  const onInputChange = e => {
+  const onInputChange = (e) => {
     if (!e.target.value && formData[e.target.id]) {
       const tempObj = { ...formData }
       delete tempObj[e.target.id]
       setFormData(() => tempObj)
     } else {
-      setFormData(prev => {
+      setFormData((prev) => {
         return { ...prev, [e.target.id]: e.target.value }
       })
     }
   }
 
-  const onStudyDateChangeHandler = e => {
+  const onStudyDateChangeHandler = (e) => {
     setStudyDate(e.target.value)
   }
 
   // Handle Row Clicks
-  const handleRowClick = e => {
+  const handleRowClick = (e) => {
     openExplorer('studies', e.data['ID'], navigate)
   }
 
@@ -151,9 +160,13 @@ const Home = () => {
       setSortField(d.sortField)
 
       if (sortOrder === -1) {
-        lookupResult.sort((a, b) => String(b[d.sortField]).localeCompare(String(a[d.sortField])))
+        lookupResult.sort((a, b) =>
+          String(b[d.sortField]).localeCompare(String(a[d.sortField]))
+        )
       } else {
-        lookupResult.sort((a, b) => String(a[d.sortField]).localeCompare(String(b[d.sortField])))
+        lookupResult.sort((a, b) =>
+          String(a[d.sortField]).localeCompare(String(b[d.sortField]))
+        )
       }
 
       setLookupResult(lookupResult)
@@ -163,7 +176,7 @@ const Home = () => {
   const columns = [
     {
       name: 'Patient Name',
-      cell: row => (row['PatientName'] ? row['PatientName'] : '-'),
+      cell: (row) => (row['PatientName'] ? row['PatientName'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -172,7 +185,7 @@ const Home = () => {
     },
     {
       name: 'Study Description',
-      cell: row => (row['StudyDescription'] ? row['StudyDescription'] : '-'),
+      cell: (row) => (row['StudyDescription'] ? row['StudyDescription'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -181,19 +194,21 @@ const Home = () => {
     },
     {
       name: 'Patient Birth Date',
-      cell: row => (row['PatientBirthDate'] ? row['PatientBirthDate'] : '-'),
+      cell: (row) => (row['PatientBirthDate'] ? row['PatientBirthDate'] : '-'),
       reorder: true,
 
       id: 'PatientBirthDate',
       sortable: true,
       minWidth: '205px',
-      cell: row => {
-        return moment(row['PatientBirthDate']).format(userData?.dateFormats?.dateFormat)
+      cell: (row) => {
+        return moment(row['PatientBirthDate']).format(
+          userData?.dateFormats?.dateFormat
+        )
       },
     },
     {
       name: 'Patient ID',
-      cell: row => (row['PatientID'] ? row['PatientID'] : '-'),
+      cell: (row) => (row['PatientID'] ? row['PatientID'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -202,7 +217,7 @@ const Home = () => {
     },
     {
       name: 'Sex',
-      cell: row =>
+      cell: (row) =>
         row['PatientSex'] === 'M' ? (
           <img src={maleIcon} width={25} alt="Player" />
         ) : row['PatientSex'] === 'F' ? (
@@ -221,7 +236,7 @@ const Home = () => {
     },
     {
       name: 'Accession Number',
-      cell: row => (row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
+      cell: (row) => (row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -230,7 +245,7 @@ const Home = () => {
     },
     {
       name: 'Institution Name',
-      cell: row => (row['InstitutionName'] ? row['InstitutionName'] : '-'),
+      cell: (row) => (row['InstitutionName'] ? row['InstitutionName'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -239,7 +254,8 @@ const Home = () => {
     },
     {
       name: 'Referring Physician Name',
-      cell: row => (row['ReferringPhysicianName'] ? row['ReferringPhysicianName'] : '-'),
+      cell: (row) =>
+        row['ReferringPhysicianName'] ? row['ReferringPhysicianName'] : '-',
       sortable: true,
       reorder: true,
 
@@ -248,19 +264,21 @@ const Home = () => {
     },
     {
       name: 'Study Date',
-      selector: row => (row['StudyDate'] ? row['StudyDate'] : '-'),
+      selector: (row) => (row['StudyDate'] ? row['StudyDate'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'StudyDate',
       minWidth: '150px',
-      cell: row => {
-        return moment(row['StudyDate']).format(userData?.dateFormats?.dateFormat)
+      cell: (row) => {
+        return moment(row['StudyDate']).format(
+          userData?.dateFormats?.dateFormat
+        )
       },
     },
     {
       name: 'Study ID',
-      cell: row => (row['StudyID'] ? row['StudyID'] : '-'),
+      cell: (row) => (row['StudyID'] ? row['StudyID'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -269,7 +287,7 @@ const Home = () => {
     },
     {
       name: 'Study Instance UID',
-      cell: row => (row['StudyInstanceUID'] ? row['StudyInstanceUID'] : '-'),
+      cell: (row) => (row['StudyInstanceUID'] ? row['StudyInstanceUID'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -280,7 +298,7 @@ const Home = () => {
 
   useEffect(() => {
     if (searchValue !== '') {
-      const updatedData = lookupResult.filter(item => {
+      const updatedData = lookupResult.filter((item) => {
         if (typeof item === 'string') {
           return item.includes(searchValue)
         } else if (typeof item === 'object') {
@@ -320,7 +338,12 @@ const Home = () => {
                 Patient ID
               </Label>
               <Col sm="6">
-                <Input type="text" name="PatientID" id="PatientID" onChange={onInputChange} />
+                <Input
+                  type="text"
+                  name="PatientID"
+                  id="PatientID"
+                  onChange={onInputChange}
+                />
               </Col>
             </FormGroup>
 
@@ -329,7 +352,12 @@ const Home = () => {
                 Patient Name
               </Label>
               <Col sm="6">
-                <Input type="text" name="PatientName" id="PatientName" onChange={onInputChange} />
+                <Input
+                  type="text"
+                  name="PatientName"
+                  id="PatientName"
+                  onChange={onInputChange}
+                />
               </Col>
             </FormGroup>
 
@@ -413,7 +441,11 @@ const Home = () => {
       {lookupResult.length > 0 || filteredData.length > 0 ? (
         <>
           <Row className="justify-content-end mx-0">
-            <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+            <Col
+              className="d-flex align-items-center justify-content-end mt-1"
+              md="6"
+              sm="12"
+            >
               <Label className="mr-1" for="search-input">
                 Search
               </Label>
@@ -423,7 +455,7 @@ const Home = () => {
                 bsSize="sm"
                 id="search-input"
                 value={searchValue}
-                onChange={e => {
+                onChange={(e) => {
                   setSearchValue(e.target.value)
                 }}
               />
@@ -437,14 +469,17 @@ const Home = () => {
                   tableData: searchValue !== '' ? filteredData : lookupResult,
                   visibleColumns: columns,
                   rows: rowsPerPage,
-                  totalRecords: searchValue !== '' ? filteredData.length : lookupResultTotal,
+                  totalRecords:
+                    searchValue !== ''
+                      ? filteredData.length
+                      : lookupResultTotal,
                   onRowDoubleClick: handleRowClick,
 
                   first: page,
                   onSort: handleSort,
                   sortField,
                   sortOrder,
-                  onPage: e => {
+                  onPage: (e) => {
                     onSubmit(e.first, e.rows)
 
                     localStorage.setItem('lookuprow', e.rows)

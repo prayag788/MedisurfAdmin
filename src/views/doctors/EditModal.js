@@ -40,15 +40,21 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
         email: yup
           .string()
           .email('Please provide valid email address')
-          .required('Please provide your email address. This field is required.'),
+          .required(
+            'Please provide your email address. This field is required.'
+          ),
         hospitalname: yup
           .string()
           .max(
             FIELD_LIMITS.HOSPITAL_NAME_MAX_LENGTH,
             `Hospital name cannot be longer than ${FIELD_LIMITS.HOSPITAL_NAME_MAX_LENGTH} characters.`
           ),
-        designation: yup.string().max(25, 'Designation name cannot be longer than 25 characters.'),
-        cno: yup.string().matches(PHONE_REGEXP, 'Please enter a valid contact number'),
+        designation: yup
+          .string()
+          .max(25, 'Designation name cannot be longer than 25 characters.'),
+        cno: yup
+          .string()
+          .matches(PHONE_REGEXP, 'Please enter a valid contact number'),
         location: yup.string(),
         status: yup
           .number()
@@ -72,14 +78,23 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   const [picker, setPicker] = useState(new Date())
   // Optimized form field mapping
   const formFields = useMemo(
-    () => ['fname', 'lname', 'email', 'hospitalname', 'designation', 'cno', 'location', 'status'],
+    () => [
+      'fname',
+      'lname',
+      'email',
+      'hospitalname',
+      'designation',
+      'cno',
+      'location',
+      'status',
+    ],
     []
   )
   // Initialize form with data
   useEffect(() => {
     if (editData && Object.keys(editData).length > 0) {
       // Set form values efficiently
-      formFields.forEach(field => {
+      formFields.forEach((field) => {
         setValue(field, editData[field] || '', { shouldValidate: false })
       })
       // Handle date picker
@@ -90,7 +105,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
     }
   }, [editData, setValue, formFields])
   // Optimized date formatting function
-  const formatDate = useCallback(date => {
+  const formatDate = useCallback((date) => {
     if (!date) return ''
     const d = new Date(date)
     const year = d.getFullYear()
@@ -100,7 +115,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   }, [])
   // Form submission handler
   const onSubmit = useCallback(
-    async data => {
+    async (data) => {
       const formData = {
         ...data,
         dob: formatDate(picker),
@@ -113,7 +128,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   )
   // Status change handler
   const handleStatusChange = useCallback(
-    selectedOption => {
+    (selectedOption) => {
       setValue('status', selectedOption.value, { shouldValidate: true })
     },
     [setValue]
@@ -127,7 +142,14 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   )
   // Reusable FormField component
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -162,13 +184,28 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit Doctor Details</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormField name="fname" label="First Name" placeholder="Bruce" required />
-          <FormField name="lname" label="Last Name" placeholder="Wayne" required />
+          <FormField
+            name="fname"
+            label="First Name"
+            placeholder="Bruce"
+            required
+          />
+          <FormField
+            name="lname"
+            label="Last Name"
+            placeholder="Wayne"
+            required
+          />
           <FormField
             name="email"
             label="Email"
@@ -182,7 +219,11 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             placeholder="Fortis"
             maxLength={FIELD_LIMITS.HOSPITAL_NAME_MAX_LENGTH}
           />
-          <FormField name="designation" label="Designation" placeholder="Doctor" />
+          <FormField
+            name="designation"
+            label="Designation"
+            placeholder="Doctor"
+          />
           <FormGroup>
             <Label for="default-picker">Date of birth</Label>
             <Flatpickr
@@ -193,7 +234,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                 allowInput: false,
                 closeOnSelect: true, // Close after selecting date for single date picker
               }}
-              onChange={date => {
+              onChange={(date) => {
                 if (date && date.length > 0) {
                   setPicker(date[0])
                 }
@@ -201,7 +242,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               id="default-picker"
             />
           </FormGroup>
-          <FormField name="cno" label="Contact Number" type="number" placeholder="+1" />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="number"
+            placeholder="+1"
+          />
           <FormField name="location" label="Location" placeholder="New York" />
           <FormGroup>
             <Label for="status">
@@ -217,7 +263,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                   isClearable={false}
                   theme={selectThemeColors}
                   value={
-                    STATUS_OPTIONS.find(option => option.value === statusValue) || STATUS_OPTIONS[0]
+                    STATUS_OPTIONS.find(
+                      (option) => option.value === statusValue
+                    ) || STATUS_OPTIONS[0]
                   }
                   name="status"
                   id="status"
@@ -229,14 +277,21 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               )}
             />
             {errors.status && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.status?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.status?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <div className="d-flex justify-content-end gap-2 mt-3">
             <Button type="submit" className="me-1" color="primary">
               Update Doctor
             </Button>
-            <Button type="button" color="secondary" onClick={handleModal} outline>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={handleModal}
+              outline
+            >
               Cancel
             </Button>
           </div>

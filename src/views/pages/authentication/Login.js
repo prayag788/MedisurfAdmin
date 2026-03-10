@@ -30,12 +30,18 @@ import '@styles/react/libs/login/login.scss'
 
 const ToastContent = ({ name, role }) => (
   <div className="d-flex">
-    <Avatar size="sm" color="success" icon={<Coffee size={12} />} className="me-2 flex-shrink-0" />
+    <Avatar
+      size="sm"
+      color="success"
+      icon={<Coffee size={12} />}
+      className="me-2 flex-shrink-0"
+    />
     <div className="flex-grow-1">
       <div className="toast-title font-weight-bold">Welcome, {name}</div>
       <div className="toast-message">
-        You have successfully logged in as an {role} user to {`${process.env.REACT_APP_INNER_NAME}`}
-        . Now you can start to explore. Enjoy!
+        You have successfully logged in as an {role} user to{' '}
+        {`${process.env.REACT_APP_INNER_NAME}`}. Now you can start to explore.
+        Enjoy!
       </div>
     </div>
   </div>
@@ -50,7 +56,9 @@ const ToastContentMessage = ({ message, status }) => (
       className="me-2 flex-shrink-0"
     />
     <div className="flex-grow-1">
-      <div className="toast-title font-weight-bold">{status ? 'Success' : 'Failed'}</div>
+      <div className="toast-title font-weight-bold">
+        {status ? 'Success' : 'Failed'}
+      </div>
       <div className="toast-message">{message}</div>
     </div>
   </div>
@@ -75,7 +83,7 @@ const ToastInActiveAccount = () => (
   </div>
 )
 
-const Login = props => {
+const Login = (props) => {
   const [skin, setSkin] = useSkin()
   const ability = useContext(AbilityContext)
   const dispatch = useDispatch()
@@ -87,7 +95,7 @@ const Login = props => {
   const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
     source = require(`@src/assets/images/pages/${illustration}`).default
 
-  const validate = obj => {
+  const validate = (obj) => {
     const isValid = []
     for (const item in obj) {
       if (obj[item] === '') {
@@ -97,14 +105,14 @@ const Login = props => {
     return isValid
   }
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault()
     const pass = validate(creds)
     if (!pass.length) {
       setLoading(() => true)
       useJwt
         .login(creds)
-        .then(res => {
+        .then((res) => {
           setLoading(() => false)
           if (res.data.user.status === 1) {
             const data = {
@@ -131,11 +139,17 @@ const Login = props => {
                 }
               )
             } else {
-              toast.error(<ToastContentMessage message={res.data.error.message} status={false} />, {
-                transition: Slide,
-                hideProgressBar: true,
-                autoClose: 4000,
-              })
+              toast.error(
+                <ToastContentMessage
+                  message={res.data.error.message}
+                  status={false}
+                />,
+                {
+                  transition: Slide,
+                  hideProgressBar: true,
+                  autoClose: 4000,
+                }
+              )
             }
           } else {
             toast.info(<ToastInActiveAccount />, {
@@ -149,9 +163,9 @@ const Login = props => {
             })
           }
         })
-        .catch(err => {
+        .catch((err) => {
           setLoading(() => false)
-          setError(prev => {
+          setError((prev) => {
             return {
               ...prev,
               auth: err.response.data ? err.response.data.error.message : '',
@@ -159,9 +173,9 @@ const Login = props => {
           })
         })
     } else {
-      setError(prev => {
+      setError((prev) => {
         const errors = {}
-        pass.map(item => {
+        pass.map((item) => {
           errors[item] = 1
         })
         return errors
@@ -169,30 +183,30 @@ const Login = props => {
     }
   }
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
 
     // Remove authentication error
-    setError(prev => {
+    setError((prev) => {
       delete prev.auth
       return prev
     })
 
     // Remove/Set input error
     if (!value) {
-      setError(prev => {
+      setError((prev) => {
         return { ...prev, [name]: 1 }
       })
     } else {
-      setError(prev => {
+      setError((prev) => {
         delete prev[name]
         return prev
       })
     }
 
     // Update input value
-    setCreds(prev => {
+    setCreds((prev) => {
       return { ...prev, [name]: value }
     })
   }
@@ -200,7 +214,7 @@ const Login = props => {
   return (
     <div className="auth-wrapper auth-v2">
       <Row className="auth-inner m-0">
-        <Link className="brand-logo" to="/" onClick={e => e.preventDefault()}>
+        <Link className="brand-logo" to="/" onClick={(e) => e.preventDefault()}>
           <svg viewBox="0 0 139 95" version="1.1" height="28">
             <defs>
               <linearGradient
@@ -224,7 +238,13 @@ const Login = props => {
                 <stop stopColor="#FFFFFF" offset="100%"></stop>
               </linearGradient>
             </defs>
-            <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <g
+              id="Page-1"
+              stroke="none"
+              strokeWidth="1"
+              fill="none"
+              fillRule="evenodd"
+            >
               <g id="Artboard" transform="translate(-400.000000, -178.000000)">
                 <g id="Group" transform="translate(400.000000, 178.000000)">
                   <path
@@ -263,12 +283,20 @@ const Login = props => {
           </svg>
           <h2 className="brand-text text-primary ml-1">{`${process.env.REACT_APP_INNER_NAME}`}</h2>
         </Link>
-        <Col className="d-lg-flex align-items-center p-lg-5 p-sm-5 p-4" lg="8" sm="12">
+        <Col
+          className="d-lg-flex align-items-center p-lg-5 p-sm-5 p-4"
+          lg="8"
+          sm="12"
+        >
           <div className="w-100 d-lg-flex align-items-center justify-content-center px-lg-5">
             <img className="img-fluid-new px-1" src={source} alt="Login V2" />
           </div>
         </Col>
-        <Col className="d-flex align-items-center auth-bg py-4 px-4 p-lg-5" lg="4" sm="12">
+        <Col
+          className="d-flex align-items-center auth-bg py-4 px-4 p-lg-5"
+          lg="4"
+          sm="12"
+        >
           <Col className="px-xl-2 mx-auto px-1" sm="8" md="6" lg="12">
             <CardTitle tag="h2" className="font-weight-bold mb-1">
               Welcome to {`${process.env.REACT_APP_INNER_NAME}`}! 👋
@@ -290,7 +318,10 @@ const Login = props => {
                   value={creds.username}
                   placeholder="john@example.com"
                   onChange={inputHandler}
-                  invalid={(error && error.username && true) || (error && error.auth && true)}
+                  invalid={
+                    (error && error.username && true) ||
+                    (error && error.auth && true)
+                  }
                   className={classnames()}
                 />
               </FormGroup>
@@ -309,12 +340,17 @@ const Login = props => {
                   tabIndex="2"
                   value={creds.password}
                   onChange={inputHandler}
-                  invalid={(error && error.password && true) || (error && error.auth && true)}
+                  invalid={
+                    (error && error.password && true) ||
+                    (error && error.auth && true)
+                  }
                   className={classnames({
                     'is-invalid': error && error.auth && true,
                   })}
                 />
-                {error && error.auth && <FormFeedback>{error.auth}</FormFeedback>}
+                {error && error.auth && (
+                  <FormFeedback>{error.auth}</FormFeedback>
+                )}
               </FormGroup>
               <Button.Ripple
                 type="submit"

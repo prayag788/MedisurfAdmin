@@ -1,4 +1,12 @@
-import { Box, Menu, Circle, EyeOff, Folder, LifeBuoy, Shield } from 'react-feather'
+import {
+  Box,
+  Menu,
+  Circle,
+  EyeOff,
+  Folder,
+  LifeBuoy,
+  Shield,
+} from 'react-feather'
 export default [
   {
     id: 'misc',
@@ -58,7 +66,8 @@ export default [
         icon: <Folder />,
         externalLink: true,
         newTab: true,
-        navLink: 'https://pixinvent.com/demo/vuexy-react-admin-dashboard-template/documentation',
+        navLink:
+          'https://pixinvent.com/demo/vuexy-react-admin-dashboard-template/documentation',
       },
       {
         id: 'raiseSupport',

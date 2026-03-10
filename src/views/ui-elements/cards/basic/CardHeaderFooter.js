@@ -22,8 +22,8 @@ const CardHeaderFooter = () => {
             <CardBody>
               <CardTitle tag="h4">Special title treatment</CardTitle>
               <CardText>
-                With supporting text below as a natural lead-in to additional content natural
-                lead-in to additional content.
+                With supporting text below as a natural lead-in to additional
+                content natural lead-in to additional content.
               </CardText>
               <Button.Ripple color="primary" outline>
                 Go somewhere
@@ -37,9 +37,10 @@ const CardHeaderFooter = () => {
             <CardBody>
               <blockquote className="blockquote mb-0">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a
-                  ante.Lorem ipsum dolor sit amet, Integer posuere erat a ante Integer posuere erat
-                  a anteconsectetur.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Integer posuere erat a ante.Lorem ipsum dolor sit amet,
+                  Integer posuere erat a ante Integer posuere erat a
+                  anteconsectetur.
                 </p>
                 <footer className="blockquote-footer">
                   Someone famous in

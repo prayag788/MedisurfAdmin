@@ -283,7 +283,9 @@
 }
 
 @include media-breakpoint-down(sm) {
-  .ecommerce-application .swiper-responsive-breakpoints.swiper-container .swiper-slide {
+  .ecommerce-application
+    .swiper-responsive-breakpoints.swiper-container
+    .swiper-slide {
     padding: 1rem;
   }
 }

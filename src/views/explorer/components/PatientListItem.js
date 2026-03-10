@@ -8,11 +8,11 @@ const PatientListItem = ({ data, value, callback, showArrow }) => {
   const [fieldDataHead, setFieldDataHead] = useState({ PatientName: '' })
   const [fieldData, setFieldData] = useState({})
 
-  const isObject = obj => {
+  const isObject = (obj) => {
     return Object.prototype.toString.call(obj) === '[object Object]'
   }
 
-  const flattenObj = ob => {
+  const flattenObj = (ob) => {
     const result = {}
 
     for (const i in ob) {
@@ -31,7 +31,7 @@ const PatientListItem = ({ data, value, callback, showArrow }) => {
   useEffect(() => {
     const extractedData = {}
     const flatData = flattenObj(data)
-    fieldSets.forEach(tag => {
+    fieldSets.forEach((tag) => {
       if (flatData[tag] !== undefined) {
         extractedData[tag] = flatData[tag]
       }
@@ -39,16 +39,18 @@ const PatientListItem = ({ data, value, callback, showArrow }) => {
 
     setFieldData(() => extractedData)
 
-    setFieldDataHead(prev => {
+    setFieldDataHead((prev) => {
       return {
         ...prev,
         PatientName: flatData['PatientName'] ? flatData['PatientName'] : '',
-        StudyDescription: flatData['StudyDescription'] ? flatData['StudyDescription'] : '',
+        StudyDescription: flatData['StudyDescription']
+          ? flatData['StudyDescription']
+          : '',
       }
     })
   }, [data])
 
-  const handleCallback = idx => {
+  const handleCallback = (idx) => {
     if (callback) {
       callback(idx)
     }
@@ -68,7 +70,7 @@ const PatientListItem = ({ data, value, callback, showArrow }) => {
         <CardBody>
           <Row>
             <Col md={11}>
-              {Object.keys(fieldData).map(key => {
+              {Object.keys(fieldData).map((key) => {
                 return (
                   <p className="mb-0">
                     {key}: <strong>{fieldData[key]}</strong>

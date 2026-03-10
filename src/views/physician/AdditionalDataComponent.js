@@ -16,11 +16,16 @@ const AdditionalDataComponent = ({
   console.log(formData, 'errors of emial')
   const addMoreEmails = () => {
     console.log(getValues()[fieldName], 'getValues of emial')
-    setValue(fieldName, getValues()[fieldName] ? [...getValues()[fieldName], ''] : [''])
-    setFormData(prev => {
+    setValue(
+      fieldName,
+      getValues()[fieldName] ? [...getValues()[fieldName], ''] : ['']
+    )
+    setFormData((prev) => {
       return {
         ...prev,
-        [fieldName]: getValues()[fieldName] ? [...getValues()[fieldName], ''] : [''],
+        [fieldName]: getValues()[fieldName]
+          ? [...getValues()[fieldName], '']
+          : [''],
       }
     })
   }
@@ -43,11 +48,17 @@ const AdditionalDataComponent = ({
               <div style={{ marginLeft: 'auto' }}>
                 <i
                   className="pi pi-times"
-                  style={{ fontSize: '1rem', cursor: 'pointer', marginLeft: 'auto' }}
+                  style={{
+                    fontSize: '1rem',
+                    cursor: 'pointer',
+                    marginLeft: 'auto',
+                  }}
                   onClick={() => {
-                    setFormData(prev => {
+                    setFormData((prev) => {
                       let newSecondaryEmail = getValues()[fieldName]
-                      newSecondaryEmail = newSecondaryEmail.filter((email, i) => i !== index)
+                      newSecondaryEmail = newSecondaryEmail.filter(
+                        (email, i) => i !== index
+                      )
                       setValue(fieldName, newSecondaryEmail)
                       return { ...prev, [fieldName]: newSecondaryEmail }
                     })
@@ -62,7 +73,12 @@ const AdditionalDataComponent = ({
               name={`${fieldName}[${index}]`}
               id={`${fieldName}.${index}`}
               defaultValue={email ?? ''}
-              invalid={errors && errors?.[fieldName] && errors[fieldName]?.[index] && true}
+              invalid={
+                errors &&
+                errors?.[fieldName] &&
+                errors[fieldName]?.[index] &&
+                true
+              }
               placeholder={placeholder}
             ></Input>
 

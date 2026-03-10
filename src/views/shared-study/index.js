@@ -4,7 +4,7 @@ import ShareStudyList from './ShareStudyList'
 
 import '@styles/base/pages/page-auth.scss'
 
-const SharedStudy = props => {
+const SharedStudy = (props) => {
   console.log('SharedStudy component loaded', props)
   const [isAuthenticated, setIsAuthenticated] = useState(true)
 
@@ -15,7 +15,7 @@ const SharedStudy = props => {
     ) {
       localStorage.setItem('sharedAuth', false)
       document.cookie = `sharedAuth=; domain=${process.env.REACT_APP_COOKIE_DOMAIN}; path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`
-      setIsAuthenticated(prev => false)
+      setIsAuthenticated((prev) => false)
       sessionStorage.setItem('sharedStudy', false)
     }
     localStorage.setItem('sharedUrl', window.location.pathname)

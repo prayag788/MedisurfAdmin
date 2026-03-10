@@ -11,14 +11,14 @@ const CustomTable = ({ columns, paginationPerPage, data, handleRowClick }) => {
   const [filteredData, setFilteredData] = useState([])
 
   // ** Function to handle filter
-  const handleFilter = e => {
+  const handleFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     setSearchValue(value)
 
     if (value.length) {
-      updatedData = data.filter(item => {
-        const startsWith = Object.keys(item).some(val => {
+      updatedData = data.filter((item) => {
+        const startsWith = Object.keys(item).some((val) => {
           if (
             typeof item[val] === 'string' ||
             typeof item[val] === 'number' ||
@@ -28,51 +28,63 @@ const CustomTable = ({ columns, paginationPerPage, data, handleRowClick }) => {
               return item[val].toLowerCase().startsWith(value.toLowerCase())
             } else if (typeof item[val] === 'number') {
               return item[val].toString().startsWith(value)
-            } else if (typeof item[val] === 'object' && item[val] && item[val].length) {
-              if (item[val].find(o => o.subject.toString().startsWith(value))) {
-                return item[val].find(o => o.subject.toString().startsWith(value))
+            } else if (
+              typeof item[val] === 'object' &&
+              item[val] &&
+              item[val].length
+            ) {
+              if (
+                item[val].find((o) => o.subject.toString().startsWith(value))
+              ) {
+                return item[val].find((o) =>
+                  o.subject.toString().startsWith(value)
+                )
               } else if (
-                item[val].find(o => o.subject === 't&c') &&
-                'Terms & Conditions'.toLowerCase().startsWith(value.toLowerCase())
+                item[val].find((o) => o.subject === 't&c') &&
+                'Terms & Conditions'
+                  .toLowerCase()
+                  .startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'upload-dicom') &&
-                'Upload Dicom Image'.toLowerCase().startsWith(value.toLowerCase())
+                item[val].find((o) => o.subject === 'upload-dicom') &&
+                'Upload Dicom Image'
+                  .toLowerCase()
+                  .startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'doctors') &&
+                item[val].find((o) => o.subject === 'doctors') &&
                 'Doctors'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Study List Viewer') &&
+                item[val].find((o) => o.subject === 'Study List Viewer') &&
                 'Study list'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'power-user') &&
+                item[val].find((o) => o.subject === 'power-user') &&
                 'Power User'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Modality') &&
+                item[val].find((o) => o.subject === 'Modality') &&
                 'Modality'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'privacy-policy') &&
+                item[val].find((o) => o.subject === 'privacy-policy') &&
                 'Privacy policy'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'cookie-policy') &&
+                item[val].find((o) => o.subject === 'cookie-policy') &&
                 'Cookie policy'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'data-analytics') &&
+                item[val].find((o) => o.subject === 'data-analytics') &&
                 'Data analytics'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
@@ -81,7 +93,7 @@ const CustomTable = ({ columns, paginationPerPage, data, handleRowClick }) => {
           }
         })
 
-        const includes = Object.keys(item).some(val => {
+        const includes = Object.keys(item).some((val) => {
           if (
             typeof item[val] === 'string' ||
             typeof item[val] === 'number' ||
@@ -91,51 +103,63 @@ const CustomTable = ({ columns, paginationPerPage, data, handleRowClick }) => {
               return item[val].toLowerCase().startsWith(value.toLowerCase())
             } else if (typeof item[val] === 'number') {
               return item[val].toString().startsWith(value)
-            } else if (typeof item[val] === 'object' && item[val] && item[val].length) {
-              if (item[val].find(o => o.subject.toString().startsWith(value))) {
-                return item[val].find(o => o.subject.toString().startsWith(value))
+            } else if (
+              typeof item[val] === 'object' &&
+              item[val] &&
+              item[val].length
+            ) {
+              if (
+                item[val].find((o) => o.subject.toString().startsWith(value))
+              ) {
+                return item[val].find((o) =>
+                  o.subject.toString().startsWith(value)
+                )
               } else if (
-                item[val].find(o => o.subject === 't&c') &&
-                'Terms & Conditions'.toLowerCase().startsWith(value.toLowerCase())
+                item[val].find((o) => o.subject === 't&c') &&
+                'Terms & Conditions'
+                  .toLowerCase()
+                  .startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Study List Viewer') &&
-                'Upload Dicom Image'.toLowerCase().startsWith(value.toLowerCase())
+                item[val].find((o) => o.subject === 'Study List Viewer') &&
+                'Upload Dicom Image'
+                  .toLowerCase()
+                  .startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'upload-dicom') &&
+                item[val].find((o) => o.subject === 'upload-dicom') &&
                 'Doctors'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'doctors') &&
+                item[val].find((o) => o.subject === 'doctors') &&
                 'Study list'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'power-user') &&
+                item[val].find((o) => o.subject === 'power-user') &&
                 'Power User'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Modality') &&
+                item[val].find((o) => o.subject === 'Modality') &&
                 'Modality'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'privacy-policy') &&
+                item[val].find((o) => o.subject === 'privacy-policy') &&
                 'Privacy policy'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'cookie-policy') &&
+                item[val].find((o) => o.subject === 'cookie-policy') &&
                 'Cookie policy'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'data-analytics') &&
+                item[val].find((o) => o.subject === 'data-analytics') &&
                 'Data analytics'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
@@ -158,7 +182,11 @@ const CustomTable = ({ columns, paginationPerPage, data, handleRowClick }) => {
   return (
     <Card>
       <Row className="justify-content-end mx-0 p-1">
-        <Col className="d-flex align-items-center justify-content-end" md="6" sm="12">
+        <Col
+          className="d-flex align-items-center justify-content-end"
+          md="6"
+          sm="12"
+        >
           <Label className="mr-1" for="search-input">
             Search
           </Label>

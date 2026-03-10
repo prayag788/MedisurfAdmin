@@ -4,7 +4,14 @@ import { Fragment, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // ** Third Party Components
-import { Row, Col, UncontrolledTooltip, Card, CardHeader, CardTitle } from 'reactstrap'
+import {
+  Row,
+  Col,
+  UncontrolledTooltip,
+  Card,
+  CardHeader,
+  CardTitle,
+} from 'reactstrap'
 import { Edit } from 'react-feather'
 
 // ** Styles
@@ -38,20 +45,20 @@ const ReportTemplate = () => {
   }
 
   // ** Table item Button Handlers
-  const editHandler = row => {
+  const editHandler = (row) => {
     navigate(`/email-template/${row.url}/edit`)
   }
 
   const columns = [
     {
       name: 'Name',
-      selector: row => (row['name'] ? row['name'] : '-'),
+      selector: (row) => (row['name'] ? row['name'] : '-'),
       sortable: false,
       reorder: false,
       visible: true,
       id: 'name',
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.name}</div>
       },
     },
@@ -62,7 +69,7 @@ const ReportTemplate = () => {
       sortable: false,
       reorder: false,
       id: 'Actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -102,9 +109,9 @@ const ReportTemplate = () => {
                 onSort: handleSort,
                 sortField,
                 sortOrder,
-                onPage: e => {
+                onPage: (e) => {
                   setPage(e.first++)
-                  setRowsPerPage(prev => e.rows)
+                  setRowsPerPage((prev) => e.rows)
                 },
               }}
             />

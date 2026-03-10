@@ -12,7 +12,8 @@ const ThemeContext = ({ children }) => {
   useEffect(() => {
     if (window !== 'undefined') {
       //** Get variable value
-      const getHex = color => window.getComputedStyle(document.body).getPropertyValue(color).trim()
+      const getHex = (color) =>
+        window.getComputedStyle(document.body).getPropertyValue(color).trim()
 
       //** Colors obj
       const obj = {
@@ -50,7 +51,9 @@ const ThemeContext = ({ children }) => {
     }
   }, [])
 
-  return <ThemeColors.Provider value={{ colors }}>{children}</ThemeColors.Provider>
+  return (
+    <ThemeColors.Provider value={{ colors }}>{children}</ThemeColors.Provider>
+  )
 }
 
 export { ThemeColors, ThemeContext }

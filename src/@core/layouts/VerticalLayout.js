@@ -4,7 +4,11 @@ import { useLocation } from 'react-router-dom'
 
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
-import { handleMenuCollapsed, handleContentWidth, handleMenuHidden } from '@store/actions/layout'
+import {
+  handleMenuCollapsed,
+  handleContentWidth,
+  handleMenuHidden,
+} from '@store/actions/layout'
 
 // ** Third Party Components
 import classnames from 'classnames'
@@ -32,9 +36,10 @@ import { useNavbarColor } from '@hooks/useNavbarColor'
 import '@styles/base/core/menu/menu-types/vertical-menu.scss'
 import '@styles/base/core/menu/menu-types/vertical-overlay-menu.scss'
 
-const VerticalLayout = props => {
+const VerticalLayout = (props) => {
   // ** Props
-  const { children, navbar, footer, menu, routerProps, currentActiveItem } = props
+  const { children, navbar, footer, menu, routerProps, currentActiveItem } =
+    props
 
   // ** Hooks
   const [skin, setSkin] = useSkin()
@@ -50,7 +55,7 @@ const VerticalLayout = props => {
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const layoutStore = useSelector(state => state.layout)
+  const layoutStore = useSelector((state) => state.layout)
 
   // ** Update Window Width
   const handleWindowWidth = () => {
@@ -64,20 +69,20 @@ const VerticalLayout = props => {
   const isHidden = layoutStore.menuHidden
 
   // ** Toggles Menu Collapsed
-  const setMenuCollapsed = val => {
+  const setMenuCollapsed = (val) => {
     dispatch(handleMenuCollapsed(val))
   }
 
-  const setToggleMenuCollapsed = val => {
+  const setToggleMenuCollapsed = (val) => {
     console.log(val, 'toggle colaps')
     dispatch(handleMenuCollapsed(!val))
   }
 
   // ** Handles Content Width
-  const setContentWidth = val => dispatch(handleContentWidth(val))
+  const setContentWidth = (val) => dispatch(handleContentWidth(val))
 
   // ** Handles Content Width
-  const setIsHidden = val => dispatch(handleMenuHidden(val))
+  const setIsHidden = (val) => dispatch(handleMenuHidden(val))
 
   //** This function will detect the Route Change and will hide the menu on menu item click
   useEffect(() => {
@@ -120,7 +125,8 @@ const VerticalLayout = props => {
     hidden: 'd-none',
   }
 
-  const bgColorCondition = navbarColor !== '' && navbarColor !== 'light' && navbarColor !== 'white'
+  const bgColorCondition =
+    navbarColor !== '' && navbarColor !== 'light' && navbarColor !== 'white'
 
   if (!isMounted) {
     return null
@@ -227,7 +233,10 @@ const VerticalLayout = props => {
         {footer ? (
           footer
         ) : (
-          <FooterComponent footerType={footerType} footerClasses={footerClasses} />
+          <FooterComponent
+            footerType={footerType}
+            footerClasses={footerClasses}
+          />
         )}
       </footer>
 

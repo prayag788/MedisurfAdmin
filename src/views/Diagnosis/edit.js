@@ -9,7 +9,16 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { ToastContent, ToastContentForError } from '../../utils/toast'
 // ** Third Party Components
-import { Row, Col, Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Button,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap'
 
 import Breadcrumbs from '@components/breadcrumbs'
 
@@ -26,7 +35,7 @@ import {
 import { extractErrorMessage, handleAutoLogout } from '@utils'
 import { STATUS_OPTIONS } from '../../utils/constants'
 
-const EditRecord = props => {
+const EditRecord = (props) => {
   const [id] = useState(props?.match?.params?.id)
   const [editorText, setEditorText] = useState(null)
 
@@ -62,20 +71,20 @@ const EditRecord = props => {
     getValue,
   } = useForm({ mode: 'onSubmit', resolver: yupResolver(NewSchema) })
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: e.target.value }
     })
   }
   useEffect(() => {
     if (form_data?.modality) {
-      const exists = modalityList.some(obj => {
+      const exists = modalityList.some((obj) => {
         return obj._id === form_data?.modality
       })
       if (!exists) {
         if (selectedModality?._id === form_data.modality) {
-          setModalityList(prev => [
+          setModalityList((prev) => [
             { _id: selectedModality?._id, name: selectedModality?.name },
             ...prev,
           ])
@@ -84,21 +93,27 @@ const EditRecord = props => {
     }
   }, [form_data])
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       showLoadingAlert()
-      const res = await axios.put(`${process.env.REACT_APP_API_URL}/diagnosis/update/${id}`, data)
+      const res = await axios.put(
+        `${process.env.REACT_APP_API_URL}/diagnosis/update/${id}`,
+        data
+      )
       hideLoadingAlert()
 
-      toast.success(<ToastContent message={res.data?.success?.message} type={'success'} />, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.success(
+        <ToastContent message={res.data?.success?.message} type={'success'} />,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      )
       navigate('/diagnosis')
     } catch (err) {
       hideLoadingAlert()
@@ -109,7 +124,9 @@ const EditRecord = props => {
   useEffect(() => {
     const fetchModalityList = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/diagnosis/modality/list`)
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/diagnosis/modality/list`
+        )
         setModalityList(res.data?.modality)
       } catch (err) {
         toast.error(
@@ -138,7 +155,9 @@ const EditRecord = props => {
     const fetchDiagnosisDetail = async () => {
       if (id) {
         try {
-          const res = await axios.get(`${process.env.REACT_APP_API_URL}/diagnosis/detail/${id}`)
+          const res = await axios.get(
+            `${process.env.REACT_APP_API_URL}/diagnosis/detail/${id}`
+          )
           setValue('name', res.data?.result?.name)
           setValue('text', res.data?.result?.text)
           setValue('status', res.data?.result?.status)
@@ -196,7 +215,9 @@ const EditRecord = props => {
                 placeholder="Template name"
                 onChange={inputHandler}
               />
-              {errors?.name && <FormFeedback>{errors.name.message}</FormFeedback>}
+              {errors?.name && (
+                <FormFeedback>{errors.name.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -214,7 +235,7 @@ const EditRecord = props => {
                 value={form_data?.modality || ''}
               >
                 {modalityList &&
-                  modalityList.map(modality => {
+                  modalityList.map((modality) => {
                     return (
                       <option key={modality._id} value={modality._id}>
                         {' '}
@@ -223,7 +244,9 @@ const EditRecord = props => {
                     )
                   })}
               </Input>
-              {errors?.modality && <FormFeedback>{errors.modality.message}</FormFeedback>}
+              {errors?.modality && (
+                <FormFeedback>{errors.modality.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -277,8 +300,8 @@ const EditRecord = props => {
                     content_style:
                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                     placeholder: `Anything entered here will be added to the report layout chosen from the diagnosis template.`,
-                    setup: editor => {
-                      editor.on('keydown', e => {
+                    setup: (editor) => {
+                      editor.on('keydown', (e) => {
                         handleAutoLogout()
                       })
                     },
@@ -307,13 +330,15 @@ const EditRecord = props => {
                 value={form_data.status}
                 onChange={inputHandler}
               >
-                {STATUS_OPTIONS.map(option => (
+                {STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </Input>
-              {errors?.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+              {errors?.status && (
+                <FormFeedback>{errors.status.message}</FormFeedback>
+              )}
             </FormGroup>
             <Button color="primary" type="submit">
               Save

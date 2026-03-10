@@ -1,12 +1,26 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Card, Col, Form, FormGroup, Input, Label, Row, Spinner } from 'reactstrap'
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Spinner,
+} from 'reactstrap'
 import axios from 'axios'
 import { selectThemeColors } from '@utils'
 import Select from 'react-select'
 import moment from 'moment'
 import { useForm } from 'react-hook-form'
-import { showErrorAlert, showSuccessAlert, getErrorMessage } from '../../../utils/alerts'
+import {
+  showErrorAlert,
+  showSuccessAlert,
+  getErrorMessage,
+} from '../../../utils/alerts'
 
 const LicenseTabContent = () => {
   const navigate = useNavigate()
@@ -97,7 +111,7 @@ const LicenseTabContent = () => {
   useEffect(() => {
     const dateFormatArray = {}
     licenseDetails &&
-      licenseDetails.map(item => {
+      licenseDetails.map((item) => {
         if (
           item.label === 'dateFormat' ||
           item.label === 'timeFormat' ||
@@ -117,11 +131,11 @@ const LicenseTabContent = () => {
     setLoading(true)
     axios
       .get(`${process.env.REACT_APP_API_URL}/user/license/details`)
-      .then(res => {
+      .then((res) => {
         setLicenseDetails(res.data.message)
         setLoading(false)
       })
-      .catch(err => {
+      .catch((err) => {
         setLoading(false)
       })
   }, [])
@@ -151,7 +165,7 @@ const LicenseTabContent = () => {
         ...dateFormats,
         dateTimeFormat: `${dateFormats.dateFormat} ${dateFormats.timeFormat}`,
       })
-      .then(doc => {
+      .then((doc) => {
         showSuccessAlert(doc?.data?.message?.message || 'Success').then(() => {
           const userDetails = JSON.parse(localStorage.getItem('userData'))
           if (userDetails.dateCng === false) {
@@ -163,7 +177,7 @@ const LicenseTabContent = () => {
           localStorage.setItem('userData', JSON.stringify(userDetails))
         })
       })
-      .catch(err => {
+      .catch((err) => {
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
         }
@@ -174,13 +188,13 @@ const LicenseTabContent = () => {
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row>
         {licenseDetails &&
-          licenseDetails.map(item => {
+          licenseDetails.map((item) => {
             if (
               item.label === 'dateFormat' ||
               item.label === 'timeFormat' ||
               item.label === 'dateTimeFormat'
             ) {
-              const [selectedOption] = item.options.filter(dates => {
+              const [selectedOption] = item.options.filter((dates) => {
                 return dates.value === item.value
               })
               return (
@@ -190,13 +204,16 @@ const LicenseTabContent = () => {
                     <Select
                       isClearable={false}
                       theme={selectThemeColors}
-                      defaultValue={{ value: item.value, label: selectedOption?.label }}
+                      defaultValue={{
+                        value: item.value,
+                        label: selectedOption?.label,
+                      }}
                       name={item.label}
                       id={item.label}
                       options={item.options}
                       className="react-select"
                       classNamePrefix="select"
-                      onChange={e => selectHandler(e.value, item.label)}
+                      onChange={(e) => selectHandler(e.value, item.label)}
                     />
                   </FormGroup>
                 </Col>
@@ -211,7 +228,8 @@ const LicenseTabContent = () => {
                       id={item.label}
                       type="text"
                       value={
-                        item.label === 'activationDate' || item.label === 'expiryDate'
+                        item.label === 'activationDate' ||
+                        item.label === 'expiryDate'
                           ? moment(item.value).format(dateFormats.dateFormat)
                           : item.value
                       }

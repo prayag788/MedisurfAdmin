@@ -64,7 +64,9 @@ const physician = () => {
   const [refreshLoading, setRefreshLoading] = useState(false)
 
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('poweruserrow') ? JSON.parse(localStorage.getItem('poweruserrow')) : 7
+    localStorage.getItem('poweruserrow')
+      ? JSON.parse(localStorage.getItem('poweruserrow'))
+      : 7
   )
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
@@ -93,9 +95,9 @@ const physician = () => {
           sortcolumn: sortColumn,
         },
       })
-      .then(response => {
+      .then((response) => {
         setStartsrno(response.data.startsrno ? response.data.startsrno : 0)
-        setData(prev =>
+        setData((prev) =>
           response.data.list.map((obj, index) => {
             obj.sl = startsrno + index + 1
             obj.full_name = `${obj.fname} ${obj.lname}`
@@ -106,7 +108,7 @@ const physician = () => {
         setRefreshLoading(false)
         setTotal(response.data.numberOfRecord)
       })
-      .catch(err => {
+      .catch((err) => {
         setRefreshLoading(false)
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -132,7 +134,7 @@ const physician = () => {
   const handleEditModal = () => SetEditModal(!editModal)
 
   // ** CRUD Handlers
-  const addNewUser = requestData => {
+  const addNewUser = (requestData) => {
     showLoadingAlert()
     const token = localStorage.getItem('accessToken')
 
@@ -153,18 +155,22 @@ const physician = () => {
     }
 
     axios
-      .post(`${process.env.REACT_APP_API_URL}/user/register/physician`, physicianData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(response => {
+      .post(
+        `${process.env.REACT_APP_API_URL}/user/register/physician`,
+        physicianData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
         handleModal()
         getData()
         hideLoadingAlert()
         showSuccessAlert('Physician Added Successfully!')
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -189,7 +195,7 @@ const physician = () => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(response => {
+      .then((response) => {
         hideLoadingAlert()
         getData()
 
@@ -198,7 +204,7 @@ const physician = () => {
         )
         handleEditModal()
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -218,12 +224,12 @@ const physician = () => {
           },
         }
       )
-      .then(response => {
+      .then((response) => {
         showSuccessAlert('Physician User Deleted Successfully!')
         setPage(0)
         getData()
       })
-      .catch(err => {
+      .catch((err) => {
         handleEditModal()
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -233,16 +239,18 @@ const physician = () => {
 
   // Confirmation Sweet Alert
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
+        setTip(!tip)
       }
-      setTip(!tip)
-    })
+    )
   }
 
   // ** Table item Button Handlers
-  const editHandler = row => {
+  const editHandler = (row) => {
     console.log(row, 'row Data')
 
     // Properly map the row data to form structure
@@ -256,8 +264,12 @@ const physician = () => {
       dob: row.dob || '',
       status: row.status || 1,
       designation: row.designation || '',
-      secondaryEmail: row.secondaryEmail ? row.secondaryEmail.filter(obj => obj !== '') : [],
-      secondaryCno: row.secondaryCno ? row.secondaryCno.filter(obj => obj !== '') : [],
+      secondaryEmail: row.secondaryEmail
+        ? row.secondaryEmail.filter((obj) => obj !== '')
+        : [],
+      secondaryCno: row.secondaryCno
+        ? row.secondaryCno.filter((obj) => obj !== '')
+        : [],
       clinics: row.clinics || [],
     }
 
@@ -265,11 +277,11 @@ const physician = () => {
     handleEditModal()
   }
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     deleteUser(id)
   }
 
-  const DeactivationHandler = id => {
+  const DeactivationHandler = (id) => {
     const deactivationOptions = {
       _id: id,
       status: 0,
@@ -278,7 +290,7 @@ const physician = () => {
     updateUserDetails(deactivationOptions, 'deactivate')
   }
 
-  const ActivationHandler = id => {
+  const ActivationHandler = (id) => {
     const activationOptions = {
       _id: id,
       status: 1,
@@ -296,38 +308,44 @@ const physician = () => {
   const columns = [
     {
       name: 'Username',
-      selector: row => (row['username'] ? row['username'] : '-'),
+      selector: (row) => (row['username'] ? row['username'] : '-'),
       sortable: true,
       reorder: true,
       id: 'username',
       minWidth: '150px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.username || '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.username || '-'}
+          </div>
+        )
       },
     },
     {
       name: 'Name',
-      selector: row => row.physicianname || row.full_name,
+      selector: (row) => row.physicianname || row.full_name,
       sortable: true,
       reorder: true,
       id: 'physicianname',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return (
-          <div style={{ whiteSpace: 'break-spaces' }}>{row.physicianname || row.full_name}</div>
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.physicianname || row.full_name}
+          </div>
         )
       },
     },
     {
       name: 'Email',
-      selector: row => (row['email'] ? row['email'] : '-'),
+      selector: (row) => (row['email'] ? row['email'] : '-'),
       sortable: true,
       reorder: true,
       id: 'email',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.email}</div>
       },
     },
@@ -339,13 +357,17 @@ const physician = () => {
       id: 'hospitalname',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.hospitalname || '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.hospitalname || '-'}
+          </div>
+        )
       },
     },
     {
       name: 'Location',
-      cell: row => (row['location'] ? row['location'] : '-'),
+      cell: (row) => (row['location'] ? row['location'] : '-'),
       sortable: true,
       reorder: true,
       id: 'location',
@@ -353,7 +375,7 @@ const physician = () => {
     },
     {
       name: 'Date Of Birth',
-      cell: row => (row['dob'] ? row['dob'] : '-'),
+      cell: (row) => (row['dob'] ? row['dob'] : '-'),
       sortable: true,
       reorder: true,
       id: 'dob',
@@ -361,7 +383,7 @@ const physician = () => {
     },
     {
       name: 'Designation',
-      cell: row => (row['designation'] ? row['designation'] : '-'),
+      cell: (row) => (row['designation'] ? row['designation'] : '-'),
       sortable: true,
       reorder: true,
       id: 'designation',
@@ -369,18 +391,18 @@ const physician = () => {
     },
     {
       name: 'Clinic Name(s)',
-      selector: row => (row['clinics'] ? row['clinics']['clinicName'] : '-'),
+      selector: (row) => (row['clinics'] ? row['clinics']['clinicName'] : '-'),
       sortable: true,
       reorder: true,
       id: 'clinic',
       minWidth: '190px',
       maxWidth: '250px',
       height: 'auto',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row?.clinics
-              ?.map(data => {
+              ?.map((data) => {
                 return data?.clinicName
               })
               .join(' , ')}
@@ -393,7 +415,7 @@ const physician = () => {
       sortable: false,
       reorder: true,
       id: 'numberOfStudies',
-      cell: row => row.numberOfStudies || '-',
+      cell: (row) => row.numberOfStudies || '-',
     },
     {
       name: 'Status',
@@ -401,7 +423,7 @@ const physician = () => {
       sortable: true,
       reorder: true,
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         return (
           <Badge color={status[row?.status]?.color} pill>
             {status[row?.status]?.title || 'N/A'}
@@ -415,7 +437,7 @@ const physician = () => {
       sortable: false,
       reorder: true,
       id: 'actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -505,7 +527,11 @@ const physician = () => {
               </div>
             </CardHeader>
             <Row className="justify-content-end mx-0">
-              <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+              <Col
+                className="d-flex align-items-center justify-content-end mt-1"
+                md="6"
+                sm="12"
+              >
                 <Label className="mr-1" for="search-input">
                   Search
                 </Label>
@@ -515,7 +541,7 @@ const physician = () => {
                   bsSize="sm"
                   id="search-input"
                   value={searchValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     setSearchValue(e.target.value)
                   }}
                 />
@@ -534,9 +560,9 @@ const physician = () => {
                     onSort: handleSort,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setPage(e.first++)
-                      setRowsPerPage(prev => e.rows)
+                      setRowsPerPage((prev) => e.rows)
                       localStorage.setItem('poweruserrow', e.rows)
                     },
                   }}

@@ -11,20 +11,25 @@ const ComingSoon = () => {
     <div className="misc-wrapper">
       <a className="brand-logo" href="/">
         <span className="brand-logo-span">
-          <img id="medisurf-logo" src={themeConfig.app.appLogoImage} alt="logo" />
+          <img
+            id="medisurf-logo"
+            src={themeConfig.app.appLogoImage}
+            alt="logo"
+          />
         </span>
       </a>
       <div className="misc-inner p-2 p-sm-3">
         <div className="w-100 text-center">
           <h2 className="mb-1">We are launching soon 🚀</h2>
           <p className="mb-3">
-            We're creating something awesome. Please subscribe to get notified when it's ready!
+            We're creating something awesome. Please subscribe to get notified
+            when it's ready!
           </p>
           <Form
             tag={Row}
             className="justify-content-center m-0 mb-2"
             inline
-            onSubmit={e => e.preventDefault()}
+            onSubmit={(e) => e.preventDefault()}
           >
             <Col
               tag={Input}
@@ -37,7 +42,11 @@ const ComingSoon = () => {
               Notify
             </Button>
           </Form>
-          <img className="img-fluid" src={comingSoonImg} alt="Coming soon page" />
+          <img
+            className="img-fluid"
+            src={comingSoonImg}
+            alt="Coming soon page"
+          />
         </div>
       </div>
     </div>

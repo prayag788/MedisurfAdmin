@@ -1,5 +1,13 @@
 import { Fragment } from 'react'
-import { Card, CardTitle, CardBody, CardText, Row, Col, Button } from 'reactstrap'
+import {
+  Card,
+  CardTitle,
+  CardBody,
+  CardText,
+  Row,
+  Col,
+  Button,
+} from 'reactstrap'
 
 const CardTextAlignment = () => {
   return (
@@ -11,7 +19,8 @@ const CardTextAlignment = () => {
             <CardBody>
               <CardTitle tag="h4">Special title treatment</CardTitle>
               <CardText>
-                With supporting text below as a natural lead-in to additional content.
+                With supporting text below as a natural lead-in to additional
+                content.
               </CardText>
               <Button.Ripple color="primary" outline>
                 Go somewhere
@@ -24,7 +33,8 @@ const CardTextAlignment = () => {
             <CardBody>
               <CardTitle tag="h4">Special title treatment</CardTitle>
               <CardText>
-                With supporting text below as a natural lead-in to additional content.
+                With supporting text below as a natural lead-in to additional
+                content.
               </CardText>
               <Button.Ripple color="primary" outline>
                 Go somewhere
@@ -37,7 +47,8 @@ const CardTextAlignment = () => {
             <CardBody>
               <CardTitle tag="h4">Special title treatment</CardTitle>
               <CardText>
-                With supporting text below as a natural lead-in to additional content.
+                With supporting text below as a natural lead-in to additional
+                content.
               </CardText>
               <Button.Ripple color="primary" outline>
                 Go somewhere

@@ -9,7 +9,10 @@ function transformFile(file) {
   const src = fs.readFileSync(file, 'utf8')
   let ast
   try {
-    ast = parser.parse(src, { sourceType: 'module', plugins: ['jsx', 'classProperties'] })
+    ast = parser.parse(src, {
+      sourceType: 'module',
+      plugins: ['jsx', 'classProperties'],
+    })
   } catch (e) {
     console.error('Parse error:', file, e.message)
     return false
@@ -23,16 +26,21 @@ function transformFile(file) {
         // map named imports like Pagination -> swiper/modules/pagination/pagination.js
         const specifiers = path.node.specifiers
         const newDecls = []
-        specifiers.forEach(spec => {
+        specifiers.forEach((spec) => {
           if (t.isImportSpecifier(spec)) {
             const imported = spec.imported.name
             const lower = imported.toLowerCase()
             const modulePath = `swiper/modules/${lower}/${lower}.js`
-            const newImport = t.importDeclaration([t.importDefaultSpecifier(t.identifier(imported))], t.stringLiteral(modulePath))
+            const newImport = t.importDeclaration(
+              [t.importDefaultSpecifier(t.identifier(imported))],
+              t.stringLiteral(modulePath)
+            )
             newDecls.push(newImport)
           } else {
             // default import from 'swiper' — leave it
-            newDecls.push(t.importDeclaration([spec], t.stringLiteral('swiper')))
+            newDecls.push(
+              t.importDeclaration([spec], t.stringLiteral('swiper'))
+            )
           }
         })
         if (newDecls.length) {
@@ -41,7 +49,7 @@ function transformFile(file) {
         }
       }
       // ensure react imports from 'swiper/react' remain but keep as-is
-    }
+    },
   })
 
   if (changed) {

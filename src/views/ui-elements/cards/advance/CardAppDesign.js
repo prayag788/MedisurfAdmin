@@ -50,7 +50,8 @@ const CardAppDesign = () => {
         <Badge color="light-primary">03 Sep, 20</Badge>
         <CardTitle className="mt-1 mb-75">App design</CardTitle>
         <CardText className="font-small-2 mb-2">
-          You can Find Only Post and Quotes Related to IOS like ipad app design, iphone app design
+          You can Find Only Post and Quotes Related to IOS like ipad app design,
+          iphone app design
         </CardText>
         <div className="design-group mb-2 pt-50">
           <h6 className="section-label">Team</h6>
@@ -74,7 +75,7 @@ const CardAppDesign = () => {
           })}
         </div>
         <div className="design-planning-wrapper mb-2 py-75">
-          {designPlanningArr.map(item => (
+          {designPlanningArr.map((item) => (
             <div key={item.title} className="design-planning">
               <CardText className="mb-25">{item.title}</CardText>
               <h6 className="mb-0">{item.subtitle}</h6>

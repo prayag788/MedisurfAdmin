@@ -31,7 +31,9 @@ const ToastContent = ({ message, type }) => (
       className="me-2 flex-shrink-0"
     />
     <div className="flex-grow-1">
-      <div className="toast-title font-weight-bold">{type === 'success' ? 'Success' : 'Error'}</div>
+      <div className="toast-title font-weight-bold">
+        {type === 'success' ? 'Success' : 'Error'}
+      </div>
       <div className="toast-message">{message}</div>
     </div>
   </div>
@@ -53,7 +55,10 @@ const ForgotPasswordV1 = () => {
     'reenter-new-password': yup
       .string()
       .required('Please re-enter the password.')
-      .oneOf([yup.ref(`new-password`), null], 'Please ensure the new passwords match'),
+      .oneOf(
+        [yup.ref(`new-password`), null],
+        'Please ensure the new passwords match'
+      ),
   })
 
   const {
@@ -62,7 +67,7 @@ const ForgotPasswordV1 = () => {
     handleSubmit,
   } = useForm({ mode: 'onChange', resolver: yupResolver(SignupSchema) })
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       setLoading(() => true)
       const response = await axios({
@@ -75,15 +80,18 @@ const ForgotPasswordV1 = () => {
       })
       setLoading(() => false)
 
-      toast.success(<ToastContent message={response.data.message} type={'success'} />, {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.success(
+        <ToastContent message={response.data.message} type={'success'} />,
+        {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      )
 
       navigate('/login')
     } catch (err) {
@@ -98,7 +106,11 @@ const ForgotPasswordV1 = () => {
       <div className="auth-inner py-2">
         <Card className="mb-0">
           <CardBody>
-            <Link className="brand-logo" to="/" onClick={e => e.preventDefault()}>
+            <Link
+              className="brand-logo"
+              to="/"
+              onClick={(e) => e.preventDefault()}
+            >
               <svg viewBox="0 0 139 95" version="1.1" height="28">
                 <defs>
                   <linearGradient
@@ -118,12 +130,25 @@ const ForgotPasswordV1 = () => {
                     y2="100%"
                     id="linearGradient-2"
                   >
-                    <stop stopColor="#EEEEEE" stopOpacity="0" offset="0%"></stop>
+                    <stop
+                      stopColor="#EEEEEE"
+                      stopOpacity="0"
+                      offset="0%"
+                    ></stop>
                     <stop stopColor="#FFFFFF" offset="100%"></stop>
                   </linearGradient>
                 </defs>
-                <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                  <g id="Artboard" transform="translate(-400.000000, -178.000000)">
+                <g
+                  id="Page-1"
+                  stroke="none"
+                  strokeWidth="1"
+                  fill="none"
+                  fillRule="evenodd"
+                >
+                  <g
+                    id="Artboard"
+                    transform="translate(-400.000000, -178.000000)"
+                  >
                     <g id="Group" transform="translate(400.000000, 178.000000)">
                       <path
                         d="M-5.68434189e-14,2.84217094e-14 L39.1816085,2.84217094e-14 L69.3453773,32.2519224 L101.428699,2.84217094e-14 L138.784583,2.84217094e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L6.71554594,44.4188507 C2.46876683,39.9813776 0.345377275,35.1089553 0.345377275,29.8015838 C0.345377275,24.4942122 0.230251516,14.560351 -5.68434189e-14,2.84217094e-14 Z"
@@ -165,7 +190,10 @@ const ForgotPasswordV1 = () => {
               Change Password 🔒
             </CardTitle>
             <CardText className="mb-2">Please enter your new password</CardText>
-            <Form className="auth-forgot-password-form mt-2" onSubmit={handleSubmit(onSubmit)}>
+            <Form
+              className="auth-forgot-password-form mt-2"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <FormGroup>
                 <InputPasswordToggle
                   label="New Password"
@@ -191,7 +219,9 @@ const ForgotPasswordV1 = () => {
                   })}
                 />
                 {errors && errors['reenter-new-password'] && (
-                  <FormFeedback>{errors['reenter-new-password'].message}</FormFeedback>
+                  <FormFeedback>
+                    {errors['reenter-new-password'].message}
+                  </FormFeedback>
                 )}
               </FormGroup>
               <Button.Ripple
@@ -201,7 +231,11 @@ const ForgotPasswordV1 = () => {
                 disabled={loading}
                 className="d-flex align-items-center justify-content-center"
               >
-                {!loading ? 'Change Password' : <Spinner color="white" size="sm" />}
+                {!loading ? (
+                  'Change Password'
+                ) : (
+                  <Spinner color="white" size="sm" />
+                )}
                 {!loading ? '' : <p className="ml-50 mb-0">Loading...</p>}
               </Button.Ripple>
             </Form>

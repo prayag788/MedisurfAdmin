@@ -1,4 +1,11 @@
-import { Card, CardHeader, CardTitle, CardBody, CardText, Table } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  CardText,
+  Table,
+} from 'reactstrap'
 
 const DisplayHeadings = () => {
   return (
@@ -9,9 +16,10 @@ const DisplayHeadings = () => {
 
       <CardBody>
         <CardText>
-          Traditional heading elements are designed to work best in the meat of your page content.
-          When you need a heading to stand out, consider using a <code>display-[1-4]</code> for
-          larger, slightly more opinionated heading style.
+          Traditional heading elements are designed to work best in the meat of
+          your page content. When you need a heading to stand out, consider
+          using a <code>display-[1-4]</code> for larger, slightly more
+          opinionated heading style.
         </CardText>
       </CardBody>
       <Table responsive borderless className="mb-0">

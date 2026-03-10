@@ -32,7 +32,10 @@ module.exports = [
       'no-return-assign': 'error',
       'no-useless-concat': 'error',
       'no-useless-return': 'off', // Disabled - allows return statements for code clarity
-      'no-use-before-define': ['error', { functions: false, classes: true, variables: false }],
+      'no-use-before-define': [
+        'error',
+        { functions: false, classes: true, variables: false },
+      ],
       'brace-style': ['error', '1tbs', { allowSingleLine: true }],
       'block-spacing': 'error',
       'comma-dangle': 'off',

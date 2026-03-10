@@ -12,7 +12,7 @@ import { selectThemeColors } from '@utils'
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 
-const Customizer = props => {
+const Customizer = (props) => {
   // ** Props
   const {
     skin,
@@ -41,7 +41,7 @@ const Customizer = props => {
   const [openCustomizer, setOpenCustomizer] = useState(false)
 
   // ** Toggles Customizer
-  const handleToggle = e => {
+  const handleToggle = (e) => {
     e.preventDefault()
     setOpenCustomizer(!openCustomizer)
   }
@@ -82,7 +82,9 @@ const Customizer = props => {
       return (
         <div
           key={index}
-          className={classnames('d-flex align-items-center', { 'mr-1': marginCondition })}
+          className={classnames('d-flex align-items-center', {
+            'mr-1': marginCondition,
+          })}
         >
           <Input
             type="radio"
@@ -111,7 +113,7 @@ const Customizer = props => {
       'dark',
     ]
 
-    return colorsArr.map(color => (
+    return colorsArr.map((color) => (
       <li
         key={color}
         className={classnames(`color-box bg-${color}`, {
@@ -159,7 +161,9 @@ const Customizer = props => {
       return (
         <div
           key={index}
-          className={classnames('d-flex align-items-center', { 'mr-1': marginCondition })}
+          className={classnames('d-flex align-items-center', {
+            'mr-1': marginCondition,
+          })}
         >
           <Input
             type="radio"
@@ -202,7 +206,9 @@ const Customizer = props => {
       return (
         <div
           key={index}
-          className={classnames('d-flex align-items-center', { 'mr-1': marginCondition })}
+          className={classnames('d-flex align-items-center', {
+            'mr-1': marginCondition,
+          })}
         >
           <Input
             type="radio"
@@ -227,7 +233,7 @@ const Customizer = props => {
   ]
 
   // ** Get Current Transition
-  const transitionValue = transitionOptions.find(i => i.value === transition)
+  const transitionValue = transitionOptions.find((i) => i.value === transition)
 
   return (
     <div
@@ -382,7 +388,9 @@ const Customizer = props => {
           {layout !== 'HorizontalLayout' ? (
             <FormGroup className="mb-2">
               <p className="font-weight-bold">Navbar Color</p>
-              <ul className="list-inline unstyled-list">{renderNavbarColors()}</ul>
+              <ul className="list-inline unstyled-list">
+                {renderNavbarColors()}
+              </ul>
             </FormGroup>
           ) : null}
 

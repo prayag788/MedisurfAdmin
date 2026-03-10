@@ -9,7 +9,9 @@ const Settings = [
   {
     path: '/settings/terms-and-conditions',
     exact: true,
-    component: lazy(() => import('../../views/Settings/pages/TermsAndConditions')),
+    component: lazy(
+      () => import('../../views/Settings/pages/TermsAndConditions')
+    ),
     meta: {
       action: 'manage',
       resource: 't&c',
@@ -63,7 +65,9 @@ const Settings = [
   {
     path: '/settings/edit_orthanc',
     exact: true,
-    component: lazy(() => import('../../views/Settings/pages/EditOrthancDetails')),
+    component: lazy(
+      () => import('../../views/Settings/pages/EditOrthancDetails')
+    ),
     meta: {
       action: 'manage',
       resource: 'orthanc',

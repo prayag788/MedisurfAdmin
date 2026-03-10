@@ -3,28 +3,31 @@ module.exports = {
   default: {
     get: () => Promise.resolve({}),
     post: () => Promise.resolve({}),
-    create: function () { return module.exports.default },
+    create: function () {
+      return module.exports.default
+    },
     interceptors: {
       request: { use: () => {} },
-      response: { use: () => {} }
-    }
-    ,
+      response: { use: () => {} },
+    },
     defaults: {
       timeout: 0,
       headers: {},
-      baseURL: ''
-    }
+      baseURL: '',
+    },
   },
   get: () => Promise.resolve({}),
   post: () => Promise.resolve({}),
-  create: function () { return module.exports },
+  create: function () {
+    return module.exports
+  },
   interceptors: {
     request: { use: () => {} },
-    response: { use: () => {} }
+    response: { use: () => {} },
   },
   defaults: {
     timeout: 0,
     headers: {},
-    baseURL: ''
-  }
-};
+    baseURL: '',
+  },
+}

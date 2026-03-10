@@ -23,23 +23,27 @@ const CustomTable = ({ columns, data, handleRowClick, tableName }) => {
       setSortField(d.sortField)
 
       if (sortOrder === -1) {
-        data.sort((a, b) => String(b[d.sortField]).localeCompare(String(a[d.sortField])))
+        data.sort((a, b) =>
+          String(b[d.sortField]).localeCompare(String(a[d.sortField]))
+        )
       } else {
-        data.sort((a, b) => String(a[d.sortField]).localeCompare(String(b[d.sortField])))
+        data.sort((a, b) =>
+          String(a[d.sortField]).localeCompare(String(b[d.sortField]))
+        )
       }
 
       setTableData(data)
     }
   }
 
-  const handleFilter = e => {
+  const handleFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     setSearchValue(value)
 
     if (value.length) {
-      updatedData = tableData.filter(item => {
-        const startsWith = Object.keys(item).some(val => {
+      updatedData = tableData.filter((item) => {
+        const startsWith = Object.keys(item).some((val) => {
           if (
             typeof item[val] === 'string' ||
             typeof item[val] === 'number' ||
@@ -49,51 +53,63 @@ const CustomTable = ({ columns, data, handleRowClick, tableName }) => {
               return item[val].toLowerCase().startsWith(value.toLowerCase())
             } else if (typeof item[val] === 'number') {
               return item[val].toString().startsWith(value)
-            } else if (typeof item[val] === 'object' && item[val] && item[val].length) {
-              if (item[val].find(o => o.subject?.toString()?.startsWith(value))) {
-                return item[val].find(o => o.subject?.toString().startsWith(value))
+            } else if (
+              typeof item[val] === 'object' &&
+              item[val] &&
+              item[val].length
+            ) {
+              if (
+                item[val].find((o) => o.subject?.toString()?.startsWith(value))
+              ) {
+                return item[val].find((o) =>
+                  o.subject?.toString().startsWith(value)
+                )
               } else if (
-                item[val].find(o => o.subject === 't&c') &&
-                'Terms & Conditions'.toLowerCase().startsWith(value.toLowerCase())
+                item[val].find((o) => o.subject === 't&c') &&
+                'Terms & Conditions'
+                  .toLowerCase()
+                  .startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'upload-dicom') &&
-                'Upload Dicom Image'.toLowerCase().startsWith(value.toLowerCase())
+                item[val].find((o) => o.subject === 'upload-dicom') &&
+                'Upload Dicom Image'
+                  .toLowerCase()
+                  .startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'doctors') &&
+                item[val].find((o) => o.subject === 'doctors') &&
                 'Doctors'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Study List Viewer') &&
+                item[val].find((o) => o.subject === 'Study List Viewer') &&
                 'Study list'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'power-user') &&
+                item[val].find((o) => o.subject === 'power-user') &&
                 'Power User'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Modality') &&
+                item[val].find((o) => o.subject === 'Modality') &&
                 'Modality'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'privacy-policy') &&
+                item[val].find((o) => o.subject === 'privacy-policy') &&
                 'Privacy policy'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'cookie-policy') &&
+                item[val].find((o) => o.subject === 'cookie-policy') &&
                 'Cookie policy'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'data-analytics') &&
+                item[val].find((o) => o.subject === 'data-analytics') &&
                 'Data analytics'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
@@ -102,7 +118,7 @@ const CustomTable = ({ columns, data, handleRowClick, tableName }) => {
           }
         })
 
-        const includes = Object.keys(item).some(val => {
+        const includes = Object.keys(item).some((val) => {
           if (
             typeof item[val] === 'string' ||
             typeof item[val] === 'number' ||
@@ -112,51 +128,63 @@ const CustomTable = ({ columns, data, handleRowClick, tableName }) => {
               return item[val].toLowerCase().startsWith(value.toLowerCase())
             } else if (typeof item[val] === 'number') {
               return item[val].toString().startsWith(value)
-            } else if (typeof item[val] === 'object' && item[val] && item[val].length) {
-              if (item[val].find(o => o.subject?.toString().startsWith(value))) {
-                return item[val].find(o => o.subject?.toString().startsWith(value))
+            } else if (
+              typeof item[val] === 'object' &&
+              item[val] &&
+              item[val].length
+            ) {
+              if (
+                item[val].find((o) => o.subject?.toString().startsWith(value))
+              ) {
+                return item[val].find((o) =>
+                  o.subject?.toString().startsWith(value)
+                )
               } else if (
-                item[val].find(o => o.subject === 't&c') &&
-                'Terms & Conditions'.toLowerCase().startsWith(value.toLowerCase())
+                item[val].find((o) => o.subject === 't&c') &&
+                'Terms & Conditions'
+                  .toLowerCase()
+                  .startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'upload-dicom') &&
-                'Upload Dicom Image'.toLowerCase().startsWith(value.toLowerCase())
+                item[val].find((o) => o.subject === 'upload-dicom') &&
+                'Upload Dicom Image'
+                  .toLowerCase()
+                  .startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'doctors') &&
+                item[val].find((o) => o.subject === 'doctors') &&
                 'Doctors'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Study List Viewer') &&
+                item[val].find((o) => o.subject === 'Study List Viewer') &&
                 'Study list'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'power-user') &&
+                item[val].find((o) => o.subject === 'power-user') &&
                 'Power User'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Modality') &&
+                item[val].find((o) => o.subject === 'Modality') &&
                 'Modality'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'privacy-policy') &&
+                item[val].find((o) => o.subject === 'privacy-policy') &&
                 'Privacy policy'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'cookie-policy') &&
+                item[val].find((o) => o.subject === 'cookie-policy') &&
                 'Cookie policy'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'data-analytics') &&
+                item[val].find((o) => o.subject === 'data-analytics') &&
                 'Data analytics'.toLowerCase().startsWith(value.toLowerCase())
               ) {
                 return true
@@ -212,7 +240,11 @@ const CustomTable = ({ columns, data, handleRowClick, tableName }) => {
         <CardTitle tag="h4">{moduleName}</CardTitle>
       </CardHeader>
       <Row className="justify-content-end mx-0">
-        <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+        <Col
+          className="d-flex align-items-center justify-content-end mt-1"
+          md="6"
+          sm="12"
+        >
           <Label className="mr-1" for="search-input">
             Search
           </Label>
@@ -236,15 +268,17 @@ const CustomTable = ({ columns, data, handleRowClick, tableName }) => {
                 tableData: searchValue ? filteredData : tableData,
                 visibleColumns: columns,
                 rows: rowsPerPage,
-                totalRecords: searchValue ? filteredData.length : tableData.length,
+                totalRecords: searchValue
+                  ? filteredData.length
+                  : tableData.length,
                 onRowSelect: handleRowClick,
                 first: page,
                 onSort: handleSort,
                 sortField,
                 sortOrder,
-                onPage: e => {
+                onPage: (e) => {
                   setPage(e.first++)
-                  setRowsPerPage(prev => e.rows)
+                  setRowsPerPage((prev) => e.rows)
                 },
               }}
             />

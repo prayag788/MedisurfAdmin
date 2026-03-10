@@ -1,10 +1,14 @@
 import xMark from '@src/assets/images/login/x-mark.png'
 
-const CustomSuggestion = ({ suggestion, onSuggestionSelectedHandler, handleDelete }) => {
+const CustomSuggestion = ({
+  suggestion,
+  onSuggestionSelectedHandler,
+  handleDelete,
+}) => {
   return (
     <div className={`suggestion-item`}>
       <span
-        onClick={e => {
+        onClick={(e) => {
           onSuggestionSelectedHandler(suggestion)
         }}
       >
@@ -12,7 +16,7 @@ const CustomSuggestion = ({ suggestion, onSuggestionSelectedHandler, handleDelet
       </span>
       <button
         type="button"
-        onClick={e => {
+        onClick={(e) => {
           handleDelete(suggestion)
         }}
         className="add-new-button"

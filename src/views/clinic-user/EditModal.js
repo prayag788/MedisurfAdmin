@@ -15,8 +15,8 @@ import {
   FormFeedback,
   Input,
   Label,
-  Form } from
-'reactstrap'
+  Form,
+} from 'reactstrap'
 
 // ** Utils
 import { CLINIC_USER_SCHEMA, STATUS_OPTIONS } from '../../utils'
@@ -29,19 +29,44 @@ import StaticDropdown from '../../@core/components/staticDropdown'
 // Build form values from editData (with fallbacks for full_name / first_name / last_name)
 function getValuesFromEditData(editData) {
   if (!editData || Object.keys(editData).length === 0) {
-    return { fname: '', lname: '', email: '', cno: '', status: 1, secondaryEmail: [], secondaryCno: [], clinics: [] }
+    return {
+      fname: '',
+      lname: '',
+      email: '',
+      cno: '',
+      status: 1,
+      secondaryEmail: [],
+      secondaryCno: [],
+      clinics: [],
+    }
   }
-  const fn = editData.fname ?? editData.first_name ?? (typeof editData.full_name === 'string' ? editData.full_name.split(' ')[0] : '') ?? ''
-  const ln = editData.lname ?? editData.last_name ?? (typeof editData.full_name === 'string' ? editData.full_name.split(' ').slice(1).join(' ') : '') ?? ''
+  const fn =
+    editData.fname ??
+    editData.first_name ??
+    (typeof editData.full_name === 'string'
+      ? editData.full_name.split(' ')[0]
+      : '') ??
+    ''
+  const ln =
+    editData.lname ??
+    editData.last_name ??
+    (typeof editData.full_name === 'string'
+      ? editData.full_name.split(' ').slice(1).join(' ')
+      : '') ??
+    ''
   return {
     fname: fn,
     lname: ln,
     email: editData.email ?? '',
     cno: editData.cno ?? '',
     status: editData.status ?? 1,
-    secondaryEmail: Array.isArray(editData.secondaryEmail) ? editData.secondaryEmail.filter(Boolean) : [],
-    secondaryCno: Array.isArray(editData.secondaryCno) ? editData.secondaryCno.filter(Boolean) : [],
-    clinics: Array.isArray(editData.clinics) ? editData.clinics : []
+    secondaryEmail: Array.isArray(editData.secondaryEmail)
+      ? editData.secondaryEmail.filter(Boolean)
+      : [],
+    secondaryCno: Array.isArray(editData.secondaryCno)
+      ? editData.secondaryCno.filter(Boolean)
+      : [],
+    clinics: Array.isArray(editData.clinics) ? editData.clinics : [],
   }
 }
 
@@ -50,7 +75,10 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   const [formData, setFormData] = useState(editData)
   const [clinics, setClinics] = useState([])
 
-  const defaultValues = useMemo(() => getValuesFromEditData(editData), [editData?._id])
+  const defaultValues = useMemo(
+    () => getValuesFromEditData(editData),
+    [editData?._id]
+  )
 
   const {
     formState: { errors },
@@ -60,12 +88,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
     reset,
     control,
     watch,
-    register
+    register,
   } = useForm({
     mode: 'onSubmit',
     resolver: yupResolver(CLINIC_USER_SCHEMA),
     shouldUnregister: true,
-    defaultValues
+    defaultValues,
   })
 
   const lastSyncedEditIdRef = useRef(null)
@@ -90,7 +118,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
           value: clinic._id,
           label: clinic.name,
           _id: clinic._id,
-          clinicName: clinic.name
+          clinicName: clinic.name,
         })) || []
       )
     } catch (error) {
@@ -109,15 +137,31 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
     loadClinicData()
 
     const rawClinics = Array.isArray(editData.clinics) ? editData.clinics : []
-    const formattedClinics = rawClinics.map((clinic) => {
-      const id = typeof clinic === 'string' ? clinic : clinic?._id ?? clinic?.value ?? clinic?.id
-      if (!id) return null
-      const idStr = String(id).trim()
-      const label =
-      clinic && typeof clinic === 'object' && (clinic.clinicName || clinic.clinic_name || clinic.name || clinic.label) ||
-      `Clinic ${idStr}`
-      return { value: idStr, _id: idStr, label, clinicName: label, name: label }
-    }).filter(Boolean)
+    const formattedClinics = rawClinics
+      .map((clinic) => {
+        const id =
+          typeof clinic === 'string'
+            ? clinic
+            : (clinic?._id ?? clinic?.value ?? clinic?.id)
+        if (!id) return null
+        const idStr = String(id).trim()
+        const label =
+          (clinic &&
+            typeof clinic === 'object' &&
+            (clinic.clinicName ||
+              clinic.clinic_name ||
+              clinic.name ||
+              clinic.label)) ||
+          `Clinic ${idStr}`
+        return {
+          value: idStr,
+          _id: idStr,
+          label,
+          clinicName: label,
+          name: label,
+        }
+      })
+      .filter(Boolean)
 
     const fromEdit = getValuesFromEditData(editData)
     const initialValues = { ...fromEdit, clinics: formattedClinics }
@@ -133,17 +177,35 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
     prevClinicsLengthRef.current = nowLen
     if (nowLen === 0 || prevLen > 0) return
     const rawClinics = Array.isArray(editData.clinics) ? editData.clinics : []
-    const formattedClinics = rawClinics.map((clinic) => {
-      const id = typeof clinic === 'string' ? clinic : clinic?._id ?? clinic?.value ?? clinic?.id
-      if (!id) return null
-      const idStr = String(id).trim()
-      const exactOption = clinics.find((opt) => String(opt.value || opt._id || '').trim() === idStr)
-      if (exactOption) return exactOption
-      const label =
-      clinic && typeof clinic === 'object' && (clinic.clinicName || clinic.clinic_name || clinic.name || clinic.label) ||
-      `Clinic ${idStr}`
-      return { value: idStr, _id: idStr, label, clinicName: label, name: label }
-    }).filter(Boolean)
+    const formattedClinics = rawClinics
+      .map((clinic) => {
+        const id =
+          typeof clinic === 'string'
+            ? clinic
+            : (clinic?._id ?? clinic?.value ?? clinic?.id)
+        if (!id) return null
+        const idStr = String(id).trim()
+        const exactOption = clinics.find(
+          (opt) => String(opt.value || opt._id || '').trim() === idStr
+        )
+        if (exactOption) return exactOption
+        const label =
+          (clinic &&
+            typeof clinic === 'object' &&
+            (clinic.clinicName ||
+              clinic.clinic_name ||
+              clinic.name ||
+              clinic.label)) ||
+          `Clinic ${idStr}`
+        return {
+          value: idStr,
+          _id: idStr,
+          label,
+          clinicName: label,
+          name: label,
+        }
+      })
+      .filter(Boolean)
     setValue('clinics', formattedClinics, { shouldValidate: false })
   }, [clinics, open, editData, setValue])
 
@@ -162,7 +224,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
         secondaryCno: [],
         clinics: [],
         status: 1,
-        _id: ''
+        _id: '',
       })
     }
   }, [open])
@@ -173,22 +235,36 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       e.preventDefault()
       const raw = getValues()
       const fromEdit = getValuesFromEditData(editData)
-      const fname = raw.fname && String(raw.fname).trim() || fromEdit.fname || ''
-      const lname = raw.lname && String(raw.lname).trim() || fromEdit.lname || ''
-      const email = raw.email && String(raw.email).trim() || fromEdit.email || ''
-      const cno = raw.cno !== null && raw.cno !== undefined ? String(raw.cno).trim() : fromEdit.cno || ''
+      const fname =
+        (raw.fname && String(raw.fname).trim()) || fromEdit.fname || ''
+      const lname =
+        (raw.lname && String(raw.lname).trim()) || fromEdit.lname || ''
+      const email =
+        (raw.email && String(raw.email).trim()) || fromEdit.email || ''
+      const cno =
+        raw.cno !== null && raw.cno !== undefined
+          ? String(raw.cno).trim()
+          : fromEdit.cno || ''
       const status = parseInt(raw.status, 10) || fromEdit.status || 1
-      const secondaryEmail = Array.isArray(raw.secondaryEmail) ?
-      raw.secondaryEmail.map((s) => typeof s === 'string' ? s.trim() : s).filter(Boolean) :
-      fromEdit.secondaryEmail || []
-      const secondaryCno = Array.isArray(raw.secondaryCno) ?
-      raw.secondaryCno.map((s) => typeof s === 'string' ? String(s).trim() : s).filter(Boolean) :
-      fromEdit.secondaryCno || []
-      const clinicIds = Array.isArray(raw.clinics) ?
-      raw.clinics.map((c) => typeof c === 'string' ? c : c?._id ?? c?.value).filter(Boolean) :
-      Array.isArray(editData.clinics) ?
-      editData.clinics.map((c) => typeof c === 'string' ? c : c?._id ?? c?.value).filter(Boolean) :
-      []
+      const secondaryEmail = Array.isArray(raw.secondaryEmail)
+        ? raw.secondaryEmail
+            .map((s) => (typeof s === 'string' ? s.trim() : s))
+            .filter(Boolean)
+        : fromEdit.secondaryEmail || []
+      const secondaryCno = Array.isArray(raw.secondaryCno)
+        ? raw.secondaryCno
+            .map((s) => (typeof s === 'string' ? String(s).trim() : s))
+            .filter(Boolean)
+        : fromEdit.secondaryCno || []
+      const clinicIds = Array.isArray(raw.clinics)
+        ? raw.clinics
+            .map((c) => (typeof c === 'string' ? c : (c?._id ?? c?.value)))
+            .filter(Boolean)
+        : Array.isArray(editData.clinics)
+          ? editData.clinics
+              .map((c) => (typeof c === 'string' ? c : (c?._id ?? c?.value)))
+              .filter(Boolean)
+          : []
 
       const processedData = {
         _id: editData._id || editData.id,
@@ -199,7 +275,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
         status,
         secondaryEmail,
         secondaryCno,
-        clinics: clinicIds
+        clinics: clinicIds,
       }
       updateUser(processedData, 'update')
     },
@@ -222,30 +298,39 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   // ** Reusable FormField component
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) =>
-    <FormGroup>
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
+      <FormGroup>
         <Label for={name}>
           {label}
           {required && <span style={{ color: '#FF0000' }}>*</span>}
         </Label>
         <Controller
-        name={name}
-        control={control}
-        rules={{ required }}
-        render={({ field }) =>
-        <Input
-          id={name}
           name={name}
-          type={type}
-          {...field}
-          invalid={errors?.[name] && true}
-          placeholder={placeholder}
-          {...props} />
+          control={control}
+          rules={{ required }}
+          render={({ field }) => (
+            <Input
+              id={name}
+              name={name}
+              type={type}
+              {...field}
+              invalid={errors?.[name] && true}
+              placeholder={placeholder}
+              {...props}
+            />
+          )}
+        />
 
-        } />
-      
         {errors?.[name] && <FormFeedback>{errors[name].message}</FormFeedback>}
-      </FormGroup>,
+      </FormGroup>
+    ),
 
     [control, errors]
   )
@@ -256,9 +341,14 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       toggle={handleModal}
       className="sidebar-sm sm-w-100"
       modalClassName="modal-slide-in"
-      contentClassName="pt-0">
-      
-      <ModalHeader className="mb-3" toggle={handleModal} close={CloseBtn} tag="div">
+      contentClassName="pt-0"
+    >
+      <ModalHeader
+        className="mb-3"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit Clinic-user Details</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
@@ -273,10 +363,21 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             fieldName="clinics"
             labelName="Clinics"
             options={clinics}
-            isMulti={true} />
-          
-          <FormField name="fname" label="First Name" placeholder="Jhon" required />
-          <FormField name="lname" label="Last Name" placeholder="Doe" required />
+            isMulti={true}
+          />
+
+          <FormField
+            name="fname"
+            label="First Name"
+            placeholder="Jhon"
+            required
+          />
+          <FormField
+            name="lname"
+            label="Last Name"
+            placeholder="Doe"
+            required
+          />
           <FormGroup>
             <Label for="email">
               Email <span style={{ color: '#FF0000' }}>*</span>
@@ -285,19 +386,22 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               name="email"
               control={control}
               rules={{ required: true }}
-              render={({ field }) =>
-              <Input
-                {...field}
-                type="email"
-                id="email"
-                invalid={errors.email && true}
-                placeholder="bruce.wayne@email.com" />
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="email"
+                  id="email"
+                  invalid={errors.email && true}
+                  placeholder="bruce.wayne@email.com"
+                />
+              )}
+            />
 
-              } />
-            
-            {errors.email &&
-            <FormFeedback style={{ display: 'block' }}>{errors?.email?.message}</FormFeedback>
-            }
+            {errors.email && (
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.email?.message}
+              </FormFeedback>
+            )}
           </FormGroup>
           <AdditionalDataComponent
             fieldName="secondaryEmail"
@@ -310,10 +414,15 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             setValue={setValue}
             reset={reset}
             getValues={getValues}
-            placeholder="bruce.wayne@email.com" />
-          
+            placeholder="bruce.wayne@email.com"
+          />
 
-          <FormField name="cno" label="Contact Number" type="text" placeholder="+1" />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="text"
+            placeholder="+1"
+          />
           <AdditionalDataComponent
             fieldName="secondaryCno"
             title="Add More"
@@ -325,8 +434,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             setValue={setValue}
             reset={reset}
             getValues={getValues}
-            placeholder={'+1'} />
-          
+            placeholder={'+1'}
+          />
+
           <FormGroup>
             <Label for="status">
               Status <span style={{ color: '#FF0000' }}>*</span>
@@ -335,25 +445,28 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               name="status"
               control={control}
               rules={{ required: true }}
-              render={({ field }) =>
-              <Input
-                {...field}
-                name="status"
-                id="status"
-                type="select"
-                invalid={errors.status && true}>
-                
-                  {STATUS_OPTIONS.map((option) =>
-                <option key={option.value} value={option.value}>
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  name="status"
+                  id="status"
+                  type="select"
+                  invalid={errors.status && true}
+                >
+                  {STATUS_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
-                )}
+                  ))}
                 </Input>
-              } />
-            
-            {errors.status &&
-            <FormFeedback style={{ display: 'block' }}>{errors?.status?.message}</FormFeedback>
-            }
+              )}
+            />
+
+            {errors.status && (
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.status?.message}
+              </FormFeedback>
+            )}
           </FormGroup>
           <div className="d-flex justify-content-start mt-1">
             <Button className="mr-1" color="primary" type="submit">
@@ -363,15 +476,15 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               type="button"
               color="secondary"
               onClick={handleModal}
-              outline>
-              
+              outline
+            >
               Cancel
             </Button>
           </div>
         </Form>
       </ModalBody>
-    </Modal>)
-
+    </Modal>
+  )
 }
 
 export default EditModal

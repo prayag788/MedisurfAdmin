@@ -6,7 +6,7 @@ import { AbilityContext } from '@src/utility/context/Can'
  * Return which component to render based on it's data/context
  * @param {Object} item nav menu item
  */
-export const resolveVerticalNavMenuItemComponent = item => {
+export const resolveVerticalNavMenuItemComponent = (item) => {
   if (item.header) return 'VerticalNavMenuSectionHeader'
   if (item.children) return 'VerticalNavMenuGroup'
   return 'VerticalNavMenuLink'
@@ -16,7 +16,7 @@ export const resolveVerticalNavMenuItemComponent = item => {
  * Return which component to render based on it's data/context
  * @param {Object} item nav menu item
  */
-export const resolveHorizontalNavMenuItemComponent = item => {
+export const resolveHorizontalNavMenuItemComponent = (item) => {
   if (item.children) return 'HorizontalNavMenuGroup'
   return 'HorizontalNavMenuLink'
 }
@@ -49,7 +49,7 @@ export const isNavLinkActive = (link, currentURL, routerProps) => {
 //   })
 // }
 export const isNavGroupActive = (children, currentURL, routerProps) => {
-  return children.some(child => {
+  return children.some((child) => {
     // If child have children => It's group => Go deeper(recursive)
     if (child.children) {
       return isNavGroupActive(child.children, currentURL, routerProps)
@@ -76,10 +76,13 @@ export const isNavGroupActive = (children, currentURL, routerProps) => {
 
 export const search = (navigation, currentURL, routerProps) => {
   let result
-  navigation.some(child => {
+  navigation.some((child) => {
     let children
     // If child have children => It's group => Go deeper(recursive)
-    if (child.children && (children = search(child.children, currentURL, routerProps))) {
+    if (
+      child.children &&
+      (children = search(child.children, currentURL, routerProps))
+    ) {
       return (result = {
         id: child.id,
         children,
@@ -119,14 +122,14 @@ export const getAllParents = (obj, match) => {
   return res
 }
 
-export const canViewMenuGroup = item => {
+export const canViewMenuGroup = (item) => {
   const ability = useContext(AbilityContext)
 
   const hasAnyVisibleChild =
     item.children &&
-    item.children.some(i => {
+    item.children.some((i) => {
       if (i.children) {
-        return i.children.some(ia => ability.can(ia.action, ia.resource))
+        return i.children.some((ia) => ability.can(ia.action, ia.resource))
       }
       return ability?.can(i.action, i.resource)
     })
@@ -139,7 +142,7 @@ export const canViewMenuGroup = item => {
   return ability?.can(item.action, item.resource) && hasAnyVisibleChild
 }
 
-export const canViewMenuItem = item => {
+export const canViewMenuItem = (item) => {
   const ability = useContext(AbilityContext)
   return ability?.can(item.action, item.resource)
 }

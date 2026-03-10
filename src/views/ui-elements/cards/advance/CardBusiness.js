@@ -41,12 +41,16 @@ const CardBusiness = () => {
   ]
 
   const renderOptions = () => {
-    return dataArr.map(item => {
+    return dataArr.map((item) => {
       return (
         <div key={item.id} className="business-item">
           <div className="d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center">
-              <Input type="checkbox" id={item.id} defaultChecked={item.checked} />
+              <Input
+                type="checkbox"
+                id={item.id}
+                defaultChecked={item.checked}
+              />
               <Label for={item.id} className="mb-0 ml-50">
                 {item.title}
               </Label>
@@ -66,7 +70,8 @@ const CardBusiness = () => {
       </CardHeader>
       <CardBody>
         <CardText>
-          Here, i focus ona range of items and featured that we use in life without giving them
+          Here, i focus ona range of items and featured that we use in life
+          without giving them
         </CardText>
         <h6 className="mb-75">Basic price is $130</h6>
         <div className="business-items">{renderOptions()}</div>

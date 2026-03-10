@@ -31,25 +31,25 @@
 
 // remove first btn group border left
 .btn-group
-  > .btn:not([class*='btn-outline-']):not([class*='btn-flat-']):not([class*='btn-gradient-']):not(
-    [class*='btn-relief-']
-  ):first-child,
+  > .btn:not([class*='btn-outline-']):not([class*='btn-flat-']):not(
+    [class*='btn-gradient-']
+  ):not([class*='btn-relief-']):first-child,
 .btn-group
-  > .btn:not([class*='btn-outline-']):not([class*='btn-flat-']):not([class*='btn-gradient-']):not(
-    [class*='btn-relief-']
-  ):first-of-type {
+  > .btn:not([class*='btn-outline-']):not([class*='btn-flat-']):not(
+    [class*='btn-gradient-']
+  ):not([class*='btn-relief-']):first-of-type {
   border-left-color: transparent !important;
 }
 
 // remove last btn group border right
 .btn-group
-  > .btn:not([class*='btn-outline-']):not([class*='btn-flat-']):not([class*='btn-gradient-']):not(
-    [class*='btn-relief-']
-  ):last-child,
+  > .btn:not([class*='btn-outline-']):not([class*='btn-flat-']):not(
+    [class*='btn-gradient-']
+  ):not([class*='btn-relief-']):last-child,
 .btn-group
-  > .btn:not([class*='btn-outline-']):not([class*='btn-flat-']):not([class*='btn-gradient-']):not(
-    [class*='btn-relief-']
-  ):last-of-type {
+  > .btn:not([class*='btn-outline-']):not([class*='btn-flat-']):not(
+    [class*='btn-gradient-']
+  ):not([class*='btn-relief-']):last-of-type {
   border-right-color: transparent !important;
 }
 

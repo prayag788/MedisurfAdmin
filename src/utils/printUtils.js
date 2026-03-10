@@ -22,10 +22,13 @@ export const printPage = (title = '') => {
  * Adds print-visible class to elements that should be visible during print
  * @param {string|Element} selector - CSS selector or DOM element
  */
-export const makePrintVisible = selector => {
-  const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : [selector]
+export const makePrintVisible = (selector) => {
+  const elements =
+    typeof selector === 'string'
+      ? document.querySelectorAll(selector)
+      : [selector]
 
-  elements.forEach(element => {
+  elements.forEach((element) => {
     if (element) {
       element.classList.add('print-visible')
     }
@@ -36,10 +39,13 @@ export const makePrintVisible = selector => {
  * Removes print-visible class from elements
  * @param {string|Element} selector - CSS selector or DOM element
  */
-export const makePrintHidden = selector => {
-  const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : [selector]
+export const makePrintHidden = (selector) => {
+  const elements =
+    typeof selector === 'string'
+      ? document.querySelectorAll(selector)
+      : [selector]
 
-  elements.forEach(element => {
+  elements.forEach((element) => {
     if (element) {
       element.classList.remove('print-visible')
     }
@@ -56,15 +62,15 @@ export const preparePrint = (options = {}) => {
   const { hideSelectors = [], showSelectors = [] } = options
 
   // Hide specified elements
-  hideSelectors.forEach(selector => {
+  hideSelectors.forEach((selector) => {
     const elements = document.querySelectorAll(selector)
-    elements.forEach(element => {
+    elements.forEach((element) => {
       element.style.display = 'none'
     })
   })
 
   // Show specified elements
-  showSelectors.forEach(selector => {
+  showSelectors.forEach((selector) => {
     makePrintVisible(selector)
   })
 }
@@ -77,9 +83,9 @@ export const preparePrint = (options = {}) => {
 export const restoreAfterPrint = (options = {}) => {
   const { restoreSelectors = [] } = options
 
-  restoreSelectors.forEach(selector => {
+  restoreSelectors.forEach((selector) => {
     const elements = document.querySelectorAll(selector)
-    elements.forEach(element => {
+    elements.forEach((element) => {
       element.style.display = ''
     })
   })

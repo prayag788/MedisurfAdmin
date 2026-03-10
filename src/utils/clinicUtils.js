@@ -8,11 +8,11 @@
  * @param {Object|Array} clinicData - Single clinic object or array of clinic objects
  * @returns {Object|Array} Normalized clinic data with consistent field names
  */
-export const normalizeClinicData = clinicData => {
+export const normalizeClinicData = (clinicData) => {
   if (!clinicData) return null
 
   if (Array.isArray(clinicData)) {
-    return clinicData.map(clinic => normalizeClinicData(clinic))
+    return clinicData.map((clinic) => normalizeClinicData(clinic))
   }
 
   if (typeof clinicData === 'string') {
@@ -47,10 +47,10 @@ export const normalizeClinicData = clinicData => {
  * @param {Array} options - Array of clinic options from API
  * @returns {Array} Normalized options with consistent field names
  */
-export const normalizeClinicOptions = options => {
+export const normalizeClinicOptions = (options) => {
   if (!Array.isArray(options)) return []
 
-  return options.map(option => {
+  return options.map((option) => {
     const clinicName =
       option.clinicName ||
       option.clinic_name ||
@@ -74,7 +74,7 @@ export const normalizeClinicOptions = options => {
  * @param {Object} clinic - Clinic object
  * @returns {string} Display name for the clinic
  */
-export const getClinicDisplayName = clinic => {
+export const getClinicDisplayName = (clinic) => {
   if (!clinic) return 'Unknown Clinic'
 
   if (typeof clinic === 'string') {
@@ -96,7 +96,10 @@ export const getClinicDisplayName = clinic => {
  * @param {string} clinicFieldName - Name of the field containing clinic data (default: 'clinics')
  * @returns {Object} Form data with normalized clinic information
  */
-export const normalizeFormClinicData = (formData, clinicFieldName = 'clinics') => {
+export const normalizeFormClinicData = (
+  formData,
+  clinicFieldName = 'clinics'
+) => {
   if (!formData || !formData[clinicFieldName]) return formData
 
   return {

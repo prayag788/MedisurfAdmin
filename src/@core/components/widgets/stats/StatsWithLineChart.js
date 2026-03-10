@@ -27,9 +27,18 @@ const StatsWithLineChart = ({
           <h2 className="font-weight-bolder">{stats}</h2>
           <CardText>{statTitle}</CardText>
         </div>
-        <Avatar className="avatar-stats p-50 m-0" color={`light-${color}`} icon={icon} />
+        <Avatar
+          className="avatar-stats p-50 m-0"
+          color={`light-${color}`}
+          icon={icon}
+        />
       </CardHeader>
-      <Chart options={options} series={series} type={type} height={height ? height : 100} />
+      <Chart
+        options={options}
+        series={series}
+        type={type}
+        height={height ? height : 100}
+      />
     </Card>
   )
 }

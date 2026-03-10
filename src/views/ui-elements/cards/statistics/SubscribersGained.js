@@ -7,7 +7,9 @@ const SubscribersGained = ({ kFormatter }) => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    axios.get('/card/card-statistics/subscribers').then(res => setData(res.data))
+    axios
+      .get('/card/card-statistics/subscribers')
+      .then((res) => setData(res.data))
   }, [])
 
   return data !== null ? (

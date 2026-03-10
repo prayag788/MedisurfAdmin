@@ -11,10 +11,22 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-.content-body .main-login-banner .container .authentication-input-fields:-webkit-autofill,
-.content-body .main-login-banner .container .authentication-input-fields:-webkit-autofill:hover,
-.content-body .main-login-banner .container .authentication-input-fields:-webkit-autofill:focus,
-.content-body .main-login-banner .container .authentication-input-fields:-webkit-autofill:active {
+.content-body
+  .main-login-banner
+  .container
+  .authentication-input-fields:-webkit-autofill,
+.content-body
+  .main-login-banner
+  .container
+  .authentication-input-fields:-webkit-autofill:hover,
+.content-body
+  .main-login-banner
+  .container
+  .authentication-input-fields:-webkit-autofill:focus,
+.content-body
+  .main-login-banner
+  .container
+  .authentication-input-fields:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
   -webkit-text-fill-color: #fff !important;
   caret-color: white;

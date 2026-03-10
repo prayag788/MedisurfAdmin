@@ -62,7 +62,9 @@ const ClinicUser = () => {
   const [refreshLoading, setRefreshLoading] = useState(false)
 
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('poweruserrow') ? JSON.parse(localStorage.getItem('poweruserrow')) : 7
+    localStorage.getItem('poweruserrow')
+      ? JSON.parse(localStorage.getItem('poweruserrow'))
+      : 7
   )
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
@@ -87,9 +89,9 @@ const ClinicUser = () => {
           sortcolumn: sortColumn,
         },
       })
-      .then(response => {
+      .then((response) => {
         setStartsrno(response.data.startsrno ? response.data.startsrno : 0)
-        setData(prev =>
+        setData((prev) =>
           response.data.list.map((obj, index) => {
             obj.sl = startsrno + index + 1
             obj.full_name = `${obj.fname} ${obj.lname}`
@@ -105,7 +107,15 @@ const ClinicUser = () => {
     if (!modal && !editModal) {
       getData()
     }
-  }, [page, rowsPerPage, searchValue, sortColumn, sortDirection, modal, editModal])
+  }, [
+    page,
+    rowsPerPage,
+    searchValue,
+    sortColumn,
+    sortDirection,
+    modal,
+    editModal,
+  ])
 
   function handleSort(d) {
     if (d.sortField) {
@@ -122,7 +132,7 @@ const ClinicUser = () => {
   const handleEditModal = () => SetEditModal(!editModal)
 
   // ** CRUD Handlers - return promise so modal can await and avoid double success/loader
-  const addNewUser = requestData => {
+  const addNewUser = (requestData) => {
     requestData = {
       ...requestData,
       role: 'CU',
@@ -132,13 +142,13 @@ const ClinicUser = () => {
     showLoadingAlert()
     return axios
       .post(`${process.env.REACT_APP_API_URL}/user/register/admin`, requestData)
-      .then(response => {
+      .then((response) => {
         handleModal()
         hideLoadingAlert()
         showSuccessAlert('Clinic User Added Successfully!')
         getData()
       })
-      .catch(err => {
+      .catch((err) => {
         const isValidationError = err?.response?.status === 422
         hideLoadingAlert()
         hideLoadingThenShowError(err)
@@ -151,15 +161,24 @@ const ClinicUser = () => {
 
   const updateUserDetails = (data, type) => {
     const url = `${process.env.REACT_APP_API_URL}/user/${data._id}`
-    console.log('[ClinicUser Edit] updateUserDetails called', { type, userId: data._id })
+    console.log('[ClinicUser Edit] updateUserDetails called', {
+      type,
+      userId: data._id,
+    })
     console.log('[ClinicUser Edit] PATCH URL:', url)
-    console.log('[ClinicUser Edit] Request payload:', JSON.stringify(data, null, 2))
+    console.log(
+      '[ClinicUser Edit] Request payload:',
+      JSON.stringify(data, null, 2)
+    )
 
     showLoadingAlert()
     axios
       .patch(url, data)
-      .then(response => {
-        console.log('[ClinicUser Edit] PATCH success', { status: response?.status, data: response?.data })
+      .then((response) => {
+        console.log('[ClinicUser Edit] PATCH success', {
+          status: response?.status,
+          data: response?.data,
+        })
         if (editModal) {
           handleEditModal()
         }
@@ -169,7 +188,7 @@ const ClinicUser = () => {
         )
         getData()
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('[ClinicUser Edit] PATCH failed', {
           message: err?.message,
           response: err?.response?.data,
@@ -181,13 +200,16 @@ const ClinicUser = () => {
 
   function deleteUser(id) {
     axios
-      .patch(`${process.env.REACT_APP_API_URL}/user/${id}`, { _id: id, status: -1 })
-      .then(response => {
+      .patch(`${process.env.REACT_APP_API_URL}/user/${id}`, {
+        _id: id,
+        status: -1,
+      })
+      .then((response) => {
         showSuccessAlert('Clinic User Deleted Successfully!')
         setPage(0)
         getData()
       })
-      .catch(err => {
+      .catch((err) => {
         handleEditModal()
         showErrorAlert(err)
       })
@@ -195,26 +217,40 @@ const ClinicUser = () => {
 
   // Confirmation Sweet Alert
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
+        setTip(!tip)
       }
-      setTip(!tip)
-    })
+    )
   }
 
   // ** Table item Button Handlers — set selected row first, then open modal next tick so editData has row values
-  const editHandler = row => {
-    setSelectedItem(prev => {
+  const editHandler = (row) => {
+    setSelectedItem((prev) => {
       const newData = { ...prev }
       const keys = Object.keys(prev)
       for (const key of keys) {
         if (key === 'secondaryEmail' || key === 'secondaryCno') {
-          newData[key] = row[key] ? row[key].filter(obj => obj !== '') : []
+          newData[key] = row[key] ? row[key].filter((obj) => obj !== '') : []
         } else if (key === 'fname') {
-          newData.fname = row.fname ?? row.first_name ?? (typeof row.full_name === 'string' ? row.full_name.split(' ')[0] : '') ?? ''
+          newData.fname =
+            row.fname ??
+            row.first_name ??
+            (typeof row.full_name === 'string'
+              ? row.full_name.split(' ')[0]
+              : '') ??
+            ''
         } else if (key === 'lname') {
-          newData.lname = row.lname ?? row.last_name ?? (typeof row.full_name === 'string' ? row.full_name.split(' ').slice(1).join(' ') : '') ?? ''
+          newData.lname =
+            row.lname ??
+            row.last_name ??
+            (typeof row.full_name === 'string'
+              ? row.full_name.split(' ').slice(1).join(' ')
+              : '') ??
+            ''
         } else {
           newData[key] = row[key]
         }
@@ -225,11 +261,11 @@ const ClinicUser = () => {
     setTimeout(() => handleEditModal(), 0)
   }
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     deleteUser(id)
   }
 
-  const DeactivationHandler = id => {
+  const DeactivationHandler = (id) => {
     const deactivationOptions = {
       _id: id,
       status: 0,
@@ -237,7 +273,7 @@ const ClinicUser = () => {
     updateUserDetails(deactivationOptions, 'deactivate')
   }
 
-  const ActivationHandler = id => {
+  const ActivationHandler = (id) => {
     const activationOptions = {
       _id: id,
       status: 1,
@@ -260,37 +296,42 @@ const ClinicUser = () => {
       id: 'fname',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row?.username ?? '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row?.username ?? '-'}
+          </div>
+        )
       },
     },
     {
       name: 'Email',
-      selector: row => (row['email'] ? row['email'] : '-'),
+      selector: (row) => (row['email'] ? row['email'] : '-'),
       sortable: true,
       reorder: true,
       id: 'email',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
-        const secondaryEmail = row?.secondaryEmail?.length > 0 ? row.secondaryEmail.join(' , ') : ''
+      cell: (row) => {
+        const secondaryEmail =
+          row?.secondaryEmail?.length > 0 ? row.secondaryEmail.join(' , ') : ''
         return `${row.email} ${row?.secondaryEmail?.length > 0 ? ' , ' : ' '} ${secondaryEmail}`
       },
     },
     {
       name: 'Clinic Name(s)',
-      selector: row => (row['clinics'] ? row['clinics']['clinicName'] : '-'),
+      selector: (row) => (row['clinics'] ? row['clinics']['clinicName'] : '-'),
       sortable: true,
       reorder: true,
       id: 'clinic',
       minWidth: '190px',
       maxWidth: '250px',
       height: 'auto',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row?.clinics
-              ?.map(data => {
+              ?.map((data) => {
                 return data?.clinicName
               })
               .join(' , ')}
@@ -301,7 +342,7 @@ const ClinicUser = () => {
     {
       name: 'Contact Number',
 
-      cell: row =>
+      cell: (row) =>
         `${row.cno ?? '-'} ${row?.secondaryCno?.length > 0 ? ' , ' : ' '} ${row?.secondaryCno?.length > 0 ? row?.secondaryCno?.join(' , ') : ''}`,
       sortable: true,
       reorder: true,
@@ -314,7 +355,7 @@ const ClinicUser = () => {
       sortable: true,
       reorder: true,
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         return (
           <Badge color={status[row?.status]?.color} pill>
             {status[row.status].title}
@@ -328,7 +369,7 @@ const ClinicUser = () => {
       sortable: false,
       reorder: true,
       id: 'actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -418,7 +459,11 @@ const ClinicUser = () => {
               </div>
             </CardHeader>
             <Row className="justify-content-end mx-0">
-              <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+              <Col
+                className="d-flex align-items-center justify-content-end mt-1"
+                md="6"
+                sm="12"
+              >
                 <Label className="mr-1" for="search-input">
                   Search
                 </Label>
@@ -428,7 +473,7 @@ const ClinicUser = () => {
                   bsSize="sm"
                   id="search-input"
                   value={searchValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     setSearchValue(e.target.value)
                   }}
                 />
@@ -447,9 +492,9 @@ const ClinicUser = () => {
                     onSort: handleSort,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setPage(e.first++)
-                      setRowsPerPage(prev => e.rows)
+                      setRowsPerPage((prev) => e.rows)
                       localStorage.setItem('poweruserrow', e.rows)
                     },
                   }}

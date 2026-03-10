@@ -11,7 +11,10 @@ import { showToastError as showToastErrorUtil } from './toast'
  * @param {string} fallback - Fallback message if no error found
  * @returns {string} - Extracted error message
  */
-export const extractErrorMessage = (error, fallback = 'An error occurred. Please try again.') => {
+export const extractErrorMessage = (
+  error,
+  fallback = 'An error occurred. Please try again.'
+) => {
   if (!error) return fallback
 
   // Handle string errors
@@ -118,7 +121,7 @@ export const handleApiError = (error, options = {}) => {
   const {
     type = 'alert',
     title = 'Error',
-    fallback = 'An error occurred. Please try again.'
+    fallback = 'An error occurred. Please try again.',
   } = options
 
   console.error('API Error:', error)
@@ -137,12 +140,16 @@ export const handleApiError = (error, options = {}) => {
  */
 export const handleFormError = (error, context = 'operation') => {
   const message = extractErrorMessage(error)
-  
+
   // Log for debugging
   console.error(`Form error in ${context}:`, error)
-  
+
   // Display user-friendly error
-  displayErrorAlert(error, 'Form Error', `Failed to complete ${context}. ${message}`)
+  displayErrorAlert(
+    error,
+    'Form Error',
+    `Failed to complete ${context}. ${message}`
+  )
 }
 
 /**
@@ -151,9 +158,15 @@ export const handleFormError = (error, context = 'operation') => {
  */
 export const handleNetworkError = (error) => {
   if (error && error.code === 'ECONNABORTED') {
-    displayErrorAlert('Request timeout. Please try again.', 'Connection Timeout')
+    displayErrorAlert(
+      'Request timeout. Please try again.',
+      'Connection Timeout'
+    )
   } else if (error && error.isNetworkError) {
-    displayErrorAlert('Network error. Please check your internet connection.', 'Network Error')
+    displayErrorAlert(
+      'Network error. Please check your internet connection.',
+      'Network Error'
+    )
   } else {
     handleApiError(error, { title: 'Network Error' })
   }
@@ -185,5 +198,5 @@ export default {
   handleApiError,
   handleFormError,
   handleNetworkError,
-  getFirstValidationError
+  getFirstValidationError,
 }

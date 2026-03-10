@@ -31,9 +31,10 @@ import { useNavbarColor } from '@hooks/useNavbarColor'
 // ** Styles
 import '@styles/base/core/menu/menu-types/horizontal-menu.scss'
 
-const HorizontalLayout = props => {
+const HorizontalLayout = (props) => {
   // ** Props
-  const { children, navbar, footer, menu, currentActiveItem, routerProps } = props
+  const { children, navbar, footer, menu, currentActiveItem, routerProps } =
+    props
 
   // ** Hooks
   const [skin, setSkin] = useSkin()
@@ -48,17 +49,17 @@ const HorizontalLayout = props => {
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const layoutStore = useSelector(state => state.layout)
+  const layoutStore = useSelector((state) => state.layout)
 
   // ** Vars
   const contentWidth = layoutStore.contentWidth
   const isHidden = layoutStore.menuHidden
 
   // ** Handles Content Width
-  const setContentWidth = val => dispatch(handleContentWidth(val))
+  const setContentWidth = (val) => dispatch(handleContentWidth(val))
 
   // ** Handles Content Width
-  const setIsHidden = val => dispatch(handleMenuHidden(val))
+  const setIsHidden = (val) => dispatch(handleMenuHidden(val))
 
   // ** UseEffect Cleanup
   const cleanup = () => {
@@ -98,7 +99,8 @@ const HorizontalLayout = props => {
     sticky: 'fixed-top',
   }
 
-  const bgColorCondition = navbarColor !== '' && navbarColor !== 'light' && navbarColor !== 'white'
+  const bgColorCondition =
+    navbarColor !== '' && navbarColor !== 'light' && navbarColor !== 'white'
 
   if (!isMounted) {
     return null
@@ -148,17 +150,23 @@ const HorizontalLayout = props => {
             expand="sm"
             light={skin !== 'dark'}
             dark={skin === 'dark' || bgColorCondition}
-            className={classnames(`header-navbar navbar-horizontal navbar-shadow menu-border`, {
-              [navbarClasses[navbarType]]: navbarType !== 'static',
-              'floating-nav':
-                (!navbarClasses[navbarType] && navbarType !== 'static') ||
-                navbarType === 'floating',
-            })}
+            className={classnames(
+              `header-navbar navbar-horizontal navbar-shadow menu-border`,
+              {
+                [navbarClasses[navbarType]]: navbarType !== 'static',
+                'floating-nav':
+                  (!navbarClasses[navbarType] && navbarType !== 'static') ||
+                  navbarType === 'floating',
+              }
+            )}
           >
             {menu ? (
               menu
             ) : (
-              <MenuComponent routerProps={routerProps} currentActiveItem={currentActiveItem} />
+              <MenuComponent
+                routerProps={routerProps}
+                currentActiveItem={currentActiveItem}
+              />
             )}
           </Navbar>
         </div>
@@ -199,7 +207,10 @@ const HorizontalLayout = props => {
         {footer ? (
           footer
         ) : (
-          <FooterComponent footerType={footerType} footerClasses={footerClasses} />
+          <FooterComponent
+            footerType={footerType}
+            footerClasses={footerClasses}
+          />
         )}
       </footer>
 

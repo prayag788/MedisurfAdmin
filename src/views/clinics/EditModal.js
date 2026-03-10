@@ -31,7 +31,10 @@ import * as yup from 'yup'
 
 // ** Edit-specific schema with optional contact number
 const CLINIC_EDIT_SCHEMA = yup.object().shape({
-  clinicName: createNameValidation('Clinic Name', FIELD_LIMITS.CLINIC_NAME_MAX_LENGTH),
+  clinicName: createNameValidation(
+    'Clinic Name',
+    FIELD_LIMITS.CLINIC_NAME_MAX_LENGTH
+  ),
   email: createEmailValidation(),
   cno: createPhoneValidation(false), // Optional in edit mode
   status: createStatusValidation(),
@@ -86,7 +89,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   useEffect(() => {
     if (editData && Object.keys(editData).length > 0) {
       // Set form values efficiently
-      formFields.forEach(field => {
+      formFields.forEach((field) => {
         if (editData[field] !== undefined && editData[field] !== null) {
           setValue(field, editData[field], { shouldValidate: false })
         }
@@ -100,18 +103,21 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   // ** Handle modal open/close
   useEffect(() => {
     if (!open) {
-      setIsValidSelect(prev => true)
+      setIsValidSelect((prev) => true)
     }
   }, [open])
 
   // ** Form submission handler
   const onSubmit = useCallback(
-    data => {
+    (data) => {
       const formData = {
         ...data,
         _id: editData._id,
         status: parseInt(data.status, 10),
-        allow_edit_patient_details: parseInt(data.allow_edit_patient_details, 10),
+        allow_edit_patient_details: parseInt(
+          data.allow_edit_patient_details,
+          10
+        ),
         secondaryEmail: data.secondaryEmail || [],
         secondaryCno: data.secondaryCno || [],
       }
@@ -127,16 +133,23 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   )
 
   // ** Input handler for form data updates
-  const inputHandler = useCallback(e => {
+  const inputHandler = useCallback((e) => {
     const name = e.target.name
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: e.target.value }
     })
   }, [])
 
   // ** Reusable FormField component
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -172,12 +185,22 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-3" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-3"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit Clinic Details</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormField name="_id" label="ID" placeholder="f23segfsfw344r3" disabled />
+          <FormField
+            name="_id"
+            label="ID"
+            placeholder="f23segfsfw344r3"
+            disabled
+          />
           <FormField
             name="clinicName"
             label="Clinic Name"
@@ -203,7 +226,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                 />
               )}
             />
-            {errors.email && <FormFeedback>{errors.email.message}</FormFeedback>}
+            {errors.email && (
+              <FormFeedback>{errors.email.message}</FormFeedback>
+            )}
           </FormGroup>
           <AdditionalDataComponent
             fieldName="secondaryEmail"
@@ -217,7 +242,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             getValues={getValues}
             placeholder="test.clinic@email.com"
           />
-          <FormField name="cno" label="Contact Number" type="text" placeholder="+1" />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="text"
+            placeholder="+1"
+          />
           <AdditionalDataComponent
             fieldName="secondaryCno"
             title="Add More"
@@ -246,7 +276,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                   type="select"
                   invalid={errors.status && true}
                 >
-                  {STATUS_OPTIONS.map(option => (
+                  {STATUS_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -254,11 +284,14 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                 </Input>
               )}
             />
-            {errors.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+            {errors.status && (
+              <FormFeedback>{errors.status.message}</FormFeedback>
+            )}
           </FormGroup>
           <FormGroup>
             <Label for="allow_edit_patient_details">
-              Allow to Edit the Patient Details? <span style={{ color: '#FF0000' }}>*</span>
+              Allow to Edit the Patient Details?{' '}
+              <span style={{ color: '#FF0000' }}>*</span>
             </Label>
             <Controller
               name="allow_edit_patient_details"
@@ -272,7 +305,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                   type="select"
                   invalid={errors.allow_edit_patient_details && true}
                 >
-                  {EDIT_OPTIONS.map(option => (
+                  {EDIT_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -281,14 +314,21 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               )}
             />
             {errors.allow_edit_patient_details && (
-              <FormFeedback>{errors.allow_edit_patient_details.message}</FormFeedback>
+              <FormFeedback>
+                {errors.allow_edit_patient_details.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <div className="d-flex justify-content-end gap-2 mt-3">
             <Button type="submit" className="me-1" color="primary">
               Update Clinic
             </Button>
-            <Button type="button" color="secondary" onClick={handleModal} outline>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={handleModal}
+              outline
+            >
               Cancel
             </Button>
           </div>

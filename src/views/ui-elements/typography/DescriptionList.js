@@ -27,7 +27,8 @@ const DescriptionList = () => {
             </Col>
             <Col sm="9">
               <dd>
-                Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+                Vestibulum id ligula porta felis euismod semper eget lacinia
+                odio sem nec elit.
               </dd>
             </Col>
           </Row>
@@ -48,7 +49,10 @@ const DescriptionList = () => {
               <dt>Truncated term is truncated</dt>
             </Col>
             <Col sm="9">
-              <dd>Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc</dd>
+              <dd>
+                Aenean posuere, tortor sed cursus feugiat, nunc augue blandit
+                nunc
+              </dd>
             </Col>
           </Row>
         </dl>

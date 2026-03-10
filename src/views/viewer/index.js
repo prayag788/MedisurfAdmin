@@ -35,16 +35,18 @@ const Viewer = () => {
 
   const getInstances = async () => {
     try {
-      const study = await fetch(`${process.env.REACT_APP_API_URL}/orthanc/studies/${studyId}`)
-        .then(res => res.json())
-        .then(doc => doc)
+      const study = await fetch(
+        `${process.env.REACT_APP_API_URL}/orthanc/studies/${studyId}`
+      )
+        .then((res) => res.json())
+        .then((doc) => doc)
 
       const Instances = await fetch(
         `${process.env.REACT_APP_API_URL}/orthanc/series/${study.Series[0]}`
       )
-        .then(res => res.json())
-        .then(doc => {
-          return doc.Instances.map(instance => {
+        .then((res) => res.json())
+        .then((doc) => {
+          return doc.Instances.map((instance) => {
             return `dicomweb:${process.env.REACT_APP_API_URL}/orthanc/instances/${instance}/file`
           })
         })

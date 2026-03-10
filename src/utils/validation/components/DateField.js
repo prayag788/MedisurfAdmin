@@ -28,18 +28,18 @@ const DateField = ({
 
   const validation = {
     validate: {
-      isValidDate: value => {
+      isValidDate: (value) => {
         if (!value) return required ? 'Date is required' : true
         return moment(value).isValid() || 'Please enter a valid date'
       },
-      isAfterMin: value => {
+      isAfterMin: (value) => {
         if (!value || !minDate) return true
         return (
           moment(value).isAfter(moment(minDate)) ||
           `Date must be after ${moment(minDate).format('MM/DD/YYYY')}`
         )
       },
-      isBeforeMax: value => {
+      isBeforeMax: (value) => {
         if (!value || !maxDate) return true
         return (
           moment(value).isBefore(moment(maxDate)) ||
@@ -80,14 +80,18 @@ const DateField = ({
             className={`form-control ${hasError ? 'is-invalid' : ''}`}
             placeholder={placeholder}
             options={flatpickrOptions}
-            onChange={dates => field.onChange(dates[0])}
+            onChange={(dates) => field.onChange(dates[0])}
           />
         )}
       />
 
-      {hasError && <FormFeedback className="d-block">{errorMessage}</FormFeedback>}
+      {hasError && (
+        <FormFeedback className="d-block">{errorMessage}</FormFeedback>
+      )}
 
-      {helpText && !hasError && <small className="form-text text-muted">{helpText}</small>}
+      {helpText && !hasError && (
+        <small className="form-text text-muted">{helpText}</small>
+      )}
     </FormGroup>
   )
 }

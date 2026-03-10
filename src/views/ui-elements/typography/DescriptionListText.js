@@ -1,4 +1,12 @@
-import { Card, CardHeader, CardTitle, CardBody, Row, Col, CardText } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  Row,
+  Col,
+  CardText,
+} from 'reactstrap'
 
 const DescriptionListtext = () => {
   return (
@@ -11,8 +19,8 @@ const DescriptionListtext = () => {
 
       <CardBody>
         <CardText>
-          Description lists with right aligned text in <code>&lt;dt&gt;</code> tag using{' '}
-          <code>.text-right</code> class.
+          Description lists with right aligned text in <code>&lt;dt&gt;</code>{' '}
+          tag using <code>.text-right</code> class.
         </CardText>
         <dl>
           <Row>
@@ -31,7 +39,8 @@ const DescriptionListtext = () => {
             </Col>
             <Col sm="9">
               <dd>
-                Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+                Vestibulum id ligula porta felis euismod semper eget lacinia
+                odio sem nec elit.
               </dd>
             </Col>
           </Row>
@@ -52,7 +61,10 @@ const DescriptionListtext = () => {
               <dt>Truncated term is truncated</dt>
             </Col>
             <Col sm="9">
-              <dd>Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc</dd>
+              <dd>
+                Aenean posuere, tortor sed cursus feugiat, nunc augue blandit
+                nunc
+              </dd>
             </Col>
           </Row>
         </dl>
@@ -67,7 +79,10 @@ const DescriptionListtext = () => {
                   <dt>Nested definition list</dt>
                 </Col>
                 <Col sm="8">
-                  <dd>Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc.</dd>
+                  <dd>
+                    Aenean posuere, tortor sed cursus feugiat, nunc augue
+                    blandit nunc.
+                  </dd>
                 </Col>
               </Row>
             </Col>

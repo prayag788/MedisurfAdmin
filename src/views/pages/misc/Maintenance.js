@@ -11,20 +11,25 @@ const Maintenance = () => {
     <div className="misc-wrapper">
       <a className="brand-logo" href="/">
         <span className="brand-logo-span">
-          <img id="medisurf-logo" src={themeConfig.app.appLogoImage} alt="logo" />
+          <img
+            id="medisurf-logo"
+            src={themeConfig.app.appLogoImage}
+            alt="logo"
+          />
         </span>
       </a>
       <div className="misc-inner p-2 p-sm-3">
         <div className="w-100 text-center">
           <h2 className="mb-1">Under Maintenance 🛠</h2>
           <p className="mb-3">
-            Sorry for the inconvenience but we're performing some maintenance at the moment
+            Sorry for the inconvenience but we're performing some maintenance at
+            the moment
           </p>
           <Form
             tag={Row}
             className="justify-content-center m-0 mb-2"
             inline
-            onSubmit={e => e.preventDefault()}
+            onSubmit={(e) => e.preventDefault()}
           >
             <Col
               tag={Input}
@@ -37,7 +42,11 @@ const Maintenance = () => {
               Notify
             </Button>
           </Form>
-          <img className="img-fluid" src={maintenanceImg} alt="Under maintenance page" />
+          <img
+            className="img-fluid"
+            src={maintenanceImg}
+            alt="Under maintenance page"
+          />
         </div>
       </div>
     </div>

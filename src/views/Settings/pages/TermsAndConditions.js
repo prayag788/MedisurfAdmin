@@ -1,15 +1,29 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
-import { Row, Col, Card, CardBody, CardTitle, CardHeader, Button } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardTitle,
+  CardHeader,
+  Button,
+} from 'reactstrap'
 import { Editor } from '@tinymce/tinymce-react'
 
 // ** Centralized Alerts
-import { showSuccessAlert, showErrorAlert, getErrorMessage } from '../../../utils/alerts'
+import {
+  showSuccessAlert,
+  showErrorAlert,
+  getErrorMessage,
+} from '../../../utils/alerts'
 
 import '@styles/react/libs/editor/editor.scss'
 import axios from 'axios'
 import { handleAutoLogout } from '@utils'
 export default () => {
-  const [value, setValue] = useState('<p>Enter your terms and conditions here...</p>')
+  const [value, setValue] = useState(
+    '<p>Enter your terms and conditions here...</p>'
+  )
   const [isLoaded, setIsLoaded] = useState(false)
   const editorRef = useRef(null)
   useEffect(() => {
@@ -20,7 +34,7 @@ export default () => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(doc => {
+      .then((doc) => {
         // Handle both response formats: {policy: {...}} or direct policy object
         const policyData = doc?.data?.policy || doc?.data
         if (policyData && policyData.markup) {
@@ -28,7 +42,7 @@ export default () => {
         }
         setIsLoaded(true)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error loading terms and conditions:', err)
         setIsLoaded(true)
       })
@@ -51,10 +65,10 @@ export default () => {
           },
         }
       )
-      .then(doc => {
+      .then((doc) => {
         showSuccessAlert('Terms And Conditions Updated Successfully!')
       })
-      .catch(err => {
+      .catch((err) => {
         showErrorAlert(getErrorMessage(err))
       })
   }
@@ -111,8 +125,8 @@ export default () => {
                     content_style:
                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                     placeholder: 'Enter your terms and conditions here...',
-                    setup: editor => {
-                      editor.on('keydown', e => {
+                    setup: (editor) => {
+                      editor.on('keydown', (e) => {
                         handleAutoLogout()
                       })
                     },

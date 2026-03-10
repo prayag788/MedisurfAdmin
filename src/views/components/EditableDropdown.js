@@ -4,20 +4,28 @@ import Select from 'react-select'
 import { FormGroup, Label } from 'reactstrap'
 import axios from 'axios'
 
-export default function EditableDropdown({ setValue, register, fieldName, errors, clinics }) {
-  const [selectedClinic, setSelectedClinic] = useState(clinics?.length ? clinics : null)
+export default function EditableDropdown({
+  setValue,
+  register,
+  fieldName,
+  errors,
+  clinics,
+}) {
+  const [selectedClinic, setSelectedClinic] = useState(
+    clinics?.length ? clinics : null
+  )
   const [dropdownData, setDropdownData] = useState([])
   const [loading, setLoading] = useState(false)
-  const fetchData = inputValue => {
+  const fetchData = (inputValue) => {
     setLoading(true)
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/institution-clinics/dropdownData?clinicName=${inputValue}`
       )
-      .then(doc => {
+      .then((doc) => {
         setDropdownData(doc.data.dropdownData)
       })
-      .catch(err => {
+      .catch((err) => {
         let textMessage
         if (err.response.data) {
           textMessage = err.response.data
@@ -29,7 +37,7 @@ export default function EditableDropdown({ setValue, register, fieldName, errors
       })
   }
 
-  const checkSelectedCinic = value => {
+  const checkSelectedCinic = (value) => {
     setSelectedClinic(value)
   }
 
@@ -50,7 +58,7 @@ export default function EditableDropdown({ setValue, register, fieldName, errors
         name="clinics"
         id="clinics"
         styles={{
-          multiValueLabel: styles => ({
+          multiValueLabel: (styles) => ({
             ...styles,
             color: 'white',
           }),
@@ -69,13 +77,13 @@ export default function EditableDropdown({ setValue, register, fieldName, errors
         onChange={checkSelectedCinic}
         isSearchable
         theme={selectThemeColors}
-        getOptionValue={option => `${option['_id']}`}
-        getOptionLabel={option => {
+        getOptionValue={(option) => `${option['_id']}`}
+        getOptionLabel={(option) => {
           return `${option['clinicName']}`
         }}
         options={dropdownData}
         isMulti
-        onInputChange={e => {
+        onInputChange={(e) => {
           fetchData(e)
         }}
       />

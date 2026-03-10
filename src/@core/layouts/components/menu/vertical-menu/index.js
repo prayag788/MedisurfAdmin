@@ -12,7 +12,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import VerticalMenuHeader from './VerticalMenuHeader'
 import VerticalNavMenuItems from './VerticalNavMenuItems'
 
-const Sidebar = props => {
+const Sidebar = (props) => {
   // ** Props
   const { menuCollapsed, routerProps, menu, currentActiveItem, skin } = props
 
@@ -35,7 +35,7 @@ const Sidebar = props => {
   }
 
   // ** Scroll Menu
-  const scrollMenu = container => {
+  const scrollMenu = (container) => {
     if (shadowRef && container.scrollTop > 0) {
       if (!shadowRef.current.classList.contains('d-block')) {
         shadowRef.current.classList.add('d-block')
@@ -50,11 +50,14 @@ const Sidebar = props => {
   return (
     <Fragment>
       <div
-        className={classnames('main-menu menu-fixed menu-accordion menu-shadow', {
-          expanded: menuCollapsed === false,
-          'menu-light': skin !== 'semi-dark' && skin !== 'dark',
-          'menu-dark': skin === 'semi-dark' || skin === 'dark',
-        })}
+        className={classnames(
+          'main-menu menu-fixed menu-accordion menu-shadow',
+          {
+            expanded: menuCollapsed === false,
+            'menu-light': skin !== 'semi-dark' && skin !== 'dark',
+            'menu-dark': skin === 'semi-dark' || skin === 'dark',
+          }
+        )}
         onMouseEnter={onMouseEnter}
         onMouseLeave={() => setMenuHover(false)}
       >
@@ -63,14 +66,18 @@ const Sidebar = props => {
         ) : (
           <Fragment>
             {}
-            <VerticalMenuHeader setGroupOpen={setGroupOpen} menuHover={menuHover} {...props} />
+            <VerticalMenuHeader
+              setGroupOpen={setGroupOpen}
+              menuHover={menuHover}
+              {...props}
+            />
             {}
             <div className="shadow-bottom" ref={shadowRef}></div>
             {}
             <PerfectScrollbar
               className="main-menu-content"
               options={{ wheelPropagation: false }}
-              onScrollY={container => scrollMenu(container)}
+              onScrollY={(container) => scrollMenu(container)}
             >
               <ul className="navigation navigation-main">
                 <VerticalNavMenuItems

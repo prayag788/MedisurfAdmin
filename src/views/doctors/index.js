@@ -48,7 +48,9 @@ const Doctors = () => {
   const [refreshLoading, setRefreshLoading] = useState(false)
   const [newUserId, SetNewUserId] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('doctorrow') ? JSON.parse(localStorage.getItem('doctorrow')) : 7
+    localStorage.getItem('doctorrow')
+      ? JSON.parse(localStorage.getItem('doctorrow'))
+      : 7
   )
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
@@ -70,10 +72,12 @@ const Doctors = () => {
           sortcolumn: sortColumn,
         },
       })
-      .then(response => {
-        const currentStartsrno = response.data.startsrno ? response.data.startsrno : 0
+      .then((response) => {
+        const currentStartsrno = response.data.startsrno
+          ? response.data.startsrno
+          : 0
         setStartsrno(currentStartsrno)
-        
+
         if (response?.data?.list && Array.isArray(response.data.list)) {
           const processedData = response.data.list
             .map((obj, index) => {
@@ -83,17 +87,17 @@ const Doctors = () => {
               }
               return obj
             })
-            .filter(obj => obj !== null && obj !== undefined)
+            .filter((obj) => obj !== null && obj !== undefined)
           setData(processedData)
         } else {
           setData([])
         }
-        
+
         SetNewUserId(response.data.nextId)
         setRefreshLoading(false)
         setTotal(response.data.numberOfRecord)
       })
-      .catch(err => {
+      .catch((err) => {
         setRefreshLoading(false)
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -103,7 +107,6 @@ const Doctors = () => {
   useEffect(() => {
     getData()
   }, [page, rowsPerPage, searchValue, sortColumn, sortDirection])
-  
 
   function handleSort(d) {
     if (d.sortField) {
@@ -116,8 +119,14 @@ const Doctors = () => {
   }
   const handleModal = () => setModal(!modal)
   const handleEditModal = () => SetEditModal(!editModal)
-  const addNewUser = async requestData => {
-    requestData = { ...requestData, role: 'Doc', status: 1, pwdCng: false, byAdmin: true }
+  const addNewUser = async (requestData) => {
+    requestData = {
+      ...requestData,
+      role: 'Doc',
+      status: 1,
+      pwdCng: false,
+      byAdmin: true,
+    }
     showLoadingAlert()
     try {
       const response = await axios.post(
@@ -127,7 +136,7 @@ const Doctors = () => {
       handleModal()
       hideLoadingAlert()
       showSuccessAlert('Doctor Added Successfully!')
-      setData(prev => {
+      setData((prev) => {
         if (response?.data?.user) {
           prev = [response.data.user].concat(prev || [])
           prev = prev.map((obj, index) => {
@@ -155,20 +164,25 @@ const Doctors = () => {
     }
     showLoadingAlert()
     try {
-      const response = await axios.patch(`${process.env.REACT_APP_API_URL}/user/${data._id}`, data)
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API_URL}/user/${data._id}`,
+        data
+      )
       hideLoadingAlert()
       showSuccessAlert(
         `Doctor ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
       )
       // Update frontend state immediately
-      setData(prev => prev.map(user => {
-        if (user._id === data._id) {
-          const updatedUser = { ...user, ...data }
-          updatedUser.full_name = `${updatedUser.fname || ''} ${updatedUser.lname || ''}`
-          return updatedUser
-        }
-        return user
-      }))
+      setData((prev) =>
+        prev.map((user) => {
+          if (user._id === data._id) {
+            const updatedUser = { ...user, ...data }
+            updatedUser.full_name = `${updatedUser.fname || ''} ${updatedUser.lname || ''}`
+            return updatedUser
+          }
+          return user
+        })
+      )
       // Refresh from API with delay
       setTimeout(() => getData(), 500)
     } catch (err) {
@@ -183,28 +197,30 @@ const Doctors = () => {
         _id: id,
         status: -1,
       })
-      .then(response => {
+      .then((response) => {
         showSuccessAlert('Doctor Deleted Successfully!')
         // Immediately remove from frontend state
-        setData(prev => prev.filter(user => user._id !== id))
+        setData((prev) => prev.filter((user) => user._id !== id))
         // Refresh from API with longer delay
         setTimeout(() => getData(), 500)
         setTimeout(() => getData(), 1000)
       })
-      .catch(err => {
+      .catch((err) => {
         handleEditModal()
         showErrorAlert(err)
       })
   }
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
       }
-    })
+    )
   }
-  const editHandler = row => {
-    SetUpdateData(prev => {
+  const editHandler = (row) => {
+    SetUpdateData((prev) => {
       const newData = { ...prev }
       const keys = Object.keys(newData)
       for (const key of keys) {
@@ -218,17 +234,17 @@ const Doctors = () => {
     })
     handleEditModal()
   }
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     deleteUser(id)
   }
-  const DeactivationHandler = id => {
+  const DeactivationHandler = (id) => {
     const deactivationOptions = {
       _id: id,
       status: 0,
     }
     updateUserDetails(deactivationOptions, 'deactivate')
   }
-  const ActivationHandler = id => {
+  const ActivationHandler = (id) => {
     const activationOptions = {
       _id: id,
       status: 1,
@@ -247,19 +263,19 @@ const Doctors = () => {
       reorder: true,
       id: 'fname',
       minWidth: '120px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.full_name}</div>
       },
     },
     {
       name: 'User Name',
-      selector: row => (row['username'] ? row['username'] : '-'),
+      selector: (row) => (row['username'] ? row['username'] : '-'),
       sortable: true,
       reorder: true,
       id: 'username',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.username}</div>
       },
     },
@@ -270,7 +286,7 @@ const Doctors = () => {
       reorder: true,
       id: 'email',
       minWidth: '190px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.email}</div>
       },
     },
@@ -281,7 +297,7 @@ const Doctors = () => {
       reorder: true,
       id: 'hospitalname',
       minWidth: '160px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row.hospitalname ? row.hospitalname : '-'}
@@ -295,7 +311,7 @@ const Doctors = () => {
       sortable: true,
       reorder: true,
       id: 'designation',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row.designation ? row.designation : '-'}
@@ -311,8 +327,12 @@ const Doctors = () => {
       id: 'cno',
       minWidth: '190px',
       maxWidth: 'fit-content',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.cno ? row.cno : '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.cno ? row.cno : '-'}
+          </div>
+        )
       },
     },
     {
@@ -322,7 +342,7 @@ const Doctors = () => {
       reorder: true,
       id: 'status',
       maxWidth: '120px',
-      cell: row => {
+      cell: (row) => {
         return (
           <Badge color={status[row.status].color} pill>
             {status[row.status].title}
@@ -336,7 +356,7 @@ const Doctors = () => {
       sortable: false,
       id: 'actions',
       maxWidth: '130px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -440,7 +460,11 @@ const Doctors = () => {
               </div>
             </CardHeader>
             <Row className="justify-content-end mx-0">
-              <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+              <Col
+                className="d-flex align-items-center justify-content-end mt-1"
+                md="6"
+                sm="12"
+              >
                 <Label className="me-1" for="search-input">
                   Search
                 </Label>
@@ -450,7 +474,7 @@ const Doctors = () => {
                   bsSize="sm"
                   id="search-input"
                   value={searchValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     setSearchValue(e.target.value)
                   }}
                 />
@@ -469,9 +493,9 @@ const Doctors = () => {
                     onSort: handleSort,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setPage(e.first++)
-                      setRowsPerPage(prev => e.rows)
+                      setRowsPerPage((prev) => e.rows)
                       localStorage.setItem('doctorrow', e.rows)
                     },
                   }}
@@ -481,7 +505,11 @@ const Doctors = () => {
           </Card>
         </Col>
       </Row>
-      <AddNewModal addUser={addNewUser} open={modal} handleModal={handleModal} />
+      <AddNewModal
+        addUser={addNewUser}
+        open={modal}
+        handleModal={handleModal}
+      />
       <EditModal
         updateUser={updateUserDetails}
         open={editModal}

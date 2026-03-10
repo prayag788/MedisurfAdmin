@@ -8,7 +8,15 @@ import { handleLogin } from '@store/actions/auth'
 import { AbilityContext } from '@src/utility/context/Can'
 import { useNavigate } from 'react-router-dom'
 import { extractErrorMessage, getHomeRouteForLoggedInUser } from '@utils'
-import { Coffee, AlertCircle, Eye, EyeOff, Heart, X, Check } from 'react-feather'
+import {
+  Coffee,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Heart,
+  X,
+  Check,
+} from 'react-feather'
 import { Spinner, FormFeedback } from 'reactstrap'
 
 import bodyImg from '@src/assets/images/login/Column-img.png'
@@ -19,12 +27,18 @@ import { Checkbox, FormControlLabel } from '@mui/material'
 
 const ToastContent = ({ name, role }) => (
   <div className="d-flex">
-    <Avatar size="sm" color="success" icon={<Coffee size={12} />} className="me-2 flex-shrink-0" />
+    <Avatar
+      size="sm"
+      color="success"
+      icon={<Coffee size={12} />}
+      className="me-2 flex-shrink-0"
+    />
     <div className="flex-grow-1">
       <div className="toast-title font-weight-bold">Welcome, {name}</div>
       <div className="toast-message">
-        You have successfully logged in as an {role} user to {`${process.env.REACT_APP_INNER_NAME}`}
-        . Now you can start to explore. Enjoy!
+        You have successfully logged in as an {role} user to{' '}
+        {`${process.env.REACT_APP_INNER_NAME}`}. Now you can start to explore.
+        Enjoy!
       </div>
     </div>
   </div>
@@ -39,7 +53,9 @@ const ToastContentMessage = ({ message, status }) => (
       className="me-2 flex-shrink-0"
     />
     <div className="flex-grow-1">
-      <div className="toast-title font-weight-bold">{status ? 'Success' : 'Failed'}</div>
+      <div className="toast-title font-weight-bold">
+        {status ? 'Success' : 'Failed'}
+      </div>
       <div className="toast-message">{message}</div>
     </div>
   </div>
@@ -86,7 +102,7 @@ const NewLogin = () => {
   //   }
   // }
 
-  const validate = obj => {
+  const validate = (obj) => {
     const isValid = []
     for (const item in obj) {
       if (obj[item] === '') {
@@ -95,7 +111,7 @@ const NewLogin = () => {
     }
     return isValid
   }
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     if (forgotPasswordStatus) {
       const pass = validate({ username: creds.username })
@@ -107,9 +123,12 @@ const NewLogin = () => {
           .post(`${process.env.REACT_APP_API_URL}/user/forgotPassword`, data, {
             headers: { 'content-type': 'application/json' },
           })
-          .then(res => {
+          .then((res) => {
             toast.success(
-              <ToastContentMessage message={res?.data?.message || 'Email sent'} status={true} />,
+              <ToastContentMessage
+                message={res?.data?.message || 'Email sent'}
+                status={true}
+              />,
               {
                 position: 'top-right',
                 transition: Slide,
@@ -124,7 +143,7 @@ const NewLogin = () => {
             setForgotPasswordStatus(false)
             setLoading(() => false)
           })
-          .catch(err => {
+          .catch((err) => {
             const message = extractErrorMessage(
               err?.response?.data ?? err,
               'Something went wrong, Please try again later!'
@@ -137,13 +156,13 @@ const NewLogin = () => {
                 autoClose: 4000,
               }
             )
-            setError(prev => ({ ...prev, forgotPassword: message }))
+            setError((prev) => ({ ...prev, forgotPassword: message }))
             setLoading(() => false)
           })
       } else {
-        setError(prev => {
+        setError((prev) => {
           const errors = { ...prev }
-          pass.forEach(item => {
+          pass.forEach((item) => {
             errors[item] = 1
           })
           return errors
@@ -155,7 +174,7 @@ const NewLogin = () => {
         setLoading(() => true)
         useJwt
           .login(creds)
-          .then(res => {
+          .then((res) => {
             const user = res?.data?.user
             const token = res?.data?.token
             if (user && user.status === 1) {
@@ -230,20 +249,23 @@ const NewLogin = () => {
               })
             }
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err)
             setLoading(() => false)
-            setError(prev => {
+            setError((prev) => {
               return {
                 ...prev,
-                auth: extractErrorMessage(err?.response?.data ?? err, 'Login failed'),
+                auth: extractErrorMessage(
+                  err?.response?.data ?? err,
+                  'Login failed'
+                ),
               }
             })
           })
       } else {
-        setError(prev => {
+        setError((prev) => {
           const errors = {}
-          pass.map(item => {
+          pass.map((item) => {
             errors[item] = 1
           })
           return errors
@@ -252,30 +274,30 @@ const NewLogin = () => {
     }
   }
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
 
     // Remove authentication error
-    setError(prev => {
+    setError((prev) => {
       delete prev.auth
       return prev
     })
 
     // Remove/Set input error
     if (!value) {
-      setError(prev => {
+      setError((prev) => {
         return { ...prev, [name]: 1 }
       })
     } else {
-      setError(prev => {
+      setError((prev) => {
         delete prev[name]
         return prev
       })
     }
 
     // Update input value
-    setCreds(prev => {
+    setCreds((prev) => {
       return { ...prev, [name]: value }
     })
   }
@@ -283,12 +305,14 @@ const NewLogin = () => {
   //   )
   // }
 
-  const handleDelete = option => {
-    const updatedSuggestions = options.filter(suggestion => suggestion.label !== option.label)
+  const handleDelete = (option) => {
+    const updatedSuggestions = options.filter(
+      (suggestion) => suggestion.label !== option.label
+    )
     setOptions(updatedSuggestions)
     const tmp = []
     const etmp = []
-    options.map(op => {
+    options.map((op) => {
       if (op.label !== option.label) {
         tmp.push(op)
         etmp.push(btoa(op.value))
@@ -302,8 +326,8 @@ const NewLogin = () => {
 
   // )
 
-  const onSuggestionSelected = suggestion => {
-    setCreds(prev => {
+  const onSuggestionSelected = (suggestion) => {
+    setCreds((prev) => {
       return { ...prev, username: suggestion.label }
     })
   }
@@ -314,7 +338,7 @@ const NewLogin = () => {
       const unminifiedData = JSON.parse(usernames) || []
 
       const tmp = []
-      unminifiedData.map(uD => {
+      unminifiedData.map((uD) => {
         const d = atob(uD)
         tmp.push({
           label: d,
@@ -361,7 +385,7 @@ const NewLogin = () => {
                       control={
                         <Checkbox
                           checked={isSaveUsername}
-                          onChange={e => setIsSaveUsername(!isSaveUsername)}
+                          onChange={(e) => setIsSaveUsername(!isSaveUsername)}
                           id="default"
                           name="default"
                           color="primary"
@@ -388,12 +412,21 @@ const NewLogin = () => {
                         autoComplete="new-password"
                         value={creds.password}
                         onChange={inputHandler}
-                        invalid={(error && error.password && true) || (error && error.auth && true)}
+                        invalid={
+                          (error && error.password && true) ||
+                          (error && error.auth && true)
+                        }
                       />
                       {togglePassword ? (
-                        <Eye size={20} onClick={() => setTogglePassword(prev => !prev)} />
+                        <Eye
+                          size={20}
+                          onClick={() => setTogglePassword((prev) => !prev)}
+                        />
                       ) : (
-                        <EyeOff size={20} onClick={() => setTogglePassword(prev => !prev)} />
+                        <EyeOff
+                          size={20}
+                          onClick={() => setTogglePassword((prev) => !prev)}
+                        />
                       )}
                     </div>
                   </div>
@@ -416,15 +449,21 @@ const NewLogin = () => {
                     {error.forgotPassword}
                   </FormFeedback>
                 )}
-                {error && (error.username || error.usernane) && forgotPasswordStatus && (
-                  <FormFeedback
-                    style={{ display: 'block', marginBottom: '1rem' }}
-                  >
-                    Please enter your username or email.
-                  </FormFeedback>
-                )}
+                {error &&
+                  (error.username || error.usernane) &&
+                  forgotPasswordStatus && (
+                    <FormFeedback
+                      style={{ display: 'block', marginBottom: '1rem' }}
+                    >
+                      Please enter your username or email.
+                    </FormFeedback>
+                  )}
                 <div className="login-btn">
-                  <button type="submit" className="btn btn-primary" disabled={loading}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={loading}
+                  >
                     {!loading ? (
                       forgotPasswordStatus ? (
                         'RESET PASSWORD'

@@ -20,7 +20,9 @@ const ToastContent = ({ message, type }) => (
       className="me-2 flex-shrink-0"
     />
     <div className="flex-grow-1">
-      <div className="toast-title font-weight-bold">{type === 'success' ? 'Success' : 'Error'}</div>
+      <div className="toast-title font-weight-bold">
+        {type === 'success' ? 'Success' : 'Error'}
+      </div>
       <div className="toast-message">{message}</div>
     </div>
   </div>
@@ -28,11 +30,15 @@ const ToastContent = ({ message, type }) => (
 
 const ActivationKey = () => {
   const navigate = useNavigate()
-  const [creds, setCreds] = useState({ contact: '', email: '', activationKey: '' })
+  const [creds, setCreds] = useState({
+    contact: '',
+    email: '',
+    activationKey: '',
+  })
   const [error, setError] = useState({})
   const [loading, setLoading] = useState(false)
 
-  const validate = obj => {
+  const validate = (obj) => {
     const isValid = []
     for (const item in obj) {
       if (obj[item] === '') {
@@ -56,18 +62,21 @@ const ActivationKey = () => {
   }
 
   window.onoffline = () => {
-    toast.error(<ToastContent message={'No Internet Connection!'} type={'error'} />, {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
+    toast.error(
+      <ToastContent message={'No Internet Connection!'} type={'error'} />,
+      {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }
+    )
   }
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     if (navigator.onLine) {
       const pass = validate(creds)
@@ -89,7 +98,10 @@ const ActivationKey = () => {
           if (response.status === 200) {
             if (response.data?.user) {
               // Direct user login after license verification
-              localStorage.setItem('userData', JSON.stringify(response.data.user))
+              localStorage.setItem(
+                'userData',
+                JSON.stringify(response.data.user)
+              )
               localStorage.setItem(
                 'accessToken',
                 response.data.user.accessToken || response.data.user.token || ''
@@ -114,7 +126,10 @@ const ActivationKey = () => {
                 // User has already changed password - redirect to home
                 navigate(getHomeRouteForLoggedInUser(response.data.user.role))
                 toast.success(
-                  <ToastContent message={'Successfully activated license.'} type={'success'} />,
+                  <ToastContent
+                    message={'Successfully activated license.'}
+                    type={'success'}
+                  />,
                   {
                     transition: Slide,
                     hideProgressBar: true,
@@ -126,7 +141,9 @@ const ActivationKey = () => {
               // License verified but user needs to login separately
               toast.success(
                 <ToastContent
-                  message={'License verified successfully. Please login to continue.'}
+                  message={
+                    'License verified successfully. Please login to continue.'
+                  }
                   type={'success'}
                 />,
                 {
@@ -157,15 +174,18 @@ const ActivationKey = () => {
               response?.data?.error ?? response?.data,
               'Something went wrong'
             )
-            toast.error(<ToastContent message={error_message} type={'error'} />, {
-              position: 'top-center',
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            })
+            toast.error(
+              <ToastContent message={error_message} type={'error'} />,
+              {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              }
+            )
           }
         } catch (err) {
           setLoading(false)
@@ -187,51 +207,54 @@ const ActivationKey = () => {
           setLoading(false)
         }
       } else {
-        setError(prev => {
+        setError((prev) => {
           const errors = {}
-          pass.forEach(item => {
+          pass.forEach((item) => {
             errors[item] = 1
           })
           return errors
         })
       }
     } else {
-      toast.error(<ToastContent message={'No Internet Connection!'} type={'error'} />, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.error(
+        <ToastContent message={'No Internet Connection!'} type={'error'} />,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      )
     }
   }
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
 
     // Remove authentication error
-    setError(prev => {
+    setError((prev) => {
       delete prev.auth
       return prev
     })
 
     // Remove/Set input error
     if (!value) {
-      setError(prev => {
+      setError((prev) => {
         return { ...prev, [name]: 1 }
       })
     } else {
-      setError(prev => {
+      setError((prev) => {
         delete prev[name]
         return prev
       })
     }
 
     // Update input value
-    setCreds(prev => {
+    setCreds((prev) => {
       return { ...prev, [name]: value }
     })
   }
@@ -263,7 +286,10 @@ const ActivationKey = () => {
                       tabIndex="2"
                       value={creds.email}
                       onChange={inputHandler}
-                      invalid={(error && error.email && true) || (error && error.auth && true)}
+                      invalid={
+                        (error && error.email && true) ||
+                        (error && error.auth && true)
+                      }
                     />
                     <img src={lock} alt="" />
                   </div>
@@ -278,7 +304,10 @@ const ActivationKey = () => {
                       tabIndex="2"
                       value={creds.contact}
                       onChange={inputHandler}
-                      invalid={(error && error.contact && true) || (error && error.auth && true)}
+                      invalid={
+                        (error && error.contact && true) ||
+                        (error && error.auth && true)
+                      }
                     />
                     <img src={lock} alt="" />
                   </div>
@@ -294,7 +323,8 @@ const ActivationKey = () => {
                       value={creds.activationKey}
                       onChange={inputHandler}
                       invalid={
-                        (error && error.activationKey && true) || (error && error.auth && true)
+                        (error && error.activationKey && true) ||
+                        (error && error.auth && true)
                       }
                     />
                     <img src={lock} alt="" />
@@ -318,7 +348,11 @@ const ActivationKey = () => {
                     </FormFeedback>
                   )}
                   <div className="login-btn">
-                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={loading}
+                    >
                       {!loading ? 'LOGIN' : <Spinner color="white" size="sm" />}
                     </button>
                   </div>
@@ -338,7 +372,11 @@ const ActivationKey = () => {
       <div className="float-md-right footer">
         Powered by &nbsp;
         <Heart size={20} /> &nbsp;
-        <a href={`${process.env.REACT_APP_POWER_BY_URL}`} target="_blank" rel="noopener noreferrer">
+        <a
+          href={`${process.env.REACT_APP_POWER_BY_URL}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {`${process.env.REACT_APP_POWER_BY_NAME}`}
         </a>
       </div>

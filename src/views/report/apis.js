@@ -1,8 +1,9 @@
 const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8005/api'
 
 const getToken = () => {
-  const tokenRaw = localStorage.getItem('accessToken') || localStorage.getItem('authToken')
-  
+  const tokenRaw =
+    localStorage.getItem('accessToken') || localStorage.getItem('authToken')
+
   if (!tokenRaw) {
     return null
   }
@@ -21,16 +22,13 @@ const getToken = () => {
   return token && typeof token === 'string' ? token.trim() : null
 }
 
-export const getAllWorkSheet = async id => {
+export const getAllWorkSheet = async (id) => {
   const token = getToken()
-  const resp = await fetch(
-    `${BASE_URL}/orthanc/study/getAllWorkSheet/${id}`,
-    {
-      headers: {
-        Authorization: token ? `Bearer ${token}` : undefined,
-      },
-    }
-  )
+  const resp = await fetch(`${BASE_URL}/orthanc/study/getAllWorkSheet/${id}`, {
+    headers: {
+      Authorization: token ? `Bearer ${token}` : undefined,
+    },
+  })
   const data = await resp.json()
   const { status, worksheets } = data
   console.log('ppp worksheet .. ', status, worksheets)
@@ -44,7 +42,7 @@ export const getAllWorkSheet = async id => {
 export const uploadWorksheet = async (data, id) => {
   const token = getToken()
   const dataArr = []
-  await Object.values(data).map(item => {
+  await Object.values(data).map((item) => {
     dataArr.push(item)
   })
 
@@ -54,16 +52,13 @@ export const uploadWorksheet = async (data, id) => {
     const formdata = new FormData()
     formdata.append('worksheet', data[0])
     formdata.append('id', id)
-    respData = await fetch(
-      `${BASE_URL}/orthanc/study/assignWorkSheet`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: token ? `Bearer ${token}` : undefined,
-        },
-        body: formdata,
-      }
-    )
+    respData = await fetch(`${BASE_URL}/orthanc/study/assignWorkSheet`, {
+      method: 'POST',
+      headers: {
+        Authorization: token ? `Bearer ${token}` : undefined,
+      },
+      body: formdata,
+    })
   }
 
   return respData
@@ -84,7 +79,12 @@ export const deleteWorksheet = async (studyId, worksheetId) => {
 }
 
 export const getAllDicomImage = async (studyId, options = {}) => {
-  console.log('[getAllDicomImage] Called with studyId:', studyId, 'options:', options)
+  console.log(
+    '[getAllDicomImage] Called with studyId:',
+    studyId,
+    'options:',
+    options
+  )
   try {
     const token = getToken()
     let url = `${BASE_URL}/orthanc/getStudyImages/${studyId}`
@@ -99,10 +99,10 @@ export const getAllDicomImage = async (studyId, options = {}) => {
     if ([...params.keys()].length > 0) {
       url += `?${params.toString()}`
     }
-    
+
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 30000)
-    
+
     const res = await fetch(url, {
       headers: {
         Authorization: token ? `Bearer ${token}` : undefined,
@@ -110,19 +110,19 @@ export const getAllDicomImage = async (studyId, options = {}) => {
       signal: options.signal || controller.signal,
     })
     clearTimeout(timeoutId)
-    
+
     const data = await res.json()
     console.log('[getAllDicomImage] Response:', data)
     return { data }
   } catch (error) {
     console.error('[getAllDicomImage] Error:', error)
-    
+
     if (error.name === 'AbortError') {
       throw new Error('Request timeout - please try again')
     } else if (error instanceof TypeError) {
       throw new Error('Network Error - Please check your internet connection')
     }
-    
+
     throw error
   }
 }
@@ -134,7 +134,7 @@ const normalizeSeriesId = (series) => {
 const transformSeriesOption = (series) => {
   const seriesId = normalizeSeriesId(series)
   if (!seriesId) return null
-  
+
   return {
     value: String(seriesId),
     name: `${series.modality || 'Unknown'} - ${series.instanceCount || 0} images`,
@@ -144,7 +144,7 @@ const transformSeriesOption = (series) => {
   }
 }
 
-export const getAllSeries = async studyId => {
+export const getAllSeries = async (studyId) => {
   try {
     console.log('[getAllSeries] Fetching series for studyId:', studyId)
     const token = getToken()
@@ -157,31 +157,41 @@ export const getAllSeries = async studyId => {
         },
       }
     )
-    
+
     const data = await res.json()
     console.log('[getAllSeries] API response:', data)
-    
-    if (data.success && Array.isArray(data.seriesOptions) && data.seriesOptions.length > 0) {
+
+    if (
+      data.success &&
+      Array.isArray(data.seriesOptions) &&
+      data.seriesOptions.length > 0
+    ) {
       const transformed = data.seriesOptions
         .map(transformSeriesOption)
         .filter(Boolean)
-      
-      console.log('[getAllSeries] Transformed series:', { 
-        count: transformed.length, 
-        series: transformed.map(s => ({ value: s.value, modality: s.modality, instanceCount: s.instanceCount }))
+
+      console.log('[getAllSeries] Transformed series:', {
+        count: transformed.length,
+        series: transformed.map((s) => ({
+          value: s.value,
+          modality: s.modality,
+          instanceCount: s.instanceCount,
+        })),
       })
-      
+
       return {
         data: {
           all_series: transformed,
         },
       }
     }
-    
-    console.warn('[getAllSeries] No valid seriesOptions in response:', { 
-      success: data.success, 
-      seriesOptionsCount: Array.isArray(data.seriesOptions) ? data.seriesOptions.length : 'N/A',
-      data 
+
+    console.warn('[getAllSeries] No valid seriesOptions in response:', {
+      success: data.success,
+      seriesOptionsCount: Array.isArray(data.seriesOptions)
+        ? data.seriesOptions.length
+        : 'N/A',
+      data,
     })
     return { data: { all_series: [] } }
   } catch (error) {

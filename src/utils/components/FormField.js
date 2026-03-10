@@ -48,7 +48,7 @@ const FormField = ({
             return (
               <Input {...field} type="select" invalid={hasError} {...props}>
                 <option value="">Select {label}</option>
-                {options.map(option => (
+                {options.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
@@ -70,7 +70,13 @@ const FormField = ({
           }
 
           return (
-            <Input {...field} type={type} placeholder={placeholder} invalid={hasError} {...props} />
+            <Input
+              {...field}
+              type={type}
+              placeholder={placeholder}
+              invalid={hasError}
+              {...props}
+            />
           )
         }}
       />

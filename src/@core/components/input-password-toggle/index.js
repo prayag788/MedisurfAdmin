@@ -7,7 +7,7 @@ import classnames from 'classnames'
 import { Eye, EyeOff } from 'react-feather'
 import { InputGroup, Input, InputGroupText, Label } from 'reactstrap'
 
-const InputPasswordToggle = props => {
+const InputPasswordToggle = (props) => {
   // ** Props
   const {
     label,

@@ -35,7 +35,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   const [picker, setPicker] = useState('')
 
   // ** Redux state
-  const dropdownData = useSelector(state => state.dropdownDataReducer)
+  const dropdownData = useSelector((state) => state.dropdownDataReducer)
 
   // ** Form setup
   const {
@@ -69,7 +69,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   )
 
   // ** Optimized date formatting function
-  const formatDate = useCallback(date => {
+  const formatDate = useCallback((date) => {
     if (!date) return ''
     const d = new Date(date)
     return moment(d).format('YYYY-MM-DD') ?? ''
@@ -82,7 +82,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       reset(editData)
 
       // Set form values efficiently
-      formFields.forEach(field => {
+      formFields.forEach((field) => {
         if (editData[field] !== undefined && editData[field] !== null) {
           // Special handling for clinics array
           if (field === 'clinics' && Array.isArray(editData[field])) {
@@ -107,12 +107,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   // ** Handle modal open/close
   useEffect(() => {
     if (!open) {
-      setIsValidSelect(prev => true)
+      setIsValidSelect((prev) => true)
     }
   }, [open])
   // ** Form submission handler
   const onSubmit = useCallback(
-    data => {
+    (data) => {
       const formData = {
         ...data,
         _id: editData._id,
@@ -140,7 +140,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-3" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-3"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit Physician Details</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
@@ -149,7 +154,8 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             name="physicianname"
             control={control}
             render={({ field }) =>
-              dropdownData?.physicianNames && dropdownData?.physicianNames.length > 0 ? (
+              dropdownData?.physicianNames &&
+              dropdownData?.physicianNames.length > 0 ? (
                 <StaticDropdown
                   errors={errors}
                   value={field.value || ''}
@@ -159,7 +165,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                   fieldName="physicianname"
                   labelName="Physician Name"
                   options={[
-                    ...dropdownData?.physicianNames.map(data => ({
+                    ...dropdownData?.physicianNames.map((data) => ({
                       value: data.physicianname,
                       label: data.physicianname,
                     })),
@@ -186,7 +192,8 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             name="clinics"
             control={control}
             render={({ field }) =>
-              dropdownData?.clinicNames && dropdownData?.clinicNames.length > 0 ? (
+              dropdownData?.clinicNames &&
+              dropdownData?.clinicNames.length > 0 ? (
                 <StaticDropdown
                   errors={errors}
                   value={field.value || []}
@@ -196,9 +203,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                   fieldName="clinics"
                   labelName="Clinic Name"
                   options={[
-                    ...dropdownData?.clinicNames.map(data => {
+                    ...dropdownData?.clinicNames.map((data) => {
                       const clinicName =
-                        data.clinicName || data.clinic_name || data.name || `Clinic ${data._id}`
+                        data.clinicName ||
+                        data.clinic_name ||
+                        data.name ||
+                        `Clinic ${data._id}`
                       return {
                         value: data._id,
                         _id: data._id,
@@ -263,7 +273,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               )}
             />
             {errors?.location && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.location?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.location?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <FormGroup>
@@ -284,7 +296,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               )}
             />
             {errors?.email && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.email?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.email?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <FormGroup>
@@ -303,7 +317,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               )}
             />
             {errors?.cno && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.cno?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.cno?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <FormGroup>
@@ -336,7 +352,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                 allowInput: false,
                 closeOnSelect: true, // Close after selecting date for single date picker
               }}
-              onChange={date => {
+              onChange={(date) => {
                 if (date && date.length > 0) {
                   setPicker(date[0])
                 }
@@ -352,8 +368,13 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               name="status"
               control={control}
               render={({ field }) => (
-                <Input {...field} id="status" type="select" invalid={errors?.status && true}>
-                  {STATUS_OPTIONS.map(option => (
+                <Input
+                  {...field}
+                  id="status"
+                  type="select"
+                  invalid={errors?.status && true}
+                >
+                  {STATUS_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -362,7 +383,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               )}
             />
             {errors?.status && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.status?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.status?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <div className="d-flex justify-content-start mt-1">

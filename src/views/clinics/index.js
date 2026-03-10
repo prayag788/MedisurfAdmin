@@ -83,7 +83,7 @@ const Clinic = () => {
       .get(
         `${process.env.REACT_APP_API_URL}/institution-clinics?page=${page}&size=${rowsPerPage}&filter=${filter}&sortdirection=${sortDirection}&sortcolumn=${sortColumn}`
       )
-      .then(response => {
+      .then((response) => {
         setClinicList(response.data.data)
         setTotal(response.data.total)
       })
@@ -94,9 +94,19 @@ const Clinic = () => {
     if (!modal || !editModal) {
       getData()
     }
-  }, [page, rowsPerPage, newData, filter, addDisplay, sortColumn, sortDirection, modal, editModal])
+  }, [
+    page,
+    rowsPerPage,
+    newData,
+    filter,
+    addDisplay,
+    sortColumn,
+    sortDirection,
+    modal,
+    editModal,
+  ])
 
-  const deleteHandler = async id => {
+  const deleteHandler = async (id) => {
     const res = await deleteUser(id)
     if (res) {
       setNewData(!newData)
@@ -112,25 +122,32 @@ const Clinic = () => {
       setPage(0)
 
       if (sortOrder === -1) {
-        clinicList.sort((a, b) => String(b[d.sortField]).localeCompare(String(a[d.sortField])))
+        clinicList.sort((a, b) =>
+          String(b[d.sortField]).localeCompare(String(a[d.sortField]))
+        )
       } else {
-        clinicList.sort((a, b) => String(a[d.sortField]).localeCompare(String(b[d.sortField])))
+        clinicList.sort((a, b) =>
+          String(a[d.sortField]).localeCompare(String(b[d.sortField]))
+        )
       }
 
       setClinicList(clinicList)
     }
   }
-  const addNewInstitutionClinics = requestData => {
+  const addNewInstitutionClinics = (requestData) => {
     showLoadingAlert()
     axios
-      .post(`${process.env.REACT_APP_API_URL}/institution-clinics/add`, requestData)
-      .then(response => {
+      .post(
+        `${process.env.REACT_APP_API_URL}/institution-clinics/add`,
+        requestData
+      )
+      .then((response) => {
         handleModal()
         console.log(response, 'added doc')
         hideLoadingAlert()
         showSuccessAlert('Clinic Added Successfully!')
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -143,8 +160,11 @@ const Clinic = () => {
     // }
     showLoadingAlert()
     axios
-      .patch(`${process.env.REACT_APP_API_URL}/institution-clinics/edit/${data._id}`, data)
-      .then(response => {
+      .patch(
+        `${process.env.REACT_APP_API_URL}/institution-clinics/edit/${data._id}`,
+        data
+      )
+      .then((response) => {
         hideLoadingAlert()
         showSuccessAlert(
           `Clinic User ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
@@ -153,7 +173,7 @@ const Clinic = () => {
           handleEditModal()
         }
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -169,31 +189,33 @@ const Clinic = () => {
       sortable: true,
       reorder: true,
       id: 'clinicName',
-      cell: row => row.clinicName,
+      cell: (row) => row.clinicName,
     },
     {
       name: 'Number of Studies',
       sortable: true,
       reorder: true,
       id: 'numberOfStudies',
-      cell: row => (row.numberOfStudies ? row.numberOfStudies : 0),
+      cell: (row) => (row.numberOfStudies ? row.numberOfStudies : 0),
     },
     {
       name: 'Exist in Orthanc',
       sortable: true,
       reorder: true,
       id: 'existInOrthanc',
-      cell: row => (row.orthancExistStatus === 1 ? 'Yes' : 'No'),
+      cell: (row) => (row.orthancExistStatus === 1 ? 'Yes' : 'No'),
     },
     {
       name: 'Phone Number',
       sortable: true,
       reorder: true,
       id: 'phoneNumber',
-      cell: row => {
+      cell: (row) => {
         const primaryPhone = row.cno && row.cno !== '' ? row.cno : '-'
         const secondaryPhones =
-          row.secondaryCno && Array.isArray(row.secondaryCno) && row.secondaryCno.length > 0
+          row.secondaryCno &&
+          Array.isArray(row.secondaryCno) &&
+          row.secondaryCno.length > 0
             ? row.secondaryCno.join(' , ')
             : ''
         return `${primaryPhone}${secondaryPhones ? ` , ${secondaryPhones}` : ''}`
@@ -204,10 +226,12 @@ const Clinic = () => {
       sortable: true,
       reorder: true,
       id: 'email',
-      cell: row => {
+      cell: (row) => {
         const email = row.email ? row.email : ''
         const secondaryEmail =
-          row.secondaryEmail && Array.isArray(row.secondaryEmail) && row.secondaryEmail.length > 0
+          row.secondaryEmail &&
+          Array.isArray(row.secondaryEmail) &&
+          row.secondaryEmail.length > 0
             ? row.secondaryEmail.join(' , ')
             : ''
         return `${email}${secondaryEmail ? ` , ${secondaryEmail}` : ''}`
@@ -219,7 +243,7 @@ const Clinic = () => {
       sortable: true,
       reorder: true,
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         const statusInfo = status[row?.status] || status[0] // Default to inactive if undefined
         return (
           <Badge color={statusInfo?.color || 'light-secondary'} pill>
@@ -234,7 +258,7 @@ const Clinic = () => {
       sortable: true,
       reorder: true,
       id: 'allow_edit_patient_details',
-      cell: row => {
+      cell: (row) => {
         const editInfo =
           allow_edit_patient_details[row?.allow_edit_patient_details] ||
           allow_edit_patient_details[0] // Default to not allowed if undefined
@@ -254,7 +278,7 @@ const Clinic = () => {
       style: {
         'border-left': '1px dotted #6e6b7b',
       },
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -293,7 +317,7 @@ const Clinic = () => {
       },
     },
   ]
-  const filterHandler = e => {
+  const filterHandler = (e) => {
     setSearchVal(e.target.value)
     clearTimeout(myTimeout)
     myTimeout = setTimeout(() => {
@@ -322,7 +346,11 @@ const Clinic = () => {
           </div>
         </CardHeader>
         <Row className="justify-content-end mx-0">
-          <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+          <Col
+            className="d-flex align-items-center justify-content-end mt-1"
+            md="6"
+            sm="12"
+          >
             <Label className="mr-1" for="search-input">
               Search
             </Label>
@@ -332,7 +360,7 @@ const Clinic = () => {
               bsSize="sm"
               id="search-input"
               value={searchVal}
-              onChange={e => filterHandler(e)}
+              onChange={(e) => filterHandler(e)}
             />
           </Col>
         </Row>
@@ -359,9 +387,9 @@ const Clinic = () => {
                             onSort: handleSort,
                             sortField,
                             sortOrder,
-                            onPage: e => {
+                            onPage: (e) => {
                               setPage(e.first++)
-                              setRowsPerPage(prev => e.rows)
+                              setRowsPerPage((prev) => e.rows)
                               localStorage.setItem('poweruserrow', e.rows)
                             },
                           }}

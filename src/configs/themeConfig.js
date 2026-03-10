@@ -4,8 +4,9 @@
 const themeConfig = {
   app: {
     appName: `${process.env.REACT_APP_NAME}`,
-    appLogoImage: require(`@src/assets/images/logo/logo-${process.env.REACT_APP_IMAGE_PREFIX}.svg`)
-      .default,
+    appLogoImage: require(
+      `@src/assets/images/logo/logo-${process.env.REACT_APP_IMAGE_PREFIX}.svg`
+    ).default,
     appLogoIcon: require(
       `@src/assets/images/logo/icon-logo-${process.env.REACT_APP_IMAGE_PREFIX}.svg`
     ).default,

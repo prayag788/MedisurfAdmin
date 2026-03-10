@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import Tabs from './Tabs'
-import { Row, Col, TabContent, TabPane, Card, CardBody, CardHeader, CardTitle } from 'reactstrap'
+import {
+  Row,
+  Col,
+  TabContent,
+  TabPane,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+} from 'reactstrap'
 
 import Information from './Information'
 import License from './License'
@@ -14,7 +23,7 @@ const AddClinic = ({ AddNewModal, toEdit }) => {
     setAllData(dataPass)
   }
 
-  const redirectList = data => {
+  const redirectList = (data) => {
     AddNewModal(data)
   }
 
@@ -39,7 +48,10 @@ const AddClinic = ({ AddNewModal, toEdit }) => {
                       toEdit={toEdit.information}
                     />
                   ) : (
-                    <Information toggleTab={toggleTab} redirectList={redirectList} />
+                    <Information
+                      toggleTab={toggleTab}
+                      redirectList={redirectList}
+                    />
                   )}
                 </TabPane>
               </TabContent>
@@ -55,7 +67,11 @@ const AddClinic = ({ AddNewModal, toEdit }) => {
                       toEditId={toEdit._id}
                     />
                   ) : (
-                    <License toggleTab={toggleTab} infoData={allData} redirectList={redirectList} />
+                    <License
+                      toggleTab={toggleTab}
+                      infoData={allData}
+                      redirectList={redirectList}
+                    />
                   )}
                 </TabPane>
               </TabContent>

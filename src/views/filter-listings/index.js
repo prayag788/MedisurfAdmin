@@ -9,8 +9,8 @@ import {
   showSuccessAlert,
   showErrorAlert,
   showConfirm,
-  getErrorMessage } from
-'../../utils/alerts'
+  getErrorMessage,
+} from '../../utils/alerts'
 
 // centralized alerts
 
@@ -26,8 +26,8 @@ import {
   CardTitle,
   Button,
   Label,
-  Input } from
-'reactstrap'
+  Input,
+} from 'reactstrap'
 import { Edit, Trash, Plus } from 'react-feather'
 
 // ** Tables
@@ -58,13 +58,15 @@ const ClinicUser = () => {
     status: 1,
     _id: '',
     studyStatus: [],
-    filterfor: ''
+    filterfor: '',
   })
   const [data, setData] = useState([])
   const [refreshLoading, setRefreshLoading] = useState(false)
 
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('poweruserrow') ? JSON.parse(localStorage.getItem('poweruserrow')) : 7
+    localStorage.getItem('poweruserrow')
+      ? JSON.parse(localStorage.getItem('poweruserrow'))
+      : 7
   )
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
@@ -80,65 +82,84 @@ const ClinicUser = () => {
   // ** Fetch data
   const getData = async () => {
     const token = localStorage.getItem('accessToken')
-    axios.
-    get(`${process.env.REACT_APP_API_URL}/filter-module/get`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      params: {
-        page,
-        size: rowsPerPage,
-        filter: searchValue,
-        sortdirection: sortDirection,
-        sortcolumn: sortColumn
-      }
-    }).
-    then((doc) => {
-      const dataPayload = doc.data
-      // Support both shapes: { list, numberOfRecord, startsrno } or { success, result } (single filter row)
-      // Do not treat table-config (moduleName + columns) as filter list
-      let list = Array.isArray(dataPayload?.list) ? dataPayload.list : null
-      if ((list === null || list === undefined) && dataPayload?.result !== null && dataPayload?.result !== undefined) {
-        const result = dataPayload.result
-        const isTableConfig =
-        result && (result.moduleName === 'filter-listings' || result.columns && Array.isArray(result.columns))
-        if (!isTableConfig) {
-          list = Array.isArray(result) ? result : [result]
-        }
-      }
-      list = list || []
-      // Exclude soft-deleted (status === -1) from display
-      const activeList = list.filter((obj) => {
-        const row = typeof obj?.toJSON === 'function' ? obj.toJSON() : obj
-        return row !== null && row !== undefined && row.status !== -1
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/filter-module/get`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page,
+          size: rowsPerPage,
+          filter: searchValue,
+          sortdirection: sortDirection,
+          sortcolumn: sortColumn,
+        },
       })
-      const numberOfRecord = dataPayload?.numberOfRecord ?? activeList.length
-      const startsrnoVal = dataPayload?.startsrno !== null && dataPayload?.startsrno !== undefined ? dataPayload.startsrno : 0
-
-      setStartsrno(startsrnoVal)
-      setData(
-        activeList.map((obj, index) => {
-          const row = typeof obj?.toJSON === 'function' ? obj.toJSON() : { ...obj }
-          row.sl = startsrnoVal + index + 1
-          return row
+      .then((doc) => {
+        const dataPayload = doc.data
+        // Support both shapes: { list, numberOfRecord, startsrno } or { success, result } (single filter row)
+        // Do not treat table-config (moduleName + columns) as filter list
+        let list = Array.isArray(dataPayload?.list) ? dataPayload.list : null
+        if (
+          (list === null || list === undefined) &&
+          dataPayload?.result !== null &&
+          dataPayload?.result !== undefined
+        ) {
+          const result = dataPayload.result
+          const isTableConfig =
+            result &&
+            (result.moduleName === 'filter-listings' ||
+              (result.columns && Array.isArray(result.columns)))
+          if (!isTableConfig) {
+            list = Array.isArray(result) ? result : [result]
+          }
+        }
+        list = list || []
+        // Exclude soft-deleted (status === -1) from display
+        const activeList = list.filter((obj) => {
+          const row = typeof obj?.toJSON === 'function' ? obj.toJSON() : obj
+          return row !== null && row !== undefined && row.status !== -1
         })
-      )
-      SetNewUserId(dataPayload?.nextId ?? '')
-      setRefreshLoading(false)
-      setTotal(numberOfRecord)
-    }).
-    catch((err) => {
-      setRefreshLoading(false)
-      if (err && err.response) {
-        showErrorAlert(getErrorMessage(err))
-      }
-    })
+        const numberOfRecord = dataPayload?.numberOfRecord ?? activeList.length
+        const startsrnoVal =
+          dataPayload?.startsrno !== null &&
+          dataPayload?.startsrno !== undefined
+            ? dataPayload.startsrno
+            : 0
+
+        setStartsrno(startsrnoVal)
+        setData(
+          activeList.map((obj, index) => {
+            const row =
+              typeof obj?.toJSON === 'function' ? obj.toJSON() : { ...obj }
+            row.sl = startsrnoVal + index + 1
+            return row
+          })
+        )
+        SetNewUserId(dataPayload?.nextId ?? '')
+        setRefreshLoading(false)
+        setTotal(numberOfRecord)
+      })
+      .catch((err) => {
+        setRefreshLoading(false)
+        if (err && err.response) {
+          showErrorAlert(getErrorMessage(err))
+        }
+      })
   }
   useEffect(() => {
     if (!modal && !editModal) {
       getData()
     }
-  }, [page, rowsPerPage, searchValue, sortColumn, sortDirection, modal, editModal])
+  }, [
+    page,
+    rowsPerPage,
+    searchValue,
+    sortColumn,
+    sortDirection,
+    modal,
+    editModal,
+  ])
 
   function handleSort(d) {
     if (d.sortField) {
@@ -159,24 +180,24 @@ const ClinicUser = () => {
   const addNewUser = (requestData) => {
     const token = localStorage.getItem('accessToken')
     showLoadingAlert()
-    axios.
-    post(`${process.env.REACT_APP_API_URL}/filter-module/add`, requestData, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).
-    then((doc) => {
-      handleModal()
-      hideLoadingAlert()
-      showSuccessAlert('Filter Added Successfully!')
-      getData() // Refresh the list
-    }).
-    catch((err) => {
-      hideLoadingAlert()
-      if (err && err.response) {
-        showErrorAlert(getErrorMessage(err))
-      }
-    })
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/filter-module/add`, requestData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((doc) => {
+        handleModal()
+        hideLoadingAlert()
+        showSuccessAlert('Filter Added Successfully!')
+        getData() // Refresh the list
+      })
+      .catch((err) => {
+        hideLoadingAlert()
+        if (err && err.response) {
+          showErrorAlert(getErrorMessage(err))
+        }
+      })
   }
 
   const updateUserDetails = (data, type) => {
@@ -185,25 +206,29 @@ const ClinicUser = () => {
     }
     const token = localStorage.getItem('accessToken')
     showLoadingAlert()
-    axios.
-    patch(`${process.env.REACT_APP_API_URL}/filter-module/update/${data._id}`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).
-    then((doc) => {
-      hideLoadingAlert()
-      showSuccessAlert(
-        `Filter ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
+    axios
+      .patch(
+        `${process.env.REACT_APP_API_URL}/filter-module/update/${data._id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
-      getData() // Refresh the list
-    }).
-    catch((err) => {
-      hideLoadingAlert()
-      if (err && err.response) {
-        showErrorAlert(getErrorMessage(err))
-      }
-    })
+      .then((doc) => {
+        hideLoadingAlert()
+        showSuccessAlert(
+          `Filter ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
+        )
+        getData() // Refresh the list
+      })
+      .catch((err) => {
+        hideLoadingAlert()
+        if (err && err.response) {
+          showErrorAlert(getErrorMessage(err))
+        }
+      })
   }
 
   function deleteFilter(id) {
@@ -211,36 +236,38 @@ const ClinicUser = () => {
     const token = localStorage.getItem('accessToken')
     showLoadingAlert()
 
-    axios.
-    delete(`${process.env.REACT_APP_API_URL}/filter-module/delete/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).
-    then((doc) => {
-      hideLoadingAlert()
-      showSuccessAlert('Filter Deleted Successfully!')
-      getData()
-    }).
-    catch((err) => {
-      hideLoadingAlert()
-      console.error('Delete error:', err)
-      if (err && err.response) {
-        showErrorAlert(getErrorMessage(err))
-      } else {
-        showErrorAlert('Failed to delete filter')
-      }
-    })
+    axios
+      .delete(`${process.env.REACT_APP_API_URL}/filter-module/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((doc) => {
+        hideLoadingAlert()
+        showSuccessAlert('Filter Deleted Successfully!')
+        getData()
+      })
+      .catch((err) => {
+        hideLoadingAlert()
+        console.error('Delete error:', err)
+        if (err && err.response) {
+          showErrorAlert(getErrorMessage(err))
+        } else {
+          showErrorAlert('Failed to delete filter')
+        }
+      })
   }
 
   // Confirmation Sweet Alert
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then((result) => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
+        setTip(!tip)
       }
-      setTip(!tip)
-    })
+    )
   }
 
   // ** Table item Button Handlers
@@ -257,7 +284,7 @@ const ClinicUser = () => {
       Physicians: row.Physicians || [],
       Users: row.Users || [],
       modality: row.modality || [],
-      studyStatus: row.studyStatus || []
+      studyStatus: row.studyStatus || [],
     }
 
     console.log('Mapped edit data:', mappedData)
@@ -272,7 +299,7 @@ const ClinicUser = () => {
   const DeactivationHandler = (id) => {
     const deactivationOptions = {
       _id: id,
-      status: 0
+      status: 0,
     }
     updateUserDetails(deactivationOptions, 'deactivate')
   }
@@ -280,7 +307,7 @@ const ClinicUser = () => {
   const ActivationHandler = (id) => {
     const activationOptions = {
       _id: id,
-      status: 1
+      status: 1,
     }
     updateUserDetails(activationOptions, 'activate')
   }
@@ -288,189 +315,195 @@ const ClinicUser = () => {
   // ** Component Columns – status map (soft-deleted -1 filtered out above, not shown)
   const statusMap = {
     0: { title: 'Inactive', color: 'light-danger' },
-    1: { title: 'Active', color: 'light-success' }
+    1: { title: 'Active', color: 'light-success' },
   }
   const getStatusDisplay = (rowStatus) => {
-    const key = rowStatus !== null && rowStatus !== undefined ? Number(rowStatus) : null
+    const key =
+      rowStatus !== null && rowStatus !== undefined ? Number(rowStatus) : null
     return statusMap[key] || { title: 'Unknown', color: 'light-secondary' }
   }
 
   const columns = [
-  {
-    name: 'Filter Name',
-    selector: 'name',
-    sortable: true,
-    reorder: true,
-    id: 'name',
-    visible: true,
-    minWidth: '150px',
-    cell: (row) => {
-      return <div style={{ whiteSpace: 'break-spaces' }}>{row.name}</div>
-    }
-  },
-  {
-    name: 'Physicians',
-    sortable: true,
-    reorder: true,
-    id: 'physicians',
-    minWidth: '150px',
-    cell: (row) => {
-      const names = row.physicianNames || []
-      return (
-        <div style={{ whiteSpace: 'break-spaces' }}>
+    {
+      name: 'Filter Name',
+      selector: 'name',
+      sortable: true,
+      reorder: true,
+      id: 'name',
+      visible: true,
+      minWidth: '150px',
+      cell: (row) => {
+        return <div style={{ whiteSpace: 'break-spaces' }}>{row.name}</div>
+      },
+    },
+    {
+      name: 'Physicians',
+      sortable: true,
+      reorder: true,
+      id: 'physicians',
+      minWidth: '150px',
+      cell: (row) => {
+        const names = row.physicianNames || []
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
             {names.length > 0 ? names.join(', ') : '-'}
-          </div>)
+          </div>
+        )
+      },
+    },
+    {
+      name: 'Clinic Users',
+      sortable: true,
+      reorder: true,
+      id: 'clinicUsers',
+      minWidth: '150px',
+      cell: (row) => {
+        const clinicUsers = row.clinicUserNames || []
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {clinicUsers.length > 0
+              ? clinicUsers.filter((name) => name && name.trim()).join(', ')
+              : '-'}
+          </div>
+        )
+      },
+    },
+    {
+      name: 'Clinic Names',
+      sortable: true,
+      reorder: true,
+      id: 'clinicNames',
+      visible: true,
+      minWidth: '190px',
+      maxWidth: '250px',
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row['clinicNamesDisplay'] && row['clinicNamesDisplay'].length > 0
+              ? row['clinicNamesDisplay']
+                  .filter((name) => name && name !== 'undefined')
+                  .join(', ')
+              : '-'}
+          </div>
+        )
+      },
+    },
+    {
+      name: 'Modality',
+      sortable: true,
+      reorder: true,
+      id: 'modality',
+      minWidth: '190px',
+      maxWidth: '250px',
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.modality && row.modality.length > 0
+              ? row.modality
+                  .map((item) => item.label || item.value || item)
+                  .join(', ')
+              : '-'}
+          </div>
+        )
+      },
+    },
+    {
+      name: 'Study Status',
+      sortable: true,
+      reorder: true,
+      id: 'studyStatus',
+      minWidth: '190px',
+      maxWidth: '250px',
+      cell: (row) => {
+        const studyStatusMap = {
+          examined: 'Examined',
+          draft: 'Draft',
+          reported: 'Reported',
+          verified: 'Verified',
+          Examined: 'Examined',
+          Draft: 'Draft',
+          Reported: 'Reported',
+          Verified: 'Verified',
+        }
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row['studyStatus'] && row['studyStatus'].length > 0
+              ? row['studyStatus']
+                  .map((item) => {
+                    const value = item.value || item.label || item
+                    return studyStatusMap[value.toLowerCase()] || value
+                  })
+                  .join(', ')
+              : '-'}
+          </div>
+        )
+      },
+    },
 
-    }
-  },
-  {
-    name: 'Clinic Users',
-    sortable: true,
-    reorder: true,
-    id: 'clinicUsers',
-    minWidth: '150px',
-    cell: (row) => {
-      const clinicUsers = row.clinicUserNames || []
-      return (
-        <div style={{ whiteSpace: 'break-spaces' }}>
-            {clinicUsers.length > 0 ?
-          clinicUsers.filter((name) => name && name.trim()).join(', ') :
-          '-'}
-          </div>)
-
-    }
-  },
-  {
-    name: 'Clinic Names',
-    sortable: true,
-    reorder: true,
-    id: 'clinicNames',
-    visible: true,
-    minWidth: '190px',
-    maxWidth: '250px',
-    cell: (row) => {
-      return (
-        <div style={{ whiteSpace: 'break-spaces' }}>
-            {row['clinicNamesDisplay'] && row['clinicNamesDisplay'].length > 0 ?
-          row['clinicNamesDisplay'].filter((name) => name && name !== 'undefined').join(', ') :
-          '-'}
-          </div>)
-
-    }
-  },
-  {
-    name: 'Modality',
-    sortable: true,
-    reorder: true,
-    id: 'modality',
-    minWidth: '190px',
-    maxWidth: '250px',
-    cell: (row) => {
-      return (
-        <div style={{ whiteSpace: 'break-spaces' }}>
-            {row.modality && row.modality.length > 0 ?
-          row.modality.map((item) => item.label || item.value || item).join(', ') :
-          '-'}
-          </div>)
-
-    }
-  },
-  {
-    name: 'Study Status',
-    sortable: true,
-    reorder: true,
-    id: 'studyStatus',
-    minWidth: '190px',
-    maxWidth: '250px',
-    cell: (row) => {
-      const studyStatusMap = {
-        examined: 'Examined',
-        draft: 'Draft',
-        reported: 'Reported',
-        verified: 'Verified',
-        Examined: 'Examined',
-        Draft: 'Draft',
-        Reported: 'Reported',
-        Verified: 'Verified'
-      }
-      return (
-        <div style={{ whiteSpace: 'break-spaces' }}>
-            {row['studyStatus'] && row['studyStatus'].length > 0 ?
-          row['studyStatus'].
-          map((item) => {
-            const value = item.value || item.label || item
-            return studyStatusMap[value.toLowerCase()] || value
-          }).
-          join(', ') :
-          '-'}
-          </div>)
-
-    }
-  },
-
-  {
-    name: 'Status',
-    selector: 'status',
-    sortable: true,
-    reorder: true,
-    id: 'status',
-    cell: (row) => {
-      const display = getStatusDisplay(row?.status)
-      return (
-        <Badge color={display.color} pill>
+    {
+      name: 'Status',
+      selector: 'status',
+      sortable: true,
+      reorder: true,
+      id: 'status',
+      cell: (row) => {
+        const display = getStatusDisplay(row?.status)
+        return (
+          <Badge color={display.color} pill>
             {display.title}
-          </Badge>)
-
-    }
-  },
-  {
-    name: 'Actions',
-    allowOverflow: true,
-    sortable: false,
-    reorder: true,
-    id: 'action',
-    cell: (row) => {
-      return userData._id === row.created_by ?
-      <div className="d-flex">
+          </Badge>
+        )
+      },
+    },
+    {
+      name: 'Actions',
+      allowOverflow: true,
+      sortable: false,
+      reorder: true,
+      id: 'action',
+      cell: (row) => {
+        return userData._id === row.created_by ? (
+          <div className="d-flex">
             <Edit
-          size={15}
-          id="edit"
-          className="mr-50"
-          style={{ cursor: 'pointer' }}
-          onClick={() => editHandler(row)} // Ensure editHandler is defined
-        />
+              size={15}
+              id="edit"
+              className="mr-50"
+              style={{ cursor: 'pointer' }}
+              onClick={() => editHandler(row)} // Ensure editHandler is defined
+            />
             <Trash
-          size={15}
-          id={`trash-${row._id || row.id}`}
-          className="ml-50 mr-50"
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            const filterId = row._id || row.id
-            console.log('Delete clicked for filter:', filterId)
-            handleConfirm(
-              filterId,
-              deleteHandler,
-              "You won't be able to revert this!",
-              'Yes, delete it!'
-            )
-          }} />
-        
+              size={15}
+              id={`trash-${row._id || row.id}`}
+              className="ml-50 mr-50"
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                const filterId = row._id || row.id
+                console.log('Delete clicked for filter:', filterId)
+                handleConfirm(
+                  filterId,
+                  deleteHandler,
+                  "You won't be able to revert this!",
+                  'Yes, delete it!'
+                )
+              }}
+            />
+
             <UncontrolledTooltip className="tooltip-react-strap" target="edit">
               Edit
             </UncontrolledTooltip>
             <UncontrolledTooltip
-          className="tooltip-react-strap"
-          target={`trash-${row._id || row.id}`}>
-          
+              className="tooltip-react-strap"
+              target={`trash-${row._id || row.id}`}
+            >
               Delete
             </UncontrolledTooltip>
-          </div> :
-
-      'N/A'
-
-    }
-  }]
-
+          </div>
+        ) : (
+          'N/A'
+        )
+      },
+    },
+  ]
 
   // Custom table styles
   // ** Custom Styles
@@ -479,8 +512,8 @@ const ClinicUser = () => {
       style: {
         minHeight: '100% !important',
         justifyContent: 'center',
-        alignItems: 'center'
-      }
+        alignItems: 'center',
+      },
     },
     cells: {
       style: {
@@ -488,17 +521,17 @@ const ClinicUser = () => {
         height: '100% !important',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        justifyContent: 'center'
-      }
-    }
+        justifyContent: 'center',
+      },
+    },
   }
 
   if (refreshLoading) {
     return (
       <Card className="loading-initial">
         <Spinner color="primary" />
-      </Card>)
-
+      </Card>
+    )
   }
 
   return (
@@ -509,22 +542,26 @@ const ClinicUser = () => {
             <CardHeader className="flex-md-row flex-column align-md-items-center align-items-center border-bottom">
               <CardTitle tag="h4">Filter Listing</CardTitle>
               <div className="d-flex mt-md-0 mt-1">
-                {userData.role !== ROLES.ClinicUser &&
-                <Button
-                  className="ml-2"
-                  color={'primary'}
-                  onClick={() => {
-                    handleModal()
-                  }}>
-                  
+                {userData.role !== ROLES.ClinicUser && (
+                  <Button
+                    className="ml-2"
+                    color={'primary'}
+                    onClick={() => {
+                      handleModal()
+                    }}
+                  >
                     <Plus size={15} />
                     <span className="align-middle ml-50">Add New</span>
                   </Button>
-                }
+                )}
               </div>
             </CardHeader>
             <Row className="justify-content-end mx-0">
-              <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+              <Col
+                className="d-flex align-items-center justify-content-end mt-1"
+                md="6"
+                sm="12"
+              >
                 <Label className="mr-1" for="search-input">
                   Search
                 </Label>
@@ -536,8 +573,8 @@ const ClinicUser = () => {
                   value={searchValue}
                   onChange={(e) => {
                     setSearchValue(e.target.value)
-                  }} />
-                
+                  }}
+                />
               </Col>
             </Row>
             <Row>
@@ -557,9 +594,9 @@ const ClinicUser = () => {
                       setPage(e.first++)
                       setRowsPerPage((prev) => e.rows)
                       localStorage.setItem('poweruserrow', e.rows)
-                    }
-                  }} />
-                
+                    },
+                  }}
+                />
               </Col>
             </Row>
           </Card>
@@ -569,17 +606,18 @@ const ClinicUser = () => {
         addUser={addNewUser}
         open={modal}
         handleModal={handleModal}
-        newUserId={newUserId} />
-      
+        newUserId={newUserId}
+      />
+
       <EditModal
         key={selectedItem?._id || 'edit-modal'}
         updateUser={updateUserDetails}
         open={editModal}
         handleModal={handleEditModal}
-        editData={selectedItem} />
-      
-    </Fragment>)
-
+        editData={selectedItem}
+      />
+    </Fragment>
+  )
 }
 
 export default ClinicUser

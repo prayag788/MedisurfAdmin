@@ -45,7 +45,7 @@ import {
 import { extractErrorMessage, handleAutoLogout } from '@utils'
 import { STATUS_OPTIONS } from '../../utils/constants'
 
-const EditRecord = props => {
+const EditRecord = (props) => {
   const { id } = useParams()
   const [editorText, setEditorText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -79,9 +79,9 @@ const EditRecord = props => {
     getValue,
   } = useForm({ mode: 'onSubmit', resolver: yupResolver(NewSchema) })
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
-    setFormData(prev => {
+    setFormData((prev) => {
       if (e.target.name === 'default') {
         return { ...prev, [name]: e.target.checked }
       }
@@ -99,7 +99,7 @@ const EditRecord = props => {
     setPreviewText(templatePreview)
   }
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     data.default = form_data.default
     try {
       showLoadingAlert()
@@ -110,15 +110,18 @@ const EditRecord = props => {
       )
       hideLoadingAlert()
 
-      toast.success(<ToastContent message={res.data?.success?.message} type={'success'} />, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.success(
+        <ToastContent message={res.data?.success?.message} type={'success'} />,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      )
       navigate('/report-template')
     } catch (err) {
       hideLoadingAlert()
@@ -126,12 +129,12 @@ const EditRecord = props => {
     }
   }
 
-  const handleVaribaleClick = tag => {
+  const handleVaribaleClick = (tag) => {
     const editor = editorRef.current
     editor.insertContent(`{{${tag}}}`)
   }
 
-  const handleSampleReportChange = report => {
+  const handleSampleReportChange = (report) => {
     if (report !== '') {
       let content = StandardTemplete
       if (report === 'classic') {
@@ -199,9 +202,10 @@ const EditRecord = props => {
           console.error('Error fetching template:', err)
           toast.error(
             <ToastContentForError
-              message={
-                extractErrorMessage(err?.response?.data ?? err, 'Failed to load template')
-              }
+              message={extractErrorMessage(
+                err?.response?.data ?? err,
+                'Failed to load template'
+              )}
               type={'error'}
             />,
             {
@@ -253,7 +257,9 @@ const EditRecord = props => {
                 value={form_data.name}
                 onChange={inputHandler}
               />
-              {errors?.name && <FormFeedback>{errors.name.message}</FormFeedback>}
+              {errors?.name && (
+                <FormFeedback>{errors.name.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -319,8 +325,8 @@ const EditRecord = props => {
                     content_style:
                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                     placeholder: `Anything entered here will be added to the report layout chosen from the diagnosis template.`,
-                    setup: editor => {
-                      editor.on('keydown', e => {
+                    setup: (editor) => {
+                      editor.on('keydown', (e) => {
                         handleAutoLogout()
                       })
                     },
@@ -365,19 +371,29 @@ const EditRecord = props => {
                 value={form_data.status}
                 onChange={inputHandler}
               >
-                {STATUS_OPTIONS.map(option => (
+                {STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </Input>
-              {errors?.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+              {errors?.status && (
+                <FormFeedback>{errors.status.message}</FormFeedback>
+              )}
             </FormGroup>
 
-            <Button.Ripple type="submit" className="mr-1 sm-mb-1" color="primary">
+            <Button.Ripple
+              type="submit"
+              className="mr-1 sm-mb-1"
+              color="primary"
+            >
               Save
             </Button.Ripple>
-            <Button.Ripple className="mr-1 sm-mb-1" color="info" onClick={showTemplatePreview}>
+            <Button.Ripple
+              className="mr-1 sm-mb-1"
+              color="info"
+              onClick={showTemplatePreview}
+            >
               Preview
             </Button.Ripple>
             <Button.Ripple color="secondary" outline onClick={CancelForm}>
@@ -399,7 +415,7 @@ const EditRecord = props => {
                     id="sample_template"
                     name="sample_template"
                     type="select"
-                    onChange={e => handleSampleReportChange(e.target.value)}
+                    onChange={(e) => handleSampleReportChange(e.target.value)}
                   >
                     <option value="">Select Sample Template</option>
                     <option value="standard"> Standard </option>
@@ -416,8 +432,9 @@ const EditRecord = props => {
             <CardBody>
               <Row className="mt-1 mb-50 pb-2 border-bottom">
                 <Col>
-                  If you want to add dynamic values to the template, please use the variables below.
-                  Click on a variable to add it to the template.
+                  If you want to add dynamic values to the template, please use
+                  the variables below. Click on a variable to add it to the
+                  template.
                 </Col>
               </Row>
               <Row className="mt-1 mb-50">

@@ -17,7 +17,14 @@ import {
   ModalFooter,
   Spinner,
 } from 'reactstrap'
-import { RefreshCw, Activity, AlertTriangle, CheckCircle, XCircle, Settings } from 'react-feather'
+import {
+  RefreshCw,
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  Settings,
+} from 'react-feather'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
 
@@ -27,7 +34,11 @@ const SyncMonitor = () => {
   const [activities, setActivities] = useState([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
-  const [actionModal, setActionModal] = useState({ isOpen: false, action: null, loading: false })
+  const [actionModal, setActionModal] = useState({
+    isOpen: false,
+    action: null,
+    loading: false,
+  })
 
   // Fetch sync status
   const fetchSyncStatus = async () => {
@@ -64,7 +75,11 @@ const SyncMonitor = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
-      await Promise.all([fetchSyncStatus(), fetchHealthMetrics(), fetchActivities()])
+      await Promise.all([
+        fetchSyncStatus(),
+        fetchHealthMetrics(),
+        fetchActivities(),
+      ])
       setLoading(false)
     }
     loadData()
@@ -75,7 +90,11 @@ const SyncMonitor = () => {
     const interval = setInterval(async () => {
       if (!refreshing) {
         setRefreshing(true)
-        await Promise.all([fetchSyncStatus(), fetchHealthMetrics(), fetchActivities()])
+        await Promise.all([
+          fetchSyncStatus(),
+          fetchHealthMetrics(),
+          fetchActivities(),
+        ])
         setRefreshing(false)
       }
     }, 30000)
@@ -86,20 +105,26 @@ const SyncMonitor = () => {
   // Manual refresh
   const handleRefresh = async () => {
     setRefreshing(true)
-    await Promise.all([fetchSyncStatus(), fetchHealthMetrics(), fetchActivities()])
+    await Promise.all([
+      fetchSyncStatus(),
+      fetchHealthMetrics(),
+      fetchActivities(),
+    ])
     setRefreshing(false)
     toast.success('Data refreshed')
   }
 
   // Execute sync action
-  const executeSyncAction = async action => {
+  const executeSyncAction = async (action) => {
     setActionModal({ ...actionModal, loading: true })
 
     try {
       let response
       switch (action) {
         case 'incremental':
-          response = await axios.post('/api/sync/incremental', { sinceMinutes: 5 })
+          response = await axios.post('/api/sync/incremental', {
+            sinceMinutes: 5,
+          })
           break
         case 'full':
           response = await axios.post('/api/sync/full')
@@ -129,7 +154,7 @@ const SyncMonitor = () => {
   }
 
   // Get status badge color
-  const getStatusBadge = status => {
+  const getStatusBadge = (status) => {
     switch (status) {
       case 'healthy':
         return (
@@ -158,13 +183,13 @@ const SyncMonitor = () => {
   }
 
   // Format timestamp
-  const formatTimestamp = timestamp => {
+  const formatTimestamp = (timestamp) => {
     if (!timestamp) return 'Never'
     return new Date(timestamp).toLocaleString()
   }
 
   // Format uptime
-  const formatUptime = seconds => {
+  const formatUptime = (seconds) => {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
     return `${hours}h ${minutes}m`
@@ -172,7 +197,10 @@ const SyncMonitor = () => {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '400px' }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: '400px' }}
+      >
         <Spinner color="primary" />
       </div>
     )
@@ -202,7 +230,9 @@ const SyncMonitor = () => {
                 <Button
                   color="outline-secondary"
                   size="sm"
-                  onClick={() => setActionModal({ isOpen: true, action: 'settings' })}
+                  onClick={() =>
+                    setActionModal({ isOpen: true, action: 'settings' })
+                  }
                 >
                   <Settings size={14} /> Actions
                 </Button>
@@ -236,7 +266,11 @@ const SyncMonitor = () => {
                   <h4>{syncStatus?.queueSize || 0}</h4>
                 </div>
                 <div className="text-primary">
-                  {syncStatus?.queueSize > 50 ? <AlertTriangle /> : <CheckCircle />}
+                  {syncStatus?.queueSize > 50 ? (
+                    <AlertTriangle />
+                  ) : (
+                    <CheckCircle />
+                  )}
                 </div>
               </div>
             </CardBody>
@@ -263,7 +297,11 @@ const SyncMonitor = () => {
               <div className="d-flex justify-content-between">
                 <div>
                   <h6 className="text-muted">Uptime</h6>
-                  <h4>{syncStatus?.uptime ? formatUptime(syncStatus.uptime) : 'N/A'}</h4>
+                  <h4>
+                    {syncStatus?.uptime
+                      ? formatUptime(syncStatus.uptime)
+                      : 'N/A'}
+                  </h4>
                 </div>
                 <div className="text-info">
                   <Activity />
@@ -285,19 +323,24 @@ const SyncMonitor = () => {
               {syncStatus?.syncManager && (
                 <div>
                   <div className="mb-2">
-                    <strong>Total Synced:</strong> {syncStatus.syncManager.totalSynced}
+                    <strong>Total Synced:</strong>{' '}
+                    {syncStatus.syncManager.totalSynced}
                   </div>
                   <div className="mb-2">
-                    <strong>Total Errors:</strong> {syncStatus.syncManager.totalErrors}
+                    <strong>Total Errors:</strong>{' '}
+                    {syncStatus.syncManager.totalErrors}
                   </div>
                   <div className="mb-2">
-                    <strong>Last Sync:</strong> {formatTimestamp(syncStatus.syncManager.lastSync)}
+                    <strong>Last Sync:</strong>{' '}
+                    {formatTimestamp(syncStatus.syncManager.lastSync)}
                   </div>
                   <div className="mb-2">
-                    <strong>Processing:</strong> {syncStatus.syncManager.processingCount} items
+                    <strong>Processing:</strong>{' '}
+                    {syncStatus.syncManager.processingCount} items
                   </div>
                   <div className="mb-2">
-                    <strong>Retry Queue:</strong> {syncStatus.syncManager.retryQueueSize} items
+                    <strong>Retry Queue:</strong>{' '}
+                    {syncStatus.syncManager.retryQueueSize} items
                   </div>
                 </div>
               )}
@@ -313,16 +356,20 @@ const SyncMonitor = () => {
               {syncStatus?.databaseHooks && (
                 <div>
                   <div className="mb-2">
-                    <strong>Total Hooks:</strong> {syncStatus.databaseHooks.totalHooks}
+                    <strong>Total Hooks:</strong>{' '}
+                    {syncStatus.databaseHooks.totalHooks}
                   </div>
                   <div className="mb-2">
-                    <strong>Successful:</strong> {syncStatus.databaseHooks.successfulSyncs}
+                    <strong>Successful:</strong>{' '}
+                    {syncStatus.databaseHooks.successfulSyncs}
                   </div>
                   <div className="mb-2">
-                    <strong>Failed:</strong> {syncStatus.databaseHooks.failedSyncs}
+                    <strong>Failed:</strong>{' '}
+                    {syncStatus.databaseHooks.failedSyncs}
                   </div>
                   <div className="mb-2">
-                    <strong>Success Rate:</strong> {syncStatus.databaseHooks.successRate}
+                    <strong>Success Rate:</strong>{' '}
+                    {syncStatus.databaseHooks.successRate}
                   </div>
                   <div className="mb-2">
                     <strong>Initialized:</strong>{' '}
@@ -410,7 +457,9 @@ const SyncMonitor = () => {
         isOpen={actionModal.isOpen}
         toggle={() => setActionModal({ isOpen: false, action: null })}
       >
-        <ModalHeader toggle={() => setActionModal({ isOpen: false, action: null })}>
+        <ModalHeader
+          toggle={() => setActionModal({ isOpen: false, action: null })}
+        >
           Sync Actions
         </ModalHeader>
         <ModalBody>
@@ -420,14 +469,22 @@ const SyncMonitor = () => {
               onClick={() => executeSyncAction('incremental')}
               disabled={actionModal.loading}
             >
-              {actionModal.loading ? <Spinner size="sm" /> : 'Trigger Incremental Sync'}
+              {actionModal.loading ? (
+                <Spinner size="sm" />
+              ) : (
+                'Trigger Incremental Sync'
+              )}
             </Button>
             <Button
               color="warning"
               onClick={() => executeSyncAction('full')}
               disabled={actionModal.loading}
             >
-              {actionModal.loading ? <Spinner size="sm" /> : 'Trigger Full Sync'}
+              {actionModal.loading ? (
+                <Spinner size="sm" />
+              ) : (
+                'Trigger Full Sync'
+              )}
             </Button>
             <Button
               color="info"
@@ -441,12 +498,19 @@ const SyncMonitor = () => {
               onClick={() => executeSyncAction('reset')}
               disabled={actionModal.loading}
             >
-              {actionModal.loading ? <Spinner size="sm" /> : 'Reset Sync System'}
+              {actionModal.loading ? (
+                <Spinner size="sm" />
+              ) : (
+                'Reset Sync System'
+              )}
             </Button>
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={() => setActionModal({ isOpen: false, action: null })}>
+          <Button
+            color="secondary"
+            onClick={() => setActionModal({ isOpen: false, action: null })}
+          >
             Close
           </Button>
         </ModalFooter>

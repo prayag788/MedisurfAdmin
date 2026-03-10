@@ -26,7 +26,11 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap'
 import ListTable from '../../@core/components/list-table'
-import { isUserLoggedIn, selectThemeColors, checkForOtherOperationDm } from '@utils'
+import {
+  isUserLoggedIn,
+  selectThemeColors,
+  checkForOtherOperationDm,
+} from '@utils'
 import moment from 'moment'
 import crossicon from '../../assets/images/icons/close.png'
 import ReactDOM from 'react-dom'
@@ -49,7 +53,12 @@ import FilterModal from '../../@core/components/filter-modal'
 import { AbilityContext } from '../../utility/context/Can'
 import NewDynamicDropdown from './NewDynamicDropdown'
 
-const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport, studyDownloadHandler }) => {
+const DataTableAdvSearch = ({
+  studylist,
+  previewReportHandler,
+  handlePrintReport,
+  studyDownloadHandler,
+}) => {
   // ** States
   const statusColors = JSON.parse(localStorage.getItem('userData'))?.statusColor
   const [statusColor, setStatusColor] = useState(null)
@@ -65,7 +74,9 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
   const [selectedOption, setSelectedOption] = useState(null)
   const [selectedModalities, setSelectedModalities] = useState(null)
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('studylistrow') ? JSON.parse(localStorage.getItem('studylistrow')) : 7
+    localStorage.getItem('studylistrow')
+      ? JSON.parse(localStorage.getItem('studylistrow'))
+      : 7
   )
   const [crossPatient, setcrossPatient] = useState(false)
   const [crossPatientID, setcrossPatientID] = useState(false)
@@ -75,8 +86,10 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
   const [crossModality, setcrossModality] = useState(false)
   const [crossDescription, setcrossDescription] = useState(false)
   const [Flatpicker, showFlatpicker] = useState(true)
-  const [isSelectingStudyDateRange, setIsSelectingStudyDateRange] = useState(false)
-  const [isSelectingPatientDOBRange, setIsSelectingPatientDOBRange] = useState(true)
+  const [isSelectingStudyDateRange, setIsSelectingStudyDateRange] =
+    useState(false)
+  const [isSelectingPatientDOBRange, setIsSelectingPatientDOBRange] =
+    useState(true)
   const [totalFilteredStudies, setFilteredStudies] = useState(null)
   const [openStudyUpdated, setOpenStudyUpdated] = useState(false)
   const [openNotesUpdated, setOpenNotesUpdated] = useState(false)
@@ -117,11 +130,16 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     width: '100%',
   }
   const [selectedDropDownFilter, setSelectedDropDownFilter] = useState([])
-  const dropdownData = useSelector(state => state.dropdownDataReducer)
-  const modalityOptionsForFilters = useSelector(state => state.ModalityReducer) || []
-  const ClinicNamesForFilters = useSelector(state => state.dropdownDataReducer.clinicNames)
-  const PhysiciansForFilters = useSelector(state => state.dropdownDataReducer.Physicians)
-  const userDataRedux = useSelector(state => state.auth.userData)
+  const dropdownData = useSelector((state) => state.dropdownDataReducer)
+  const modalityOptionsForFilters =
+    useSelector((state) => state.ModalityReducer) || []
+  const ClinicNamesForFilters = useSelector(
+    (state) => state.dropdownDataReducer.clinicNames
+  )
+  const PhysiciansForFilters = useSelector(
+    (state) => state.dropdownDataReducer.Physicians
+  )
+  const userDataRedux = useSelector((state) => state.auth.userData)
   const ability = useContext(AbilityContext)
 
   const flatPickerDateFormat =
@@ -278,7 +296,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
       setSortField(d.sortField)
       const filerData = JSON.stringify(
         Object.keys(searchData)
-          .map(key => {
+          .map((key) => {
             if (
               searchData[key] === '' ||
               searchData[key] === null ||
@@ -287,10 +305,10 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
               return {}
             }
             if (key === 'Physicians') {
-              return { [key]: searchData[key].map(data => data.username) }
+              return { [key]: searchData[key].map((data) => data.username) }
             }
             if (key === 'clinicNames') {
-              return { [key]: searchData[key].map(data => data.clinicName) }
+              return { [key]: searchData[key].map((data) => data.clinicName) }
             }
             return { [key]: searchData[key] }
           })
@@ -315,10 +333,13 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
         params['email'] = userData.email
       }
 
-      const studylist = await axios.get(`${process.env.REACT_APP_API_URL}/orthanc/study-list`, {
-        params,
-        signal: controller.signal,
-      })
+      const studylist = await axios.get(
+        `${process.env.REACT_APP_API_URL}/orthanc/study-list`,
+        {
+          params,
+          signal: controller.signal,
+        }
+      )
 
       setTableData(() => studylist.data.data)
 
@@ -328,14 +349,17 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     }
   }
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     if (e.data?.StudyInstanceUID) {
       const viewer_url = `${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${e.data.StudyInstanceUID}&accessToken=${localStorage.getItem('accessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${e.data._id}&mode=${e.data.status === STUDYSTATUS.Unread ? 'create' : 'preview'}`
-      window.open(viewer_url, JSON.parse(localStorage.getItem('userData'))?.viewerPreference)
+      window.open(
+        viewer_url,
+        JSON.parse(localStorage.getItem('userData'))?.viewerPreference
+      )
     }
   }
 
-  const studyDownloadHanlderNew = async studyId => {
+  const studyDownloadHanlderNew = async (studyId) => {
     showLoadingAlert('<p>Downloading...</p>') // Show loading indicator
 
     try {
@@ -353,7 +377,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     }
   }
 
-  const studyDownloadHanlder = async studyId => {
+  const studyDownloadHanlder = async (studyId) => {
     MySwal.showLoading() // Show loading indicator
 
     try {
@@ -392,33 +416,38 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
 
   // ** Function to handle date filter
   const handleDateFilter = (range, isSelect) => {
-    console.log('🔍 handleDateFilter called with range:', range, 'isSelect:', isSelect)
+    console.log(
+      '🔍 handleDateFilter called with range:',
+      range,
+      'isSelect:',
+      isSelect
+    )
     setCurrentPage(0)
     countDate++
-    
+
     if (!range || (Array.isArray(range) && range.length === 0)) {
       console.log('⚠️ Empty range, clearing StudyDate')
       setPicker('')
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, StudyDate: '' }
       })
       setcrossStudyDate(false)
       setIsSelectingStudyDateRange(false)
       return
     }
-    
+
     // Handle both single date and date range
     const dates = Array.isArray(range) ? range : [range]
-    const format = dates.map(date => {
+    const format = dates.map((date) => {
       return moment(date).format('YYYYMMDD')
     })
-    
+
     if (format.length >= 2) {
       // Date range - both dates selected
       const studyDateValue = `${format[0]}-${format[1]}`
       console.log('✅ Setting StudyDate range:', studyDateValue)
       setPicker(range) // Update picker only after both dates selected
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, StudyDate: studyDateValue }
       })
       if (!crossStudyDate) {
@@ -437,7 +466,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
         const studyDateValue = `${format[0]}-${format[0]}`
         console.log('✅ Setting StudyDate single date:', studyDateValue)
         setPicker(range)
-        setSearchData(prev => {
+        setSearchData((prev) => {
           return { ...prev, StudyDate: studyDateValue }
         })
         if (!crossStudyDate) {
@@ -449,31 +478,36 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
   }
 
   const handlePatientDOBDateFilter = (range, isSelect) => {
-    console.log('🔍 handlePatientDOBDateFilter called with range:', range, 'isSelect:', isSelect)
-    
+    console.log(
+      '🔍 handlePatientDOBDateFilter called with range:',
+      range,
+      'isSelect:',
+      isSelect
+    )
+
     if (!range || (Array.isArray(range) && range.length === 0)) {
       console.log('⚠️ Empty range, clearing PatientBirthDate')
       setPatientDOBPickerPicker('')
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, PatientBirthDate: '' }
       })
       setcrossPatientDOBDate(false)
       setIsSelectingPatientDOBRange(true)
       return
     }
-    
+
     // Handle both single date and date range
     const dates = Array.isArray(range) ? range : [range]
-    const format = dates.map(date => {
+    const format = dates.map((date) => {
       return moment(date).format('YYYYMMDD')
     })
-    
+
     if (format.length >= 2) {
       // Date range - both dates selected
       const patientBirthDateValue = `${format[0]}-${format[1]}`
       console.log('✅ Setting PatientBirthDate range:', patientBirthDateValue)
       setPatientDOBPickerPicker(range) // Update picker only after both dates selected
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, PatientBirthDate: patientBirthDateValue }
       })
       if (!crossPatientDOBDate) {
@@ -491,9 +525,12 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
       } else {
         // Single date selection (not range mode)
         const patientBirthDateValue = `${format[0]}-${format[0]}`
-        console.log('✅ Setting PatientBirthDate single date:', patientBirthDateValue)
+        console.log(
+          '✅ Setting PatientBirthDate single date:',
+          patientBirthDateValue
+        )
         setPatientDOBPickerPicker(range)
-        setSearchData(prev => {
+        setSearchData((prev) => {
           return { ...prev, PatientBirthDate: patientBirthDateValue }
         })
         if (!crossPatientDOBDate) {
@@ -522,7 +559,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
         }
         const filerData = JSON.stringify(
           Object.keys(searchData)
-            .map(key => {
+            .map((key) => {
               if (
                 searchData[key] === '' ||
                 searchData[key] === null ||
@@ -531,10 +568,10 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                 return {}
               }
               if (key === 'Physicians') {
-                return { [key]: searchData[key].map(data => data.username) }
+                return { [key]: searchData[key].map((data) => data.username) }
               }
               if (key === 'clinicNames') {
-                return { [key]: searchData[key].map(data => data.clinicName) }
+                return { [key]: searchData[key].map((data) => data.clinicName) }
               }
               return { [key]: searchData[key] }
             })
@@ -557,9 +594,12 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
         if (userData && userData.role === ROLES.ReferringDoctor) {
           params['email'] = userData.email
         }
-        const studylist = await axios.get(`${process.env.REACT_APP_API_URL}/orthanc/study-list`, {
-          params,
-        })
+        const studylist = await axios.get(
+          `${process.env.REACT_APP_API_URL}/orthanc/study-list`,
+          {
+            params,
+          }
+        )
 
         setTableData(() => studylist.data.data)
 
@@ -572,9 +612,17 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
       }
     }
     fetchData()
-  }, [refresh, rowsPerPage, currentPage, isFilter, dataUpdate, openStudyUpdated, openNotesUpdated])
+  }, [
+    refresh,
+    rowsPerPage,
+    currentPage,
+    isFilter,
+    dataUpdate,
+    openStudyUpdated,
+    openNotesUpdated,
+  ])
 
-  const checkSelectedOption = value => {
+  const checkSelectedOption = (value) => {
     setCurrentPage(0)
     if (value.value === 'customdate') {
       showFlatpicker(() => false)
@@ -588,21 +636,21 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     setSelectedOption(value)
   }
 
-  const onDataScroll = e => {
+  const onDataScroll = (e) => {
     if (document.getElementById('blank_div')) {
       document.getElementById('blank_div').scrollLeft = e.target.scrollLeft
     }
   }
 
-  const getTable = e => {
+  const getTable = (e) => {
     return table_data?.current?.children[0]?.children[0]?.children[0]
   }
-  const onBlankScroll = async e => {
+  const onBlankScroll = async (e) => {
     const table = await getTable()
     table.scrollLeft = e.target.scrollLeft
   }
 
-  const onBlankWidth = e => {
+  const onBlankWidth = (e) => {
     setTimeout(async () => {
       const table = await getTable()
       if (table) {
@@ -617,22 +665,22 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     onBlankWidth()
   }, [data])
 
-  const onResize = useCallback(target => {
+  const onResize = useCallback((target) => {
     onBlankWidth()
   }, [])
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/user/status/color`)
-      .then(res => {
+      .then((res) => {
         setStatusColor(res.data.message)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.response.data.message, 'error')
       })
   }, [])
 
-  const rowClassFn = data => {
+  const rowClassFn = (data) => {
     const status =
       data.status === STUDYSTATUS.Unread ||
       data.status === STUDYSTATUS.Ready ||
@@ -656,7 +704,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
         return
       }
 
-      const observer = new ResizeObserver(entries => {
+      const observer = new ResizeObserver((entries) => {
         callback(element, entries[0])
       })
 
@@ -668,12 +716,12 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     return ref
   }
 
-  const checkSelectedModalities = value => {
+  const checkSelectedModalities = (value) => {
     setCurrentPage(0)
 
     console.log('first', value)
     if (value.length === 0) {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, Modality: null }
       })
       setSelectedModalities(null)
@@ -681,8 +729,8 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
         setSelectedDropDownFilter(null)
       }
     } else {
-      const modalityArray = value.map(modalityList => modalityList.value)
-      setSearchData(prev => {
+      const modalityArray = value.map((modalityList) => modalityList.value)
+      setSearchData((prev) => {
         return { ...prev, Modality: modalityArray }
       })
       setSelectedModalities(value)
@@ -696,12 +744,12 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
       setcrossModality(false)
     }
     // Refresh worklist when modality selection changes (no need to click Search)
-    setFilter(prev => !prev)
+    setFilter((prev) => !prev)
   }
-  const checkSelectedStatus = value => {
+  const checkSelectedStatus = (value) => {
     setCurrentPage(0)
     if (value.length === 0) {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, status: null }
       })
       setSelectedstatus(null)
@@ -709,12 +757,14 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
         setSelectedDropDownFilter(null)
       }
     } else {
-      const studyStatusArray = value.map(statusList => statusList.value)
-      setSearchData(prev => {
+      const studyStatusArray = value.map((statusList) => statusList.value)
+      setSearchData((prev) => {
         return { ...prev, status: studyStatusArray }
       })
       setSelectedstatus(value)
-      if (selectedDropDownFilter?.studyStatus?.length !== studyStatusArray?.length) {
+      if (
+        selectedDropDownFilter?.studyStatus?.length !== studyStatusArray?.length
+      ) {
         setSelectedDropDownFilter(null)
       }
     }
@@ -723,13 +773,13 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     } else {
       setcrossStatus(false)
     }
-    setFilter(prev => !prev)
+    setFilter((prev) => !prev)
   }
 
-  const checkSelectedClinics = value => {
+  const checkSelectedClinics = (value) => {
     setCurrentPage(0)
     if (value.length === 0) {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, clinicNames: null }
       })
       setSelectedClinics([])
@@ -737,7 +787,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
         setSelectedDropDownFilter(null)
       }
     } else {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, clinicNames: value }
       })
       setSelectedClinics(value)
@@ -750,13 +800,13 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     } else {
       setcrossClinic(false)
     }
-    setFilter(prev => !prev)
+    setFilter((prev) => !prev)
   }
-  const checkSelectedPhysicians = value => {
+  const checkSelectedPhysicians = (value) => {
     setCurrentPage(0)
     console.log('first', value.length)
     if (value.length === 0) {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, Physicians: null }
       })
       setSelectedPhysicians([])
@@ -764,7 +814,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
         setSelectedDropDownFilter(null)
       }
     } else {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, Physicians: value }
       })
       setSelectedPhysicians(value)
@@ -777,12 +827,16 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     } else {
       setcrossPhysician(false)
     }
-    setFilter(prev => !prev)
+    setFilter((prev) => !prev)
   }
 
-  const updateFilterData = value => {
+  const updateFilterData = (value) => {
     const obj = {}
-    if (value?.Physicians?.length === 0 || typeof value === 'undefined' || value === 'undefined') {
+    if (
+      value?.Physicians?.length === 0 ||
+      typeof value === 'undefined' ||
+      value === 'undefined'
+    ) {
       obj.Physicians = null
       setSelectedPhysicians(null)
       setcrossPhysician(false)
@@ -791,7 +845,11 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
       setcrossPhysician(true)
       setSelectedPhysicians(value.Physicians)
     }
-    if (value?.clinicNames?.length === 0 || typeof value === 'undefined' || value === 'undefined') {
+    if (
+      value?.clinicNames?.length === 0 ||
+      typeof value === 'undefined' ||
+      value === 'undefined'
+    ) {
       obj.clinicNames = null
       setSelectedClinics(null)
       setcrossClinic(false)
@@ -801,7 +859,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
       setcrossClinic(true)
       setSelectedClinics(value.clinicNames)
     }
-    setSearchData(prev => {
+    setSearchData((prev) => {
       return { ...prev, ...obj }
     })
   }
@@ -821,7 +879,10 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     { value: moment().add(-1, 'days')._d, label: 'Yesterday' },
     { value: [moment().add(-6, 'days')._d, moment()._d], label: 'Last 7 days' },
     { value: [moment().day(0)._d, moment()._d], label: 'Current Week' },
-    { value: [moment().add(-29, 'days')._d, moment()._d], label: 'Last 30 days' },
+    {
+      value: [moment().add(-29, 'days')._d, moment()._d],
+      label: 'Last 30 days',
+    },
     { value: 'customdate', label: 'Custom date range' },
   ]
 
@@ -832,28 +893,28 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     {
       name: 'Patient Name',
       id: 'PatientName',
-      cell: row => (row['PatientName'] ? row['PatientName'] : '-'),
+      cell: (row) => (row['PatientName'] ? row['PatientName'] : '-'),
       sortable: true,
       minWidth: '200px',
     },
     {
       name: 'Patient ID',
       id: 'PatientID',
-      cell: row => (row['PatientID'] ? row['PatientID'] : '-'),
+      cell: (row) => (row['PatientID'] ? row['PatientID'] : '-'),
       sortable: true,
       minWidth: '150px',
     },
     {
       name: 'Accession',
       id: 'AccessionNumber',
-      cell: row => (row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
+      cell: (row) => (row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
       sortable: true,
       minWidth: '150px',
     },
     {
       name: 'Study Date',
       id: 'startTimeStamp',
-      cell: row =>
+      cell: (row) =>
         row['startTimeStamp']
           ? moment(row['startTimeStamp']).format(
               userData?.dateFormats?.dateTimeFormat || 'MM/DD/YYYY hh:mmA'
@@ -865,7 +926,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     {
       name: 'Modality',
       id: 'Modality',
-      cell: row => (row['Modality'] ? row['Modality'] : '-'),
+      cell: (row) => (row['Modality'] ? row['Modality'] : '-'),
       sortable: false,
       minWidth: '150px',
     },
@@ -874,18 +935,22 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
       sortable: true,
       reorder: true,
       id: 'status',
-      cell: row =>
+      cell: (row) =>
         row['status'] === STUDYSTATUS.Unread ? (
           <div
             className="worklist-status"
-            style={{ background: statusColor?.completed || statusColors?.completed }}
+            style={{
+              background: statusColor?.completed || statusColors?.completed,
+            }}
           >
             <span>{STUDYSTATUS.Unread}</span>
           </div>
         ) : row['status'] === STUDYSTATUS.Preliminary ? (
           <div
             className="worklist-status"
-            style={{ background: statusColor?.preliminary || statusColors?.preliminary }}
+            style={{
+              background: statusColor?.preliminary || statusColors?.preliminary,
+            }}
           >
             <span>{STUDYSTATUS.Preliminary}</span>
           </div>
@@ -911,21 +976,21 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     {
       name: 'Description',
       id: 'Description',
-      cell: row => (row['Description'] ? row['Description'] : '-'),
+      cell: (row) => (row['Description'] ? row['Description'] : '-'),
       sortable: true,
       minWidth: '200px',
     },
     {
       name: '#Series',
       id: 'SeriesNumber',
-      cell: row => (row['SeriesNumber'] ? row['SeriesNumber'] : '-'),
+      cell: (row) => (row['SeriesNumber'] ? row['SeriesNumber'] : '-'),
       sortable: false,
       minWidth: '100px',
     },
     {
       name: '#Images',
       id: 'ImagesNumber',
-      cell: row => (row['ImagesNumber'] ? row['ImagesNumber'] : '-'),
+      cell: (row) => (row['ImagesNumber'] ? row['ImagesNumber'] : '-'),
       sortable: false,
       minWidth: '100px',
     },
@@ -934,15 +999,22 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
       id: 'Actions',
       allowOverflow: true,
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex align-items-center">
             <a
               href={`${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${row.StudyInstanceUID}&accessToken=${localStorage.getItem('accessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${row._id}&mode=${row.status === STUDYSTATUS.Unread ? 'create' : 'preview'}`}
               style={{ color: 'inherit' }}
-              target={JSON.parse(localStorage.getItem('userData'))?.viewerPreference}
+              target={
+                JSON.parse(localStorage.getItem('userData'))?.viewerPreference
+              }
             >
-              <Eye size={15} id="view" className="ml-50" style={{ cursor: 'pointer' }} />
+              <Eye
+                size={15}
+                id="view"
+                className="ml-50"
+                style={{ cursor: 'pointer' }}
+              />
             </a>
 
             {userData && userData.role === ROLES.ReferringDoctor && (
@@ -952,9 +1024,14 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                   id="download"
                   className="ml-50"
                   style={{ cursor: 'pointer' }}
-                  onClick={() => (studyDownloadHandler || studyDownloadHanlder)(row.ID)}
+                  onClick={() =>
+                    (studyDownloadHandler || studyDownloadHanlder)(row.ID)
+                  }
                 />
-                <UncontrolledTooltip className="tooltip-react-strap" target="download">
+                <UncontrolledTooltip
+                  className="tooltip-react-strap"
+                  target="download"
+                >
                   Click to download study
                 </UncontrolledTooltip>
               </>
@@ -978,7 +1055,10 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                     cursor: 'pointer',
                   }}
                 />
-                <UncontrolledTooltip target={`abc${row.ID}`} className="tooltip-react-strap">
+                <UncontrolledTooltip
+                  target={`abc${row.ID}`}
+                  className="tooltip-react-strap"
+                >
                   View report
                 </UncontrolledTooltip>
               </>
@@ -1017,12 +1097,15 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     },
   ]
 
-  const handleFilter = e => {
+  const handleFilter = (e) => {
     setCurrentPage(0)
-    setSearchData(prev => {
+    setSearchData((prev) => {
       return {
         ...prev,
-        [e.target.id]: e.target.id === 'Modality' ? e.target.value.toUpperCase() : e.target.value,
+        [e.target.id]:
+          e.target.id === 'Modality'
+            ? e.target.value.toUpperCase()
+            : e.target.value,
       }
     })
     if (e.target.value) {
@@ -1071,8 +1154,8 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     setAddNewFilter(true)
   }
 
-  const handleClearFilter = e => {
-    setSearchData(prev => {
+  const handleClearFilter = (e) => {
+    setSearchData((prev) => {
       return { ...prev, [e]: '' }
     })
   }
@@ -1108,14 +1191,14 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     handleClearFilter('StudyDescription')
     showFlatpicker(() => true)
     setSelectedOption(null)
-    setSearchData(prev => {
+    setSearchData((prev) => {
       return { ...prev, Physicians: null, clinicNames: null, status: null }
     })
     setSelectedDropDownFilter(undefined)
     handleSeach()
   }
 
-  const onKeyPressed = e => {
+  const onKeyPressed = (e) => {
     if (e.key === 'Backspace' || e.key === 'Delete') {
       setPicker('')
       setcrossStudyDate(false)
@@ -1123,7 +1206,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     }
   }
 
-  const onPatientKeyPressed = e => {
+  const onPatientKeyPressed = (e) => {
     if (e.key === 'Backspace' || e.key === 'Delete') {
       setPatientDOBPickerPicker('')
       setcrossPatientDOBDate(false)
@@ -1131,7 +1214,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
     }
   }
 
-  const MuiAccordionSummary = styled(props => (
+  const MuiAccordionSummary = styled((props) => (
     <AccordionSummary
       id="panel-header-1"
       aria-controls="panel-content-1"
@@ -1169,11 +1252,16 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
               )}
             </div>
             <div className="d-flex mt-md-0 mt-1 study-button-container">
-              {ability.can('manage', 'filter-listings') && userData.role !== ROLES.ClinicUser && (
-                <Button className="ml-2" color="primary" onClick={handleAddFilter}>
-                  <span className="align-middle">Add New Filter</span>
-                </Button>
-              )}
+              {ability.can('manage', 'filter-listings') &&
+                userData.role !== ROLES.ClinicUser && (
+                  <Button
+                    className="ml-2"
+                    color="primary"
+                    onClick={handleAddFilter}
+                  >
+                    <span className="align-middle">Add New Filter</span>
+                  </Button>
+                )}
               {crossPatient ||
               crossPatientID ||
               crossAccession ||
@@ -1194,7 +1282,7 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                 className="ml-2"
                 color="primary"
                 onClick={() => {
-                  setRefresh(prev => !prev)
+                  setRefresh((prev) => !prev)
                 }}
               >
                 <span className="align-middle ml-50">Refresh</span>
@@ -1344,9 +1432,11 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                           },
                           onClose: (selectedDates, dateStr, instance) => {
                             // Only allow closing if both dates are selected or no dates selected
-                            const selectedCount = selectedDates ? selectedDates.length : 0
+                            const selectedCount = selectedDates
+                              ? selectedDates.length
+                              : 0
                             const fpInstance = fp.current?.flatpickr
-                            
+
                             if (selectedCount === 0) {
                               // No dates selected - reset to dropdown
                               showFlatpicker(true)
@@ -1359,20 +1449,23 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                               // Set end date = start date to ensure date range works properly
                               const startDate = selectedDates[0]
                               const dateRange = [startDate, startDate]
-                              
+
                               // Update the picker and search data with the date range
                               setPicker(dateRange)
                               handleDateFilter(dateRange, false)
                               setIsSelectingStudyDateRange(false)
                               studyDatePreventClose.current = false
-                              
+
                               // Ensure calendar stays closed
                               setTimeout(() => {
                                 if (fpInstance && fpInstance.isOpen) {
                                   try {
                                     fpInstance.close()
                                   } catch (error) {
-                                    console.warn('Error closing calendar:', error)
+                                    console.warn(
+                                      'Error closing calendar:',
+                                      error
+                                    )
                                   }
                                 }
                               }, 50)
@@ -1384,7 +1477,12 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                           },
                         }}
                         onChange={(selectedDates, dateStr, instance) => {
-                          console.log('🔍 Flatpickr onChange - selectedDates:', selectedDates, 'dateStr:', dateStr)
+                          console.log(
+                            '🔍 Flatpickr onChange - selectedDates:',
+                            selectedDates,
+                            'dateStr:',
+                            dateStr
+                          )
                           // Flatpickr passes selectedDates array, dateStr string, and instance
                           if (selectedDates && selectedDates.length > 0) {
                             if (selectedDates.length === 1) {
@@ -1408,7 +1506,10 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                                   try {
                                     fpInstance.close()
                                   } catch (error) {
-                                    console.warn('Error closing calendar:', error)
+                                    console.warn(
+                                      'Error closing calendar:',
+                                      error
+                                    )
                                   }
                                 }
                               }, 50)
@@ -1469,21 +1570,23 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                         },
                         onClose: (selectedDates, dateStr, instance) => {
                           // Check if calendar closed with only one date selected (user clicked outside)
-                          const selectedCount = selectedDates ? selectedDates.length : 0
+                          const selectedCount = selectedDates
+                            ? selectedDates.length
+                            : 0
                           const fpInstance = patientDOBfp.current?.flatpickr
-                          
+
                           if (selectedCount === 1) {
                             // Only one date selected - calendar closed (user clicked outside)
                             // Set end date = start date to ensure date range works properly
                             const startDate = selectedDates[0]
                             const dateRange = [startDate, startDate] // Set end date = start date
-                            
+
                             // Update the picker and search data with the date range
                             setPatientDOBPickerPicker(dateRange)
                             handlePatientDOBDateFilter(dateRange, false)
                             setIsSelectingPatientDOBRange(true)
                             patientDOBPreventClose.current = false
-                            
+
                             // Ensure calendar stays closed
                             setTimeout(() => {
                               if (fpInstance && fpInstance.isOpen) {
@@ -1507,17 +1610,22 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                         },
                       }}
                       onChange={(selectedDates, dateStr, instance) => {
-                        console.log('🔍 Flatpickr PatientDOB onChange - selectedDates:', selectedDates, 'dateStr:', dateStr)
+                        console.log(
+                          '🔍 Flatpickr PatientDOB onChange - selectedDates:',
+                          selectedDates,
+                          'dateStr:',
+                          dateStr
+                        )
                         // Flatpickr passes selectedDates array, dateStr string, and instance
                         if (selectedDates && selectedDates.length > 0) {
                           if (selectedDates.length === 1) {
                             // First date selected - prevent closing and keep calendar open
                             patientDOBPreventClose.current = true
                             handlePatientDOBDateFilter(selectedDates, false)
-                            
+
                             // Immediately try to keep calendar open - use multiple strategies
                             const fpInstance = patientDOBfp.current?.flatpickr
-                            
+
                             if (fpInstance) {
                               // Strategy 1: Check immediately and reopen if needed
                               if (!fpInstance.isOpen) {
@@ -1527,10 +1635,14 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                                   // Ignore errors
                                 }
                               }
-                              
+
                               // Strategy 2: Use requestAnimationFrame
                               requestAnimationFrame(() => {
-                                if (fpInstance && !fpInstance.isOpen && patientDOBPreventClose.current) {
+                                if (
+                                  fpInstance &&
+                                  !fpInstance.isOpen &&
+                                  patientDOBPreventClose.current
+                                ) {
                                   try {
                                     fpInstance.open()
                                   } catch (error) {
@@ -1538,10 +1650,14 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                                   }
                                 }
                               })
-                              
+
                               // Strategy 3: Use setTimeout (multiple attempts)
                               setTimeout(() => {
-                                if (fpInstance && !fpInstance.isOpen && patientDOBPreventClose.current) {
+                                if (
+                                  fpInstance &&
+                                  !fpInstance.isOpen &&
+                                  patientDOBPreventClose.current
+                                ) {
                                   try {
                                     fpInstance.open()
                                   } catch (error) {
@@ -1549,9 +1665,13 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                                   }
                                 }
                               }, 0)
-                              
+
                               setTimeout(() => {
-                                if (fpInstance && !fpInstance.isOpen && patientDOBPreventClose.current) {
+                                if (
+                                  fpInstance &&
+                                  !fpInstance.isOpen &&
+                                  patientDOBPreventClose.current
+                                ) {
                                   try {
                                     fpInstance.open()
                                   } catch (error) {
@@ -1559,9 +1679,13 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                                   }
                                 }
                               }, 5)
-                              
+
                               setTimeout(() => {
-                                if (fpInstance && !fpInstance.isOpen && patientDOBPreventClose.current) {
+                                if (
+                                  fpInstance &&
+                                  !fpInstance.isOpen &&
+                                  patientDOBPreventClose.current
+                                ) {
                                   try {
                                     fpInstance.open()
                                   } catch (error) {
@@ -1637,7 +1761,8 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                   </FormGroup>
                 </Col>
                 <Col lg="3" md="6">
-                  {ClinicNamesForFilters && ClinicNamesForFilters?.length > 0 ? (
+                  {ClinicNamesForFilters &&
+                  ClinicNamesForFilters?.length > 0 ? (
                     <FormGroup>
                       <Label for="Modality">Clinics:</Label>
                       <Select
@@ -1650,8 +1775,8 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                         value={selectedClinics}
                         onChange={checkSelectedClinics}
                         theme={selectThemeColors}
-                        getOptionValue={option => `${option['_id']}`}
-                        getOptionLabel={option => {
+                        getOptionValue={(option) => `${option['_id']}`}
+                        getOptionLabel={(option) => {
                           return `${option['clinicName']}`
                         }}
                         className="react-select staticmodality"
@@ -1686,8 +1811,8 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                         value={selectedPhysicians}
                         onChange={checkSelectedPhysicians}
                         theme={selectThemeColors}
-                        getOptionValue={option => `${option['_id']}`}
-                        getOptionLabel={option => {
+                        getOptionValue={(option) => `${option['_id']}`}
+                        getOptionLabel={(option) => {
                           return `${option['username'] ?? option['clinicName']}`
                         }}
                         className="react-select staticmodality"
@@ -1720,8 +1845,8 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                       value={selectedStatus}
                       onChange={checkSelectedStatus}
                       theme={selectThemeColors}
-                      getOptionValue={option => `${option['value']}`}
-                      getOptionLabel={option => {
+                      getOptionValue={(option) => `${option['value']}`}
+                      getOptionLabel={(option) => {
                         return `${option['label']}`
                       }}
                       className="react-select staticmodality"
@@ -1783,15 +1908,17 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
                   </FormGroup>
                 </Col>
               </Row>
-              {totalFilteredStudies !== null && totalFilteredStudies !== totalStudies && (
-                <Row className="mt-1 mb-50">
-                  <Col>
-                    <div className="searchTotal">
-                      {totalFilteredStudies} filtered from total {totalStudies} studies.
-                    </div>
-                  </Col>
-                </Row>
-              )}
+              {totalFilteredStudies !== null &&
+                totalFilteredStudies !== totalStudies && (
+                  <Row className="mt-1 mb-50">
+                    <Col>
+                      <div className="searchTotal">
+                        {totalFilteredStudies} filtered from total{' '}
+                        {totalStudies} studies.
+                      </div>
+                    </Col>
+                  </Row>
+                )}
             </CardBody>
           </AccordionDetails>
         </Accordion>
@@ -1815,9 +1942,10 @@ const DataTableAdvSearch = ({ studylist, previewReportHandler, handlePrintReport
               onSort: handleSort,
               sortField,
               sortOrder,
-              onPage: e => {
+              onPage: (e) => {
                 setCurrentPage(e.first++)
-                ;(setRowsPerPage(prev => e.rows), localStorage.setItem('studylistrow', e.rows))
+                ;(setRowsPerPage((prev) => e.rows),
+                  localStorage.setItem('studylistrow', e.rows))
               },
               onBlankWidth,
               rowClassFn,

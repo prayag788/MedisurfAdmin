@@ -9,7 +9,10 @@ function transformFile(file) {
   const src = fs.readFileSync(file, 'utf8')
   let ast
   try {
-    ast = parser.parse(src, { sourceType: 'module', plugins: ['jsx', 'classProperties'] })
+    ast = parser.parse(src, {
+      sourceType: 'module',
+      plugins: ['jsx', 'classProperties'],
+    })
   } catch (e) {
     console.error('Parse error:', file, e.message)
     return false
@@ -22,13 +25,18 @@ function transformFile(file) {
       const val = pathNode.node.source && pathNode.node.source.value
       if (typeof val === 'string' && val.startsWith('tinymce/plugins/')) {
         // replace import with try { require('tinymce/plugins/...') } catch(e) {}
-        const requireCall = t.callExpression(t.identifier('require'), [t.stringLiteral(val)])
+        const requireCall = t.callExpression(t.identifier('require'), [
+          t.stringLiteral(val),
+        ])
         const expr = t.expressionStatement(requireCall)
-        const tryStmt = t.tryStatement(t.blockStatement([expr]), t.catchClause(t.identifier('e'), t.blockStatement([])))
+        const tryStmt = t.tryStatement(
+          t.blockStatement([expr]),
+          t.catchClause(t.identifier('e'), t.blockStatement([]))
+        )
         pathNode.replaceWithMultiple([tryStmt])
         changed = true
       }
-    }
+    },
   })
 
   if (changed) {
@@ -54,7 +62,7 @@ function addJestMappings() {
     '^@configs/(.*)$': '<rootDir>/src/configs/$1',
     '^@utils/(.*)$': '<rootDir>/src/utils/$1',
     '^@hooks/(.*)$': '<rootDir>/src/utility/hooks/$1',
-    '^@fake-db/(.*)$': '<rootDir>/src/@fake-db/$1'
+    '^@fake-db/(.*)$': '<rootDir>/src/@fake-db/$1',
   }
   let added = false
   for (const k of Object.keys(mappings)) {

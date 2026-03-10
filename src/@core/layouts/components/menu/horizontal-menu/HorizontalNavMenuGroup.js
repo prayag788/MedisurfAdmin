@@ -12,7 +12,7 @@ import { isNavGroupActive } from '@layouts/utils'
 // ** Horizontal Menu Items Component
 import HorizontalNavMenuItems from './HorizontalNavMenuItems'
 
-const HorizontalNavMenuGroup = props => {
+const HorizontalNavMenuGroup = (props) => {
   // ** Props
   const {
     item,
@@ -36,7 +36,7 @@ const HorizontalNavMenuGroup = props => {
   const menuModifiers = {
     setMaxHeight: {
       enabled: true,
-      fn: data => {
+      fn: (data) => {
         const pageHeight = window.innerHeight,
           ddTop = data.instance.reference.getBoundingClientRect().top,
           ddHeight = data.popper.height
@@ -74,7 +74,8 @@ const HorizontalNavMenuGroup = props => {
         'nav-item': submenu === false,
         'dropdown-submenu': submenu === true,
         'sidebar-group-active active':
-          isNavGroupActive(item.children, currentURL, routerProps) || groupActive.includes(item.id),
+          isNavGroupActive(item.children, currentURL, routerProps) ||
+          groupActive.includes(item.id),
       })}
       isOpen={openDropdown.includes(item.id)}
       toggle={() => onMouseEnter(item.id)}
@@ -88,7 +89,7 @@ const HorizontalNavMenuGroup = props => {
           'dropdown-item': submenu === true,
           'nav-link': submenu === false,
         })}
-        onClick={e => e.preventDefault()}
+        onClick={(e) => e.preventDefault()}
       >
         {item.icon}
         <span>

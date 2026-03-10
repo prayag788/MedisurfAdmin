@@ -2,7 +2,14 @@
 import PropTypes from 'prop-types'
 import { Card, CardBody } from 'reactstrap'
 
-const StatsHorizontal = ({ icon, color, stats, statTitle, className, ...rest }) => {
+const StatsHorizontal = ({
+  icon,
+  color,
+  stats,
+  statTitle,
+  className,
+  ...rest
+}) => {
   return (
     <Card>
       <CardBody className={className}>

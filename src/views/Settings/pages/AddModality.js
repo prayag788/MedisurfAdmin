@@ -19,7 +19,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useBeforeunload } from 'react-beforeunload'
 
 import axios from 'axios'
-import { MySwalError, MySwalLoading, MySwalSuccess } from '../../components/MySwalAlert'
+import {
+  MySwalError,
+  MySwalLoading,
+  MySwalSuccess,
+} from '../../components/MySwalAlert'
 import {
   showErrorAlert,
   showSuccessAlert,
@@ -31,58 +35,64 @@ import {
 } from '../../../utils/alerts'
 
 export default () => {
-  const [formData, setFormData] = useState({ dicomServer: '', aet: '', port: '' })
+  const [formData, setFormData] = useState({
+    dicomServer: '',
+    aet: '',
+    port: '',
+  })
   const [ipData, setIpData] = useState({ ip1: '', ip2: '', ip3: '', ip4: '' })
   const [error, setError] = useState({})
   const [check, setCheck] = useState(false)
   const navigate = useNavigate()
 
-  useBeforeunload(event => {
+  useBeforeunload((event) => {
     if (!check && formData.dicomServer) {
       axios
-        .delete(`${process.env.REACT_APP_API_URL}/explorer/modalities/${formData.dicomServer}`)
-        .then(doc => {
+        .delete(
+          `${process.env.REACT_APP_API_URL}/explorer/modalities/${formData.dicomServer}`
+        )
+        .then((doc) => {
           setCheck(true)
         })
     }
   })
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
     if (value === '') {
-      setError(prev => {
+      setError((prev) => {
         prev = { ...prev, [name]: 'This field cannot be empty!' }
         return prev
       })
     } else {
-      setError(prev => {
+      setError((prev) => {
         delete prev[name]
         return prev
       })
     }
-    setFormData(prev => {
+    setFormData((prev) => {
       prev = { ...prev, [name]: value }
       return prev
     })
   }
 
-  const ipHandler = e => {
+  const ipHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
     if (value === '') {
-      setError(prev => {
+      setError((prev) => {
         prev = { ...prev, [name]: 'This field cannot be empty!' }
         return prev
       })
     } else {
-      setError(prev => {
+      setError((prev) => {
         delete prev[name]
         return prev
       })
     }
     if (value.length <= 3) {
-      setIpData(prev => {
+      setIpData((prev) => {
         prev = { ...prev, [name]: value }
         return prev
       })
@@ -92,21 +102,21 @@ export default () => {
   }
 
   const onReset = () => {
-    setFormData(prev => {
+    setFormData((prev) => {
       return { dicomServer: '', aet: '', port: '' }
     })
-    setIpData(prev => {
+    setIpData((prev) => {
       return { ip1: '', ip2: '', ip3: '', ip4: '' }
     })
   }
 
-  const isValidPort = port => {
+  const isValidPort = (port) => {
     const regex =
       /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/
     return regex.test(port)
   }
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault()
     const finalIP = Object.values(ipData).reduce((acc, curr) => {
       return `${acc}.${curr}`
@@ -114,22 +124,25 @@ export default () => {
     let doAllow = true
     for (const item in formData) {
       if (formData[item] === '') {
-        setError(prev => {
+        setError((prev) => {
           prev = { ...prev, [item]: 'This field cannot be empty!' }
           return prev
         })
         doAllow = false
       } else if (item === 'port') {
         if (!isValidPort(formData[item])) {
-          setError(prev => {
-            prev = { ...prev, port: 'Invalid port! Please enter a valid port Address' }
+          setError((prev) => {
+            prev = {
+              ...prev,
+              port: 'Invalid port! Please enter a valid port Address',
+            }
             return prev
           })
           doAllow = false
         }
       } else if (item === 'aet') {
         if (formData[item].length > 25) {
-          setError(prev => {
+          setError((prev) => {
             prev = { ...prev, aet: 'AET cannot be longer than 25 characters.' }
             return prev
           })
@@ -139,14 +152,17 @@ export default () => {
     }
     for (const item in ipData) {
       if (ipData[item] === '') {
-        setError(prev => {
+        setError((prev) => {
           prev = { ...prev, [item]: 'This field cannot be empty!' }
           return prev
         })
         doAllow = false
       } else if (Number(ipData[item]) > 255 || Number(ipData[item]) < 0) {
-        setError(prev => {
-          prev = { ...prev, [item]: 'Invalid IP! Please enter a valid IP Address' }
+        setError((prev) => {
+          prev = {
+            ...prev,
+            [item]: 'Invalid IP! Please enter a valid IP Address',
+          }
           return prev
         })
         doAllow = false
@@ -171,20 +187,20 @@ export default () => {
           `${process.env.REACT_APP_API_URL}/explorer/modalities/${formData.dicomServer}`,
           finalData
         )
-        .then(doc => {
+        .then((doc) => {
           setCheck(true)
           hideLoadingThenShowSuccess('Modality Added Successfully!')
           setTimeout(() => {
             window.location.href = '/settings/modality_listing'
           }, 1500)
         })
-        .catch(err => {
+        .catch((err) => {
           hideLoadingThenShowError(err)
         })
     }
   }
 
-  const performEcho = e => {
+  const performEcho = (e) => {
     e.preventDefault()
     const finalIP = Object.values(ipData).reduce((acc, curr) => {
       return `${acc}.${curr}`
@@ -192,22 +208,25 @@ export default () => {
     let doAllow = true
     for (const item in formData) {
       if (formData[item] === '') {
-        setError(prev => {
+        setError((prev) => {
           prev = { ...prev, [item]: 'This field cannot be empty!' }
           return prev
         })
         doAllow = false
       } else if (item === 'port') {
         if (!isValidPort(formData[item])) {
-          setError(prev => {
-            prev = { ...prev, port: 'Invalid port! Please enter a valid port Address' }
+          setError((prev) => {
+            prev = {
+              ...prev,
+              port: 'Invalid port! Please enter a valid port Address',
+            }
             return prev
           })
           doAllow = false
         }
       } else if (item === 'aet') {
         if (formData[item].length > 25) {
-          setError(prev => {
+          setError((prev) => {
             prev = { ...prev, aet: 'AET cannot be longer than 25 characters.' }
             return prev
           })
@@ -217,14 +236,17 @@ export default () => {
     }
     for (const item in ipData) {
       if (ipData[item] === '') {
-        setError(prev => {
+        setError((prev) => {
           prev = { ...prev, [item]: 'This field cannot be empty!' }
           return prev
         })
         doAllow = false
       } else if (Number(ipData[item]) > 255 || Number(ipData[item]) < 0) {
-        setError(prev => {
-          prev = { ...prev, [item]: 'Invalid IP! Please enter a valid IP Address' }
+        setError((prev) => {
+          prev = {
+            ...prev,
+            [item]: 'Invalid IP! Please enter a valid IP Address',
+          }
           return prev
         })
         doAllow = false
@@ -249,7 +271,7 @@ export default () => {
           `${process.env.REACT_APP_API_URL}/explorer/modalities/${formData.dicomServer}`,
           finalData
         )
-        .then(doc => {
+        .then((doc) => {
           hideLoadingAlert().then(() => {
             showLoadingAlert('Performing C-ECHO...')
           })
@@ -262,7 +284,7 @@ export default () => {
                 .delete(
                   `${process.env.REACT_APP_API_URL}/explorer/modalities/${formData.dicomServer}`
                 )
-                .then(doc => {
+                .then((doc) => {
                   hideLoadingThenShowSuccess('C-Echo successful!')
                 })
             })
@@ -271,16 +293,18 @@ export default () => {
                 .delete(
                   `${process.env.REACT_APP_API_URL}/explorer/modalities/${formData.dicomServer}`
                 )
-                .then(doc => {
+                .then((doc) => {
                   hideLoadingThenShowError('C-Echo has Failed!')
                   setCheck(true)
                 })
             })
         })
-        .catch(err => {
+        .catch((err) => {
           hideLoadingThenShowError(err)
           setCheck(true)
-          axios.delete(`${process.env.REACT_APP_API_URL}/explorer/modalities/${formData.dicomServer}`)
+          axios.delete(
+            `${process.env.REACT_APP_API_URL}/explorer/modalities/${formData.dicomServer}`
+          )
         })
     }
   }
@@ -382,13 +406,19 @@ export default () => {
                       </FormGroup>
                     </FormGroup>
                     <Input
-                      invalid={error && (error.ip1 || error.ip2 || error.ip3 || error.ip4) && true}
+                      invalid={
+                        error &&
+                        (error.ip1 || error.ip2 || error.ip3 || error.ip4) &&
+                        true
+                      }
                       name="port"
                       type="hidden"
                       value={formData.port}
                       onChange={inputHandler}
                     />
-                    <FormFeedback>{error.ip1 || error.ip2 || error.ip3 || error.ip4}</FormFeedback>
+                    <FormFeedback>
+                      {error.ip1 || error.ip2 || error.ip3 || error.ip4}
+                    </FormFeedback>
                   </FormGroup>
                   <FormGroup>
                     <Label for="port">Port</Label>
@@ -413,7 +443,11 @@ export default () => {
                   </FormGroup>
 
                   <FormGroup className="d-flex mt-3">
-                    <Button.Ripple className="mr-1" color="primary" type="submit">
+                    <Button.Ripple
+                      className="mr-1"
+                      color="primary"
+                      type="submit"
+                    >
                       Save
                     </Button.Ripple>
                     <Button.Ripple outline color="secondary" type="reset">

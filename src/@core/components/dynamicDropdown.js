@@ -9,9 +9,9 @@ import { selectThemeColors } from '@utils'
 function getSelectedIds(arr) {
   if (!Array.isArray(arr)) return []
   return arr
-    .map(x => x?.value ?? x?._id ?? x)
+    .map((x) => x?.value ?? x?._id ?? x)
     .filter(Boolean)
-    .map(id => (typeof id === 'string' ? id : String(id)))
+    .map((id) => (typeof id === 'string' ? id : String(id)))
     .sort()
 }
 
@@ -23,7 +23,7 @@ function selectedIdsEqual(a, b) {
 
 function isSubsetOf(a, b) {
   const setB = new Set(getSelectedIds(b))
-  return getSelectedIds(a).every(id => setB.has(id))
+  return getSelectedIds(a).every((id) => setB.has(id))
 }
 
 const DynamicDropdown = ({
@@ -68,7 +68,7 @@ const DynamicDropdown = ({
   useEffect(() => {
     if (isMulti && controlledValue && Array.isArray(controlledValue)) {
       const formatted = controlledValue
-        .map(item => {
+        .map((item) => {
           if (item === null || item === undefined) return null
           if (typeof item === 'string') {
             return { value: item, _id: item, label: item }
@@ -107,9 +107,7 @@ const DynamicDropdown = ({
     } else if (!isMulti && controlledValue) {
       const val = controlledValue
       setSelectedValue(
-        typeof val === 'string'
-          ? { value: val, _id: val, label: val }
-          : val
+        typeof val === 'string' ? { value: val, _id: val, label: val } : val
       )
     } else if (
       controlledValue === undefined ||
@@ -121,14 +119,16 @@ const DynamicDropdown = ({
     }
   }, [controlledValue, isMulti, selectedValue])
 
-  const fetchData = inputValue => {
+  const fetchData = (inputValue) => {
     setLoading(true)
     axios
-      .get(`${process.env.REACT_APP_API_URL}/dropdownData/${roleName}?name=${inputValue}${institutionalOnly ? '&institutionalOnly=true' : ''}`)
-      .then(doc => {
+      .get(
+        `${process.env.REACT_APP_API_URL}/dropdownData/${roleName}?name=${inputValue}${institutionalOnly ? '&institutionalOnly=true' : ''}`
+      )
+      .then((doc) => {
         setDropdownData(doc.data.dropdownData)
       })
-      .catch(err => {
+      .catch((err) => {
         // Only handle response errors, let global interceptor handle network errors
         if (err && err.response) {
           console.error('API Error:', err.response.data)
@@ -178,7 +178,10 @@ const DynamicDropdown = ({
     } catch (err) {
       // Only handle response errors, let global interceptor handle network errors
       if (err && err.response) {
-        console.error('Failed to load dropdown options:', err.response.data?.message || err.message)
+        console.error(
+          'Failed to load dropdown options:',
+          err.response.data?.message || err.message
+        )
       }
       // Return empty options for network errors to prevent UI issues
       return {
@@ -191,7 +194,7 @@ const DynamicDropdown = ({
     }
   }
 
-  const onChange = option => {
+  const onChange = (option) => {
     if (option?._id && !Array.isArray(option)) {
       if (option._id === 'select') {
         option._id = null
@@ -200,7 +203,7 @@ const DynamicDropdown = ({
       setValue(fieldName, option)
       return
     }
-    if (option?.find(data => data.value === 'addNewUser')) {
+    if (option?.find((data) => data.value === 'addNewUser')) {
       setKey(Math.random())
       if (openNestedModal) {
         openNestedModal()
@@ -208,28 +211,36 @@ const DynamicDropdown = ({
       return
     }
     const next = option || []
-    const findSelectAll = next.find(data => (data?.value ?? data?._id) === 'selectAll')
+    const findSelectAll = next.find(
+      (data) => (data?.value ?? data?._id) === 'selectAll'
+    )
     if (findSelectAll) {
       if (fieldName === 'Users') {
         setLoading(true)
         axios
-          .get(`${process.env.REACT_APP_API_URL}/filter-module/get-clinic-users`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-          })
-          .then(res => {
-            const allUsers = res.data.data?.map(user => ({
-              value: user._id,
-              label: user.username,
-              _id: user._id,
-              name: user.name,
-              username: user.username,
-              fname: user.fname,
-              lname: user.lname
-            })) || []
+          .get(
+            `${process.env.REACT_APP_API_URL}/filter-module/get-clinic-users`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+              },
+            }
+          )
+          .then((res) => {
+            const allUsers =
+              res.data.data?.map((user) => ({
+                value: user._id,
+                label: user.username,
+                _id: user._id,
+                name: user.name,
+                username: user.username,
+                fname: user.fname,
+                lname: user.lname,
+              })) || []
             setSelectedValue(allUsers)
             setValue(fieldName, allUsers)
           })
-          .catch(err => {
+          .catch((err) => {
             console.error('API Error:', err)
           })
           .finally(() => {
@@ -274,15 +285,16 @@ const DynamicDropdown = ({
         id={`${fieldName}`}
         value={selectedValue}
         loadOptions={loadOptions}
-        getOptionValue={option => `${option['_id']}`}
-        getOptionLabel={option => {
+        getOptionValue={(option) => `${option['_id']}`}
+        getOptionLabel={(option) => {
           if (option.value === 'addNewUser' || option.value === 'selectAll') {
             return option.name
           }
           // Handle different field names based on role type
           if (roleName === 'CU' || roleName === 'ClinicUser') {
             // For clinic users, use fname and lname
-            const fullName = `${option.fname || ''} ${option.lname || ''}`.trim()
+            const fullName =
+              `${option.fname || ''} ${option.lname || ''}`.trim()
             return fullName || option.username || option._id || 'Unknown User'
           }
           // For other roles (clinics, physicians, etc.)

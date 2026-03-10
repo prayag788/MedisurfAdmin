@@ -62,7 +62,12 @@ const StatisticsCards = () => {
       <Row>
         {}
         <Col xl="2" md="4" sm="6">
-          <StatsVertical icon={<Eye size={21} />} color="info" stats="36.9k" statTitle="Views" />
+          <StatsVertical
+            icon={<Eye size={21} />}
+            color="info"
+            stats="36.9k"
+            statTitle="Views"
+          />
         </Col>
         <Col xl="2" md="4" sm="6">
           <StatsVertical
@@ -150,13 +155,19 @@ const StatisticsCards = () => {
           <SubscribersGained kFormatter={kFormatter} />
         </Col>
         <Col lg="3" sm="6">
-          <RevenueGenerated kFormatter={kFormatter} success={context.colors.success.main} />
+          <RevenueGenerated
+            kFormatter={kFormatter}
+            success={context.colors.success.main}
+          />
         </Col>
         <Col lg="3" sm="6">
           <QuaterlySales danger={context.colors.danger.main} />
         </Col>
         <Col lg="3" sm="6">
-          <OrdersReceived kFormatter={kFormatter} warning={context.colors.warning.main} />
+          <OrdersReceived
+            kFormatter={kFormatter}
+            warning={context.colors.warning.main}
+          />
         </Col>
         {}
       </Row>

@@ -47,8 +47,10 @@ const Typography = () => {
           <div className="group-area">
             <h4>BlockQuotes</h4>
             <p>
-              For quoting blocks of content from another source within your document. Wrap{' '}
-              <code>&lt;blockquote className="blockquote"&gt;</code> around any HTML as the quote.
+              For quoting blocks of content from another source within your
+              document. Wrap{' '}
+              <code>&lt;blockquote className="blockquote"&gt;</code> around any
+              HTML as the quote.
             </p>
             <hr />
           </div>
@@ -71,7 +73,8 @@ const Typography = () => {
             <p>
               All lists - <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, and{' '}
               <code>&lt;dl&gt;</code> - have their margin-top removed and a{' '}
-              <code>margin-bottom: 1rem</code>. Nested lists have no <code>margin-bottom</code>.
+              <code>margin-bottom: 1rem</code>. Nested lists have no{' '}
+              <code>margin-bottom</code>.
             </p>
             <hr />
           </div>
@@ -95,9 +98,10 @@ const Typography = () => {
           <div className="group-area">
             <h4>Description list alignment</h4>
             <p>
-              Align terms and descriptions horizontally by using our grid system’s predefined
-              classes (or semantic mixins). For longer terms, you can optionally add a{' '}
-              <code>.text-truncate</code> class to truncate the text with an ellipsis.
+              Align terms and descriptions horizontally by using our grid
+              system’s predefined classes (or semantic mixins). For longer
+              terms, you can optionally add a <code>.text-truncate</code> class
+              to truncate the text with an ellipsis.
             </p>
             <hr />
           </div>

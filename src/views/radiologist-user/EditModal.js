@@ -34,8 +34,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   // ** State
   const [signatureImage, setSignatureImage] = useState(null)
-  const [signatureBase64, setSignatureBase64] = useState(editData.digitalSignature)
-  const [signaturePreview, setSignaturePreview] = useState(editData.digitalSignature)
+  const [signatureBase64, setSignatureBase64] = useState(
+    editData.digitalSignature
+  )
+  const [signaturePreview, setSignaturePreview] = useState(
+    editData.digitalSignature
+  )
 
   // ** Validation schema
   const validationSchema = useMemo(
@@ -52,8 +56,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
         email: yup
           .string()
           .email('Please provide valid email address')
-          .required('Please provide your email address. This field is required.'),
-        cno: yup.string().matches(PHONE_REGEXP, 'Please enter a valid contact number'),
+          .required(
+            'Please provide your email address. This field is required.'
+          ),
+        cno: yup
+          .string()
+          .matches(PHONE_REGEXP, 'Please enter a valid contact number'),
         status: yup
           .number()
           .oneOf([0, 1], 'Please select a valid status')
@@ -93,7 +101,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   useEffect(() => {
     if (editData && Object.keys(editData).length > 0) {
       // Set form values efficiently
-      formFields.forEach(field => {
+      formFields.forEach((field) => {
         if (editData[field] !== undefined && editData[field] !== null) {
           setValue(field, editData[field], { shouldValidate: false })
         }
@@ -103,7 +111,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   // ** Form submission handler
   const onSubmit = useCallback(
-    data => {
+    (data) => {
       const formData = {
         ...data,
         _id: editData._id,
@@ -112,12 +120,18 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       }
       updateUser(formData)
     },
-    [editData._id, editData.status, editData.digitalSignature, signatureBase64, updateUser]
+    [
+      editData._id,
+      editData.status,
+      editData.digitalSignature,
+      signatureBase64,
+      updateUser,
+    ]
   )
 
   // ** Status change handler
   const handleStatusChange = useCallback(
-    selectedOption => {
+    (selectedOption) => {
       setValue('status', selectedOption.value, { shouldValidate: true })
     },
     [setValue]
@@ -127,7 +141,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   const statusValue = watch('status')
 
   // ** Digital signature handler
-  const digitalSignatureHandler = useCallback(e => {
+  const digitalSignatureHandler = useCallback((e) => {
     if (e.target.files.length > 0 && e.target.files[0]) {
       const file = e.target.files[0]
       if (file.type === 'image/png' || file.type === 'image/jpeg') {
@@ -161,7 +175,14 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   // ** Reusable FormField component
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -189,7 +210,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
     [control, errors]
   )
 
-  const blobToBase64 = blob => {
+  const blobToBase64 = (blob) => {
     return new Promise((resolve, _) => {
       const reader = new FileReader()
       reader.onloadend = () => resolve(reader.result)
@@ -199,7 +220,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   useEffect(() => {
     if (signatureImage) {
-      blobToBase64(signatureImage).then(res => {
+      blobToBase64(signatureImage).then((res) => {
         setSignatureBase64(res)
       })
     }
@@ -220,14 +241,35 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-3" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-3"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit Radiologist User Details</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormField name="referenceId" label="ID" placeholder="ID" required readOnly />
-          <FormField name="fname" label="First Name" placeholder="Bruce" required />
-          <FormField name="lname" label="Last Name" placeholder="Wayne" required />
+          <FormField
+            name="referenceId"
+            label="ID"
+            placeholder="ID"
+            required
+            readOnly
+          />
+          <FormField
+            name="fname"
+            label="First Name"
+            placeholder="Bruce"
+            required
+          />
+          <FormField
+            name="lname"
+            label="Last Name"
+            placeholder="Wayne"
+            required
+          />
           <FormField
             name="email"
             label="Email"
@@ -235,13 +277,22 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             placeholder="bruce.wayne@email.com"
             required
           />
-          <FormField name="cno" label="Contact Number" type="text" placeholder="+1" />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="text"
+            placeholder="+1"
+          />
           <FormField
             name="medicalQualifications"
             label="Medical Qualifications"
             placeholder="MBBS"
           />
-          <FormField name="boardCertifications" label="Board Qualifications" placeholder="MD" />
+          <FormField
+            name="boardCertifications"
+            label="Board Qualifications"
+            placeholder="MD"
+          />
           <FormGroup>
             <Label for="digitalSignature">Digital Signature</Label>
             <Controller
@@ -287,7 +338,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                   isClearable={false}
                   theme={selectThemeColors}
                   value={
-                    STATUS_OPTIONS.find(option => option.value === statusValue) || STATUS_OPTIONS[0]
+                    STATUS_OPTIONS.find(
+                      (option) => option.value === statusValue
+                    ) || STATUS_OPTIONS[0]
                   }
                   name="status"
                   id="status"
@@ -299,14 +352,21 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               )}
             />
             {errors.status && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.status?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.status?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <div className="d-flex justify-content-end gap-2 mt-3">
             <Button type="submit" className="me-1" color="primary">
               Update Radiologist User
             </Button>
-            <Button type="button" color="secondary" onClick={handleModal} outline>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={handleModal}
+              outline
+            >
               Cancel
             </Button>
           </div>

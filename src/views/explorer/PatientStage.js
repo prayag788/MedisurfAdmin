@@ -29,7 +29,7 @@ import StudyListItem from './components/StudyListItem'
 
 const PatientStage = () => {
   const navigate = useNavigate()
-  const study = useSelector(state => state.dicom.study)
+  const study = useSelector((state) => state.dicom.study)
   const [modalities, setModalities] = useState([])
   const [DICOMwebServers, setDICOMwebServers] = useState([])
   const [isProtected, setIsProtected] = useState(null)
@@ -92,7 +92,7 @@ const PatientStage = () => {
 
   const sendToRemoteModalityHandler = () => {
     const options = {}
-    modalities.forEach(mod => {
+    modalities.forEach((mod) => {
       options[mod] = mod
     })
     MySwal.fire({
@@ -104,21 +104,21 @@ const PatientStage = () => {
       },
       confirmButtonText: 'Send',
       showLoaderOnConfirm: true,
-      preConfirm: modality => {
+      preConfirm: (modality) => {
         return axios
           .post(`${process.env.REACT_APP_API_URL}/orthanc/modalities`, {
             modality,
             resources: [study.ID],
           })
-          .then(response => {
+          .then((response) => {
             return response.data
           })
-          .catch(error => {
+          .catch((error) => {
             MySwal.showValidationMessage(error.response.data.message)
           })
       },
       allowOutsideClick: () => !MySwal.isLoading(),
-    }).then(result => {
+    }).then((result) => {
       if (result.isConfirmed) {
         showSuccessAlert('Study sent Successfully!')
       }
@@ -127,7 +127,7 @@ const PatientStage = () => {
 
   const sendToDICOMwebServerHandler = () => {
     const options = {}
-    DICOMwebServers.forEach(mod => {
+    DICOMwebServers.forEach((mod) => {
       options[mod] = mod
     })
     MySwal.fire({
@@ -139,13 +139,13 @@ const PatientStage = () => {
       },
       confirmButtonText: 'Send',
       showLoaderOnConfirm: true,
-      preConfirm: server => {
+      preConfirm: (server) => {
         if (!server) {
           MySwal.showValidationMessage('Please select a server')
         }
       },
       allowOutsideClick: () => !MySwal.isLoading(),
-    }).then(result => {
+    }).then((result) => {
       if (result.isConfirmed) {
         showSuccessAlert('Study sent Successfully!')
       }
@@ -160,7 +160,7 @@ const PatientStage = () => {
         data: { code: isProtected ? 0 : 1 },
       })
 
-      setIsProtected(prev => !prev)
+      setIsProtected((prev) => !prev)
     } catch (error) {
       console.log(error)
     }
@@ -188,7 +188,11 @@ const PatientStage = () => {
           </Card>
           <Card>
             <CardBody>
-              <Button.Ripple block onClick={sendToDICOMwebServerHandler} color="primary">
+              <Button.Ripple
+                block
+                onClick={sendToDICOMwebServerHandler}
+                color="primary"
+              >
                 Send to DICOMweb server
               </Button.Ripple>
             </CardBody>
@@ -199,12 +203,20 @@ const PatientStage = () => {
             </CardHeader>
             <ListGroup flush>
               <ListGroupItem>
-                <Button.Ripple block onClick={deletePatientHandler} color="primary">
+                <Button.Ripple
+                  block
+                  onClick={deletePatientHandler}
+                  color="primary"
+                >
                   Delete this patient
                 </Button.Ripple>
               </ListGroupItem>
               <ListGroupItem>
-                <Button.Ripple block onClick={sendToRemoteModalityHandler} color="primary">
+                <Button.Ripple
+                  block
+                  onClick={sendToRemoteModalityHandler}
+                  color="primary"
+                >
                   Send to remote modality
                 </Button.Ripple>
               </ListGroupItem>

@@ -48,7 +48,10 @@ const BackgroundProcessLoader = () => {
         >
           {/* <span className="visually-hidden">Loading</span> */}
         </div>
-        <span className="background-process-loader__text" style={{ whiteSpace: 'nowrap' }}>
+        <span
+          className="background-process-loader__text"
+          style={{ whiteSpace: 'nowrap' }}
+        >
           {message}
         </span>
       </div>

@@ -25,9 +25,10 @@ const CardContentTypes = () => {
           <Card className="mb-4">
             <CardBody>
               <CardText>
-                This is some text within a card body. Jelly lemon drops tiramisu chocolate cake
-                cotton candy soufflé oat cake sweet roll. Sugar plum marzipan dragée topping
-                cheesecake chocolate bar. Danish muffin icing donut.
+                This is some text within a card body. Jelly lemon drops tiramisu
+                chocolate cake cotton candy soufflé oat cake sweet roll. Sugar
+                plum marzipan dragée topping cheesecake chocolate bar. Danish
+                muffin icing donut.
               </CardText>
             </CardBody>
           </Card>
@@ -35,15 +36,17 @@ const CardContentTypes = () => {
           <Card className="mb-4">
             <CardBody>
               <CardTitle tag="h4">Card Title</CardTitle>
-              <CardSubtitle className="text-muted mb-1">Support card subtitle</CardSubtitle>
+              <CardSubtitle className="text-muted mb-1">
+                Support card subtitle
+              </CardSubtitle>
               <CardText>
-                Some quick example text to build on the card title and make up the bulk of the
-                card's content.
+                Some quick example text to build on the card title and make up
+                the bulk of the card's content.
               </CardText>
-              <CardLink href="/" onClick={e => e.preventDefault()}>
+              <CardLink href="/" onClick={(e) => e.preventDefault()}>
                 Card Link
               </CardLink>
-              <CardLink href="/" onClick={e => e.preventDefault()}>
+              <CardLink href="/" onClick={(e) => e.preventDefault()}>
                 Another Link
               </CardLink>
             </CardBody>
@@ -63,12 +66,13 @@ const CardContentTypes = () => {
             <img className="img-fluid" src={img1} alt="Card cap" />
             <CardBody>
               <CardText>
-                Some quick example text to build on the card title and make up the bulk of the
-                card's content.
+                Some quick example text to build on the card title and make up
+                the bulk of the card's content.
               </CardText>
               <CardText>
-                Cookie topping caramels jujubes gingerbread. Lollipop apple pie cupcake candy canes
-                cookie ice cream. Wafer chocolate bar carrot cake jelly-o.
+                Cookie topping caramels jujubes gingerbread. Lollipop apple pie
+                cupcake candy canes cookie ice cream. Wafer chocolate bar carrot
+                cake jelly-o.
               </CardText>
             </CardBody>
           </Card>
@@ -79,17 +83,19 @@ const CardContentTypes = () => {
             <CardImg top src={img2} alt="Card cap" />
             <CardBody>
               <CardTitle tag="h4">Card Title</CardTitle>
-              <CardText>Some quick example text to build on the card title.</CardText>
+              <CardText>
+                Some quick example text to build on the card title.
+              </CardText>
             </CardBody>
             <ListGroup flush>
               <ListGroupItem>Cras justo odio</ListGroupItem>
               <ListGroupItem>Vestibulum at eros</ListGroupItem>
             </ListGroup>
             <CardBody>
-              <CardLink href="/" onClick={e => e.preventDefault()}>
+              <CardLink href="/" onClick={(e) => e.preventDefault()}>
                 Card Link
               </CardLink>
-              <CardLink href="/" onClick={e => e.preventDefault()}>
+              <CardLink href="/" onClick={(e) => e.preventDefault()}>
                 Another Link
               </CardLink>
             </CardBody>

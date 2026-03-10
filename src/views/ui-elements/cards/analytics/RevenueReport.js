@@ -13,11 +13,13 @@ import {
 } from 'reactstrap'
 import Chart from 'react-apexcharts'
 
-const RevenueReport = props => {
+const RevenueReport = (props) => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    axios.get('/card/card-analytics/revenue-report').then(res => setData(res.data))
+    axios
+      .get('/card/card-analytics/revenue-report')
+      .then((res) => setData(res.data))
   }, [])
 
   const revenueOptions = {
@@ -36,7 +38,17 @@ const RevenueReport = props => {
         },
       },
       xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+        ],
         labels: {
           style: {
             colors: '#b9b9c3',
@@ -137,11 +149,17 @@ const RevenueReport = props => {
         </Col>
         <Col className="budget-wrapper" md="4" xs="12">
           <UncontrolledButtonDropdown>
-            <DropdownToggle className="budget-dropdown" outline color="primary" size="sm" caret>
+            <DropdownToggle
+              className="budget-dropdown"
+              outline
+              color="primary"
+              size="sm"
+              caret
+            >
               2020
             </DropdownToggle>
             <DropdownMenu>
-              {data.years.map(item => (
+              {data.years.map((item) => (
                 <DropdownItem className="w-100" key={item}>
                   {item}
                 </DropdownItem>

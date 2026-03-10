@@ -22,7 +22,11 @@ import { FileText, Upload, X } from 'react-feather'
 // ** Third Party Components
 import { useDropzone } from 'react-dropzone'
 
-function UploadStudyReport({ selectRowForUploadStudy, setOpenStudyUpload, setRefresh }) {
+function UploadStudyReport({
+  selectRowForUploadStudy,
+  setOpenStudyUpload,
+  setRefresh,
+}) {
   // ** State
   const [files, setFiles] = useState([])
   const [skin, setSkin] = useSkin()
@@ -32,12 +36,11 @@ function UploadStudyReport({ selectRowForUploadStudy, setOpenStudyUpload, setRef
     maxFiles: 1,
     maxSize: 5000000,
     acceptedFiles: '.pdf',
-    onDrop: acceptedFiles => {
+    onDrop: (acceptedFiles) => {
       if (acceptedFiles.length === 1) {
-        const acceptedFile = acceptedFiles
-          .filter(file => {
-            return file.type.startsWith('application/pdf')
-          })
+        const acceptedFile = acceptedFiles.filter((file) => {
+          return file.type.startsWith('application/pdf')
+        })
         if (!acceptedFile.length) {
           toast.error('You can only upload PDF format.', {
             duration: 2000,
@@ -58,19 +61,19 @@ function UploadStudyReport({ selectRowForUploadStudy, setOpenStudyUpload, setRef
     },
   })
 
-  const renderFilePreview = file => {
+  const renderFilePreview = (file) => {
     if (file?.type?.startsWith('application/pdf')) {
       return <FileText size={30} />
     }
   }
 
-  const handleRemoveFile = file => {
+  const handleRemoveFile = (file) => {
     const uploadedFiles = files
-    const filtered = uploadedFiles.filter(i => i.name !== file.name)
+    const filtered = uploadedFiles.filter((i) => i.name !== file.name)
     setFiles([...filtered])
   }
 
-  const fileList = files.map(file => (
+  const fileList = files.map((file) => (
     <ListItem key={file.name} className="pdfListing">
       <div className="file-details">
         <div className="file-preview">{renderFilePreview(file)}</div>
@@ -110,12 +113,12 @@ function UploadStudyReport({ selectRowForUploadStudy, setOpenStudyUpload, setRef
           },
         }
       )
-      .then(res => {
+      .then((res) => {
         MySwalSuccess(res?.data?.message || 'Report uploaded Successfully')
         setOpenStudyUpload(false)
         setRefresh(Math.random())
       })
-      .catch(err => {
+      .catch((err) => {
         toast.error(err?.response?.data?.message || 'Something went wrong', {
           duration: 2000,
         })
@@ -152,7 +155,9 @@ function UploadStudyReport({ selectRowForUploadStudy, setOpenStudyUpload, setRef
             <Typography variant="h4" sx={{ mb: 2.5 }}>
               Drop files here or click to upload.
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>Allowed *.pdf</Typography>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Allowed *.pdf
+            </Typography>
             <Typography sx={{ color: 'text.secondary' }}>
               Max 1 files and max size of 5 MB
             </Typography>
@@ -162,10 +167,18 @@ function UploadStudyReport({ selectRowForUploadStudy, setOpenStudyUpload, setRef
           <Fragment>
             <List>{fileList}</List>
             <div className="buttons">
-              <Button className="ml-1" color="outline-danger" onClick={handleRemoveAllFiles}>
+              <Button
+                className="ml-1"
+                color="outline-danger"
+                onClick={handleRemoveAllFiles}
+              >
                 Remove
               </Button>
-              <Button className="ml-1" color="primary" onClick={handleUploadFile}>
+              <Button
+                className="ml-1"
+                color="primary"
+                onClick={handleUploadFile}
+              >
                 Upload Files
               </Button>
             </div>

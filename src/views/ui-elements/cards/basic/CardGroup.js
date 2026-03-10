@@ -1,4 +1,12 @@
-import { CardGroup, Card, CardImg, CardBody, CardTitle, CardText, CardFooter } from 'reactstrap'
+import {
+  CardGroup,
+  Card,
+  CardImg,
+  CardBody,
+  CardTitle,
+  CardText,
+  CardFooter,
+} from 'reactstrap'
 import img1 from '@src/assets/images/slider/01.jpg'
 import img2 from '@src/assets/images/slider/05.jpg'
 import img3 from '@src/assets/images/slider/03.jpg'
@@ -11,8 +19,8 @@ const CardGroupComponent = () => {
         <CardBody>
           <CardTitle tag="h4">Card title</CardTitle>
           <CardText>
-            This is a wider card with supporting text below as a natural lead-in to additional
-            content. This content is a little bit longer.
+            This is a wider card with supporting text below as a natural lead-in
+            to additional content. This content is a little bit longer.
           </CardText>
         </CardBody>
         <CardFooter>
@@ -24,7 +32,8 @@ const CardGroupComponent = () => {
         <CardBody>
           <CardTitle tag="h4">Card title</CardTitle>
           <CardText>
-            This card has supporting text below as a natural lead-in to additional content.
+            This card has supporting text below as a natural lead-in to
+            additional content.
           </CardText>
         </CardBody>
         <CardFooter>
@@ -36,9 +45,9 @@ const CardGroupComponent = () => {
         <CardBody>
           <CardTitle tag="h4">Card title</CardTitle>
           <CardText>
-            This is a wider card with supporting text below as a natural lead-in to additional
-            content. This card has even longer content than the first to show that equal height
-            action.
+            This is a wider card with supporting text below as a natural lead-in
+            to additional content. This card has even longer content than the
+            first to show that equal height action.
           </CardText>
         </CardBody>
         <CardFooter>

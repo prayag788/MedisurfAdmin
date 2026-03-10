@@ -7,7 +7,7 @@ import classnames from 'classnames'
 import { ChevronUp } from 'react-feather'
 import { Collapse, Card, CardHeader, CardBody, CardTitle } from 'reactstrap'
 
-const AppCollapse = props => {
+const AppCollapse = (props) => {
   // ** Props
   const {
     data,
@@ -35,7 +35,7 @@ const AppCollapse = props => {
   const [openCollapse, setOpenCollapse] = useState(defaultActive())
 
   // ** Function to handle Collapse Toggle
-  const handleCollapseToggle = id => {
+  const handleCollapseToggle = (id) => {
     if (accordion) {
       if (id === openCollapse) {
         setOpenCollapse(null)
@@ -72,9 +72,16 @@ const AppCollapse = props => {
           key={index}
         >
           <CardHeader
-            className={classnames('align-items-center', 'p-0', 'justify-content-start', {
-              collapsed: accordion ? openCollapse !== index : !openCollapse.includes(index),
-            })}
+            className={classnames(
+              'align-items-center',
+              'p-0',
+              'justify-content-start',
+              {
+                collapsed: accordion
+                  ? openCollapse !== index
+                  : !openCollapse.includes(index),
+              }
+            )}
             {...(toggle === 'hover'
               ? {
                   onMouseEnter: () => handleCollapseToggle(index),
@@ -84,9 +91,15 @@ const AppCollapse = props => {
                 })}
           >
             <ChevronUp size={14} />
-            <CardTitle className="collapse-title font-weight-normal">{title}</CardTitle>
+            <CardTitle className="collapse-title font-weight-normal">
+              {title}
+            </CardTitle>
           </CardHeader>
-          <Collapse isOpen={accordion ? openCollapse === index : openCollapse.includes(index)}>
+          <Collapse
+            isOpen={
+              accordion ? openCollapse === index : openCollapse.includes(index)
+            }
+          >
             <CardBody className="p-0 ml-5">{content}</CardBody>
           </Collapse>
         </Card>

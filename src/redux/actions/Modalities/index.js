@@ -1,2 +1,2 @@
-export const handleModalityUpdate = value => dispatch =>
+export const handleModalityUpdate = (value) => (dispatch) =>
   dispatch({ type: 'UPDATE_MODALITIES', data: value })

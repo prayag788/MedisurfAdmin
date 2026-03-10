@@ -1,7 +1,9 @@
 import mock from '../mock'
 
 const previousDay = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
-const dayBeforePreviousDay = new Date(new Date().getTime() - 24 * 60 * 60 * 1000 * 2)
+const dayBeforePreviousDay = new Date(
+  new Date().getTime() - 24 * 60 * 60 * 1000 * 2
+)
 
 const data = {
   profileUser: {
@@ -25,7 +27,8 @@ const data = {
       about:
         'Cake pie jelly jelly beans. Marzipan lemon drops halvah cake. Pudding cookie lemon drops icing',
 
-      avatar: require('@src/assets/images/portrait/small/avatar-s-2.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-2.jpg')
+        .default,
       status: 'offline',
     },
     {
@@ -34,7 +37,8 @@ const data = {
       role: 'UI/UX Designer',
       about:
         'Toffee caramels jelly-o tart gummi bears cake I love ice cream lollipop. Sweet liquorice croissant candy danish dessert icing. Cake macaroon gingerbread toffee sweet.',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-1.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-1.jpg')
+        .default,
       status: 'busy',
     },
     {
@@ -43,7 +47,8 @@ const data = {
       role: 'Town planner',
       about:
         'Soufflé soufflé caramels sweet roll. Jelly lollipop sesame snaps bear claw jelly beans sugar plum sugar plum.',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-3.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-3.jpg')
+        .default,
       status: 'busy',
     },
     {
@@ -52,7 +57,8 @@ const data = {
       role: 'Data scientist',
       about:
         'Chupa chups candy canes chocolate bar marshmallow liquorice muffin. Lemon drops oat cake tart liquorice tart cookie. Jelly-o cookie tootsie roll halvah.',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-4.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-4.jpg')
+        .default,
       status: 'online',
     },
     {
@@ -61,7 +67,8 @@ const data = {
       role: 'Dietitian',
       about:
         'Cake pie jelly jelly beans. Marzipan lemon drops halvah cake. Pudding cookie lemon drops icing',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-5.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-5.jpg')
+        .default,
       status: 'busy',
     },
     {
@@ -70,7 +77,8 @@ const data = {
       role: 'Marketing executive',
       about:
         'Toffee caramels jelly-o tart gummi bears cake I love ice cream lollipop. Sweet liquorice croissant candy danish dessert icing. Cake macaroon gingerbread toffee sweet.',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-6.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-6.jpg')
+        .default,
       status: 'online',
     },
     {
@@ -79,7 +87,8 @@ const data = {
       role: 'Special educational needs teacher',
       about:
         'Biscuit powder oat cake donut brownie ice cream I love soufflé. I love tootsie roll I love powder tootsie roll.',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-7.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-7.jpg')
+        .default,
       status: 'online',
     },
     {
@@ -88,7 +97,8 @@ const data = {
       role: 'Advertising copywriter',
       about:
         'Bear claw ice cream lollipop gingerbread carrot cake. Brownie gummi bears chocolate muffin croissant jelly I love marzipan wafer.',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-8.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-8.jpg')
+        .default,
       status: 'away',
     },
     {
@@ -97,7 +107,8 @@ const data = {
       role: 'Designer, television/film set',
       about:
         'Gummies gummi bears I love candy icing apple pie I love marzipan bear claw. I love tart biscuit I love candy canes pudding chupa chups liquorice croissant.',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-9.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-9.jpg')
+        .default,
       status: 'offline',
     },
     {
@@ -106,7 +117,8 @@ const data = {
       role: 'Building surveyor',
       about:
         'Cake pie jelly jelly beans. Marzipan lemon drops halvah cake. Pudding cookie lemon drops icing',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-10.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-10.jpg')
+        .default,
       status: 'away',
     },
   ],
@@ -127,7 +139,8 @@ const data = {
           senderId: 2,
         },
         {
-          message: 'Can I get details of my last transaction I made last month?',
+          message:
+            'Can I get details of my last transaction I made last month?',
           time: 'Mon Dec 11 2018 07:46:10 GMT+0000 (GMT)',
           senderId: 11,
         },
@@ -175,7 +188,8 @@ const data = {
           senderId: 11,
         },
         {
-          message: 'Modern admin is the responsive bootstrap 4 admin template.!',
+          message:
+            'Modern admin is the responsive bootstrap 4 admin template.!',
           time: 'Mon Dec 10 2018 07:46:05 GMT+0000 (GMT)',
           senderId: 11,
         },
@@ -212,8 +226,8 @@ const data = {
 // GET: Return Chats Contacts and Contacts
 
 mock.onGet('/apps/chat/chats-and-contacts').reply(() => {
-  const chatsContacts = data.chats.map(chat => {
-    const contact = data.contacts.find(c => c.id === chat.userId)
+  const chatsContacts = data.chats.map((chat) => {
+    const contact = data.contacts.find((c) => c.id === chat.userId)
     contact.chat = {
       id: chat.id,
       unseenMsgs: chat.unseenMsgs,
@@ -227,7 +241,10 @@ mock.onGet('/apps/chat/chats-and-contacts').reply(() => {
     fullName: data.profileUser.fullName,
     status: data.profileUser.status,
   }
-  return [200, { chatsContacts, contacts: data.contacts, profileUser: profileUserData }]
+  return [
+    200,
+    { chatsContacts, contacts: data.contacts, profileUser: profileUserData },
+  ]
 })
 
 // GET: Return User Profile
@@ -236,7 +253,7 @@ mock.onGet('/apps/chat/users/profile-user').reply(() => [200, data.profileUser])
 
 // GET: Return Single Chat
 
-mock.onGet('/apps/chat/get-chat').reply(config => {
+mock.onGet('/apps/chat/get-chat').reply((config) => {
   // Get event id from URL
 
   let userId = config.id
@@ -244,20 +261,20 @@ mock.onGet('/apps/chat/get-chat').reply(config => {
   //  Convert Id to number
   userId = Number(userId)
 
-  const chat = data.chats.find(c => c.id === userId)
+  const chat = data.chats.find((c) => c.id === userId)
   if (chat) chat.unseenMsgs = 0
-  const contact = data.contacts.find(c => c.id === userId)
+  const contact = data.contacts.find((c) => c.id === userId)
   if (contact.chat) contact.chat.unseenMsgs = 0
   return [200, { chat, contact }]
 })
 
 // POST: Add new chat message
 
-mock.onPost('/apps/chat/send-msg').reply(config => {
+mock.onPost('/apps/chat/send-msg').reply((config) => {
   // Get event from post data
   const { obj } = JSON.parse(config.data)
 
-  let activeChat = data.chats.find(chat => chat.userId === obj.contact.id)
+  let activeChat = data.chats.find((chat) => chat.userId === obj.contact.id)
 
   const newMessageData = {
     message: obj.message,

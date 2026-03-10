@@ -4,7 +4,7 @@ import parse from 'html-react-parser'
 import { Row, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import { X } from 'react-feather'
 
-const TemplatePreview = props => {
+const TemplatePreview = (props) => {
   const { previewText, previewOpen, setPreviewOpen } = props
 
   const renderPreviewContent = () => {
@@ -29,7 +29,13 @@ const TemplatePreview = props => {
       >
         <ModalHeader
           className="mb-2"
-          close={<X className="cursor-pointer" size={15} onClick={() => setPreviewOpen(false)} />}
+          close={
+            <X
+              className="cursor-pointer"
+              size={15}
+              onClick={() => setPreviewOpen(false)}
+            />
+          }
           tag="div"
         >
           <h5 className="modal-title">Preview Template</h5>

@@ -64,7 +64,8 @@ const data = {
     },
     {
       id: 5,
-      title: 'Test functionality of apps developed by dev team for enhancements. ',
+      title:
+        'Test functionality of apps developed by dev team for enhancements. ',
       dueDate: '2020-12-06',
       description:
         'Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.',
@@ -94,7 +95,8 @@ const data = {
     },
     {
       id: 7,
-      title: 'Plan new dashboard design with design team for Google app store. ',
+      title:
+        'Plan new dashboard design with design team for Google app store. ',
       dueDate: '2020-12-05',
       description:
         'Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.',
@@ -229,7 +231,8 @@ const data = {
     },
     {
       id: 16,
-      title: 'Hire 5 new Fresher or Experienced, frontend and backend developers ',
+      title:
+        'Hire 5 new Fresher or Experienced, frontend and backend developers ',
       dueDate: '2020-12-12',
       description:
         'Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.',
@@ -265,7 +268,8 @@ const data = {
         'Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.',
       assignee: {
         fullName: 'Danielle Anderson',
-        avatar: require('@src/assets/images/portrait/small/avatar-s-9.jpg').default,
+        avatar: require('@src/assets/images/portrait/small/avatar-s-9.jpg')
+          .default,
       },
       tags: ['low'],
       isCompleted: false,
@@ -277,7 +281,7 @@ const data = {
 
 // GET: Return Tasks
 
-mock.onGet('/apps/todo/tasks').reply(config => {
+mock.onGet('/apps/todo/tasks').reply((config) => {
   const { q = '', filter, tag, sortBy: sortByParam = 'latest' } = config.params
 
   // Get Sort by and Sort Direction
@@ -305,14 +309,14 @@ mock.onGet('/apps/todo/tasks').reply(config => {
 
   const queryLowered = q.toLowerCase()
 
-  const hasFilter = task => {
+  const hasFilter = (task) => {
     if (filter === 'important') return task.isImportant && !task.isDeleted
     if (filter === 'completed') return task.isCompleted && !task.isDeleted
     if (filter === 'deleted') return task.isDeleted
     return !task.isDeleted
   }
 
-  const filteredData = data.tasks.filter(task => {
+  const filteredData = data.tasks.filter((task) => {
     return (
       task.title.toLowerCase().includes(queryLowered) &&
       hasFilter(task) &&
@@ -322,7 +326,7 @@ mock.onGet('/apps/todo/tasks').reply(config => {
 
   // Perform sorting
 
-  const sortTasks = key => (a, b) => {
+  const sortTasks = (key) => (a, b) => {
     let fieldA
     let fieldB
 
@@ -364,7 +368,7 @@ mock.onGet('/apps/todo/tasks').reply(config => {
 
 // POST: Add new task
 
-mock.onPost('/apps/todo/add-tasks').reply(config => {
+mock.onPost('/apps/todo/add-tasks').reply((config) => {
   // Get event from post data
   const { task } = JSON.parse(config.data)
 
@@ -382,13 +386,13 @@ mock.onPost('/apps/todo/add-tasks').reply(config => {
 
 // POST: Update Task
 
-mock.onPost('/apps/todo/update-task').reply(config => {
+mock.onPost('/apps/todo/update-task').reply((config) => {
   const taskData = JSON.parse(config.data).task
 
   // Convert Id to number
   taskData.id = Number(taskData.id)
 
-  const task = data.tasks.find(e => e.id === Number(taskData.id))
+  const task = data.tasks.find((e) => e.id === Number(taskData.id))
   Object.assign(task, taskData)
 
   return [200, { task }]
@@ -396,14 +400,14 @@ mock.onPost('/apps/todo/update-task').reply(config => {
 
 // DELETE: Remove Task
 
-mock.onDelete('/apps/todo/delete-task').reply(config => {
+mock.onDelete('/apps/todo/delete-task').reply((config) => {
   // Get task id from URL
   let taskId = config.taskId
 
   // Convert Id to number
   taskId = Number(taskId)
 
-  const task = data.tasks.find(t => t.id === taskId)
+  const task = data.tasks.find((t) => t.id === taskId)
   Object.assign(task, { isDeleted: true })
   return [200]
 })

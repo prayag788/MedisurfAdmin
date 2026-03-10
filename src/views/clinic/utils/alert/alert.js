@@ -7,11 +7,13 @@ import {
 } from '../../../../utils/alerts'
 
 export const handleConfirm = (id, callback, msg, btnMsg) => {
-  return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-    if (result && result.isConfirmed) {
-      callback(id)
+  return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+    (result) => {
+      if (result && result.isConfirmed) {
+        callback(id)
+      }
     }
-  })
+  )
 }
 
 export function deleteUser(id) {
@@ -22,7 +24,7 @@ export function deleteUser(id) {
         showSuccessAlert('Clinic Deleted Successfully!', '<p>Deleted!</p>')
         resolve(true)
       })
-      .catch(err => {
+      .catch((err) => {
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
         }

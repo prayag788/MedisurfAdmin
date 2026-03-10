@@ -24,7 +24,14 @@ import {
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 
-const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEditPicker }) => {
+const EditModal = ({
+  updateUser,
+  open,
+  handleModal,
+  editData,
+  editPicker,
+  setEditPicker,
+}) => {
   // ** Constants
   const userData = JSON.parse(isUserLoggedIn())
   const flatPickerDateFormat = useMemo(
@@ -72,7 +79,7 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
   })
 
   // ** Optimized date formatting function
-  const formatDate = useCallback(date => {
+  const formatDate = useCallback((date) => {
     if (!date) return ''
     const d = new Date(date)
     const year = d.getFullYear()
@@ -104,7 +111,7 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
 
   // ** Form submission handler
   const onSubmit = useCallback(
-    data => {
+    (data) => {
       const formData = {
         ...data,
         expiryDate: formatDate(editPicker),
@@ -122,15 +129,17 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
 
   // ** Status change handlers
   const handleStatusChange = useCallback(
-    selectedOption => {
+    (selectedOption) => {
       setValue('status', selectedOption.value, { shouldValidate: true })
     },
     [setValue]
   )
 
   const handleActivationStatusChange = useCallback(
-    selectedOption => {
-      setValue('activationStatus', selectedOption.value, { shouldValidate: true })
+    (selectedOption) => {
+      setValue('activationStatus', selectedOption.value, {
+        shouldValidate: true,
+      })
     },
     [setValue]
   )
@@ -153,7 +162,12 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit License Details</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
@@ -166,10 +180,17 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
               name="licenseId"
               control={control}
               render={({ field }) => (
-                <Input {...field} id="licenseId" placeholder="License ID" disabled />
+                <Input
+                  {...field}
+                  id="licenseId"
+                  placeholder="License ID"
+                  disabled
+                />
               )}
             />
-            {errors.licenseId && <FormFeedback>{errors.licenseId.message}</FormFeedback>}
+            {errors.licenseId && (
+              <FormFeedback>{errors.licenseId.message}</FormFeedback>
+            )}
           </FormGroup>
           <FormGroup>
             <Label for="email">
@@ -188,7 +209,9 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
                 />
               )}
             />
-            {errors.email && <FormFeedback>{errors.email.message}</FormFeedback>}
+            {errors.email && (
+              <FormFeedback>{errors.email.message}</FormFeedback>
+            )}
           </FormGroup>
           <FormGroup>
             <Label for="contact">
@@ -197,9 +220,13 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
             <Controller
               name="contact"
               control={control}
-              render={({ field }) => <Input {...field} id="contact" placeholder="+1" disabled />}
+              render={({ field }) => (
+                <Input {...field} id="contact" placeholder="+1" disabled />
+              )}
             />
-            {errors.contact && <FormFeedback>{errors.contact.message}</FormFeedback>}
+            {errors.contact && (
+              <FormFeedback>{errors.contact.message}</FormFeedback>
+            )}
           </FormGroup>
           <FormGroup>
             <Label for="Activationkey">Activation Key </Label>
@@ -207,12 +234,21 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
               name="activationKey"
               control={control}
               render={({ field }) => (
-                <Input {...field} id="ActivationKey" placeholder="Activation Key" disabled />
+                <Input
+                  {...field}
+                  id="ActivationKey"
+                  placeholder="Activation Key"
+                  disabled
+                />
               )}
             />
-            {errors.activationKey && <FormFeedback>{errors.activationKey.message}</FormFeedback>}
+            {errors.activationKey && (
+              <FormFeedback>{errors.activationKey.message}</FormFeedback>
+            )}
             <Button
-              onClick={() => navigator.clipboard.writeText(editData.activationKey)}
+              onClick={() =>
+                navigator.clipboard.writeText(editData.activationKey)
+              }
               className="mt-1"
               color="success"
             >
@@ -226,7 +262,7 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
                 className="form-control"
                 value={editPicker}
                 options={{ dateFormat: flatPickerDateFormat }}
-                onChange={date => setEditPicker(date)}
+                onChange={(date) => setEditPicker(date)}
                 id="default-picker"
               />
             )}
@@ -249,7 +285,9 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
               />
               <span className="ml-2">Is Permanent?</span>
             </Label>
-            {errors.expiryDate && <FormFeedback>{errors.expiryDate.message}</FormFeedback>}
+            {errors.expiryDate && (
+              <FormFeedback>{errors.expiryDate.message}</FormFeedback>
+            )}
           </FormGroup>
           <FormGroup>
             <Label for="activationStatus">Activation Status </Label>
@@ -263,7 +301,7 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
                   theme={selectThemeColors}
                   value={
                     ACTIVATION_STATUS_OPTIONS.find(
-                      option => option.value === activationStatusValue
+                      (option) => option.value === activationStatusValue
                     ) || ACTIVATION_STATUS_OPTIONS[0]
                   }
                   name="activationStatus"
@@ -290,7 +328,9 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
                   isClearable={false}
                   theme={selectThemeColors}
                   value={
-                    STATUS_OPTIONS.find(option => option.value === statusValue) || STATUS_OPTIONS[0]
+                    STATUS_OPTIONS.find(
+                      (option) => option.value === statusValue
+                    ) || STATUS_OPTIONS[0]
                   }
                   name="status"
                   id="status"
@@ -301,13 +341,20 @@ const EditModal = ({ updateUser, open, handleModal, editData, editPicker, setEdi
                 />
               )}
             />
-            {errors.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+            {errors.status && (
+              <FormFeedback>{errors.status.message}</FormFeedback>
+            )}
           </FormGroup>
           <div className="d-flex justify-content-end gap-2 mt-3">
             <Button type="submit" className="me-1" color="primary">
               Update License
             </Button>
-            <Button type="button" color="secondary" onClick={handleModal} outline>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={handleModal}
+              outline
+            >
               Cancel
             </Button>
           </div>

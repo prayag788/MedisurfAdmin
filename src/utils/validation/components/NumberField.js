@@ -40,7 +40,7 @@ const NumberField = ({
   }
 
   // Remove undefined validation rules
-  Object.keys(validation).forEach(key => {
+  Object.keys(validation).forEach((key) => {
     if (validation[key] === undefined) {
       delete validation[key]
     }

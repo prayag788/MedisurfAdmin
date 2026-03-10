@@ -32,7 +32,7 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   // ** State
   const [isValidSelect, setIsValidSelect] = useState(true)
   const isInitialInput = useRef(true)
-  const dropdowndata = useSelector(state => state.dropdownDataReducer)
+  const dropdowndata = useSelector((state) => state.dropdownDataReducer)
 
   // ** Form setup using utility
   const defaultValues = {
@@ -49,7 +49,7 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   }, [open])
 
   // ** Form submission handler - parent addUser shows loading, success and closes modal; we only await and show error on failure
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       await addUser(data)
     } catch (err) {
@@ -65,7 +65,9 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   }
 
   // ** Custom close btn
-  const CloseBtn = <X className="cursor-pointer" size={15} onClick={handleModal} />
+  const CloseBtn = (
+    <X className="cursor-pointer" size={15} onClick={handleModal} />
+  )
 
   return (
     <Modal
@@ -81,7 +83,9 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
         close={CloseBtn}
         tag="div"
       >
-        <h4 className="modal-title fw-bold text-primary mb-0">Add New Clinic User</h4>
+        <h4 className="modal-title fw-bold text-primary mb-0">
+          Add New Clinic User
+        </h4>
       </ModalHeader>
       <ModalBody className="flex-grow-1 px-4 py-3">
         <FormValidationWrapper
@@ -89,10 +93,19 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
           defaultValues={defaultValues}
           onSubmit={onSubmit}
         >
-          {({ control, errors, handleSubmit, setValue, getValues, isSubmitting }) => (
+          {({
+            control,
+            errors,
+            handleSubmit,
+            setValue,
+            getValues,
+            isSubmitting,
+          }) => (
             <>
               <div className="mb-4">
-                <h6 className="text-muted mb-3 fw-semibold">Personal Information</h6>
+                <h6 className="text-muted mb-3 fw-semibold">
+                  Personal Information
+                </h6>
                 <Row className="g-3">
                   <Col md="6">
                     <NameField
@@ -118,7 +131,9 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
               </div>
 
               <div className="mb-4">
-                <h6 className="text-muted mb-3 fw-semibold">Contact Information</h6>
+                <h6 className="text-muted mb-3 fw-semibold">
+                  Contact Information
+                </h6>
                 <Row className="g-3">
                   <Col md="6">
                     <EmailField
@@ -143,7 +158,9 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
               </div>
 
               <div className="mb-4">
-                <h6 className="text-muted mb-3 fw-semibold">Account Settings</h6>
+                <h6 className="text-muted mb-3 fw-semibold">
+                  Account Settings
+                </h6>
                 <Row className="g-3">
                   <Col md="6">
                     <SelectField
@@ -186,7 +203,12 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" color="primary" disabled={isSubmitting} className="px-4">
+                <Button
+                  type="submit"
+                  color="primary"
+                  disabled={isSubmitting}
+                  className="px-4"
+                >
                   {isSubmitting ? (
                     <>
                       <span

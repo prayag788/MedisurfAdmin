@@ -1404,16 +1404,16 @@ const data = [
   },
 ]
 
-mock.onGet('/api/datatables/initial-data').reply(config => {
+mock.onGet('/api/datatables/initial-data').reply((config) => {
   return [200, data]
 })
 
-mock.onGet('/api/datatables/data').reply(config => {
+mock.onGet('/api/datatables/data').reply((config) => {
   const { q = '', perPage = 10, page = 1 } = config
 
   const queryLowered = q.toLowerCase()
   const filteredData = data.filter(
-    item =>
+    (item) =>
       item.full_name.toLowerCase().includes(queryLowered) ||
       item.post.toLowerCase().includes(queryLowered) ||
       item.email.toLowerCase().includes(queryLowered) ||

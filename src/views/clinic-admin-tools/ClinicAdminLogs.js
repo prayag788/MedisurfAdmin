@@ -57,7 +57,7 @@ const ClinicAdminLogs = () => {
   const [currentCursorIndex, setCurrentCursorIndex] = useState(0)
   const [error, setError] = useState(null)
 
-  const resolveEndpointUrl = useCallback(url => {
+  const resolveEndpointUrl = useCallback((url) => {
     if (!url) {
       return url
     }
@@ -95,24 +95,28 @@ const ClinicAdminLogs = () => {
     () =>
       userRole &&
       [ROLES.ClinicAdmin, ROLES.Admin, ROLES.SuperAdmin].includes(userRole),
-    [userRole],
+    [userRole]
   )
 
   const buildQueryParams = useCallback(
     (overrides = {}) => {
       const params = {}
       Object.entries({ ...filters, ...overrides }).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && String(value).trim() !== '') {
+        if (
+          value !== undefined &&
+          value !== null &&
+          String(value).trim() !== ''
+        ) {
           params[key] = value
         }
       })
       return params
     },
-    [filters],
+    [filters]
   )
 
   const fetchLogs = useCallback(
-    async overrides => {
+    async (overrides) => {
       if (!canView) return null
       setLoading(true)
       setError(null)
@@ -143,7 +147,7 @@ const ClinicAdminLogs = () => {
         setLoading(false)
       }
     },
-    [buildQueryParams, canView, resolveEndpointUrl],
+    [buildQueryParams, canView, resolveEndpointUrl]
   )
 
   const refreshCurrentPage = useCallback(async () => {
@@ -153,7 +157,7 @@ const ClinicAdminLogs = () => {
   }, [cursorHistory, currentCursorIndex, fetchLogs])
 
   const handleNextPage = useCallback(
-    async event => {
+    async (event) => {
       if (event) {
         event.preventDefault()
       }
@@ -174,18 +178,18 @@ const ClinicAdminLogs = () => {
       }
 
       if (!existingCursor) {
-        setCursorHistory(prev => {
+        setCursorHistory((prev) => {
           const base = prev.slice(0, currentCursorIndex + 1)
           return [...base, targetCursor]
         })
       }
       setCurrentCursorIndex(currentCursorIndex + 1)
     },
-    [cursorHistory, currentCursorIndex, fetchLogs, loading, nextCursor],
+    [cursorHistory, currentCursorIndex, fetchLogs, loading, nextCursor]
   )
 
   const handlePreviousPage = useCallback(
-    async event => {
+    async (event) => {
       if (event) {
         event.preventDefault()
       }
@@ -194,14 +198,16 @@ const ClinicAdminLogs = () => {
       }
 
       const targetCursor = cursorHistory[currentCursorIndex - 1] || null
-      const payload = await fetchLogs(targetCursor ? { after: targetCursor } : {})
+      const payload = await fetchLogs(
+        targetCursor ? { after: targetCursor } : {}
+      )
       if (!payload) {
         return
       }
 
       setCurrentCursorIndex(currentCursorIndex - 1)
     },
-    [cursorHistory, currentCursorIndex, fetchLogs, loading],
+    [cursorHistory, currentCursorIndex, fetchLogs, loading]
   )
 
   const pageSize = useMemo(() => {
@@ -213,8 +219,7 @@ const ClinicAdminLogs = () => {
   }, [filters.size])
 
   const currentPage = currentCursorIndex + 1
-  const totalPages =
-    total > 0 ? Math.max(1, Math.ceil(total / pageSize)) : 1
+  const totalPages = total > 0 ? Math.max(1, Math.ceil(total / pageSize)) : 1
   const hasPreviousPage = currentCursorIndex > 0
   const hasHistoryForward = currentCursorIndex < cursorHistory.length - 1
   const hasNextPage = hasHistoryForward || Boolean(nextCursor)
@@ -237,9 +242,9 @@ const ClinicAdminLogs = () => {
     fetchLogs()
   }, [canView, fetchLogs])
 
-  const handleFilterChange = event => {
+  const handleFilterChange = (event) => {
     const { name, value } = event.target
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
       [name]: value,
     }))
@@ -254,14 +259,17 @@ const ClinicAdminLogs = () => {
   }
 
   useEffect(() => {
-    const handler = event => {
+    const handler = (event) => {
       if (!event || !event.operation) {
         return
       }
       if (!canView) {
         return
       }
-      if (event.operation === 'sync-orthanc-to-db' || event.operation === 'sync-db-to-orthanc') {
+      if (
+        event.operation === 'sync-orthanc-to-db' ||
+        event.operation === 'sync-db-to-orthanc'
+      ) {
         refreshCurrentPage()
       }
     }
@@ -272,7 +280,7 @@ const ClinicAdminLogs = () => {
     }
   }, [canView, refreshCurrentPage])
 
-  const renderLogLevel = level => {
+  const renderLogLevel = (level) => {
     if (!level) {
       return <Badge color="light-secondary">UNKNOWN</Badge>
     }
@@ -281,7 +289,7 @@ const ClinicAdminLogs = () => {
     return <Badge color={badgeColor}>{normalized}</Badge>
   }
 
-  const formatTimestamp = value => {
+  const formatTimestamp = (value) => {
     if (!value) return '-'
     try {
       return new Date(value).toLocaleString()
@@ -292,7 +300,10 @@ const ClinicAdminLogs = () => {
 
   if (userRole === null) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: '300px' }}
+      >
         <Spinner color="primary" />
       </div>
     )
@@ -307,9 +318,13 @@ const ClinicAdminLogs = () => {
               <XCircle size={32} className="text-danger mb-1" />
               <h4>Access Denied</h4>
               <p className="text-muted mb-2">
-                This section is restricted to Clinic Admins. Please contact an administrator if you believe this is an error.
+                This section is restricted to Clinic Admins. Please contact an
+                administrator if you believe this is an error.
               </p>
-              <Button color="primary" onClick={() => (window.location.href = '/')}>
+              <Button
+                color="primary"
+                onClick={() => (window.location.href = '/')}
+              >
                 Return Home
               </Button>
             </CardBody>
@@ -328,15 +343,31 @@ const ClinicAdminLogs = () => {
               <div>
                 <h3 className="mb-0">System Logs</h3>
                 <p className="text-muted mb-0">
-                  View and filter application logs ingested into OpenSearch. Use filters to locate errors or specific services.
+                  View and filter application logs ingested into OpenSearch. Use
+                  filters to locate errors or specific services.
                 </p>
               </div>
               <div className="d-flex align-items-center gap-1">
-                <Button color="primary" size="sm" outline onClick={() => refreshCurrentPage()} disabled={loading}>
-                  <RefreshCw size={14} className={loading ? 'me-50 spin' : 'me-50'} />
+                <Button
+                  color="primary"
+                  size="sm"
+                  outline
+                  onClick={() => refreshCurrentPage()}
+                  disabled={loading}
+                >
+                  <RefreshCw
+                    size={14}
+                    className={loading ? 'me-50 spin' : 'me-50'}
+                  />
                   {loading ? 'Refreshing…' : 'Refresh'}
                 </Button>
-                <Button color="secondary" size="sm" outline onClick={resetFilters} disabled={loading}>
+                <Button
+                  color="secondary"
+                  size="sm"
+                  outline
+                  onClick={resetFilters}
+                  disabled={loading}
+                >
                   Reset
                 </Button>
               </div>
@@ -356,7 +387,7 @@ const ClinicAdminLogs = () => {
             </CardHeader>
             <CardBody>
               <Form
-                onSubmit={event => {
+                onSubmit={(event) => {
                   event.preventDefault()
                   refreshCurrentPage()
                 }}
@@ -365,7 +396,13 @@ const ClinicAdminLogs = () => {
                   <Col md="2" sm="6">
                     <FormGroup>
                       <Label for="level">Level</Label>
-                      <Input id="level" name="level" type="select" value={filters.level} onChange={handleFilterChange}>
+                      <Input
+                        id="level"
+                        name="level"
+                        type="select"
+                        value={filters.level}
+                        onChange={handleFilterChange}
+                      >
                         <option value="">Any</option>
                         <option value="debug">Debug</option>
                         <option value="info">Info</option>
@@ -378,25 +415,49 @@ const ClinicAdminLogs = () => {
                   <Col md="2" sm="6">
                     <FormGroup>
                       <Label for="service">Service</Label>
-                      <Input id="service" name="service" value={filters.service} onChange={handleFilterChange} placeholder="medisurf-api" />
+                      <Input
+                        id="service"
+                        name="service"
+                        value={filters.service}
+                        onChange={handleFilterChange}
+                        placeholder="medisurf-api"
+                      />
                     </FormGroup>
                   </Col>
                   <Col md="2" sm="6">
                     <FormGroup>
                       <Label for="hostname">Hostname</Label>
-                      <Input id="hostname" name="hostname" value={filters.hostname} onChange={handleFilterChange} placeholder={window.location.hostname} />
+                      <Input
+                        id="hostname"
+                        name="hostname"
+                        value={filters.hostname}
+                        onChange={handleFilterChange}
+                        placeholder={window.location.hostname}
+                      />
                     </FormGroup>
                   </Col>
                   <Col md="2" sm="6">
                     <FormGroup>
                       <Label for="environment">Environment</Label>
-                      <Input id="environment" name="environment" value={filters.environment} onChange={handleFilterChange} placeholder="development" />
+                      <Input
+                        id="environment"
+                        name="environment"
+                        value={filters.environment}
+                        onChange={handleFilterChange}
+                        placeholder="development"
+                      />
                     </FormGroup>
                   </Col>
                   <Col md="2" sm="6">
                     <FormGroup>
                       <Label for="size">Page Size</Label>
-                      <Input id="size" name="size" type="select" value={filters.size} onChange={handleFilterChange}>
+                      <Input
+                        id="size"
+                        name="size"
+                        type="select"
+                        value={filters.size}
+                        onChange={handleFilterChange}
+                      >
                         <option value="25">25</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
@@ -407,7 +468,13 @@ const ClinicAdminLogs = () => {
                   <Col md="4" sm="12">
                     <FormGroup>
                       <Label for="query">Message Contains</Label>
-                      <Input id="query" name="query" value={filters.query} onChange={handleFilterChange} placeholder="Search text…" />
+                      <Input
+                        id="query"
+                        name="query"
+                        value={filters.query}
+                        onChange={handleFilterChange}
+                        placeholder="Search text…"
+                      />
                     </FormGroup>
                   </Col>
                 </Row>
@@ -415,13 +482,25 @@ const ClinicAdminLogs = () => {
                   <Col md="3" sm="6">
                     <FormGroup>
                       <Label for="from">From</Label>
-                      <Input id="from" name="from" type="datetime-local" value={filters.from} onChange={handleFilterChange} />
+                      <Input
+                        id="from"
+                        name="from"
+                        type="datetime-local"
+                        value={filters.from}
+                        onChange={handleFilterChange}
+                      />
                     </FormGroup>
                   </Col>
                   <Col md="3" sm="6">
                     <FormGroup>
                       <Label for="to">To</Label>
-                      <Input id="to" name="to" type="datetime-local" value={filters.to} onChange={handleFilterChange} />
+                      <Input
+                        id="to"
+                        name="to"
+                        type="datetime-local"
+                        value={filters.to}
+                        onChange={handleFilterChange}
+                      />
                     </FormGroup>
                   </Col>
                   <Col md="3" sm="6" className="d-flex align-items-end">
@@ -473,14 +552,21 @@ const ClinicAdminLogs = () => {
                         </td>
                       </tr>
                     ) : null}
-                    {logs.map(log => (
+                    {logs.map((log) => (
                       <tr key={`${log.id}-${log.timestamp}`}>
                         <td>{renderLogLevel(log.level)}</td>
                         <td>{formatTimestamp(log.timestamp)}</td>
-                        <td style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                        <td
+                          style={{
+                            whiteSpace: 'normal',
+                            wordBreak: 'break-word',
+                          }}
+                        >
                           <strong>{log.message || '-'}</strong>
                           {log.meta ? (
-                            <pre className="mt-50 mb-0 small bg-light rounded p-1">{JSON.stringify(log.meta, null, 2)}</pre>
+                            <pre className="mt-50 mb-0 small bg-light rounded p-1">
+                              {JSON.stringify(log.meta, null, 2)}
+                            </pre>
                           ) : null}
                         </td>
                         <td>{log.service || '-'}</td>
@@ -508,7 +594,11 @@ const ClinicAdminLogs = () => {
                     />
                   </PaginationItem>
                   <PaginationItem active>
-                    <PaginationLink tag="button" type="button" onClick={event => event.preventDefault()}>
+                    <PaginationLink
+                      tag="button"
+                      type="button"
+                      onClick={(event) => event.preventDefault()}
+                    >
                       {currentPage}
                     </PaginationLink>
                   </PaginationItem>
@@ -531,4 +621,3 @@ const ClinicAdminLogs = () => {
 }
 
 export default ClinicAdminLogs
-

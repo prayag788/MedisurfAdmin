@@ -1,5 +1,14 @@
 import { Fragment } from 'react'
-import { Card, CardImg, CardTitle, CardBody, CardImgOverlay, CardText, Row, Col } from 'reactstrap'
+import {
+  Card,
+  CardImg,
+  CardTitle,
+  CardBody,
+  CardImgOverlay,
+  CardText,
+  Row,
+  Col,
+} from 'reactstrap'
 import img1 from '@src/assets/images/slider/06.jpg'
 import img2 from '@src/assets/images/slider/09.jpg'
 import img3 from '@src/assets/images/slider/10.jpg'
@@ -15,8 +24,9 @@ const CardImages = () => {
             <CardBody>
               <CardTitle tag="h4">Card title</CardTitle>
               <CardText>
-                This is a wider card with supporting text below as a natural lead-in to additional
-                content. This content is a little bit longer.
+                This is a wider card with supporting text below as a natural
+                lead-in to additional content. This content is a little bit
+                longer.
               </CardText>
               <CardText>
                 <small className="text-muted">Last updated 3 mins ago</small>
@@ -29,8 +39,9 @@ const CardImages = () => {
             <CardBody>
               <CardTitle tag="h4">Card title</CardTitle>
               <CardText>
-                This is a wider card with supporting text below as a natural lead-in to additional
-                content. This content is a little bit longer.
+                This is a wider card with supporting text below as a natural
+                lead-in to additional content. This content is a little bit
+                longer.
               </CardText>
               <CardText>
                 <small className="text-muted">Last updated 3 mins ago</small>
@@ -47,8 +58,9 @@ const CardImages = () => {
                 Card title
               </CardTitle>
               <CardText>
-                This is a wider card with supporting text below as a natural lead-in to additional
-                content. This content is a little bit longer.
+                This is a wider card with supporting text below as a natural
+                lead-in to additional content. This content is a little bit
+                longer.
               </CardText>
               <CardText>
                 <small className="text-muted">Last updated 3 mins ago</small>

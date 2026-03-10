@@ -6,16 +6,17 @@ import useJwt from '@src/auth/jwt/useJwt'
 const config = useJwt.jwtConfig
 
 // ** Checks if an object is empty (returns boolean)
-export const isObjEmpty = obj => Object.keys(obj).length === 0
+export const isObjEmpty = (obj) => Object.keys(obj).length === 0
 
 // ** Returns K format from a number
-export const kFormatter = num => (num > 999 ? `${(num / 1000).toFixed(1)}k` : num)
+export const kFormatter = (num) =>
+  num > 999 ? `${(num / 1000).toFixed(1)}k` : num
 
 // ** Converts HTML to string
-export const htmlToString = html => html.replace(/<\/?[^>]+(>|$)/g, '')
+export const htmlToString = (html) => html.replace(/<\/?[^>]+(>|$)/g, '')
 
 // ** Checks if the passed date is today
-const isToday = date => {
+const isToday = (date) => {
   const today = new Date()
   return (
     date.getDate() === today.getDate() &&
@@ -76,7 +77,7 @@ export const getUserData = () => {
  * ? NOTE: If you have different pages to navigate based on user ability then this function can be useful. However, you need to update it.
  * @param {String} userRole Role of user
  */
-export const getHomeRouteForLoggedInUser = user => {
+export const getHomeRouteForLoggedInUser = (user) => {
   const userRole = user?.role
 
   if (userRole === 'SuperAdmin') return '/'
@@ -97,7 +98,7 @@ export const getHomeRouteForLoggedInUser = user => {
 }
 
 // ** React Select Theme Colors
-export const selectThemeColors = theme => ({
+export const selectThemeColors = (theme) => ({
   ...theme,
   colors: {
     ...theme.colors,
@@ -110,12 +111,12 @@ export const selectThemeColors = theme => ({
 })
 
 // Is Object
-export const isObject = obj => {
+export const isObject = (obj) => {
   return Object.prototype.toString.call(obj) === '[object Object]'
 }
 
 // Fatten Object
-export const flattenObj = ob => {
+export const flattenObj = (ob) => {
   const result = {}
 
   for (const i in ob) {
@@ -146,7 +147,7 @@ export const isDateTransform = (value, key) => {
 export const extractFields = (data, fields) => {
   const extractedData = {}
   data = flattenObj({ ...data })
-  fields.forEach(value => {
+  fields.forEach((value) => {
     if (data[value] !== undefined) {
       extractedData[value] = data[value]
     }
@@ -160,7 +161,7 @@ export const openExplorer = (level, uuid, navigate) => {
   navigate('/explorer/explore')
 }
 
-export const setLockPatientIdsDm = Data => {
+export const setLockPatientIdsDm = (Data) => {
   try {
     let data = {}
 
@@ -200,7 +201,10 @@ export const checkForEditDm = (data, msg) => {
   return flag >= 1
 }
 
-export const extractErrorMessage = (payload, fallback = 'Something went wrong') => {
+export const extractErrorMessage = (
+  payload,
+  fallback = 'Something went wrong'
+) => {
   if (payload === null || payload === undefined || payload === '') {
     return fallback
   }
@@ -249,10 +253,10 @@ export const checkForOtherOperationDm = (data, msg) => {
 export const getStudyLockDataAPIDm = async () => {
   await axios
     .get(`${process.env.REACT_APP_API_URL}/explorer/studies/getStudyLockData`)
-    .then(res => {
+    .then((res) => {
       setLockPatientIdsDm(res.data)
     })
-    .catch(err => console.log('err', err))
+    .catch((err) => console.log('err', err))
 }
 
 const getUserDetails = () => {
@@ -270,7 +274,6 @@ const getMilliseconds = () => {
     : parseInt(userDetails.logoutMinutes) * 60 * 1000
 }
 
-
 let myTimeout = null
 export const handleSetTimeOut = (myTimeoutSec, miliseconds) => {
   if (!isNaN(myTimeoutSec)) {
@@ -280,7 +283,10 @@ export const handleSetTimeOut = (myTimeoutSec, miliseconds) => {
     myTimeout = setTimeout(async () => {
       const lastActivity = localStorage.getItem('lastActivity')
       const currentTime = moment().unix()
-      const diff = lastActivity && !isNaN(lastActivity) ? parseInt(lastActivity) - currentTime : 0
+      const diff =
+        lastActivity && !isNaN(lastActivity)
+          ? parseInt(lastActivity) - currentTime
+          : 0
       if (diff < 0) {
         document.body.removeEventListener('click', handleAutoLogout)
         document.body.removeEventListener('mouseover', handleAutoLogout)
@@ -323,7 +329,10 @@ export function handleAutoLogout() {
   if (isUserLoggedIn() !== null) {
     const lastActivity = localStorage.getItem('lastActivity')
     const currentTime = moment().unix()
-    const diff = lastActivity && !isNaN(lastActivity) ? parseInt(lastActivity) - currentTime : 0
+    const diff =
+      lastActivity && !isNaN(lastActivity)
+        ? parseInt(lastActivity) - currentTime
+        : 0
     if (diff < 0) {
       handleSetTimeOut(1000, miliseconds)
     } else {
@@ -333,7 +342,7 @@ export function handleAutoLogout() {
     }
   }
 }
-export const ordinalSuffixOf = i => {
+export const ordinalSuffixOf = (i) => {
   const j = i % 10
   const k = i % 100
   if (j === 1 && k !== 11) {

@@ -8,7 +8,16 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { ToastContent, ToastContentForError } from '../../../utils/toast'
 // ** Third Party Components
-import { Row, Col, Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Button,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap'
 
 import Breadcrumbs from '@components/breadcrumbs'
 
@@ -24,7 +33,7 @@ import {
 import { STATUS_OPTIONS } from '../../../utils/constants'
 import { extractErrorMessage } from '@utils'
 
-const EditRecord = props => {
+const EditRecord = (props) => {
   const [id] = useState(props?.match?.params?.id)
 
   const navigate = useNavigate()
@@ -51,14 +60,14 @@ const EditRecord = props => {
     getValue,
   } = useForm({ mode: 'onSubmit', resolver: yupResolver(NewSchema) })
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: e.target.value }
     })
   }
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       showLoadingAlert()
       const res = await axios.put(
@@ -67,15 +76,18 @@ const EditRecord = props => {
       )
       hideLoadingAlert()
 
-      toast.success(<ToastContent message={res.data?.success?.message} type={'success'} />, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.success(
+        <ToastContent message={res.data?.success?.message} type={'success'} />,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      )
       navigate('/diagnosis', { state: { tab: '2' } })
     } catch (err) {
       hideLoadingAlert()
@@ -142,7 +154,9 @@ const EditRecord = props => {
                 placeholder="Modality"
                 onChange={inputHandler}
               />
-              {errors?.name && <FormFeedback>{errors.name.message}</FormFeedback>}
+              {errors?.name && (
+                <FormFeedback>{errors.name.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -158,13 +172,15 @@ const EditRecord = props => {
                 onChange={inputHandler}
                 value={form_data.status}
               >
-                {STATUS_OPTIONS.map(option => (
+                {STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </Input>
-              {errors?.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+              {errors?.status && (
+                <FormFeedback>{errors.status.message}</FormFeedback>
+              )}
             </FormGroup>
             <Button color="primary" type="submit">
               Save

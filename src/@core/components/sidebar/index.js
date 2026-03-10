@@ -4,7 +4,7 @@ import Proptypes from 'prop-types'
 import classnames from 'classnames'
 import { Modal, ModalHeader, ModalBody } from 'reactstrap'
 
-const Sidebar = props => {
+const Sidebar = (props) => {
   // ** Props
   const {
     width,

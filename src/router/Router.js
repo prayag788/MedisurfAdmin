@@ -13,7 +13,13 @@ import LayoutWrapper from '@layouts/components/layout-wrapper'
 
 import navigation from '@src/navigation/vertical'
 // ** Router Components
-import { BrowserRouter as AppRouter, Route, Routes, Navigate, useLocation } from 'react-router-dom'
+import {
+  BrowserRouter as AppRouter,
+  Route,
+  Routes,
+  Navigate,
+  useLocation,
+} from 'react-router-dom'
 
 // ** Routes & Default Routes
 import { DefaultRoute, Routes as AppRoutes } from './routes'
@@ -52,7 +58,8 @@ const Router = () => {
   // ** ACL Ability Context
   const ability = useContext(AbilityContext)
   // ** Default Layout
-  const DefaultLayout = layout === 'horizontal' ? 'HorizontalLayout' : 'VerticalLayout'
+  const DefaultLayout =
+    layout === 'horizontal' ? 'HorizontalLayout' : 'VerticalLayout'
 
   // ** All of the available layouts
   const Layouts = { BlankLayout, VerticalLayout, HorizontalLayout }
@@ -61,14 +68,17 @@ const Router = () => {
   const currentActiveItem = null
 
   // ** Return Filtered Array of Routes & Paths
-  const LayoutRoutesAndPaths = layout => {
+  const LayoutRoutesAndPaths = (layout) => {
     const LayoutRoutes = []
     const LayoutPaths = []
 
     if (AppRoutes) {
-      AppRoutes.filter(route => {
+      AppRoutes.filter((route) => {
         // ** Checks if Route layout or Default layout matches current layout
-        if (route.layout === layout || (route.layout === undefined && DefaultLayout === layout)) {
+        if (
+          route.layout === layout ||
+          (route.layout === undefined && DefaultLayout === layout)
+        ) {
           LayoutRoutes.push(route)
           LayoutPaths.push(route.path)
         }
@@ -78,7 +88,9 @@ const Router = () => {
     return { LayoutRoutes, LayoutPaths }
   }
 
-  const NotAuthorized = lazy(() => import('@src/views/pages/misc/NotAuthorized'))
+  const NotAuthorized = lazy(
+    () => import('@src/views/pages/misc/NotAuthorized')
+  )
 
   // ** Init Error Component
   const Error = lazy(() => import('@src/views/pages/misc/Error'))
@@ -97,7 +109,7 @@ const Router = () => {
   /**
    ** Final Route Component Checks for Login & User Role and then redirects to the route
    */
-  const FinalRoute = props => {
+  const FinalRoute = (props) => {
     const route = props.route
     const location = useLocation()
     let action, resource
@@ -124,7 +136,10 @@ const Router = () => {
 
     if (
       (!isUserLoggedIn() && route.meta === undefined) ||
-      (!isUserLoggedIn() && route.meta && !route.meta.authRoute && !route.meta.publicRoute)
+      (!isUserLoggedIn() &&
+        route.meta &&
+        !route.meta.authRoute &&
+        !route.meta.publicRoute)
     ) {
       /**
        ** If user is not Logged in & route meta is undefined
@@ -173,7 +188,11 @@ const Router = () => {
     ) {
       // ** If route has meta and authRole and user is Logged in then redirect user to home page (DefaultRoute)
       return <Navigate to="/" replace />
-    } else if (isUserLoggedIn() && route.meta && !ability?.can(action || 'read', resource)) {
+    } else if (
+      isUserLoggedIn() &&
+      route.meta &&
+      !ability?.can(action || 'read', resource)
+    ) {
       // ** If user is Logged in and doesn't have ability to visit the page redirect the user to Not Authorized
       const userAbilities = (() => {
         try {
@@ -215,7 +234,7 @@ const Router = () => {
       // ** RouterProps to pass them to Layouts
       const routerProps = {}
 
-      return LayoutRoutes.map(route => {
+      return LayoutRoutes.map((route) => {
         return (
           <Route
             key={route.path}

@@ -64,7 +64,9 @@ const license = () => {
   const [sortDirection, setSortDirection] = useState('desc')
 
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('licenserow') ? JSON.parse(localStorage.getItem('licenserow')) : 7
+    localStorage.getItem('licenserow')
+      ? JSON.parse(localStorage.getItem('licenserow'))
+      : 7
   )
 
   const [page, setPage] = useState(0)
@@ -86,12 +88,12 @@ const license = () => {
           sortcolumn: sortColumn,
         },
       })
-      .then(response => {
+      .then((response) => {
         setNewId(response.data.numberOfLicense + 1)
         setTotal(response.data.numberOfLicense)
         if (response.data && response.data.licenseList) {
           if (response.data.licenseList.length > 0) {
-            setData(prev =>
+            setData((prev) =>
               response.data.licenseList.map((obj, index) => {
                 obj.sl = index + 1
                 return obj
@@ -121,7 +123,7 @@ const license = () => {
     }
   }
 
-  const filterHandler = e => {
+  const filterHandler = (e) => {
     setSearchValue(e.target.value)
     clearTimeout(myTimeout)
     myTimeout = setTimeout(() => {
@@ -132,12 +134,12 @@ const license = () => {
   // ** Function to handle Modal toggle
   const handleEditModal = () => SetEditModal(!editModal)
 
-  const updateDataInFilter = data => {
+  const updateDataInFilter = (data) => {
     let updatedData = []
     const value = searchValue
     if (value.length) {
-      updatedData = data.filter(item => {
-        const startWiths = Object.keys(item).some(val => {
+      updatedData = data.filter((item) => {
+        const startWiths = Object.keys(item).some((val) => {
           if (
             typeof item[val] === 'string' ||
             typeof item[val] === 'number' ||
@@ -147,57 +149,63 @@ const license = () => {
               return item[val].toLowerCase().includes(value.toLowerCase())
             } else if (typeof item[val] === 'number') {
               return item[val].toString().includes(value)
-            } else if (typeof item[val] === 'object' && item[val] && item[val].length) {
+            } else if (
+              typeof item[val] === 'object' &&
+              item[val] &&
+              item[val].length
+            ) {
               if (
-                item[val].find(o => {
+                item[val].find((o) => {
                   if (o.subject) {
                     return o.subject.toString().includes(value)
                   }
                 })
               ) {
-                return item[val].find(o => o.subject.toString().includes(value))
+                return item[val].find((o) =>
+                  o.subject.toString().includes(value)
+                )
               } else if (
-                item[val].find(o => o.subject === 't&c') &&
+                item[val].find((o) => o.subject === 't&c') &&
                 'Terms & Conditions'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'upload-dicom') &&
+                item[val].find((o) => o.subject === 'upload-dicom') &&
                 'Upload Dicom Image'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'doctors') &&
+                item[val].find((o) => o.subject === 'doctors') &&
                 'Doctors'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Study List Viewer') &&
+                item[val].find((o) => o.subject === 'Study List Viewer') &&
                 'Study list'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'power-user') &&
+                item[val].find((o) => o.subject === 'power-user') &&
                 'Power User'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Modality') &&
+                item[val].find((o) => o.subject === 'Modality') &&
                 'Modality'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'privacy-policy') &&
+                item[val].find((o) => o.subject === 'privacy-policy') &&
                 'Privacy policy'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'cookie-policy') &&
+                item[val].find((o) => o.subject === 'cookie-policy') &&
                 'Cookie policy'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'data-analytics') &&
+                item[val].find((o) => o.subject === 'data-analytics') &&
                 'Data analytics'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
@@ -206,7 +214,7 @@ const license = () => {
           }
         })
 
-        const includes = Object.keys(item).some(val => {
+        const includes = Object.keys(item).some((val) => {
           if (
             typeof item[val] === 'string' ||
             typeof item[val] === 'number' ||
@@ -216,57 +224,63 @@ const license = () => {
               return item[val].toLowerCase().includes(value.toLowerCase())
             } else if (typeof item[val] === 'number') {
               return item[val].toString().includes(value)
-            } else if (typeof item[val] === 'object' && item[val] && item[val].length) {
+            } else if (
+              typeof item[val] === 'object' &&
+              item[val] &&
+              item[val].length
+            ) {
               if (
-                item[val].find(o => {
+                item[val].find((o) => {
                   if (o.subject) {
                     return o.subject.toString().includes(value)
                   }
                 })
               ) {
-                return item[val].find(o => o.subject.toString().includes(value))
+                return item[val].find((o) =>
+                  o.subject.toString().includes(value)
+                )
               } else if (
-                item[val].find(o => o.subject === 't&c') &&
+                item[val].find((o) => o.subject === 't&c') &&
                 'Terms & Conditions'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'upload-dicom') &&
+                item[val].find((o) => o.subject === 'upload-dicom') &&
                 'Upload Dicom Image'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'doctors') &&
+                item[val].find((o) => o.subject === 'doctors') &&
                 'Doctors'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Study List Viewer') &&
+                item[val].find((o) => o.subject === 'Study List Viewer') &&
                 'Study list'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'power-user') &&
+                item[val].find((o) => o.subject === 'power-user') &&
                 'Power User'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Modality') &&
+                item[val].find((o) => o.subject === 'Modality') &&
                 'Modality'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'privacy-policy') &&
+                item[val].find((o) => o.subject === 'privacy-policy') &&
                 'Privacy policy'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'cookie-policy') &&
+                item[val].find((o) => o.subject === 'cookie-policy') &&
                 'Cookie policy'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'data-analytics') &&
+                item[val].find((o) => o.subject === 'data-analytics') &&
                 'Data analytics'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
@@ -295,15 +309,15 @@ const license = () => {
         `${process.env.REACT_APP_API_URL}/license/updateStatus/${updatedata.licenseId}`,
         updatedata
       )
-      .then(response => {
+      .then((response) => {
         hideLoadingAlert()
         showSuccessAlert(
           `License ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
         )
-        setData(prev => {
+        setData((prev) => {
           const Mprev = [...prev]
           Mprev.splice(
-            Mprev.findIndex(obj => obj.licenseId === updatedata.licenseId),
+            Mprev.findIndex((obj) => obj.licenseId === updatedata.licenseId),
             1,
             response.data.updated_data
           )
@@ -316,7 +330,7 @@ const license = () => {
           return prev
         })
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -326,12 +340,14 @@ const license = () => {
 
   function deleteLicense(id) {
     axios
-      .post(`${process.env.REACT_APP_API_URL}/license/deleteLicense`, { licenseId: id })
-      .then(response => {
+      .post(`${process.env.REACT_APP_API_URL}/license/deleteLicense`, {
+        licenseId: id,
+      })
+      .then((response) => {
         showSuccessAlert('License Deleted Successfully!.', '<p>Deleted!</p>')
-        setData(prev => {
+        setData((prev) => {
           let Mprev = [...data]
-          Mprev = Mprev.filter(obj => {
+          Mprev = Mprev.filter((obj) => {
             return obj.licenseId !== id
           })
           prev = Mprev
@@ -343,7 +359,7 @@ const license = () => {
           return prev
         })
       })
-      .catch(err => {
+      .catch((err) => {
         handleEditModal()
         showErrorAlert(getErrorMessage(err))
       })
@@ -351,16 +367,18 @@ const license = () => {
 
   // Confirmation Sweet Alert
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
       }
-    })
+    )
   }
 
   // ** Table item Button Handlers
-  const editHandler = row => {
-    setSelectedItem(prev => {
+  const editHandler = (row) => {
+    setSelectedItem((prev) => {
       const newData = { ...prev }
       const keys = Object.keys(prev)
       for (const key of keys) {
@@ -369,16 +387,18 @@ const license = () => {
       return newData
     })
     setEditPicker(() =>
-      moment(row.expiryDate, 'YYYY-MM-DD').format(userData?.dateFormats?.dateFormat || 'MM/DD/YYYY')
+      moment(row.expiryDate, 'YYYY-MM-DD').format(
+        userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'
+      )
     )
     handleEditModal()
   }
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     deleteLicense(id)
   }
 
-  const DeactivationHandler = id => {
+  const DeactivationHandler = (id) => {
     const deactivationOptions = {
       licenseId: id,
       status: 0,
@@ -386,7 +406,7 @@ const license = () => {
     updateUserDetails(deactivationOptions, 'deactivate')
   }
 
-  const ActivationHandler = id => {
+  const ActivationHandler = (id) => {
     const activationOptions = {
       licenseId: id,
       status: 1,
@@ -411,9 +431,11 @@ const license = () => {
       id: 'licenseId',
       minWidth: '20px',
       maxWidth: '90px',
-      cell: row => {
+      cell: (row) => {
         return (
-          <div style={{ whiteSpace: 'break-spaces' }}>{row.licenseId ? row.licenseId : '-'}</div>
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.licenseId ? row.licenseId : '-'}
+          </div>
         )
       },
     },
@@ -426,8 +448,12 @@ const license = () => {
       id: 'hospital',
       minWidth: '20px',
       maxWidth: '150px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.hospital ? row.hospital : '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.hospital ? row.hospital : '-'}
+          </div>
+        )
       },
     },
     {
@@ -439,7 +465,7 @@ const license = () => {
       id: 'email',
       minWidth: '180px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.email}</div>
       },
     },
@@ -452,8 +478,12 @@ const license = () => {
       id: 'contact',
       minWidth: '110px',
       maxWidth: '140px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.contact ? row.contact : '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.contact ? row.contact : '-'}
+          </div>
+        )
       },
     },
     {
@@ -465,7 +495,7 @@ const license = () => {
       id: 'activationKey',
       minWidth: '300px',
       maxWidth: '350px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row.activationKey ? row.activationKey : '-'}
@@ -482,7 +512,7 @@ const license = () => {
       id: 'expiryDate',
       minWidth: '130px',
       maxWidth: '130px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row.expiryDate
@@ -503,7 +533,7 @@ const license = () => {
       id: 'activationStatus',
       minWidth: '180px',
       maxWidth: '190px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row.activationStatus ? row.activationStatus : '-'}
@@ -520,7 +550,7 @@ const license = () => {
       id: 'status',
       minWidth: '80px',
       maxWidth: '90px',
-      cell: row => {
+      cell: (row) => {
         return <></>
       },
     },
@@ -533,11 +563,15 @@ const license = () => {
       id: 'selectedDateFormat',
       minWidth: '80px',
       maxWidth: '120px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex flex-column">
-            <p className="m-0">{row.dateFormat ? `1. ${row.dateFormat}` : '-'}</p>
-            <p className="m-0">{row.timeFormat ? `2. ${row.timeFormat}` : '-'}</p>
+            <p className="m-0">
+              {row.dateFormat ? `1. ${row.dateFormat}` : '-'}
+            </p>
+            <p className="m-0">
+              {row.timeFormat ? `2. ${row.timeFormat}` : '-'}
+            </p>
           </div>
         )
       },
@@ -553,7 +587,7 @@ const license = () => {
         right: '0',
         'border-left': '1px dotted #6e6b7b',
       },
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex align-items-center">
             <Edit
@@ -576,7 +610,7 @@ const license = () => {
                     'Are you sure you want to deactivate the status?',
                     'Yes, Deactivate!'
                   )
-                  setUpdateState(prev => !prev)
+                  setUpdateState((prev) => !prev)
                 }}
               />
             ) : (
@@ -592,7 +626,7 @@ const license = () => {
                     'Are you sure you want to activate the status?',
                     'Yes, Activate!'
                   )
-                  setUpdateState(prev => !prev)
+                  setUpdateState((prev) => !prev)
                 }}
               />
             )}
@@ -641,7 +675,7 @@ const license = () => {
                         bsSize="sm"
                         id="search-input"
                         value={searchValue}
-                        onChange={e => {
+                        onChange={(e) => {
                           filterHandler(e)
                         }}
                       />
@@ -660,9 +694,9 @@ const license = () => {
                           onSort: handleSort,
                           sortField,
                           sortOrder,
-                          onPage: e => {
+                          onPage: (e) => {
                             setPage(e.first++)
-                            setRowsPerPage(prev => e.rows)
+                            setRowsPerPage((prev) => e.rows)
                           },
                         }}
                       />

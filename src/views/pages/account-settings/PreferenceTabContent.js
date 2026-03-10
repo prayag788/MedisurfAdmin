@@ -21,14 +21,20 @@ import { useEffect, useState } from 'react'
 import { SketchPicker } from 'react-color'
 import ROLES from '@configs/roles'
 import STUDYSTATUS from '@configs/studyStatus'
-import { showErrorAlert, showSuccessAlert, getErrorMessage } from '../../../utils/alerts'
+import {
+  showErrorAlert,
+  showSuccessAlert,
+  getErrorMessage,
+} from '../../../utils/alerts'
 
 const PreferenceTabContent = () => {
   const navigate = useNavigate()
 
   const userData = JSON.parse(localStorage.getItem('userData'))
   const [logoutMinutes, setlogoutMinutes] = useState(userData?.logoutMinutes)
-  const [viewerPreference, setviewerPreference] = useState(userData?.viewerPreference)
+  const [viewerPreference, setviewerPreference] = useState(
+    userData?.viewerPreference
+  )
   const [expirationDate, setexpirationDate] = useState(
     userData?.expirationDate ? userData?.expirationDate : 1
   )
@@ -53,11 +59,11 @@ const PreferenceTabContent = () => {
     setLoading(true)
     axios
       .get(`${process.env.REACT_APP_API_URL}/user/status/color`)
-      .then(res => {
+      .then((res) => {
         setStatusColor(res.data.message)
         setLoading(false)
       })
-      .catch(err => {
+      .catch((err) => {
         setLoading(false)
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -104,7 +110,7 @@ const PreferenceTabContent = () => {
       .number()
       .typeError('Please enter expiration hours in number format. Example 10.')
       .min(1, 'Please enter expiration hours in number format. Example 10.')
-      .test('isReq', 'Please enter expiration hours', val => {
+      .test('isReq', 'Please enter expiration hours', (val) => {
         if (userData.role === ROLES.ClinicAdmin) {
           return val !== null && val !== undefined && val !== ''
         } else {
@@ -113,10 +119,12 @@ const PreferenceTabContent = () => {
       }),
     reportEditableHours: yup
       .number()
-      .typeError('Please enter report editable hours in number format. Example 10.')
+      .typeError(
+        'Please enter report editable hours in number format. Example 10.'
+      )
       .min(0, 'Report editable hours must be at least 0.')
       // .max(168, 'Report editable hours must be at most 168.')
-      .test('isReq', 'Please enter report editable hours', val => {
+      .test('isReq', 'Please enter report editable hours', (val) => {
         if (userData.role === ROLES.ClinicAdmin) {
           return val !== null && val !== undefined && val !== ''
         } else {
@@ -150,7 +158,13 @@ const PreferenceTabContent = () => {
       expirationDate,
       reportEditableHours,
     })
-  }, [logoutMinutes, viewerPreference, expirationDate, reportEditableHours, reset])
+  }, [
+    logoutMinutes,
+    viewerPreference,
+    expirationDate,
+    reportEditableHours,
+    reset,
+  ])
 
   const onSubmit = (data, e) => {
     axios
@@ -163,7 +177,7 @@ const PreferenceTabContent = () => {
         viewerIconVisible,
         statusColor,
       })
-      .then(doc => {
+      .then((doc) => {
         showSuccessAlert('Preferences updated successfully!').then(() => {
           const userDetails = JSON.parse(localStorage.getItem('userData'))
           userDetails.logoutMinutes = doc.data.user.logoutMinutes
@@ -175,7 +189,7 @@ const PreferenceTabContent = () => {
           localStorage.setItem('userData', JSON.stringify(userDetails))
         })
       })
-      .catch(err => {
+      .catch((err) => {
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
         }
@@ -186,7 +200,7 @@ const PreferenceTabContent = () => {
     navigate(-1)
   }
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     if (name === 'logoutMinutes') {
       setlogoutMinutes(e.target.value)
@@ -201,7 +215,7 @@ const PreferenceTabContent = () => {
     }
   }
 
-  const statusHandler = status => {
+  const statusHandler = (status) => {
     setOpenColor(true)
     setDisplayColor(status)
   }
@@ -219,7 +233,9 @@ const PreferenceTabContent = () => {
       <Row>
         <Col sm="6">
           <FormGroup>
-            <Label for="logoutMinutes">Auto logout minutes (Default 10 minutes)</Label>
+            <Label for="logoutMinutes">
+              Auto logout minutes (Default 10 minutes)
+            </Label>
             <Input
               name="logoutMinutes"
               id="logoutMinutes"
@@ -240,7 +256,9 @@ const PreferenceTabContent = () => {
       <Row>
         <Col sm="6">
           <FormGroup>
-            <Label for="viewerPreference">Viewer Preference (Default same tab)</Label>
+            <Label for="viewerPreference">
+              Viewer Preference (Default same tab)
+            </Label>
             <Input
               type="select"
               name="viewerPreference"
@@ -279,12 +297,15 @@ const PreferenceTabContent = () => {
                       'is-invalid': errors['reportEditableHours'],
                     })}
                     readOnly={
-                      userData.role !== ROLES.ClinicAdmin && userData.role !== ROLES.SuperAdmin
+                      userData.role !== ROLES.ClinicAdmin &&
+                      userData.role !== ROLES.SuperAdmin
                     }
                     onChange={inputHandler}
                   />
                   {errors && errors['reportEditableHours'] && (
-                    <FormFeedback>{errors['reportEditableHours'].message}</FormFeedback>
+                    <FormFeedback>
+                      {errors['reportEditableHours'].message}
+                    </FormFeedback>
                   )}
                 </FormGroup>
               </Col>
@@ -295,13 +316,16 @@ const PreferenceTabContent = () => {
             <Row>
               <Col sm="6">
                 <FormGroup>
-                  <Label for="expirationDate">Expiration hours for shared study(In hours)</Label>
+                  <Label for="expirationDate">
+                    Expiration hours for shared study(In hours)
+                  </Label>
                   <Input
                     type="text"
                     name="expirationDate"
                     id="expirationDate"
                     readOnly={
-                      userData.role !== ROLES.ClinicAdmin && userData.role !== ROLES.SuperAdmin
+                      userData.role !== ROLES.ClinicAdmin &&
+                      userData.role !== ROLES.SuperAdmin
                     }
                     {...register('expirationDate', { required: true })}
                     value={expirationDate}
@@ -311,7 +335,9 @@ const PreferenceTabContent = () => {
                     onChange={inputHandler}
                   />
                   {errors && errors['expirationDate'] && (
-                    <FormFeedback>{errors['expirationDate'].message}</FormFeedback>
+                    <FormFeedback>
+                      {errors['expirationDate'].message}
+                    </FormFeedback>
                   )}
                 </FormGroup>
               </Col>
@@ -326,7 +352,9 @@ const PreferenceTabContent = () => {
                     type="button"
                     className="statusBtn"
                     style={
-                      statusColor ? { background: statusColor.completed } : { background: 'grey' }
+                      statusColor
+                        ? { background: statusColor.completed }
+                        : { background: 'grey' }
                     }
                     onClick={() => statusHandler('completed')}
                   >
@@ -336,7 +364,9 @@ const PreferenceTabContent = () => {
                     type="button"
                     className="statusBtn"
                     style={
-                      statusColor ? { background: statusColor.preliminary } : { background: 'grey' }
+                      statusColor
+                        ? { background: statusColor.preliminary }
+                        : { background: 'grey' }
                     }
                     onClick={() => statusHandler('preliminary')}
                   >
@@ -345,7 +375,11 @@ const PreferenceTabContent = () => {
                   <button
                     type="button"
                     className="statusBtn"
-                    style={statusColor ? { background: statusColor.read } : { background: 'grey' }}
+                    style={
+                      statusColor
+                        ? { background: statusColor.read }
+                        : { background: 'grey' }
+                    }
                     onClick={() => statusHandler('read')}
                   >
                     {STUDYSTATUS.Ready}
@@ -353,7 +387,11 @@ const PreferenceTabContent = () => {
                   <button
                     type="button"
                     className="statusBtn"
-                    style={statusColor ? { background: statusColor.final } : { background: 'grey' }}
+                    style={
+                      statusColor
+                        ? { background: statusColor.final }
+                        : { background: 'grey' }
+                    }
                     onClick={() => statusHandler('final')}
                   >
                     {STUDYSTATUS.Final}
@@ -371,7 +409,7 @@ const PreferenceTabContent = () => {
               type="checkbox"
               checked={viewerIconVisible}
               id="ViewerIconVisible"
-              onChange={e => {
+              onChange={(e) => {
                 setViewerIconVisible(e.target.checked)
               }}
             />
@@ -389,11 +427,15 @@ const PreferenceTabContent = () => {
         </Col>
       </Row>
       {statusColor && (
-        <Modal isOpen={openColor} toggle={() => setOpenColor(!openColor)} className="statusModal">
+        <Modal
+          isOpen={openColor}
+          toggle={() => setOpenColor(!openColor)}
+          className="statusModal"
+        >
           <>
             <SketchPicker
               color={statusColor[displayColor]}
-              onChange={e => handleColorChange(e, displayColor)}
+              onChange={(e) => handleColorChange(e, displayColor)}
             />
             <div className="d-flex justify-content-around">
               <Button
@@ -407,7 +449,12 @@ const PreferenceTabContent = () => {
               >
                 Cancel
               </Button>
-              <Button className="mt-1" type="button" color="primary" onClick={handleColorAccept}>
+              <Button
+                className="mt-1"
+                type="button"
+                color="primary"
+                onClick={handleColorAccept}
+              >
                 OK
               </Button>
             </div>

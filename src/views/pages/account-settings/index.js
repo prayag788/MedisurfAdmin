@@ -6,7 +6,16 @@ import PreferenceTabContent from './PreferenceTabContent'
 import EmailConfigurationTabContent from './EmailConfigurationTabContent'
 import AvatarTabContent from './AvatarTabContent'
 import LicenseTabContent from './LicenseTabContent'
-import { Row, Col, TabContent, TabPane, Card, CardBody, CardHeader, CardTitle } from 'reactstrap'
+import {
+  Row,
+  Col,
+  TabContent,
+  TabPane,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+} from 'reactstrap'
 import ROLES from '@configs/roles'
 import { useLocation } from 'react-router-dom'
 import ListTabContent from './ListTabContent'
@@ -38,12 +47,14 @@ const AccountSettings = () => {
     }
   }, [location])
 
-  const toggleTab = tab => {
+  const toggleTab = (tab) => {
     setActiveTab(tab)
   }
 
   useEffect(() => {
-    axios.get('/account-setting/data').then(response => setData(response.data))
+    axios
+      .get('/account-setting/data')
+      .then((response) => setData(response.data))
   }, [])
 
   return (
@@ -83,10 +94,14 @@ const AccountSettings = () => {
                   </>
                 )}
 
-                {(userData.role === ROLES.ClinicAdmin || userData.role === ROLES.SuperAdmin) && (
+                {(userData.role === ROLES.ClinicAdmin ||
+                  userData.role === ROLES.SuperAdmin) && (
                   <TabContent activeTab={activeTab}>
                     <TabPane tabId="4">
-                      <EmailConfigurationTabContent key="email-config-tab" activeTab={activeTab} />
+                      <EmailConfigurationTabContent
+                        key="email-config-tab"
+                        activeTab={activeTab}
+                      />
                     </TabPane>
                   </TabContent>
                 )}

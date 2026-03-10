@@ -15,12 +15,17 @@ const AdditionalDataComponent = ({
   control,
 }) => {
   const addMoreEmails = () => {
-    setValue(fieldName, getValues()[fieldName] ? [...getValues()[fieldName], ''] : [])
-    setFormData(prev => {
+    setValue(
+      fieldName,
+      getValues()[fieldName] ? [...getValues()[fieldName], ''] : []
+    )
+    setFormData((prev) => {
       return {
         ...prev,
         ...getValues(),
-        [fieldName]: getValues()[fieldName] ? [...getValues()[fieldName], ''] : [''],
+        [fieldName]: getValues()[fieldName]
+          ? [...getValues()[fieldName], '']
+          : [''],
       }
     })
   }
@@ -43,11 +48,17 @@ const AdditionalDataComponent = ({
               <div style={{ marginLeft: 'auto' }}>
                 <i
                   className="pi pi-times"
-                  style={{ fontSize: '1rem', cursor: 'pointer', marginLeft: 'auto' }}
+                  style={{
+                    fontSize: '1rem',
+                    cursor: 'pointer',
+                    marginLeft: 'auto',
+                  }}
                   onClick={() => {
-                    setFormData(prev => {
+                    setFormData((prev) => {
                       let newSecondaryEmail = getValues()[fieldName]
-                      newSecondaryEmail = newSecondaryEmail.filter((email, i) => i !== index)
+                      newSecondaryEmail = newSecondaryEmail.filter(
+                        (email, i) => i !== index
+                      )
                       setValue(fieldName, newSecondaryEmail)
                       return { ...prev, [fieldName]: newSecondaryEmail }
                     })
@@ -60,13 +71,18 @@ const AdditionalDataComponent = ({
               type={inputType}
               id={`${fieldName}.${index}`}
               placeholder={placeholder}
-              invalid={errors && errors?.[fieldName] && errors[fieldName]?.[index] && true}
+              invalid={
+                errors &&
+                errors?.[fieldName] &&
+                errors[fieldName]?.[index] &&
+                true
+              }
               value={getValues()[fieldName]?.[index] ?? ''}
-              onChange={e => {
+              onChange={(e) => {
                 const arr = [...(getValues()[fieldName] || [])]
                 arr[index] = e.target.value
                 setValue(fieldName, arr, { shouldValidate: false })
-                setFormData(prev => ({ ...prev, [fieldName]: arr }))
+                setFormData((prev) => ({ ...prev, [fieldName]: arr }))
               }}
             />
 

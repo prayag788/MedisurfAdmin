@@ -38,10 +38,11 @@ const AddNewModal = ({ addUser, open, handleModal, newUserId }) => {
   const [signatureBase64, setSignatureBase64] = useState(null)
   const [signaturePreview, setSignaturePreview] = useState(null)
   const isInitialInput = useRef(true)
-  const dropdownData = useSelector(state => state.dropdownDataReducer)
+  const dropdownData = useSelector((state) => state.dropdownDataReducer)
 
   // ** Validation schema (matching old flow)
-  const phoneRegExp = /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
+  const phoneRegExp =
+    /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
   const NewPUSchema = yup.object().shape({
     fname: yup
       .string('First Name should be a string')
@@ -55,7 +56,9 @@ const AddNewModal = ({ addUser, open, handleModal, newUserId }) => {
       .string()
       .email()
       .required('Please provide your email address. This field is required.'),
-    cno: yup.string().matches(phoneRegExp, 'Please enter a valid contact number'),
+    cno: yup
+      .string()
+      .matches(phoneRegExp, 'Please enter a valid contact number'),
     medicalQualifications: yup.string(),
     boardCertifications: yup.string(),
     referenceId: yup.string(),
@@ -76,8 +79,8 @@ const AddNewModal = ({ addUser, open, handleModal, newUserId }) => {
     mode: 'onSubmit',
     resolver: yupResolver(NewPUSchema),
     defaultValues: {
-      status: 1
-    }
+      status: 1,
+    },
   })
 
   // ** Reset form when modal opens/closes
@@ -95,7 +98,7 @@ const AddNewModal = ({ addUser, open, handleModal, newUserId }) => {
   }, [open, newUserId, setValue])
 
   // ** Digital signature handler
-  const digitalSignatureHandler = e => {
+  const digitalSignatureHandler = (e) => {
     if (e.target.files.length > 0 && e.target.files[0]) {
       const file = e.target.files[0]
       if (file.type === 'image/png' || file.type === 'image/jpeg') {
@@ -122,7 +125,7 @@ const AddNewModal = ({ addUser, open, handleModal, newUserId }) => {
   }
 
   // ** Form submission handler (matching old flow)
-  const formSubmit = async data => {
+  const formSubmit = async (data) => {
     try {
       data.digitalSignature = signatureBase64
       data.referenceId = newUserId || data.referenceId
@@ -142,11 +145,21 @@ const AddNewModal = ({ addUser, open, handleModal, newUserId }) => {
   }
 
   // ** Custom close btn
-  const CloseBtn = <X className="cursor-pointer" size={15} onClick={handleModal} />
+  const CloseBtn = (
+    <X className="cursor-pointer" size={15} onClick={handleModal} />
+  )
 
   // ** Reusable FormField component (matching EditModal pattern)
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, defaultValue, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      defaultValue,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -183,14 +196,36 @@ const AddNewModal = ({ addUser, open, handleModal, newUserId }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Add New</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
         <Form onSubmit={handleSubmit(formSubmit)}>
-          <FormField name="referenceId" label="ID" placeholder="ID" required readOnly defaultValue={newUserId} />
-          <FormField name="fname" label="First Name" placeholder="Bruce" required />
-          <FormField name="lname" label="Last Name" placeholder="Wayne" required />
+          <FormField
+            name="referenceId"
+            label="ID"
+            placeholder="ID"
+            required
+            readOnly
+            defaultValue={newUserId}
+          />
+          <FormField
+            name="fname"
+            label="First Name"
+            placeholder="Bruce"
+            required
+          />
+          <FormField
+            name="lname"
+            label="Last Name"
+            placeholder="Wayne"
+            required
+          />
           <FormField
             name="email"
             label="Email"
@@ -198,13 +233,22 @@ const AddNewModal = ({ addUser, open, handleModal, newUserId }) => {
             placeholder="bruce.wayne@email.com"
             required
           />
-          <FormField name="cno" label="Contact Number" type="text" placeholder="+1" />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="text"
+            placeholder="+1"
+          />
           <FormField
             name="medicalQualifications"
             label="Medical Qualifications"
             placeholder="MBBS"
           />
-          <FormField name="boardCertifications" label="Board Qualifications" placeholder="MD" />
+          <FormField
+            name="boardCertifications"
+            label="Board Qualifications"
+            placeholder="MD"
+          />
           <FormGroup>
             <Label for="digitalSignature">Digital Signature</Label>
             <Controller
@@ -250,26 +294,37 @@ const AddNewModal = ({ addUser, open, handleModal, newUserId }) => {
                   isClearable={false}
                   theme={selectThemeColors}
                   value={
-                    STATUS_OPTIONS.find(option => option.value === field.value) || STATUS_OPTIONS[0]
+                    STATUS_OPTIONS.find(
+                      (option) => option.value === field.value
+                    ) || STATUS_OPTIONS[0]
                   }
                   name="status"
                   id="status"
                   options={STATUS_OPTIONS}
                   className="react-select"
                   classNamePrefix="select"
-                  onChange={option => field.onChange(option ? option.value : null)}
+                  onChange={(option) =>
+                    field.onChange(option ? option.value : null)
+                  }
                 />
               )}
             />
             {errors.status && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.status?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.status?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <div className="d-flex justify-content-end gap-2 mt-3">
             <Button type="submit" className="me-1" color="primary">
               Submit
             </Button>
-            <Button type="button" color="secondary" onClick={handleModal} outline>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={handleModal}
+              outline
+            >
               Cancel
             </Button>
           </div>

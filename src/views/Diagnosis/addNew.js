@@ -10,7 +10,16 @@ import { toast } from 'react-toastify'
 import { ToastContent, ToastContentForError } from '../../utils/toast'
 
 // ** Third Party Components
-import { Row, Col, Button, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Button,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap'
 
 import Breadcrumbs from '@components/breadcrumbs'
 
@@ -57,9 +66,9 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     setValue,
   } = useForm({ mode: 'onChange', resolver: yupResolver(NewSchema) })
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: e.target.value }
     })
   }
@@ -67,8 +76,12 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
   useEffect(() => {
     const fetchModalityList = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/diagnosis/modality/list`)
-        setModalityList(Array.isArray(res.data?.modality) ? res.data.modality : [])
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/diagnosis/modality/list`
+        )
+        setModalityList(
+          Array.isArray(res.data?.modality) ? res.data.modality : []
+        )
       } catch (err) {
         console.error('Failed to fetch modality list:', err)
         setModalityList([]) // Ensure it's always an array
@@ -92,21 +105,27 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     fetchModalityList()
   }, [])
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       showLoadingAlert()
       data.status = form_data.status
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/diagnosis`, data)
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/diagnosis`,
+        data
+      )
       hideLoadingAlert()
-      toast.success(<ToastContent message={res.data?.success?.message} type={'success'} />, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.success(
+        <ToastContent message={res.data?.success?.message} type={'success'} />,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      )
       navigate('/diagnosis')
     } catch (err) {
       hideLoadingAlert()
@@ -137,14 +156,16 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     id="name"
                     invalid={errors?.name && true}
                     placeholder="Template name"
-                    onChange={e => {
+                    onChange={(e) => {
                       field.onChange(e)
                       inputHandler(e)
                     }}
                   />
                 )}
               />
-              {errors?.name && <FormFeedback>{errors.name.message}</FormFeedback>}
+              {errors?.name && (
+                <FormFeedback>{errors.name.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -160,14 +181,14 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     id="modality"
                     type="select"
                     invalid={errors?.modality && true}
-                    onChange={e => {
+                    onChange={(e) => {
                       field.onChange(e)
                       inputHandler(e)
                     }}
                   >
                     <option value="">Select Modality</option>
                     {Array.isArray(modalityList) &&
-                      modalityList.map(modality => {
+                      modalityList.map((modality) => {
                         return (
                           <option key={modality._id} value={modality._id}>
                             {' '}
@@ -178,7 +199,9 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   </Input>
                 )}
               />
-              {errors?.modality && <FormFeedback>{errors.modality.message}</FormFeedback>}
+              {errors?.modality && (
+                <FormFeedback>{errors.modality.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -189,7 +212,12 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                 name="text"
                 control={control}
                 render={({ field }) => (
-                  <Input {...field} type="hidden" id="text" invalid={errors?.text && true} />
+                  <Input
+                    {...field}
+                    type="hidden"
+                    id="text"
+                    invalid={errors?.text && true}
+                  />
                 )}
               />
               <Editor
@@ -225,10 +253,11 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     'bold italic backcolor | alignleft aligncenter ' +
                     'alignright alignjustify | bullist numlist outdent indent | ' +
                     'removeformat | help',
-                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  content_style:
+                    'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                   placeholder: `Anything entered here will be added to the report layout chosen from the diagnosis template.`,
-                  setup: editor => {
-                    editor.on('keydown', e => {
+                  setup: (editor) => {
+                    editor.on('keydown', (e) => {
                       handleAutoLogout()
                     })
                   },
@@ -257,12 +286,12 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     id="status"
                     type="select"
                     invalid={errors?.status && true}
-                    onChange={e => {
+                    onChange={(e) => {
                       field.onChange(e)
                       inputHandler(e)
                     }}
                   >
-                    {STATUS_OPTIONS.map(option => (
+                    {STATUS_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
@@ -270,7 +299,9 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   </Input>
                 )}
               />
-              {errors?.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+              {errors?.status && (
+                <FormFeedback>{errors.status.message}</FormFeedback>
+              )}
             </FormGroup>
             <Button color="primary" type="submit">
               Save

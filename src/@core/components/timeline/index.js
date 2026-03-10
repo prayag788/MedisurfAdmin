@@ -2,7 +2,7 @@
 import Proptypes from 'prop-types'
 import classnames from 'classnames'
 
-const Timeline = props => {
+const Timeline = (props) => {
   // ** Props
   const { data, tag, className } = props
 
@@ -35,9 +35,12 @@ const Timeline = props => {
             </span>
             <div className="timeline-event">
               <div
-                className={classnames('d-flex justify-content-between flex-sm-row flex-column', {
-                  'mb-sm-0 mb-1': item.meta,
-                })}
+                className={classnames(
+                  'd-flex justify-content-between flex-sm-row flex-column',
+                  {
+                    'mb-sm-0 mb-1': item.meta,
+                  }
+                )}
               >
                 <h6>{item.title}</h6>
                 {item.meta ? (

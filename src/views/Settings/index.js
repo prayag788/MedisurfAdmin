@@ -1,5 +1,12 @@
 import { Fragment } from 'react'
-import { Row, Col, Card, CardBody, Breadcrumb, BreadcrumbItem } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Card,
+  CardBody,
+  Breadcrumb,
+  BreadcrumbItem,
+} from 'reactstrap'
 import { Link } from 'react-router-dom'
 
 export default () => {

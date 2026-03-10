@@ -1,5 +1,5 @@
 // ** React Select Theme Colors - Original Theme Configuration
-export const selectThemeColors = theme => ({
+export const selectThemeColors = (theme) => ({
   ...theme,
   colors: {
     ...theme.colors,
@@ -43,7 +43,11 @@ export const ACCESS_OPTIONS = [
     label: 'Referring Doctor',
     isFixed: true,
   },
-  { value: { action: 'manage', subject: 'clinic-user' }, label: 'Clinic User', isFixed: false },
+  {
+    value: { action: 'manage', subject: 'clinic-user' },
+    label: 'Clinic User',
+    isFixed: false,
+  },
   {
     value: [
       { action: 'manage', subject: 'modality' },
@@ -53,13 +57,21 @@ export const ACCESS_OPTIONS = [
     label: 'Modality',
     isFixed: true,
   },
-  { value: { action: 'manage', subject: 't&c' }, label: 'Terms & Conditions', isFixed: true },
+  {
+    value: { action: 'manage', subject: 't&c' },
+    label: 'Terms & Conditions',
+    isFixed: true,
+  },
   {
     value: { action: 'manage', subject: 'privacy-policy' },
     label: 'Privacy Policy',
     isFixed: true,
   },
-  { value: { action: 'manage', subject: 'cookie-policy' }, label: 'Cookie Policy', isFixed: true },
+  {
+    value: { action: 'manage', subject: 'cookie-policy' },
+    label: 'Cookie Policy',
+    isFixed: true,
+  },
   {
     value: { action: 'manage', subject: 'data-analytics' },
     label: 'Data Analytics',

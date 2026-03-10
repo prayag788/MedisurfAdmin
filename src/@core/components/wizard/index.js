@@ -46,7 +46,9 @@ const Wizard = forwardRef((props, ref) => {
     return steps.map((step, index) => {
       return (
         <Fragment key={step.id}>
-          {index !== 0 && index !== steps.length ? <div className="line">{separator}</div> : null}
+          {index !== 0 && index !== steps.length ? (
+            <div className="line">{separator}</div>
+          ) : null}
           <div
             className={classnames('step', {
               crossed: activeIndex > index,
@@ -55,7 +57,9 @@ const Wizard = forwardRef((props, ref) => {
             data-target={`#${step.id}`}
           >
             <button type="button" className="step-trigger">
-              <span className="bs-stepper-box">{step.icon ? step.icon : index + 1}</span>
+              <span className="bs-stepper-box">
+                {step.icon ? step.icon : index + 1}
+              </span>
               <span className="bs-stepper-label">
                 <span className="bs-stepper-title">{step.title}</span>
                 {step.subtitle ? (

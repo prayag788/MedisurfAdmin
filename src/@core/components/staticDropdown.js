@@ -7,9 +7,9 @@ import { FormGroup, Label } from 'reactstrap'
 function getSelectedIds(arr) {
   if (!Array.isArray(arr)) return []
   return arr
-    .map(x => x?.value ?? x?._id ?? x)
+    .map((x) => x?.value ?? x?._id ?? x)
     .filter(Boolean)
-    .map(id => (typeof id === 'string' ? id : String(id)))
+    .map((id) => (typeof id === 'string' ? id : String(id)))
     .sort()
 }
 
@@ -22,7 +22,7 @@ function selectedIdsEqual(a, b) {
 // True when a is a subset of b (by option values) - used to detect stale prop after user removed an item
 function isSubsetOf(a, b) {
   const setB = new Set(getSelectedIds(b))
-  return getSelectedIds(a).every(id => setB.has(id))
+  return getSelectedIds(a).every((id) => setB.has(id))
 }
 
 const StaticDropdown = ({
@@ -44,17 +44,28 @@ const StaticDropdown = ({
   useEffect(() => {
     if (isMulti && value && Array.isArray(value)) {
       const formattedValues = value
-        .map(item => {
+        .map((item) => {
           const norm = (v) => (v === null || v === undefined ? '' : String(v))
           if (typeof item === 'string') {
             const idStr = norm(item)
-            const foundOption = options.find(opt => norm(opt.value) === idStr || norm(opt._id) === idStr)
-            return foundOption || { value: item, _id: item, label: item, clinicName: item }
+            const foundOption = options.find(
+              (opt) => norm(opt.value) === idStr || norm(opt._id) === idStr
+            )
+            return (
+              foundOption || {
+                value: item,
+                _id: item,
+                label: item,
+                clinicName: item,
+              }
+            )
           }
           if (item && (item._id || item.value)) {
             const id = item._id || item.value
             const idStr = norm(id)
-            const foundOption = options.find(opt => norm(opt.value) === idStr || norm(opt._id) === idStr)
+            const foundOption = options.find(
+              (opt) => norm(opt.value) === idStr || norm(opt._id) === idStr
+            )
             if (foundOption) {
               return foundOption
             }
@@ -85,21 +96,27 @@ const StaticDropdown = ({
         })
         .filter(Boolean)
       // Modality "SELECT ALL": expand to all options (exclude selectAll placeholder)
-      const hasSelectAll = fieldName === 'modality' && formattedValues.some(
-        x => (x?.value ?? x?._id) === 'selectAll'
-      )
+      const hasSelectAll =
+        fieldName === 'modality' &&
+        formattedValues.some((x) => (x?.value ?? x?._id) === 'selectAll')
       const resolvedValues = hasSelectAll
-        ? options.filter(opt => opt.value !== 'selectAll')
+        ? options.filter((opt) => opt.value !== 'selectAll')
         : formattedValues
 
       // Don't overwrite when prop looks stale:
       // - User removed an item: selectedValue has fewer items and is subset of prop
       // - User chose "Select all": selectedValue has more items and prop is subset (form not updated yet)
       const same = selectedIdsEqual(resolvedValues, selectedValue)
-      const propLooksStaleRemove = Array.isArray(selectedValue) && selectedValue.length > 0 &&
-        formattedValues.length > selectedValue.length && isSubsetOf(selectedValue, formattedValues)
-      const propLooksStaleSelectAll = Array.isArray(selectedValue) && selectedValue.length > 0 &&
-        resolvedValues.length < selectedValue.length && isSubsetOf(resolvedValues, selectedValue)
+      const propLooksStaleRemove =
+        Array.isArray(selectedValue) &&
+        selectedValue.length > 0 &&
+        formattedValues.length > selectedValue.length &&
+        isSubsetOf(selectedValue, formattedValues)
+      const propLooksStaleSelectAll =
+        Array.isArray(selectedValue) &&
+        selectedValue.length > 0 &&
+        resolvedValues.length < selectedValue.length &&
+        isSubsetOf(resolvedValues, selectedValue)
       const propLooksStale = propLooksStaleRemove || propLooksStaleSelectAll
       if (!same && !propLooksStale) {
         setSelectedValue(resolvedValues)
@@ -107,12 +124,18 @@ const StaticDropdown = ({
     } else if (!isMulti && value) {
       if (typeof value === 'string') {
         const valStr = String(value)
-        const foundOption = options.find(opt => String(opt.value) === valStr || String(opt._id) === valStr)
+        const foundOption = options.find(
+          (opt) => String(opt.value) === valStr || String(opt._id) === valStr
+        )
         setSelectedValue(foundOption || { value, _id: value, label: value })
       } else {
         setSelectedValue(value)
       }
-    } else if (value === undefined || value === null || (Array.isArray(value) && value.length === 0)) {
+    } else if (
+      value === undefined ||
+      value === null ||
+      (Array.isArray(value) && value.length === 0)
+    ) {
       if (isMulti && (!selectedValue || selectedValue.length === 0)) return
       setSelectedValue(isMulti ? [] : null)
     }
@@ -179,9 +202,11 @@ const StaticDropdown = ({
   const checkSelectedValue = (newValue) => {
     const next = newValue || []
     if (fieldName === 'modality') {
-      const selectAllOption = next.find(data => (data?.value ?? data?._id) === 'selectAll')
+      const selectAllOption = next.find(
+        (data) => (data?.value ?? data?._id) === 'selectAll'
+      )
       if (selectAllOption) {
-        const allModalities = options.filter(opt => opt.value !== 'selectAll')
+        const allModalities = options.filter((opt) => opt.value !== 'selectAll')
         setSelectedValue(allModalities)
         setValue(fieldName, allModalities)
       } else {
@@ -220,8 +245,8 @@ const StaticDropdown = ({
         name={fieldName}
         value={selectedValue}
         onChange={checkSelectedValue}
-        getOptionValue={option => `${option['value'] || option['_id']}`}
-        getOptionLabel={option => {
+        getOptionValue={(option) => `${option['value'] || option['_id']}`}
+        getOptionLabel={(option) => {
           if (!option) return 'Unknown'
           // Handle different data structures for clinic names and other entities
           return (

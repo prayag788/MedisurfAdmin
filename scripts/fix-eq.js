@@ -42,8 +42,11 @@ function fixFile(file) {
     enter(path) {
       const node = path.node
       if (node && node.type === 'BinaryExpression') {
-        if ((node.operator === '==' || node.operator === '!=') &&
-            node.left && node.right) {
+        if (
+          (node.operator === '==' || node.operator === '!=') &&
+          node.left &&
+          node.right
+        ) {
           const leftIsNull = node.left.type === 'NullLiteral'
           const rightIsNull = node.right.type === 'NullLiteral'
           // handle comparisons to null explicitly: `x == null` => `(x === null || x === undefined)`
@@ -100,7 +103,7 @@ function fixFile(file) {
           }
         }
       }
-    }
+    },
   })
 
   if (changed) {

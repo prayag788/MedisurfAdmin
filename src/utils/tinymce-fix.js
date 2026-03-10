@@ -28,7 +28,7 @@ export const createTinyMCEConfig = (onContentChange, editorRef) => {
       }
 
       // Prevent cursor jumping on programmatic updates
-      editor.on('SetContent', e => {
+      editor.on('SetContent', (e) => {
         if (e.initial) return
         isUpdating = true
         setTimeout(() => {
@@ -71,7 +71,7 @@ export const createTinyMCEConfig = (onContentChange, editorRef) => {
         'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } ' +
         '.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before { white-space: pre-line; } ' +
         '.mce-content-body p { margin: 0; padding: 0; margin-block: 0; margin-inline: 0; line-height: normal; }',
-      setup: editor => {
+      setup: (editor) => {
         // Prevent cursor reset on external updates
         editor.on('focus', () => {
           editor.undoManager.transact(() => {

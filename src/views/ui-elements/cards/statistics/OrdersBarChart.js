@@ -6,7 +6,9 @@ const OrdersBarChart = ({ warning }) => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    axios.get('/card/card-statistics/orders-bar-chart').then(res => setData(res.data))
+    axios
+      .get('/card/card-statistics/orders-bar-chart')
+      .then((res) => setData(res.data))
   }, [])
 
   const options = {
@@ -31,7 +33,13 @@ const OrdersBarChart = ({ warning }) => {
         columnWidth: '20%',
         startingShape: 'rounded',
         colors: {
-          backgroundBarColors: ['#f3f3f3', '#f3f3f3', '#f3f3f3', '#f3f3f3', '#f3f3f3'],
+          backgroundBarColors: [
+            '#f3f3f3',
+            '#f3f3f3',
+            '#f3f3f3',
+            '#f3f3f3',
+            '#f3f3f3',
+          ],
           backgroundBarRadius: 5,
         },
       },

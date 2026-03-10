@@ -12,7 +12,9 @@ fontawesome.library.add(faAsterisk)
 
 const WorkSheetModal = ({ handleWorksheetModal }) => {
   // ** Custom close btn
-  const CloseBtn = <X className="cursor-pointer" size={15} onClick={handleWorksheetModal} />
+  const CloseBtn = (
+    <X className="cursor-pointer" size={15} onClick={handleWorksheetModal} />
+  )
 
   return (
     <Modal
@@ -22,7 +24,12 @@ const WorkSheetModal = ({ handleWorksheetModal }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleWorksheetModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleWorksheetModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Worksheet</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1"></ModalBody>

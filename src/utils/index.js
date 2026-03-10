@@ -21,7 +21,11 @@ export * from './clinicUtils'
 export { default as AdditionalDataComponent } from './components/AdditionalDataComponent'
 export { default as FormField } from './components/FormField'
 export { default as SafeFormField } from './components/SafeFormField'
-export { default as CustomModal, FormModal, ConfirmModal } from './components/Modal'
+export {
+  default as CustomModal,
+  FormModal,
+  ConfirmModal,
+} from './components/Modal'
 
 // ** Validation Components
 export {

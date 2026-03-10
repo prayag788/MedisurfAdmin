@@ -34,7 +34,7 @@ const normaliseErrorPayload = (payload, fallback) => {
     if (payload.code && payload.message) {
       return payload.message
     }
-    
+
     // Handle array of errors (validation errors)
     if (Array.isArray(payload)) {
       const firstError = payload[0]
@@ -45,7 +45,7 @@ const normaliseErrorPayload = (payload, fallback) => {
         return firstError
       }
     }
-    
+
     if (payload.message) return normaliseErrorPayload(payload.message, fallback)
     if (payload.error) return normaliseErrorPayload(payload.error, fallback)
     if (payload.details && payload.details.error) {
@@ -62,7 +62,7 @@ export const getErrorMessage = (err, fallback = 'Please Try Again Later!') => {
     if (err && err.code === 'ECONNABORTED') {
       return 'Request timeout. Please try again.'
     }
-    
+
     if (err && err.isNetworkError) {
       return 'Network error. Please check your connection.'
     }
@@ -77,7 +77,7 @@ export const getErrorMessage = (err, fallback = 'Please Try Again Later!') => {
         const maxMb = errorData?.maxAllowedBytes
           ? Math.round(errorData.maxAllowedBytes / (1024 * 1024))
           : null
-        return (maxMb !== null && maxMb !== undefined)
+        return maxMb !== null && maxMb !== undefined
           ? `File is too large. Maximum allowed size is ${maxMb} MB.`
           : 'File is too large. Please choose a smaller file or contact support for the size limit.'
       }
@@ -92,7 +92,11 @@ export const getErrorMessage = (err, fallback = 'Please Try Again Later!') => {
         const e = errorData.error
         if (e && typeof e === 'object') {
           const text = e.message ?? e.msg
-          if (text !== null && text !== undefined && String(text).trim() !== '') {
+          if (
+            text !== null &&
+            text !== undefined &&
+            String(text).trim() !== ''
+          ) {
             return String(text)
           }
         }
@@ -103,7 +107,8 @@ export const getErrorMessage = (err, fallback = 'Please Try Again Later!') => {
         const firstError = errorData.error[0]
         if (firstError && firstError.msg) {
           const msg = firstError.msg
-          if (typeof msg === 'object' && msg !== null && msg.message) return String(msg.message)
+          if (typeof msg === 'object' && msg !== null && msg.message)
+            return String(msg.message)
           return typeof msg === 'string' ? msg : fallback
         }
       }
@@ -120,7 +125,10 @@ export const getErrorMessage = (err, fallback = 'Please Try Again Later!') => {
 
 export const showErrorAlert = (errorOrMessage, title = '<p>Error!</p>') => {
   const message = getErrorMessage(errorOrMessage)
-  const displayMessage = message && String(message).trim() ? String(message).trim() : 'Something went wrong. Please try again.'
+  const displayMessage =
+    message && String(message).trim()
+      ? String(message).trim()
+      : 'Something went wrong. Please try again.'
   return MySwal.fire({
     title,
     text: displayMessage,
@@ -192,9 +200,9 @@ export const hideLoadingAlert = () => {
   const closeResult = MySwal.close()
   const hasThen = closeResult && typeof closeResult.then === 'function'
   if (hasThen) {
-    return closeResult.then(() => new Promise(r => setTimeout(r, 80)))
+    return closeResult.then(() => new Promise((r) => setTimeout(r, 80)))
   }
-  return new Promise(resolve => setTimeout(resolve, 80))
+  return new Promise((resolve) => setTimeout(resolve, 80))
 }
 
 /**
@@ -206,7 +214,11 @@ export const hideLoadingAlert = () => {
 export const hideLoadingThenShowError = (err, messageOverride) => {
   MySwal.close()
   setTimeout(() => {
-    showErrorAlert(messageOverride !== null && messageOverride !== undefined ? messageOverride : err)
+    showErrorAlert(
+      messageOverride !== null && messageOverride !== undefined
+        ? messageOverride
+        : err
+    )
   }, 100)
 }
 
@@ -215,7 +227,10 @@ export const hideLoadingThenShowError = (err, messageOverride) => {
  * @param {string} message - Success message to show
  * @param {string} [title] - Optional title
  */
-export const hideLoadingThenShowSuccess = (message, title = '<p>Success!</p>') => {
+export const hideLoadingThenShowSuccess = (
+  message,
+  title = '<p>Success!</p>'
+) => {
   MySwal.close()
   setTimeout(() => {
     showSuccessAlert(message, title)
@@ -228,7 +243,8 @@ export const handleApiResponse = async (
   successMessage = 'Operation completed successfully!'
 ) => {
   try {
-    const result = typeof apiCall === 'function' ? await apiCall() : await apiCall
+    const result =
+      typeof apiCall === 'function' ? await apiCall() : await apiCall
     if (successMessage) {
       await showSuccessAlert(successMessage)
     }
@@ -239,7 +255,10 @@ export const handleApiResponse = async (
   }
 }
 
-export const handleFormSubmission = async (submitFn, successMessage = 'Saved successfully!') => {
+export const handleFormSubmission = async (
+  submitFn,
+  successMessage = 'Saved successfully!'
+) => {
   return handleApiResponse(submitFn, successMessage)
 }
 

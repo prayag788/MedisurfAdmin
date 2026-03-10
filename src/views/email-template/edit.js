@@ -74,10 +74,16 @@ const templateVariables = {
     'updated_email',
     'Website_URL',
   ],
-  'forgot-password': ['name', 'username', 'Password', 'Website_URL', 'Log_in_URL'],
+  'forgot-password': [
+    'name',
+    'username',
+    'Password',
+    'Website_URL',
+    'Log_in_URL',
+  ],
 }
 
-const EditRecord = props => {
+const EditRecord = (props) => {
   const { id } = useParams()
   const [editorText, setEditorText] = useState(null)
   const [editorValue, setEditorValue] = useState('')
@@ -112,9 +118,9 @@ const EditRecord = props => {
     reset,
   } = useForm({ mode: 'onSubmit', resolver: yupResolver(NewSchema) })
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: e.target.value }
     })
   }
@@ -122,7 +128,7 @@ const EditRecord = props => {
   const CancelForm = () => {
     navigate(-1)
   }
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       showLoadingAlert()
       const replace_url = `src="${process.env.REACT_APP_URL}api_static/`
@@ -134,18 +140,24 @@ const EditRecord = props => {
       data.text = text
 
       data.name = id
-      const res = await axios.put(`${process.env.REACT_APP_API_URL}/email-template/update`, data)
+      const res = await axios.put(
+        `${process.env.REACT_APP_API_URL}/email-template/update`,
+        data
+      )
       hideLoadingAlert()
 
-      toast.success(<ToastContent message={res.data?.success?.message} type={'success'} />, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.success(
+        <ToastContent message={res.data?.success?.message} type={'success'} />,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      )
       navigate('/email-template')
     } catch (err) {
       hideLoadingAlert()
@@ -153,7 +165,7 @@ const EditRecord = props => {
     }
   }
 
-  const handleVaribaleClick = tag => {
+  const handleVaribaleClick = (tag) => {
     const editor = editorRef.current
     editor.insertContent(`{{${tag}}}`)
   }
@@ -185,7 +197,9 @@ const EditRecord = props => {
     const fetchTemplateData = async () => {
       if (id) {
         try {
-          const res = await axios.get(`${process.env.REACT_APP_API_URL}/email-template/${id}`)
+          const res = await axios.get(
+            `${process.env.REACT_APP_API_URL}/email-template/${id}`
+          )
           let templateName, templateString, templateSubject
           templateName = res?.data?.result?.name || id
           if (res.data.status && res?.data?.result !== null) {
@@ -315,12 +329,14 @@ const EditRecord = props => {
                 invalid={errors?.name && true}
                 placeholder="Template name"
                 value={form_data.name}
-                onChange={e => {
+                onChange={(e) => {
                   inputHandler(e)
                   setValue('name', e.target.value)
                 }}
               />
-              {errors?.name && <FormFeedback>{errors.name.message}</FormFeedback>}
+              {errors?.name && (
+                <FormFeedback>{errors.name.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -334,12 +350,14 @@ const EditRecord = props => {
                 invalid={errors?.subject && true}
                 placeholder="Email subject"
                 value={form_data.subject}
-                onChange={e => {
+                onChange={(e) => {
                   inputHandler(e)
                   setValue('subject', e.target.value)
                 }}
               />
-              {errors?.subject && <FormFeedback>{errors.subject.message}</FormFeedback>}
+              {errors?.subject && (
+                <FormFeedback>{errors.subject.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -397,8 +415,8 @@ const EditRecord = props => {
                     content_style:
                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                     placeholder: `Anything entered here will be added to the report layout chosen from the diagnosis template.`,
-                    setup: editor => {
-                      editor.on('keydown', e => {
+                    setup: (editor) => {
+                      editor.on('keydown', (e) => {
                         handleAutoLogout()
                       })
                     },
@@ -414,7 +432,11 @@ const EditRecord = props => {
               )}
             </FormGroup>
 
-            <Button.Ripple type="submit" className="mr-1 sm-mb-1" color="primary">
+            <Button.Ripple
+              type="submit"
+              className="mr-1 sm-mb-1"
+              color="primary"
+            >
               Save
             </Button.Ripple>
             <Button.Ripple color="secondary" outline onClick={CancelForm}>
@@ -431,12 +453,13 @@ const EditRecord = props => {
             <CardBody>
               <Row className="mt-1 mb-50 pb-2 border-bottom">
                 <Col>
-                  If you want to add dynamic values to the template, please use the variables below.
-                  Click on a variable to add it to the template.
+                  If you want to add dynamic values to the template, please use
+                  the variables below. Click on a variable to add it to the
+                  template.
                 </Col>
               </Row>
               <Row className="mt-1 mb-50">
-                {templateVariables[id]?.map(variable => {
+                {templateVariables[id]?.map((variable) => {
                   return (
                     <Col className="mt-1 mb-1">
                       <MButton

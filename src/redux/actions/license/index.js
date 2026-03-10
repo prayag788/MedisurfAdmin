@@ -1,2 +1,2 @@
-export const handleLicenseUpdate = value => dispatch =>
+export const handleLicenseUpdate = (value) => (dispatch) =>
   dispatch({ type: 'UPDATE_LICENSE', data: value })

@@ -14,7 +14,11 @@ import { useNavigate } from 'react-router-dom'
 import { Edit, Trash, Radio, Plus } from 'react-feather'
 import { fetchEvent, editEvent } from '../store/actions'
 import axios from 'axios'
-import { MySwalError, MySwalLoading, MySwalSuccess } from '../../components/MySwalAlert'
+import {
+  MySwalError,
+  MySwalLoading,
+  MySwalSuccess,
+} from '../../components/MySwalAlert'
 import {
   showErrorAlert,
   showSuccessAlert,
@@ -31,7 +35,7 @@ export default () => {
   const [data, setData] = useState([])
   const [tip, setTip] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const list = useSelector(state => state.Modality.list)
+  const list = useSelector((state) => state.Modality.list)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [rowsPerPage, setRowsPerPage] = useState(7)
@@ -53,7 +57,10 @@ export default () => {
     const modalitiesData = list?.modalities || list || {}
     setData(() => {
       return Object.keys(modalitiesData)
-        .filter(key => typeof modalitiesData[key] === 'object' && modalitiesData[key].AET)
+        .filter(
+          (key) =>
+            typeof modalitiesData[key] === 'object' && modalitiesData[key].AET
+        )
         .map((modalityName, index) => {
           return {
             sl: index + 1,
@@ -73,40 +80,49 @@ export default () => {
       setSortField(d.sortField)
 
       if (sortOrder === -1) {
-        data.sort((a, b) => String(b[d.sortField]).localeCompare(String(a[d.sortField])))
+        data.sort((a, b) =>
+          String(b[d.sortField]).localeCompare(String(a[d.sortField]))
+        )
       } else {
-        data.sort((a, b) => String(a[d.sortField]).localeCompare(String(b[d.sortField])))
+        data.sort((a, b) =>
+          String(a[d.sortField]).localeCompare(String(b[d.sortField]))
+        )
       }
 
       setData(data)
     }
   }
 
-  const editHandler = id => {
+  const editHandler = (id) => {
     dispatch(editEvent(id))
     navigate('/settings/edit_modality', { state: { id } })
   }
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     showConfirm({
       title: `<p>Confirmation!</p>`,
       text: `Are you sure to delete ${id.Name}?`,
       confirmButtonText: 'Yes',
       cancelButtonText: 'No',
-    }).then(result => {
+    }).then((result) => {
       if (result.isConfirmed) {
         console.log(`[Delete] Requesting deletion for modality: ${id.Name}`)
         axios
-          .delete(`${process.env.REACT_APP_API_URL}/explorer/modalities/${id.Name}`)
-          .then(res => {
+          .delete(
+            `${process.env.REACT_APP_API_URL}/explorer/modalities/${id.Name}`
+          )
+          .then((res) => {
             console.log(`[Delete] Success: ${id.Name} deleted.`)
             showSuccessAlert(`${id.Name} Modality Deleted Successfully!`)
             setTimeout(() => {
               location.reload()
             }, 1000)
           })
-          .catch(err => {
-            console.error(`[Delete] Failed for ${id.Name}:`, err.response?.data || err.message)
+          .catch((err) => {
+            console.error(
+              `[Delete] Failed for ${id.Name}:`,
+              err.response?.data || err.message
+            )
             // Only handle non-network errors here, let global interceptor handle network errors
             if (err?.response) {
               showErrorAlert(getErrorMessage(err))
@@ -119,7 +135,7 @@ export default () => {
     })
   }
 
-  const performEcho = id => {
+  const performEcho = (id) => {
     console.log(`[C-ECHO] Requesting echo for modality: ${id.Name}`)
     MySwalLoading('Performing C-ECHO...')
 
@@ -132,8 +148,11 @@ export default () => {
         hideLoadingThenShowSuccess('C-Echo successful!')
         setTip(!tip)
       })
-      .catch(err => {
-        console.error(`[C-ECHO] Failed for ${id.Name}:`, err.response?.data || err.message)
+      .catch((err) => {
+        console.error(
+          `[C-ECHO] Failed for ${id.Name}:`,
+          err.response?.data || err.message
+        )
         // Only handle non-network errors here, let global interceptor handle network errors
         if (err?.response) {
           hideLoadingThenShowError('C-Echo has Failed!')
@@ -145,45 +164,45 @@ export default () => {
   const columns = [
     {
       name: 'Dicom Server',
-      selector: row => (row['Name'] ? row['Name'] : '-'),
+      selector: (row) => (row['Name'] ? row['Name'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'Name',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.Name}</div>
       },
     },
     {
       name: 'AET',
-      selector: row => (row['AET'] ? row['AET'] : '-'),
+      selector: (row) => (row['AET'] ? row['AET'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'AET',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.AET}</div>
       },
     },
     {
       name: 'IP Address',
-      selector: row => (row['Host'] ? row['Host'] : '-'),
+      selector: (row) => (row['Host'] ? row['Host'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'Host',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.Host}</div>
       },
     },
     {
       name: 'Port',
-      selector: row => (row['Port'] ? row['Port'] : '-'),
+      selector: (row) => (row['Port'] ? row['Port'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'Port',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.Port}</div>
       },
     },
@@ -194,7 +213,7 @@ export default () => {
       reorder: true,
       id: 'actions',
 
-      cell: row => {
+      cell: (row) => {
         return (
           <div>
             <Edit
@@ -218,7 +237,10 @@ export default () => {
                 deleteHandler(row)
               }}
             />
-            <UncontrolledTooltip className="tooltip-react-strap" target="delete">
+            <UncontrolledTooltip
+              className="tooltip-react-strap"
+              target="delete"
+            >
               Delete
             </UncontrolledTooltip>
             <Radio
@@ -280,9 +302,9 @@ export default () => {
                     first: page,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setPage(e.first++)
-                      setRowsPerPage(prev => e.rows)
+                      setRowsPerPage((prev) => e.rows)
                     },
                   }}
                 />

@@ -43,8 +43,10 @@ import { STUDY_STATUS_OPTIONS } from '../../configs/const'
 const EditModel = ({ open, handleModal, editData, updateUser }) => {
   const dispatch = useDispatch()
   // ** State
-  const modalityOptions = useSelector(state => state?.ModalityReducer) || []
-  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('userData')))
+  const modalityOptions = useSelector((state) => state?.ModalityReducer) || []
+  const [userData, setUserData] = useState(
+    JSON.parse(localStorage.getItem('userData'))
+  )
   const [formData, setFormData] = useState(editData)
   const [isValidSelect, setIsValidSelect] = useState(true)
   const isInitialInput = useRef(true)
@@ -73,7 +75,10 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
             .of(
               yup
                 .object()
-                .shape({ _id: yup.string().required(), clinicName: yup.string().required() })
+                .shape({
+                  _id: yup.string().required(),
+                  clinicName: yup.string().required(),
+                })
             ),
           status: yup.number().required('Status is a required field'),
           modality: yup.array().of(
@@ -95,7 +100,11 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
           function (value) {
             const { modality, clinicNames, studyStatus } = value
 
-            return modality?.length > 0 || clinicNames?.length > 0 || studyStatus?.length > 0
+            return (
+              modality?.length > 0 ||
+              clinicNames?.length > 0 ||
+              studyStatus?.length > 0
+            )
           }
         )
         .required(),
@@ -103,11 +112,15 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
   )
 
   // ** Form field mapping
-  const formFields = useMemo(() => ['name', 'clinicNames', 'status', 'modality', 'studyStatus'], [])
+  const formFields = useMemo(
+    () => ['name', 'clinicNames', 'status', 'modality', 'studyStatus'],
+    []
+  )
   const [isMultiPhysicians, setIsMultiPhysicians] = useState(true)
   const [searchValue, setSearchValue] = useState(ROLES.ClinicUser)
 
-  const [userregistrationCompleted, setUserregistrationCompleted] = useState(false)
+  const [userregistrationCompleted, setUserregistrationCompleted] =
+    useState(false)
 
   // ** Form setup
   const {
@@ -125,7 +138,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
   })
 
   const onChange = useCallback(
-    filterfor => {
+    (filterfor) => {
       setValue('filterfor', filterfor)
       setSearchValue(filterfor)
       setIsMultiPhysicians(filterfor === ROLES.ClinicAdmin)
@@ -140,31 +153,56 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
     try {
       // Refetch modalities from API so dropdown always shows CR, CT, MR (not DICOM server names)
       try {
-        const modRes = await axios.get(`${process.env.REACT_APP_API_URL}/orthanc/modalities`, { headers })
+        const modRes = await axios.get(
+          `${process.env.REACT_APP_API_URL}/orthanc/modalities`,
+          { headers }
+        )
         const data = modRes?.data
-        console.log('[FilterModal Edit Modality] orthanc/modalities full response:', JSON.stringify(data))
-        console.log('[FilterModal Edit Modality] response type:', Array.isArray(data) ? 'array' : typeof data)
+        console.log(
+          '[FilterModal Edit Modality] orthanc/modalities full response:',
+          JSON.stringify(data)
+        )
+        console.log(
+          '[FilterModal Edit Modality] response type:',
+          Array.isArray(data) ? 'array' : typeof data
+        )
         let raw = []
         if (Array.isArray(data)) raw = data
         else if (data && typeof data === 'object') {
-          console.log('[FilterModal Edit Modality] response is object, keys:', Object.keys(data))
+          console.log(
+            '[FilterModal Edit Modality] response is object, keys:',
+            Object.keys(data)
+          )
           const names = new Set()
           Object.keys(data).forEach((key) => {
             const config = data[key]
-            const aet = config && (config.AET ?? config.AeTitle ?? config.aeTitle)
+            const aet =
+              config && (config.AET ?? config.AeTitle ?? config.aeTitle)
             if (aet && typeof aet === 'string') names.add(String(aet).trim())
             else names.add(String(key).trim())
           })
           raw = Array.from(names).sort()
         }
-        console.log('[FilterModal Edit Modality] normalized raw array:', JSON.stringify(raw))
+        console.log(
+          '[FilterModal Edit Modality] normalized raw array:',
+          JSON.stringify(raw)
+        )
         if (raw.length > 0) {
-          const options = raw.filter(Boolean).map((name) => ({ value: name, label: name }))
-          console.log('[FilterModal Edit Modality] dispatching options to Redux:', JSON.stringify(options))
+          const options = raw
+            .filter(Boolean)
+            .map((name) => ({ value: name, label: name }))
+          console.log(
+            '[FilterModal Edit Modality] dispatching options to Redux:',
+            JSON.stringify(options)
+          )
           dispatch(handleModalityUpdate(options))
         }
       } catch (e) {
-        console.log('[FilterModal Edit Modality] fetch error:', e?.message, e?.response?.data)
+        console.log(
+          '[FilterModal Edit Modality] fetch error:',
+          e?.message,
+          e?.response?.data
+        )
       }
 
       // Load clinics
@@ -173,7 +211,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
         { headers }
       )
       setClinics(
-        clinicsRes.data.data?.map(clinic => ({
+        clinicsRes.data.data?.map((clinic) => ({
           value: clinic._id,
           label: clinic.name,
           _id: clinic._id,
@@ -190,9 +228,13 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
           { headers }
         )
         const dropdownData = fallbackRes.data?.dropdownData || []
-        physicianList = dropdownData.map(p => ({
+        physicianList = dropdownData.map((p) => ({
           value: p._id,
-          label: p.physicianname || p.name || `${p.fname || ''} ${p.lname || ''}`.trim() || p.username,
+          label:
+            p.physicianname ||
+            p.name ||
+            `${p.fname || ''} ${p.lname || ''}`.trim() ||
+            p.username,
           _id: p._id,
           name: p.physicianname || p.name,
           physicianname: p.physicianname || p.name,
@@ -207,9 +249,10 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
             { headers }
           )
           physicianList =
-            physiciansRes.data?.data?.map(physician => ({
+            physiciansRes.data?.data?.map((physician) => ({
               value: physician._id,
-              label: physician.name || physician.physicianname || physician.username,
+              label:
+                physician.name || physician.physicianname || physician.username,
               _id: physician._id,
               name: physician.name || physician.physicianname,
               physicianname: physician.name || physician.physicianname,
@@ -226,7 +269,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
         { headers }
       )
       setUsers(
-        usersRes.data.data?.map(user => ({
+        usersRes.data.data?.map((user) => ({
           value: user._id,
           label: user.username,
           _id: user._id,
@@ -246,39 +289,53 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
   // Format Users for dropdown: option-shaped so StaticDropdown can display (value, label, _id)
   const formatUsersValue = (usersList, optionsList) => {
     const raw = Array.isArray(usersList) ? usersList : []
-    return raw.map(u => {
-      const id = u?._id ?? u?.value ?? u
-      const idStr = typeof id === 'string' ? id : String(id)
-      const option = Array.isArray(optionsList) && optionsList.find(opt => String(opt._id || opt.value || '') === idStr)
-      if (option) return option
-      const label = u?.username ?? u?.label ?? u?.name ?? idStr
-      return { _id: idStr, value: idStr, label, username: label }
-    }).filter(Boolean)
+    return raw
+      .map((u) => {
+        const id = u?._id ?? u?.value ?? u
+        const idStr = typeof id === 'string' ? id : String(id)
+        const option =
+          Array.isArray(optionsList) &&
+          optionsList.find(
+            (opt) => String(opt._id || opt.value || '') === idStr
+          )
+        if (option) return option
+        const label = u?.username ?? u?.label ?? u?.name ?? idStr
+        return { _id: idStr, value: idStr, label, username: label }
+      })
+      .filter(Boolean)
   }
 
   // Format ClinicNames for dropdown: option-shaped so StaticDropdown can display (value, label, _id, clinicName)
   const formatClinicNamesValue = (clinicsList, optionsList) => {
     const raw = Array.isArray(clinicsList) ? clinicsList : []
-    return raw.map(c => {
-      const id = c?._id ?? c?.value ?? c
-      const idStr = typeof id === 'string' ? id : String(id)
-      const option = Array.isArray(optionsList) && optionsList.find(opt => String(opt._id || opt.value || '') === idStr)
-      if (option) {
-        // Ensure clinicName is present
-        return {
-          ...option,
-          clinicName: option.clinicName || option.name || option.label || idStr
+    return raw
+      .map((c) => {
+        const id = c?._id ?? c?.value ?? c
+        const idStr = typeof id === 'string' ? id : String(id)
+        const option =
+          Array.isArray(optionsList) &&
+          optionsList.find(
+            (opt) => String(opt._id || opt.value || '') === idStr
+          )
+        if (option) {
+          // Ensure clinicName is present
+          return {
+            ...option,
+            clinicName:
+              option.clinicName || option.name || option.label || idStr,
+          }
         }
-      }
-      const clinicName = c?.clinicName ?? c?.clinic_name ?? c?.name ?? c?.label ?? idStr
-      return { 
-        _id: idStr, 
-        value: idStr, 
-        label: clinicName,
-        clinicName,
-        name: clinicName
-      }
-    }).filter(Boolean)
+        const clinicName =
+          c?.clinicName ?? c?.clinic_name ?? c?.name ?? c?.label ?? idStr
+        return {
+          _id: idStr,
+          value: idStr,
+          label: clinicName,
+          clinicName,
+          name: clinicName,
+        }
+      })
+      .filter(Boolean)
   }
 
   // ** Load filter data only when modal opens or user switches to a different filter (don't overwrite on parent re-render)
@@ -296,11 +353,19 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
     setValue('name', editData.name || '', { shouldValidate: false })
     setValue('status', editData.status || 1, { shouldValidate: false })
     setValue('filterfor', editData.filterfor || 'CU', { shouldValidate: false })
-    setValue('clinicNames', formatClinicNamesValue(editData.clinicNames || [], []), { shouldValidate: false })
+    setValue(
+      'clinicNames',
+      formatClinicNamesValue(editData.clinicNames || [], []),
+      { shouldValidate: false }
+    )
     setValue('Physicians', editData.Physicians || [], { shouldValidate: false })
-    setValue('Users', formatUsersValue(editData.Users, []), { shouldValidate: false })
+    setValue('Users', formatUsersValue(editData.Users, []), {
+      shouldValidate: false,
+    })
     setValue('modality', editData.modality || [], { shouldValidate: false })
-    setValue('studyStatus', editData.studyStatus || [], { shouldValidate: false })
+    setValue('studyStatus', editData.studyStatus || [], {
+      shouldValidate: false,
+    })
 
     setFormData(editData)
     setSelectedFilterFor(editData?.filterfor || 'CU')
@@ -324,7 +389,8 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
     const prevHad = hadClinicsOptionsRef.current
     hadClinicsOptionsRef.current = true
     if (prevHad) return
-    const currentClinicNames = watch('clinicNames') || editData.clinicNames || []
+    const currentClinicNames =
+      watch('clinicNames') || editData.clinicNames || []
     const formatted = formatClinicNamesValue(currentClinicNames, clinics)
     setValue('clinicNames', formatted, { shouldValidate: false })
   }, [clinics, open, editData, setValue, watch])
@@ -332,7 +398,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
   useEffect(() => {
     if (!open) {
       lastSyncedEditIdRef.current = null
-      setIsValidSelect(prev => true)
+      setIsValidSelect((prev) => true)
       setFormData({
         Physicians: [],
         clinicNames: [],
@@ -349,7 +415,8 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
     }
   }, [open])
 
-  const phoneRegExp = /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
+  const phoneRegExp =
+    /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
   // ** New user schema
   // Do NOT sync formData to setValue — it would overwrite dropdowns when user types in name or formData reference changes.
 
@@ -361,7 +428,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
   }, [register])
 
   const [nestedModal, setNestedModal] = useState(false)
-  const dropdownData = useSelector(state => state.dropdownDataReducer)
+  const dropdownData = useSelector((state) => state.dropdownDataReducer)
 
   const toggleNested = () => {
     setNestedModal(!nestedModal)
@@ -370,7 +437,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
     setNestedModal(true)
   }, [])
 
-  const editFilter = requestData => {
+  const editFilter = (requestData) => {
     console.log('Submitting filter update:', requestData)
     if (updateUser) {
       // Add the filter ID to the request data
@@ -383,7 +450,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
   }
   // ** Form submission handler
   const onSubmit = useCallback(
-    data => {
+    (data) => {
       console.log('Form submitted with data:', data)
 
       // Convert status to number to avoid "[object Object]" error
@@ -392,7 +459,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
         status: parseInt(data.status, 10),
         _id: editData._id || editData.id,
       }
-      if (processedData.modality?.some(m => m?.value === 'selectAll')) {
+      if (processedData.modality?.some((m) => m?.value === 'selectAll')) {
         processedData.modality = modalityOptions
       }
       console.log('Processed data for update:', processedData)
@@ -401,9 +468,9 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
     [editFilter, editData, modalityOptions]
   )
 
-  const inputHandler = useCallback(e => {
+  const inputHandler = useCallback((e) => {
     const name = e.target.name
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: e.target.value }
     })
   }, [])
@@ -416,7 +483,14 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
 
   // ** Reusable FormField component
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -449,11 +523,11 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
   }
 
   const addMoreEmails = () => {
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, secondaryEmail: [...(prev?.secondaryEmail ?? []), ''] }
     })
   }
-  const addNewUserTodropdown = a => {
+  const addNewUserTodropdown = (a) => {
     setValue('Users', getValues()?.Users ? [...getValues()?.Users, a] : [a])
   }
   return (
@@ -463,7 +537,12 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit Filter</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
@@ -484,9 +563,9 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
                   type="text"
                   placeholder="Enter filter name"
                   value={field.value || formData.name || ''}
-                  onChange={e => {
+                  onChange={(e) => {
                     field.onChange(e.target.value)
-                    setFormData(prev => ({ ...prev, name: e.target.value }))
+                    setFormData((prev) => ({ ...prev, name: e.target.value }))
                   }}
                   invalid={errors.name && true}
                 />
@@ -509,7 +588,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
                   id="filterfor"
                   type="select"
                   value={field.value || searchValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     field.onChange(e.target.value)
                     setSelectedFilterFor(e.target.value)
                     setSearchValue(e.target.value)
@@ -549,7 +628,8 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
               />
             </>
           )}
-          {(selectedFilterFor === 'Physician' || searchValue === 'Physician') && (
+          {(selectedFilterFor === 'Physician' ||
+            searchValue === 'Physician') && (
             <StaticDropdown
               errors={errors}
               value={watch('Physicians')}
@@ -584,7 +664,10 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
             required={false}
             fieldName="modality"
             labelName="Modality"
-            options={[{ value: 'selectAll', label: 'SELECT ALL' }, ...modalityOptions]}
+            options={[
+              { value: 'selectAll', label: 'SELECT ALL' },
+              ...modalityOptions,
+            ]}
             isMulti={true}
           />
           <FormGroup>
@@ -599,13 +682,15 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
                 valueAsNumber: true,
               })}
             >
-              {STATUS_OPTIONS.map(option => (
+              {STATUS_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
               ))}
             </Input>
-            {errors?.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+            {errors?.status && (
+              <FormFeedback>{errors.status.message}</FormFeedback>
+            )}
           </FormGroup>
           <StaticDropdown
             value={watch('studyStatus')}

@@ -17,7 +17,7 @@ const CardActions = () => {
           <CardAction
             title="Card Actions"
             actions={['collapse', 'reload', 'remove']}
-            endReload={endLoading => {
+            endReload={(endLoading) => {
               setTimeout(() => endLoading(), 2000)
             }}
           >
@@ -68,7 +68,8 @@ const CardActions = () => {
                 <code>actions='collapse'</code>.
               </CardText>
               <CardText className="mb-0">
-                Click on <ChevronDown size={15} /> to see card collapse in action
+                Click on <ChevronDown size={15} /> to see card collapse in
+                action
               </CardText>
             </CardBody>
           </CardAction>
@@ -77,14 +78,15 @@ const CardActions = () => {
           <CardAction
             title="Reload"
             actions="reload"
-            endReload={endLoading => {
+            endReload={(endLoading) => {
               setTimeout(() => endLoading(), 2000)
             }}
           >
             <CardBody className="pt-0">
               <CardText>
                 To create a re-loadable card pass prop
-                <code>actions='reload'</code> and pass prop <code>endReload</code>
+                <code>actions='reload'</code> and pass prop{' '}
+                <code>endReload</code>
                 to end the loading.
               </CardText>
               <CardText className="mb-0">
@@ -98,8 +100,9 @@ const CardActions = () => {
             <CardBody className="pt-0">
               <CardText>
                 You can add refresh content action to card by adding class
-                <code>.card-reload</code> with your card tag, and add conditional spinner into card
-                body to show when card is refreshing.
+                <code>.card-reload</code> with your card tag, and add
+                conditional spinner into card body to show when card is
+                refreshing.
               </CardText>
               <CardText className="mb-0">
                 Click on <RotateCw size={15} /> to see card refresh in action

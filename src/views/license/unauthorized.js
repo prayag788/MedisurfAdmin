@@ -5,7 +5,17 @@ import axios from 'axios'
 import { isUserLoggedIn } from '@utils'
 
 // ** Third Party Components
-import { Row, Col, Spinner, Card, CardHeader, CardTitle, Label, Input, Button } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Spinner,
+  Card,
+  CardHeader,
+  CardTitle,
+  Label,
+  Input,
+  Button,
+} from 'reactstrap'
 import moment from 'moment'
 
 // ** Add New Modal Component
@@ -89,10 +99,10 @@ const unauthorized = () => {
           sortcolumn: sortColumn,
         },
       })
-      .then(doc => {
+      .then((doc) => {
         setTotal(doc.data.numberOfRecord)
         if (doc.data && doc.data.list && doc.data.list.length) {
-          setData(prev =>
+          setData((prev) =>
             doc.data.list.map((obj, index) => {
               // Add a serial number property
               obj.sl = index + 1
@@ -111,9 +121,10 @@ const unauthorized = () => {
                 // Check and process licenseSystemInfo if it exists
                 if (allData?.licenseSystemInfo) {
                   try {
-                    const decodedString = Buffer.from(allData.licenseSystemInfo, 'base64').toString(
-                      'utf8'
-                    )
+                    const decodedString = Buffer.from(
+                      allData.licenseSystemInfo,
+                      'base64'
+                    ).toString('utf8')
                     allData.licenseSystemInfo = JSON.parse(decodedString)
                   } catch (error) {
                     allData.licenseSystemInfo = {}
@@ -123,9 +134,10 @@ const unauthorized = () => {
                 // Check and process clinicSystemInfo if it exists
                 if (allData?.clinicSystemInfo) {
                   try {
-                    const decodedString = Buffer.from(allData.clinicSystemInfo, 'base64').toString(
-                      'utf8'
-                    )
+                    const decodedString = Buffer.from(
+                      allData.clinicSystemInfo,
+                      'base64'
+                    ).toString('utf8')
                     allData.clinicSystemInfo = JSON.parse(decodedString)
                   } catch (error) {
                     allData.clinicSystemInfo = {}
@@ -172,7 +184,7 @@ const unauthorized = () => {
     }
   }
 
-  const filterHandler = e => {
+  const filterHandler = (e) => {
     setSearchValue(e.target.value)
     clearTimeout(myTimeout)
     myTimeout = setTimeout(() => {
@@ -187,13 +199,13 @@ const unauthorized = () => {
         `${process.env.REACT_APP_API_URL}/unauthorizeddata/update/${updatedata.id}`,
         updatedata
       )
-      .then(doc => {
+      .then((doc) => {
         showSuccessAlert(
           `License ${type === 'authorize' ? 'Authorized' : type === 'unauthorize' ? 'Unauthorized' : 'Updated'} Successfully!`
         )
         getData()
       })
-      .catch(err => {
+      .catch((err) => {
         // Only handle response errors, let global interceptor handle network errors
         if (err?.response) {
           showErrorAlert(getErrorMessage(err))
@@ -201,7 +213,7 @@ const unauthorized = () => {
       })
   }
 
-  const AuthorizeHandler = id => {
+  const AuthorizeHandler = (id) => {
     const authorizeOptions = {
       id,
       status: 1,
@@ -239,9 +251,11 @@ const unauthorized = () => {
       id: 'license_id',
       minWidth: '20px',
       maxWidth: '90px',
-      cell: row => {
+      cell: (row) => {
         return (
-          <div style={{ whiteSpace: 'break-spaces' }}>{row.license_id ? row.license_id : '-'}</div>
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.license_id ? row.license_id : '-'}
+          </div>
         )
       },
     },
@@ -254,8 +268,10 @@ const unauthorized = () => {
       id: 'clinic',
       minWidth: '180px',
       maxWidth: '250px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.clinic || '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>{row.clinic || '-'}</div>
+        )
       },
     },
     {
@@ -267,8 +283,10 @@ const unauthorized = () => {
       id: 'name',
       minWidth: '150px',
       maxWidth: '200px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.name || '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>{row.name || '-'}</div>
+        )
       },
     },
     {
@@ -280,8 +298,12 @@ const unauthorized = () => {
       id: 'url',
       minWidth: '200px',
       maxWidth: '300px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces', wordBreak: 'break-all' }}>{row.url || '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces', wordBreak: 'break-all' }}>
+            {row.url || '-'}
+          </div>
+        )
       },
     },
     {
@@ -293,8 +315,10 @@ const unauthorized = () => {
       id: 'method',
       minWidth: '80px',
       maxWidth: '100px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.method || '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>{row.method || '-'}</div>
+        )
       },
     },
     {
@@ -306,7 +330,7 @@ const unauthorized = () => {
       id: 'allData',
       minWidth: '110px',
       maxWidth: '140px',
-      cell: row => {
+      cell: (row) => {
         // Construct formatted string
         let formattedString = ''
         console.log('row.allDataDiff', row.allDataDiff)
@@ -349,7 +373,7 @@ const unauthorized = () => {
       id: 'created_on',
       minWidth: '130px',
       maxWidth: '130px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row.created_on
@@ -370,11 +394,16 @@ const unauthorized = () => {
       id: 'status',
       minWidth: '80px',
       maxWidth: '100px',
-      cell: row => {
-        const statusObj = status[row.status] || { title: 'Unknown', color: 'light-secondary' }
+      cell: (row) => {
+        const statusObj = status[row.status] || {
+          title: 'Unknown',
+          color: 'light-secondary',
+        }
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
-            <span className={`badge badge-${statusObj.color}`}>{statusObj.title}</span>
+            <span className={`badge badge-${statusObj.color}`}>
+              {statusObj.title}
+            </span>
           </div>
         )
       },
@@ -390,7 +419,7 @@ const unauthorized = () => {
         right: '0',
         'border-left': '1px dotted #6e6b7b',
       },
-      cell: row => {
+      cell: (row) => {
         if (row.status === 1) {
           return <div className="d-flex">Authorized</div>
         } else {
@@ -447,7 +476,7 @@ const unauthorized = () => {
                         bsSize="sm"
                         id="search-input"
                         value={searchValue}
-                        onChange={e => {
+                        onChange={(e) => {
                           filterHandler(e)
                         }}
                       />
@@ -466,9 +495,9 @@ const unauthorized = () => {
                           onSort: handleSort,
                           sortField,
                           sortOrder,
-                          onPage: e => {
+                          onPage: (e) => {
                             setPage(e.first++)
-                            setRowsPerPage(prev => e.rows)
+                            setRowsPerPage((prev) => e.rows)
                           },
                         }}
                       />

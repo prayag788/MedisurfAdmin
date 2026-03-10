@@ -22,7 +22,8 @@ const CustomFilterDropdown = ({
   const loadFilters = useCallback(async () => {
     try {
       setLoading(true)
-      const token = localStorage.getItem('accessToken') || localStorage.getItem('authToken')
+      const token =
+        localStorage.getItem('accessToken') || localStorage.getItem('authToken')
       const apiUrl = process.env.REACT_APP_API_URL || ''
       const url = `${apiUrl.replace(/\/$/, '')}/filter-module/get-dropdown-data`
 
@@ -31,7 +32,7 @@ const CustomFilterDropdown = ({
         url,
         params: { name: '', page: 1, size: 50 },
         headers: token ? { Authorization: `Bearer ${token}` } : {},
-        timeout: 5000
+        timeout: 5000,
       })
 
       if (response.data?.success && response.data?.list) {
@@ -65,22 +66,24 @@ const CustomFilterDropdown = ({
     wasModalOpen.current = addNewFilter
   }, [addNewFilter, loadFilters])
 
-  const handleChange = selectedOption => {
+  const handleChange = (selectedOption) => {
     setSelectedDropDownFilter(selectedOption || null)
   }
 
   return (
-    <FormGroup style={{ width: '100%', minWidth: '140px', marginRight: 'auto' }}>
+    <FormGroup
+      style={{ width: '100%', minWidth: '140px', marginRight: 'auto' }}
+    >
       <Label for={'filterdropdown'}>Filter:</Label>
       <Select
         key={addNewFilter}
         value={selectedDropDownFilter}
         options={options}
-        getOptionValue={option => option._id}
-        getOptionLabel={option => {
+        getOptionValue={(option) => option._id}
+        getOptionLabel={(option) => {
           const filterName = option.name || 'Unnamed Filter'
           const criteria = []
-          
+
           if (option.Users?.length > 0) {
             criteria.push(`Users: ${option.Users.length}`)
           }
@@ -96,8 +99,10 @@ const CustomFilterDropdown = ({
           if (option.modality?.length > 0) {
             criteria.push(`Modality: ${option.modality.length}`)
           }
-          
-          return criteria.length > 0 ? `${filterName} (${criteria.join(' | ')})` : filterName
+
+          return criteria.length > 0
+            ? `${filterName} (${criteria.join(' | ')})`
+            : filterName
         }}
         onChange={handleChange}
         isSearchable

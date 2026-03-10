@@ -19,13 +19,13 @@ const CardNavigation = () => {
   const [activePill, setPillActive] = useState('1')
   const [activeTab, setTabActive] = useState('1')
 
-  const togglePills = tab => {
+  const togglePills = (tab) => {
     if (activePill !== tab) {
       setPillActive(tab)
     }
   }
 
-  const toggleTabs = tab => {
+  const toggleTabs = (tab) => {
     if (activeTab !== tab) {
       setTabActive(tab)
     }
@@ -68,7 +68,8 @@ const CardNavigation = () => {
                 <TabPane tabId="1">
                   <CardTitle tag="h4">Special title treatment</CardTitle>
                   <CardText>
-                    With supporting text below as a natural lead-in to additional content.
+                    With supporting text below as a natural lead-in to
+                    additional content.
                   </CardText>
                   <Button.Ripple color="primary" outline>
                     Go somewhere
@@ -77,7 +78,8 @@ const CardNavigation = () => {
                 <TabPane tabId="2">
                   <CardTitle tag="h4">Special title </CardTitle>
                   <CardText>
-                    With supporting text below as a natural lead-in to additional content.
+                    With supporting text below as a natural lead-in to
+                    additional content.
                   </CardText>
                   <Button.Ripple color="primary" outline>
                     Go somewhere
@@ -121,7 +123,8 @@ const CardNavigation = () => {
                 <TabPane tabId="1">
                   <CardTitle tag="h4">Special title treatment</CardTitle>
                   <CardText>
-                    With supporting text below as a natural lead-in to additional content.
+                    With supporting text below as a natural lead-in to
+                    additional content.
                   </CardText>
                   <Button.Ripple color="primary" outline>
                     Go somewhere
@@ -130,7 +133,8 @@ const CardNavigation = () => {
                 <TabPane tabId="2">
                   <CardTitle tag="h4">Special title </CardTitle>
                   <CardText>
-                    With supporting text below as a natural lead-in to additional content.
+                    With supporting text below as a natural lead-in to
+                    additional content.
                   </CardText>
                   <Button.Ripple color="primary" outline>
                     Go somewhere

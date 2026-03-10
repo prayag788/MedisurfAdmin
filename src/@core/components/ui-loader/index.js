@@ -6,7 +6,7 @@ import { Spinner } from 'reactstrap'
 
 import './ui-loader.scss'
 
-const UILoader = props => {
+const UILoader = (props) => {
   const {
     children,
     blocking = false,
@@ -19,13 +19,20 @@ const UILoader = props => {
   const Tag = tag
 
   return (
-    <Tag className={classnames('ui-loader', { [className]: className, show: blocking })}>
+    <Tag
+      className={classnames('ui-loader', {
+        [className]: className,
+        show: blocking,
+      })}
+    >
       {children}
       {blocking ? (
         <Fragment>
           <div
             className="overlay"
-            {...(blocking && overlayColor ? { style: { backgroundColor: overlayColor } } : {})}
+            {...(blocking && overlayColor
+              ? { style: { backgroundColor: overlayColor } }
+              : {})}
           ></div>
           <div className="loader">{loader}</div>
         </Fragment>

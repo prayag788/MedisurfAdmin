@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 // React 18 Performance Monitoring Hook
-export const usePerformanceMonitoring = componentName => {
+export const usePerformanceMonitoring = (componentName) => {
   const renderStartTime = useRef()
   const mountStartTime = useRef()
 
@@ -13,7 +13,9 @@ export const usePerformanceMonitoring = componentName => {
       // Log component unmount time
       const mountDuration = performance.now() - mountStartTime.current
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[Performance] ${componentName} mounted for ${mountDuration.toFixed(2)}ms`)
+        console.log(
+          `[Performance] ${componentName} mounted for ${mountDuration.toFixed(2)}ms`
+        )
       }
     }
   }, [componentName])
@@ -28,7 +30,9 @@ export const usePerformanceMonitoring = componentName => {
         const renderDuration = performance.now() - renderStartTime.current
         if (process.env.NODE_ENV === 'development' && renderDuration > 16) {
           // Only log slow renders (>16ms)
-          console.warn(`[Performance] ${componentName} slow render: ${renderDuration.toFixed(2)}ms`)
+          console.warn(
+            `[Performance] ${componentName} slow render: ${renderDuration.toFixed(2)}ms`
+          )
         }
       })
     }
@@ -50,10 +54,12 @@ export const useConcurrentFeatures = () => {
   useEffect(() => {
     // Monitor React 18 concurrent features usage
     if (process.env.NODE_ENV === 'development') {
-      const observer = new PerformanceObserver(list => {
-        list.getEntries().forEach(entry => {
+      const observer = new PerformanceObserver((list) => {
+        list.getEntries().forEach((entry) => {
           if (entry.name.includes('react')) {
-            console.log(`[React 18] ${entry.name}: ${entry.duration.toFixed(2)}ms`)
+            console.log(
+              `[React 18] ${entry.name}: ${entry.duration.toFixed(2)}ms`
+            )
           }
         })
       })

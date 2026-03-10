@@ -40,7 +40,11 @@ const data = {
         time: 'Mon Dec 10 2018 07:45:55 GMT+0000 (GMT)',
         senderId: 1,
       },
-      { message: 'Absolutely!', time: 'Mon Dec 10 2018 07:46:00 GMT+0000 (GMT)', senderId: 11 },
+      {
+        message: 'Absolutely!',
+        time: 'Mon Dec 10 2018 07:46:00 GMT+0000 (GMT)',
+        senderId: 11,
+      },
       {
         message: 'Modern admin is the responsive bootstrap 4 admin template.!',
         time: 'Mon Dec 10 2018 07:46:05 GMT+0000 (GMT)',
@@ -66,13 +70,18 @@ const data = {
         time: 'Mon Dec 10 2018 07:46:53 GMT+0000 (GMT)',
         senderId: 11,
       },
-      { message: 'I will purchase it for sure. 👍', time: '2020-12-08T13:52:38.013Z', senderId: 1 },
+      {
+        message: 'I will purchase it for sure. 👍',
+        time: '2020-12-08T13:52:38.013Z',
+        senderId: 1,
+      },
     ],
   },
   contact: {
     id: 1,
     fullName: 'Felecia Rower',
-    avatar: require('@src/assets/images/portrait/small/avatar-s-20.jpg').default,
+    avatar: require('@src/assets/images/portrait/small/avatar-s-20.jpg')
+      .default,
     status: 'away',
   },
 }
@@ -137,7 +146,7 @@ const CardChat = () => {
           </div>
 
           <div className="chat-body">
-            {item.messages.map(chat => (
+            {item.messages.map((chat) => (
               <div key={chat.msg} className="chat-content">
                 <p>{chat.msg}</p>
               </div>
@@ -159,7 +168,7 @@ const CardChat = () => {
     }
   }, [chatRef, chatData.chat.chat.length])
 
-  const handleSendMsg = e => {
+  const handleSendMsg = (e) => {
     e.preventDefault()
     if (msg.trim().length) {
       const newMsg = chatData
@@ -192,13 +201,13 @@ const CardChat = () => {
       </CardHeader>
       <div className="chat-app-window">
         <PerfectScrollbar
-          containerRef={el => setChatRef(el)}
+          containerRef={(el) => setChatRef(el)}
           className="user-chats scroll-area"
           options={{ wheelPropagation: false }}
         >
           <div className="chats">{renderChats()}</div>
         </PerfectScrollbar>
-        <Form className="chat-app-form" onSubmit={e => handleSendMsg(e)}>
+        <Form className="chat-app-form" onSubmit={(e) => handleSendMsg(e)}>
           <InputGroup className="input-group-merge mr-1 form-send-message">
             <InputGroupText>
               <Label className="attachment-icon mb-0" for="attach-doc">
@@ -209,7 +218,7 @@ const CardChat = () => {
             <Input
               value={msg}
               className="border-0"
-              onChange={e => setMsg(e.target.value)}
+              onChange={(e) => setMsg(e.target.value)}
               placeholder="Type your message"
             />
           </InputGroup>

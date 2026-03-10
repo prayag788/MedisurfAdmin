@@ -4,12 +4,26 @@ import { Fragment, forwardRef } from 'react'
 // ** Third Party Components
 import DataTable from 'react-data-table-component'
 import { ChevronDown, Plus } from 'react-feather'
-import { Card, CardHeader, CardTitle, Button, Input, Label, Row, Col } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  Button,
+  Input,
+  Label,
+  Row,
+  Col,
+} from 'reactstrap'
 
 // ** Bootstrap Checkbox Component
 const BootstrapCheckbox = forwardRef(({ onClick, ...rest }, ref) => (
   <div className="custom-control custom-checkbox">
-    <input type="checkbox" className="custom-control-input" ref={ref} {...rest} />
+    <input
+      type="checkbox"
+      className="custom-control-input"
+      ref={ref}
+      {...rest}
+    />
     <label className="custom-control-label" onClick={onClick} />
   </div>
 ))
@@ -40,14 +54,14 @@ const CustomTableForLicense = ({
   // ** States
 
   // ** Function to handle filter
-  const handleFilter = e => {
+  const handleFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     setSearchValue(value)
 
     if (value.length) {
-      updatedData = data.filter(item => {
-        const startWiths = Object.keys(item).some(val => {
+      updatedData = data.filter((item) => {
+        const startWiths = Object.keys(item).some((val) => {
           if (
             typeof item[val] === 'string' ||
             typeof item[val] === 'number' ||
@@ -57,57 +71,63 @@ const CustomTableForLicense = ({
               return item[val].toLowerCase().includes(value.toLowerCase())
             } else if (typeof item[val] === 'number') {
               return item[val].toString().includes(value)
-            } else if (typeof item[val] === 'object' && item[val] && item[val].length) {
+            } else if (
+              typeof item[val] === 'object' &&
+              item[val] &&
+              item[val].length
+            ) {
               if (
-                item[val].find(o => {
+                item[val].find((o) => {
                   if (o.subject) {
                     return o.subject.toString().includes(value)
                   }
                 })
               ) {
-                return item[val].find(o => o.subject.toString().includes(value))
+                return item[val].find((o) =>
+                  o.subject.toString().includes(value)
+                )
               } else if (
-                item[val].find(o => o.subject === 't&c') &&
+                item[val].find((o) => o.subject === 't&c') &&
                 'Terms & Conditions'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'upload-dicom') &&
+                item[val].find((o) => o.subject === 'upload-dicom') &&
                 'Upload Dicom Image'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'doctors') &&
+                item[val].find((o) => o.subject === 'doctors') &&
                 'Doctors'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Study List Viewer') &&
+                item[val].find((o) => o.subject === 'Study List Viewer') &&
                 'Study list'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'power-user') &&
+                item[val].find((o) => o.subject === 'power-user') &&
                 'Power User'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Modality') &&
+                item[val].find((o) => o.subject === 'Modality') &&
                 'Modality'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'privacy-policy') &&
+                item[val].find((o) => o.subject === 'privacy-policy') &&
                 'Privacy policy'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'cookie-policy') &&
+                item[val].find((o) => o.subject === 'cookie-policy') &&
                 'Cookie policy'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'data-analytics') &&
+                item[val].find((o) => o.subject === 'data-analytics') &&
                 'Data analytics'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
@@ -116,7 +136,7 @@ const CustomTableForLicense = ({
           }
         })
 
-        const includes = Object.keys(item).some(val => {
+        const includes = Object.keys(item).some((val) => {
           if (
             typeof item[val] === 'string' ||
             typeof item[val] === 'number' ||
@@ -126,57 +146,63 @@ const CustomTableForLicense = ({
               return item[val].toLowerCase().includes(value.toLowerCase())
             } else if (typeof item[val] === 'number') {
               return item[val].toString().includes(value)
-            } else if (typeof item[val] === 'object' && item[val] && item[val].length) {
+            } else if (
+              typeof item[val] === 'object' &&
+              item[val] &&
+              item[val].length
+            ) {
               if (
-                item[val].find(o => {
+                item[val].find((o) => {
                   if (o.subject) {
                     return o.subject.toString().includes(value)
                   }
                 })
               ) {
-                return item[val].find(o => o.subject.toString().includes(value))
+                return item[val].find((o) =>
+                  o.subject.toString().includes(value)
+                )
               } else if (
-                item[val].find(o => o.subject === 't&c') &&
+                item[val].find((o) => o.subject === 't&c') &&
                 'Terms & Conditions'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'upload-dicom') &&
+                item[val].find((o) => o.subject === 'upload-dicom') &&
                 'Upload Dicom Image'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'doctors') &&
+                item[val].find((o) => o.subject === 'doctors') &&
                 'Doctors'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Study List Viewer') &&
+                item[val].find((o) => o.subject === 'Study List Viewer') &&
                 'Study list'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'power-user') &&
+                item[val].find((o) => o.subject === 'power-user') &&
                 'Power User'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'Modality') &&
+                item[val].find((o) => o.subject === 'Modality') &&
                 'Modality'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'privacy-policy') &&
+                item[val].find((o) => o.subject === 'privacy-policy') &&
                 'Privacy policy'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'cookie-policy') &&
+                item[val].find((o) => o.subject === 'cookie-policy') &&
                 'Cookie policy'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
               } else if (
-                item[val].find(o => o.subject === 'data-analytics') &&
+                item[val].find((o) => o.subject === 'data-analytics') &&
                 'Data analytics'.toLowerCase().includes(value.toLowerCase())
               ) {
                 return true
@@ -218,7 +244,11 @@ const CustomTableForLicense = ({
         </CardHeader>
         {searchOption ? (
           <Row className="justify-content-end mx-0">
-            <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+            <Col
+              className="d-flex align-items-center justify-content-end mt-1"
+              md="6"
+              sm="12"
+            >
               <Label className="mr-1" for="search-input">
                 Search
               </Label>
@@ -243,8 +273,8 @@ const CustomTableForLicense = ({
           className="react-license-dataTable"
           sortIcon={<ChevronDown size={10} />}
           paginationRowsPerPageOptions={[7, 10, 25, 50, 75, 100]}
-          onChangeRowsPerPage={currentRowsPerPage => {
-            setRowsPerPage(prev => currentRowsPerPage)
+          onChangeRowsPerPage={(currentRowsPerPage) => {
+            setRowsPerPage((prev) => currentRowsPerPage)
             localStorage.setItem('licenserow', currentRowsPerPage)
           }}
           data={data}

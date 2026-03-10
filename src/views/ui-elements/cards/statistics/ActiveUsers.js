@@ -7,7 +7,9 @@ const ActiveUsers = ({ success }) => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    axios.get('/card/card-statistics/active-users').then(res => setData(res.data))
+    axios
+      .get('/card/card-statistics/active-users')
+      .then((res) => setData(res.data))
   }, [])
 
   const options = {
