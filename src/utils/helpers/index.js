@@ -426,7 +426,7 @@ export const handleSetTimeOut = (myTimeoutSec, miliseconds) => {
   }
 }
 
-export const handleAutoLogout = () => {
+export function handleAutoLogout() {
   const userDetails = JSON.parse(localStorage.getItem('userData'))
   const miliseconds = isNaN(parseInt(userDetails?.logoutMinutes))
     ? 100000

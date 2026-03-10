@@ -119,7 +119,6 @@ const TechnicianUser = () => {
   useEffect(() => {
     getUpdatedData()
   }, [page, rowsPerPage, searchValue, sortColumn, sortDirection, limitReach])
-  
 
 
   function handleSort(d) {

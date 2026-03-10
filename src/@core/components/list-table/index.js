@@ -221,7 +221,9 @@ const ListTable = props => {
             const savedColumns = result?.columns && Array.isArray(result.columns) ? result.columns : null
             setAllColumns(savedColumns || visibleColumns || [])
             const scrollWidthVal = result?.scrollWidth
-            await setScrollWidth(scrollWidthVal == null ? undefined : scrollWidthVal)
+            await setScrollWidth(
+              scrollWidthVal === null || scrollWidthVal === undefined ? undefined : scrollWidthVal
+            )
           }
 
           if (onBlankWidth) {

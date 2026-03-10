@@ -55,14 +55,14 @@ const SharedStudyTable = ({ toggleAuth }) => {
           {
             params: {
               limit: rowsPerPage,
-              since: currentPage,
-            },
+              since: currentPage
+            }
           }
         )
         const list = studylist?.data
-        const rows = Array.isArray(list) ? list : list != null ? [list] : []
+        const rows = Array.isArray(list) ? list : list !== null && list !== undefined ? [list] : []
         setTableData(rows)
-        setTotalStudies(Array.isArray(list) ? list.length : list != null ? 1 : 0)
+        setTotalStudies(Array.isArray(list) ? list.length : list !== null && list !== undefined ? 1 : 0)
       } catch (err) {
         setTableData([])
         setTotalStudies(0)
@@ -74,13 +74,12 @@ const SharedStudyTable = ({ toggleAuth }) => {
   // ** Table data to render
   const dataToRender = () => {
     if (
-      searchName.length ||
-      searchID.length ||
-      searchAccesstion.length ||
-      searchModality.length ||
-      searchDescription.length ||
-      Picker.length
-    ) {
+    searchName.length ||
+    searchID.length ||
+    searchAccesstion.length ||
+    searchModality.length ||
+    searchDescription.length ||
+    Picker.length) {
       return filteredData
     } else {
       return data
@@ -88,17 +87,16 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle name filter
-  const handleNameFilter = e => {
+  const handleNameFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
       if (
-        searchAccesstion.length ||
-        searchID.length ||
-        searchModality.length ||
-        searchDescription.length ||
-        Picker.length
-      ) {
+      searchAccesstion.length ||
+      searchID.length ||
+      searchModality.length ||
+      searchDescription.length ||
+      Picker.length) {
         return filteredData
       } else {
         return data
@@ -107,7 +105,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchName(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
+      updatedData = dataToFilter().filter((item) => {
         const startsWith = item.PatientName.toLowerCase().startsWith(value.toLowerCase())
 
         const includes = item.PatientName.toLowerCase().includes(value.toLowerCase())
@@ -124,17 +122,16 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle email filter
-  const handleAccesstionFilter = e => {
+  const handleAccesstionFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
       if (
-        searchName.length ||
-        searchID.length ||
-        searchModality.length ||
-        searchDescription.length ||
-        Picker.length
-      ) {
+      searchName.length ||
+      searchID.length ||
+      searchModality.length ||
+      searchDescription.length ||
+      Picker.length) {
         return filteredData
       } else {
         return data
@@ -143,7 +140,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchAccesstion(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
+      updatedData = dataToFilter().filter((item) => {
         const startsWith = item.AccessionNumber.toLowerCase().startsWith(value.toLowerCase())
 
         const includes = item.AccessionNumber.toLowerCase().includes(value.toLowerCase())
@@ -160,17 +157,16 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle post filter
-  const handleIDFilter = e => {
+  const handleIDFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
       if (
-        searchAccesstion.length ||
-        searchName.length ||
-        searchModality.length ||
-        searchDescription.length ||
-        Picker.length
-      ) {
+      searchAccesstion.length ||
+      searchName.length ||
+      searchModality.length ||
+      searchDescription.length ||
+      Picker.length) {
         return filteredData
       } else {
         return data
@@ -179,7 +175,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchID(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
+      updatedData = dataToFilter().filter((item) => {
         const startsWith = item.PatientID.toLowerCase().startsWith(value.toLowerCase())
 
         const includes = item.PatientID.toLowerCase().includes(value.toLowerCase())
@@ -195,41 +191,40 @@ const SharedStudyTable = ({ toggleAuth }) => {
     }
   }
 
-  const previewReportHandler = id => {
+  const previewReportHandler = (id) => {
     window.open(`${location.pathname}?id=${id._id}&mode=preview`, '_blank')
   }
 
-  const handlePrintReport = async id => {
+  const handlePrintReport = async (id) => {
     showLoadingAlert()
-    await axios
-      .get(`${process.env.REACT_APP_API_URL}/report/download/${id}`)
-      .then(res => {
-        const blob = new Blob([new Uint8Array(res.data.pdf.data).buffer], {
-          type: 'application/pdf',
-        })
-        const url = URL.createObjectURL(blob)
-        setPdfBlobData(url)
-        hideLoadingAlert()
-        setOpenPrintStudy(true)
+    await axios.
+    get(`${process.env.REACT_APP_API_URL}/report/download/${id}`).
+    then((res) => {
+      const blob = new Blob([new Uint8Array(res.data.pdf.data).buffer], {
+        type: 'application/pdf'
       })
-      .catch(err => {
-        console.log('err', err)
-        hideLoadingAlert()
-      })
+      const url = URL.createObjectURL(blob)
+      setPdfBlobData(url)
+      hideLoadingAlert()
+      setOpenPrintStudy(true)
+    }).
+    catch((err) => {
+      console.log('err', err)
+      hideLoadingAlert()
+    })
   }
 
   // ** Function to handle city filter
-  const handleModalityFilter = e => {
+  const handleModalityFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
       if (
-        searchAccesstion.length ||
-        searchName.length ||
-        searchID.length ||
-        searchDescription.length ||
-        Picker.length
-      ) {
+      searchAccesstion.length ||
+      searchName.length ||
+      searchID.length ||
+      searchDescription.length ||
+      Picker.length) {
         return filteredData
       } else {
         return data
@@ -238,7 +233,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchModality(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
+      updatedData = dataToFilter().filter((item) => {
         const startsWith = item.Modality[0].toLowerCase().startsWith(value.toLowerCase())
 
         const includes = item.Modality[0].toLowerCase().includes(value.toLowerCase())
@@ -255,17 +250,16 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle salary filter
-  const handleDescriptionFilter = e => {
+  const handleDescriptionFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
       if (
-        searchAccesstion.length ||
-        searchName.length ||
-        searchID.length ||
-        searchModality.length ||
-        Picker.length
-      ) {
+      searchAccesstion.length ||
+      searchName.length ||
+      searchID.length ||
+      searchModality.length ||
+      Picker.length) {
         return filteredData
       } else {
         return data
@@ -274,7 +268,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchDescription(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
+      updatedData = dataToFilter().filter((item) => {
         const startsWith = item.Description.toLowerCase().startsWith(value.toLowerCase())
 
         const includes = item.Description.toLowerCase().includes(value.toLowerCase())
@@ -291,24 +285,23 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle date filter
-  const handleDateFilter = range => {
+  const handleDateFilter = (range) => {
     const arr = []
     let updatedData = []
     const dataToFilter = () => {
       if (
-        searchAccesstion.length ||
-        searchName.length ||
-        searchID.length ||
-        searchModality.length ||
-        searchDescription.length
-      ) {
+      searchAccesstion.length ||
+      searchName.length ||
+      searchID.length ||
+      searchModality.length ||
+      searchDescription.length) {
         return filteredData
       } else {
         return data
       }
     }
 
-    range.map(i => {
+    range.map((i) => {
       const date = new Date(i)
 
       const year = date.getFullYear()
@@ -326,29 +319,29 @@ const SharedStudyTable = ({ toggleAuth }) => {
     setPicker(range)
 
     if (range.length) {
-      updatedData = dataToFilter().filter(item => {
+      updatedData = dataToFilter().filter((item) => {
         return (
           new Date(item.start_date).getTime() >= new Date(arr[0]).getTime() &&
-          new Date(item.start_date).getTime() <= new Date(arr[1]).getTime()
-        )
+          new Date(item.start_date).getTime() <= new Date(arr[1]).getTime())
+
       })
       setFilteredData([...updatedData])
       setPicker(range)
     }
   }
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const viewer_url = `${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${e.StudyInstanceUID}&accessToken=${localStorage.getItem('sharedaccessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${e._id}&mode=create&renderFrom=sharedStudy`
     window.open(viewer_url, JSON.parse(localStorage.getItem('sharedUserData'))?.viewerPreference)
   }
 
-  const studyDownloadHanlder = async studyId => {
+  const studyDownloadHanlder = async (studyId) => {
     const userId = userData?._id
     if (!userId) {
       showErrorAlert('Session expired. Please log in again.')
       return
     }
-    const orthancStudyId = studyId != null ? String(studyId).trim() : ''
+    const orthancStudyId = studyId !== null && studyId !== undefined ? String(studyId).trim() : ''
     if (!orthancStudyId) {
       showErrorAlert('Study is not available for download.')
       return
@@ -376,7 +369,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
       showErrorAlert(msg)
     }
 
-    const serializeErrForLog = err => {
+    const serializeErrForLog = (err) => {
       if (!err) return null
       try {
         return {
@@ -384,7 +377,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
           code: err?.code,
           isNetworkError: err?.isNetworkError,
           responseStatus: err?.response?.status,
-          configUrl: err?.config?.url,
+          configUrl: err?.config?.url
         }
       } catch (e) {
         return { message: String(err) }
@@ -392,7 +385,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
     }
 
     const LOG = '[StudyDownload-Shared]'
-    const onReady = async payloadStr => {
+    const onReady = async (payloadStr) => {
       try {
         const payload = typeof payloadStr === 'string' ? JSON.parse(payloadStr) : payloadStr
         console.log(LOG, 'Socket event', { jobId: payload?.jobId, success: payload?.success })
@@ -458,147 +451,147 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
   // ** Table Columns
   const column = [
-    {
-      name: 'Patient Name',
-      selector: row => (row['PatientName'] ? row['PatientName'] : '-'),
-      sortable: true,
-      reorder: true,
+  {
+    name: 'Patient Name',
+    selector: (row) => row['PatientName'] ? row['PatientName'] : '-',
+    sortable: true,
+    reorder: true,
 
-      id: 'PatientName',
-      minWidth: '200px',
+    id: 'PatientName',
+    minWidth: '200px'
+  },
+  {
+    name: 'Patient Id',
+    selector: (row) => row['PatientID'] ? row['PatientID'] : '-',
+    sortable: true,
+    reorder: true,
+
+    id: 'PatientID',
+    minWidth: '150px'
+  },
+  {
+    name: 'Accession',
+    selector: (row) => row['AccessionNumber'] ? row['AccessionNumber'] : '-',
+    sortable: true,
+    reorder: true,
+
+    id: 'AccessionNumber',
+    minWidth: '150px'
+  },
+  {
+    name: 'Study Date',
+    selector: (row) => row['startTimeStamp'] ? row['startTimeStamp'] : '-',
+    sortable: true,
+    reorder: true,
+
+    id: 'startTimeStamp',
+    minWidth: '200px'
+  },
+  {
+    name: 'Modality',
+    selector: (row) => row['Modality'] ? row['Modality'] : '-',
+    sortable: true,
+    reorder: true,
+
+    id: 'Modality',
+    minWidth: '150px'
+  },
+  {
+    name: 'Description',
+    selector: (row) => row['Description'] ? row['Description'] : '-',
+    sortable: true,
+    reorder: true,
+
+    id: 'Description',
+    minWidth: '200px'
+  },
+  {
+    name: '#Series',
+    selector: (row) => row['SeriesNumber'] ? row['SeriesNumber'] : '-',
+    sortable: false,
+    reorder: true,
+
+    id: 'SeriesNumber',
+    minWidth: '100px'
+  },
+  {
+    name: '#Images',
+    selector: (row) => row['ImagesNumber'] ? row['ImagesNumber'] : '-',
+    sortable: false,
+    reorder: true,
+
+    id: 'ImagesNumber',
+    minWidth: '100px'
+  },
+  {
+    name: 'Actions',
+    allowOverflow: true,
+    sortable: false,
+    reorder: false,
+
+    style: {
+      position: 'sticky',
+      right: '0',
+      'border-left': '1px dotted #6e6b7b'
     },
-    {
-      name: 'Patient Id',
-      selector: row => (row['PatientID'] ? row['PatientID'] : '-'),
-      sortable: true,
-      reorder: true,
-
-      id: 'PatientID',
-      minWidth: '150px',
-    },
-    {
-      name: 'Accession',
-      selector: row => (row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
-      sortable: true,
-      reorder: true,
-
-      id: 'AccessionNumber',
-      minWidth: '150px',
-    },
-    {
-      name: 'Study Date',
-      selector: row => (row['startTimeStamp'] ? row['startTimeStamp'] : '-'),
-      sortable: true,
-      reorder: true,
-
-      id: 'startTimeStamp',
-      minWidth: '200px',
-    },
-    {
-      name: 'Modality',
-      selector: row => (row['Modality'] ? row['Modality'] : '-'),
-      sortable: true,
-      reorder: true,
-
-      id: 'Modality',
-      minWidth: '150px',
-    },
-    {
-      name: 'Description',
-      selector: row => (row['Description'] ? row['Description'] : '-'),
-      sortable: true,
-      reorder: true,
-
-      id: 'Description',
-      minWidth: '200px',
-    },
-    {
-      name: '#Series',
-      selector: row => (row['SeriesNumber'] ? row['SeriesNumber'] : '-'),
-      sortable: false,
-      reorder: true,
-
-      id: 'SeriesNumber',
-      minWidth: '100px',
-    },
-    {
-      name: '#Images',
-      selector: row => (row['ImagesNumber'] ? row['ImagesNumber'] : '-'),
-      sortable: false,
-      reorder: true,
-
-      id: 'ImagesNumber',
-      minWidth: '100px',
-    },
-    {
-      name: 'Actions',
-      allowOverflow: true,
-      sortable: false,
-      reorder: false,
-
-      style: {
-        position: 'sticky',
-        right: '0',
-        'border-left': '1px dotted #6e6b7b',
-      },
-      minWidth: '80px',
-      cell: row => {
-        return (
-          <div className="d-flex align-items-center">
+    minWidth: '80px',
+    cell: (row) => {
+      return (
+        <div className="d-flex align-items-center">
             <a
-              href={`${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${row.StudyInstanceUID}&accessToken=${localStorage.getItem('sharedaccessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${row._id}&mode=create&renderFrom=sharedStudy`}
-              style={{ color: '#000' }}
-              target={JSON.parse(localStorage.getItem('sharedUserData'))?.viewerPreference}
-            >
+            href={`${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${row.StudyInstanceUID}&accessToken=${localStorage.getItem('sharedaccessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${row._id}&mode=create&renderFrom=sharedStudy`}
+            style={{ color: '#000' }}
+            target={JSON.parse(localStorage.getItem('sharedUserData'))?.viewerPreference}>
+            
               <Eye size={15} id="view" className="mr-50" style={{ cursor: 'pointer' }} />
             </a>
             <UncontrolledTooltip className="tooltip-react-strap" target="view">
               Click to view study
             </UncontrolledTooltip>
-            {userData?.role === ROLES.SharedDoctor && (
-              <>
+            {userData?.role === ROLES.SharedDoctor &&
+          <>
                 <Download
-                  size={15}
-                  id="download"
-                  className="mr-50"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => studyDownloadHanlder(row.ID)}
-                />
+              size={15}
+              id="download"
+              className="mr-50"
+              style={{ cursor: 'pointer' }}
+              onClick={() => studyDownloadHanlder(row.ID)} />
+            
                 <UncontrolledTooltip target="download" className="tooltip-react-strap">
                   Click to download study
                 </UncontrolledTooltip>
               </>
-            )}
+          }
             {}
-            {row.Status === STUDYSTATUS.Final &&
-              (userData?.role === ROLES.SharedDoctor || userData?.role === ROLES.SharedPatient) && (
-                <>
+            {row.Status === STUDYSTATUS.Final && (
+          userData?.role === ROLES.SharedDoctor || userData?.role === ROLES.SharedPatient) &&
+          <>
                   <FontAwesomeIcon
-                    icon="fa fa-print"
-                    id={`preview_pdf-${row.ID}`}
-                    className="mr-50"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      if (checkForOtherOperationDm(row, 1)) {
-                        return false
-                      }
-                      handlePrintReport(row.ID)
-                    }}
-                  />
+              icon="fa fa-print"
+              id={`preview_pdf-${row.ID}`}
+              className="mr-50"
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                if (checkForOtherOperationDm(row, 1)) {
+                  return false
+                }
+                handlePrintReport(row.ID)
+              }} />
+            
 
                   <UncontrolledTooltip
-                    target={`preview_pdf-${row.ID}`}
-                    className="tooltip-react-strap"
-                  >
+              target={`preview_pdf-${row.ID}`}
+              className="tooltip-react-strap">
+              
                     Print & Download Report
                   </UncontrolledTooltip>
                 </>
-              )}
-          </div>
-        )
-      },
-    },
-  ]
+          }
+          </div>)
+
+    }
+  }]
+
 
   return (
     <>
@@ -612,23 +605,23 @@ const SharedStudyTable = ({ toggleAuth }) => {
         sortIcon={<ChevronDown size={10} />}
         paginationDefaultPage={currentPage + 1}
         data={dataToRender()}
-        onRowDoubleClicked={handleClick}
-      />
+        onRowDoubleClicked={handleClick} />
+      
       {}
       <Modal isOpen={openPrintStudy} toggle={() => setOpenPrintStudy(!openPrintStudy)} size="lg">
         <ModalHeader
           className="mb-2"
           close={
-            <X
-              className="cursor-pointer"
-              size={15}
-              onClick={() => {
-                setOpenPrintStudy(false)
-              }}
-            />
+          <X
+            className="cursor-pointer"
+            size={15}
+            onClick={() => {
+              setOpenPrintStudy(false)
+            }} />
+
           }
-          tag="div"
-        >
+          tag="div">
+          
           <h5 className="noteModelHeader">Study Report</h5>
         </ModalHeader>
         <ModalBody className="flex-grow-1">
@@ -636,12 +629,12 @@ const SharedStudyTable = ({ toggleAuth }) => {
             src={pdfBlobData}
             width="100%"
             style={{ height: '80vh' }}
-            title="Report preview"
-          />
+            title="Report preview" />
+          
         </ModalBody>
       </Modal>
-    </>
-  )
+    </>)
+
 }
 
 export default SharedStudyTable

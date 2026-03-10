@@ -4,11 +4,11 @@
  * Released under the MIT License.
  */
 ;(!(function (t, e) {
-  'object' == typeof exports && 'undefined' != typeof module
+  'object' === typeof exports && 'undefined' !== typeof module
     ? (module.exports = e())
-    : 'function' == typeof define && define.amd
+    : 'function' === typeof define && define.amd
       ? define(e)
-      : ((t = 'undefined' != typeof globalThis ? globalThis : t || self).Sweetalert2 = e())
+      : ((t = 'undefined' !== typeof globalThis ? globalThis : t || self).Sweetalert2 = e())
 })(this, function () {
   'use strict'
   function t(t, e) {
@@ -134,7 +134,7 @@
     u = 'SweetAlert2:',
     d = t => t.charAt(0).toUpperCase() + t.slice(1),
     p = t => {
-      console.warn(''.concat(u, ' ').concat('object' == typeof t ? t.join(' ') : t))
+      console.warn(''.concat(u, ' ').concat('object' === typeof t ? t.join(' ') : t))
     },
     m = t => {
       console.error(''.concat(u, ' ').concat(t))
@@ -147,8 +147,8 @@
         .concat(e, '" instead.')),
         g.includes(n) || (g.push(n), p(n)))
     },
-    f = t => ('function' == typeof t ? t() : t),
-    b = t => t && 'function' == typeof t.toPromise,
+    f = t => ('function' === typeof t ? t() : t),
+    b = t => t && 'function' === typeof t.toPromise,
     y = t => (b(t) ? t.toPromise() : Promise.resolve(t)),
     w = t => t && Promise.resolve(t) === t,
     v = () => document.body.querySelector('.'.concat(c.container)),
@@ -230,7 +230,7 @@
         })(t, e),
         e.customClass && e.customClass[n])
       ) {
-        if ('string' != typeof e.customClass[n] && !e.customClass[n].forEach)
+        if ('string' !== typeof e.customClass[n] && !e.customClass[n].forEach)
           return void p(
             'Invalid type of customClass.'
               .concat(n, '! Expected string or iterable object, got "')
@@ -268,7 +268,7 @@
     K = (t, e, n) => {
       t &&
         e &&
-        ('string' == typeof e && (e = e.split(/\s+/).filter(Boolean)),
+        ('string' === typeof e && (e = e.split(/\s+/).filter(Boolean)),
         e.forEach(e => {
           Array.isArray(t)
             ? t.forEach(t => {
@@ -295,7 +295,7 @@
     J = (t, e, n) => {
       ;(n === ''.concat(parseInt(n)) && (n = parseInt(n)),
         n || 0 === parseInt(n)
-          ? (t.style[e] = 'number' == typeof n ? ''.concat(n, 'px') : n)
+          ? (t.style[e] = 'number' === typeof n ? ''.concat(n, 'px') : n)
           : t.style.removeProperty(e))
     },
     X = function (t) {
@@ -330,7 +330,7 @@
           ;((n.style.transition = 'width '.concat(t / 1e3, 's linear')), (n.style.width = '0%'))
         }, 10))
     },
-    st = () => 'undefined' == typeof window || 'undefined' == typeof document,
+    st = () => 'undefined' === typeof window || 'undefined' === typeof document,
     rt = '\n <div aria-labelledby="'
       .concat(c.title, '" aria-describedby="')
       .concat(c['html-container'], '" class="')
@@ -388,7 +388,7 @@
       if (st()) return void m('SweetAlert2 requires document to initialize')
       const n = document.createElement('div')
       ;((n.className = c.container), e && Y(n, c['no-transition']), _(n, rt))
-      const o = 'string' == typeof (i = t.target) ? document.querySelector(i) : i
+      const o = 'string' === typeof (i = t.target) ? document.querySelector(i) : i
       var i
       ;(o.appendChild(n),
         (t => {
@@ -423,7 +423,7 @@
         })())
     },
     lt = (t, e) => {
-      t instanceof HTMLElement ? e.appendChild(t) : 'object' == typeof t ? ut(t, e) : t && _(e, t)
+      t instanceof HTMLElement ? e.appendChild(t) : 'object' === typeof t ? ut(t, e) : t && _(e, t)
     },
     ut = (t, e) => {
       t.jquery ? dt(e, t) : _(e, t.toString())
@@ -485,7 +485,7 @@
     const n = v()
     n &&
       (!(function (t, e) {
-        'string' == typeof e
+        'string' === typeof e
           ? (t.style.background = e)
           : e || Y([document.documentElement, document.body], c['no-backdrop'])
       })(n, e.backdrop),
@@ -533,7 +533,7 @@
     },
     wt = t => {
       const e = At(t.input)
-      'object' == typeof t.customClass && Y(e, t.customClass.input)
+      'object' === typeof t.customClass && Y(e, t.customClass.input)
     },
     vt = (t, e) => {
       ;(t.placeholder && !e.inputPlaceholder) || (t.placeholder = e.inputPlaceholder)
@@ -544,7 +544,7 @@
           i = c['input-label']
         ;(o.setAttribute('for', t.id),
           (o.className = i),
-          'object' == typeof n.customClass && Y(o, n.customClass.inputLabel),
+          'object' === typeof n.customClass && Y(o, n.customClass.inputLabel),
           (o.innerText = n.inputLabel),
           e.insertAdjacentElement('beforebegin', o))
       }
@@ -684,7 +684,7 @@
           ? (Y([document.documentElement, document.body], c['toast-shown']), Y(t, c.toast))
           : Y(t, c.modal),
         U(t, e, 'popup'),
-        'string' == typeof e.customClass && Y(t, e.customClass),
+        'string' === typeof e.customClass && Y(t, e.customClass),
         e.icon && Y(t, c['icon-'.concat(e.icon)]))
     },
     Mt = t => {
@@ -795,7 +795,7 @@
           n && (tt(n, e.footer, 'block'), e.footer && lt(e.footer, n), U(n, e, 'footer'))
         })(0, e))
       const n = k()
-      'function' == typeof e.didRender && n && e.didRender(n)
+      'function' === typeof e.didRender && n && e.didRender(n)
     },
     Ht = () => {
       var t
@@ -885,7 +885,7 @@
           : t.removeAttribute('aria-hidden')
       })
     },
-    Zt = 'undefined' != typeof window && !!window.GestureEvent,
+    Zt = 'undefined' !== typeof window && !!window.GestureEvent,
     $t = () => {
       const t = v()
       if (!t) return
@@ -983,7 +983,7 @@
     ae = (t, e, n) => {
       const o = v(),
         i = pt && ot(e)
-      ;('function' == typeof n.willClose && n.willClose(e),
+      ;('function' === typeof n.willClose && n.willClose(e),
         i ? ce(t, e, o, n.returnFocus, n.didClose) : ee(t, o, n.returnFocus, n.didClose))
     },
     ce = (t, e, n, o, s) => {
@@ -996,7 +996,7 @@
     },
     le = (t, e) => {
       setTimeout(() => {
-        ;('function' == typeof e && e.bind(t.params)(), t._destroy && t._destroy())
+        ;('function' === typeof e && e.bind(t.params)(), t._destroy && t._destroy())
       })
     },
     ue = t => {
@@ -1081,7 +1081,7 @@
           y(e.inputOptions).then(e => {
             ;(t.hideLoading(), o(e))
           }))
-        : 'object' == typeof e.inputOptions
+        : 'object' === typeof e.inputOptions
           ? o(e.inputOptions)
           : m(
               'Unexpected type of inputOptions! Expected object, Map or Promise, got '.concat(
@@ -1114,11 +1114,11 @@
         t instanceof Map
           ? t.forEach((t, n) => {
               let o = t
-              ;('object' == typeof o && (o = be(o)), e.push([n, o]))
+              ;('object' === typeof o && (o = be(o)), e.push([n, o]))
             })
           : Object.keys(t).forEach(n => {
               let o = t[n]
-              ;('object' == typeof o && (o = be(o)), e.push([n, o]))
+              ;('object' === typeof o && (o = be(o)), e.push([n, o]))
             }),
         e
       )
@@ -1450,7 +1450,7 @@
       ? (t.popup &&
           i.swalCloseEventFinishedCallback &&
           (i.swalCloseEventFinishedCallback(), delete i.swalCloseEventFinishedCallback),
-        'function' == typeof e.didDestroy && e.didDestroy(),
+        'function' === typeof e.didDestroy && e.didDestroy(),
         $e(this))
       : Je(this)
   }
@@ -1536,7 +1536,7 @@
         en ? (en = !1) : o.target === e.container && f(i.allowOutsideClick) && n(Dt.backdrop)
       }
     },
-    rn = t => t instanceof Element || (t => 'object' == typeof t && t.jquery)(t)
+    rn = t => t instanceof Element || (t => 'object' === typeof t && t.jquery)(t)
   const an = () => {
       if (i.timeout)
         return (
@@ -1571,10 +1571,10 @@
     argsToParams: t => {
       const e = {}
       return (
-        'object' != typeof t[0] || rn(t[0])
+        'object' !== typeof t[0] || rn(t[0])
           ? ['title', 'html', 'icon'].forEach((n, o) => {
               const i = t[o]
-              'string' == typeof i || rn(i)
+              'string' === typeof i || rn(i)
                 ? (e[n] = i)
                 : void 0 !== i &&
                   m(
@@ -1699,7 +1699,7 @@
           const n = t.getAttribute('name'),
             o = t.getAttribute('value')
           e[n] =
-            'boolean' == typeof De[n] ? 'false' !== o : 'object' == typeof De[n] ? JSON.parse(o) : o
+            'boolean' === typeof De[n] ? 'false' !== o : 'object' === typeof De[n] ? JSON.parse(o) : o
         }),
         e
       )
@@ -1819,7 +1819,7 @@
     Bn = t => {
       const e = v(),
         n = k()
-      'function' == typeof t.willOpen && t.willOpen(n)
+      'function' === typeof t.willOpen && t.willOpen(n)
       const o = window.getComputedStyle(document.body).overflowY
       ;(Tn(e, n, t),
         setTimeout(() => {
@@ -1835,7 +1835,7 @@
               t.setAttribute('aria-hidden', 'true'))
           })),
         F() || i.previousActiveElement || (i.previousActiveElement = document.activeElement),
-        'function' == typeof t.didOpen && setTimeout(() => t.didOpen(n)),
+        'function' === typeof t.didOpen && setTimeout(() => t.didOpen(n)),
         Z(e, c['no-transition']))
     },
     En = t => {
@@ -1899,18 +1899,18 @@
         ),
       (function (t) {
         ;(!t.target ||
-          ('string' == typeof t.target && !document.querySelector(t.target)) ||
-          ('string' != typeof t.target && !t.target.appendChild)) &&
+          ('string' === typeof t.target && !document.querySelector(t.target)) ||
+          ('string' !== typeof t.target && !t.target.appendChild)) &&
           (p('Target parameter is not valid, defaulting to "body"'), (t.target = 'body'))
       })(t),
-      'string' == typeof t.title && (t.title = t.title.split('\n').join('<br />')),
+      'string' === typeof t.title && (t.title = t.title.split('\n').join('<br />')),
       ct(t))
   }
   let On
   var Mn = new WeakMap()
   class jn {
     constructor() {
-      if ((o(this, Mn, { writable: !0, value: void 0 }), 'undefined' == typeof window)) return
+      if ((o(this, Mn, { writable: !0, value: void 0 }), 'undefined' === typeof window)) return
       On = this
       for (var t = arguments.length, n = new Array(t), i = 0; i < t; i++) n[i] = arguments[i]
       const s = Object.freeze(this.constructor.argsToParams(n))
@@ -1998,7 +1998,7 @@
       }),
     Hn = (t, e) => {
       const n = (t => {
-          const e = 'string' == typeof t.template ? document.querySelector(t.template) : t.template
+          const e = 'string' === typeof t.template ? document.querySelector(t.template) : t.template
           if (!e) return {}
           const n = e.content
           return (An(n), Object.assign(hn(n), fn(n), bn(n), yn(n), wn(n), vn(n), Cn(n, gn)))
@@ -2050,11 +2050,11 @@
           : !(!e.focusConfirm || !et(t.confirmButton)) && (t.confirmButton.focus(), !0),
     Fn = () => {
       document.activeElement instanceof HTMLElement &&
-        'function' == typeof document.activeElement.blur &&
+        'function' === typeof document.activeElement.blur &&
         document.activeElement.blur()
     }
   if (
-    'undefined' != typeof window &&
+    'undefined' !== typeof window &&
     /^ru\b/.test(navigator.language) &&
     location.host.match(/\.(ru|su|by|xn--p1ai)$/)
   ) {
@@ -2104,7 +2104,7 @@
   void 0 !== this &&
     this.Sweetalert2 &&
     (this.swal = this.sweetAlert = this.Swal = this.SweetAlert = this.Sweetalert2))
-'undefined' != typeof document &&
+'undefined' !== typeof document &&
   (function (e, t) {
     var n = e.createElement('style')
     if ((e.getElementsByTagName('head')[0].appendChild(n), n.styleSheet))

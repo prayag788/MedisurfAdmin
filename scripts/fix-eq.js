@@ -46,9 +46,51 @@ function fixFile(file) {
             node.left && node.right) {
           const leftIsNull = node.left.type === 'NullLiteral'
           const rightIsNull = node.right.type === 'NullLiteral'
-          // preserve comparisons to null (== null / != null)
-          if (leftIsNull || rightIsNull) return
-          // transform
+          // handle comparisons to null explicitly: `x == null` => `(x === null || x === undefined)`
+          if (leftIsNull || rightIsNull) {
+            const other = leftIsNull ? node.right : node.left
+            if (node.operator === '==') {
+              const orExpr = {
+                type: 'LogicalExpression',
+                operator: '||',
+                left: {
+                  type: 'BinaryExpression',
+                  operator: '===',
+                  left: other,
+                  right: { type: 'NullLiteral' },
+                },
+                right: {
+                  type: 'BinaryExpression',
+                  operator: '===',
+                  left: other,
+                  right: { type: 'Identifier', name: 'undefined' },
+                },
+              }
+              path.replaceWith(orExpr)
+              changed = true
+            } else if (node.operator === '!=') {
+              const andExpr = {
+                type: 'LogicalExpression',
+                operator: '&&',
+                left: {
+                  type: 'BinaryExpression',
+                  operator: '!==',
+                  left: other,
+                  right: { type: 'NullLiteral' },
+                },
+                right: {
+                  type: 'BinaryExpression',
+                  operator: '!==',
+                  left: other,
+                  right: { type: 'Identifier', name: 'undefined' },
+                },
+              }
+              path.replaceWith(andExpr)
+              changed = true
+            }
+            return
+          }
+          // transform non-null comparisons
           if (node.operator === '==') {
             node.operator = '==='
             changed = true

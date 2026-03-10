@@ -95,18 +95,18 @@ export default () => {
       cancelButtonText: 'No',
     }).then(result => {
       if (result.isConfirmed) {
-        console.log(`[Delete] Requesting deletion for modality: ${id.Name}`);
+        console.log(`[Delete] Requesting deletion for modality: ${id.Name}`)
         axios
           .delete(`${process.env.REACT_APP_API_URL}/explorer/modalities/${id.Name}`)
           .then(res => {
-            console.log(`[Delete] Success: ${id.Name} deleted.`);
+            console.log(`[Delete] Success: ${id.Name} deleted.`)
             showSuccessAlert(`${id.Name} Modality Deleted Successfully!`)
             setTimeout(() => {
               location.reload()
             }, 1000)
           })
           .catch(err => {
-            console.error(`[Delete] Failed for ${id.Name}:`, err.response?.data || err.message);
+            console.error(`[Delete] Failed for ${id.Name}:`, err.response?.data || err.message)
             // Only handle non-network errors here, let global interceptor handle network errors
             if (err?.response) {
               showErrorAlert(getErrorMessage(err))
@@ -120,7 +120,7 @@ export default () => {
   }
 
   const performEcho = id => {
-    console.log(`[C-ECHO] Requesting echo for modality: ${id.Name}`);
+    console.log(`[C-ECHO] Requesting echo for modality: ${id.Name}`)
     MySwalLoading('Performing C-ECHO...')
 
     axios({
@@ -128,12 +128,12 @@ export default () => {
       url: `${process.env.REACT_APP_API_URL}/explorer/modalities/${id.Name}/echo`,
     })
       .then(() => {
-        console.log(`[C-ECHO] Success: ${id.Name} is reachable.`);
+        console.log(`[C-ECHO] Success: ${id.Name} is reachable.`)
         hideLoadingThenShowSuccess('C-Echo successful!')
         setTip(!tip)
       })
       .catch(err => {
-        console.error(`[C-ECHO] Failed for ${id.Name}:`, err.response?.data || err.message);
+        console.error(`[C-ECHO] Failed for ${id.Name}:`, err.response?.data || err.message)
         // Only handle non-network errors here, let global interceptor handle network errors
         if (err?.response) {
           hideLoadingThenShowError('C-Echo has Failed!')

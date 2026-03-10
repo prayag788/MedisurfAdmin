@@ -114,7 +114,6 @@ const ReferringDoctor = () => {
   useEffect(() => {
     getData()
   }, [page, rowsPerPage, searchValue, sortColumn, sortDirection])
-  
 
 
   function handleSort(d) {

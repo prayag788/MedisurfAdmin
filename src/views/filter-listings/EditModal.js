@@ -275,7 +275,7 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
         _id: idStr, 
         value: idStr, 
         label: clinicName,
-        clinicName: clinicName,
+        clinicName,
         name: clinicName
       }
     }).filter(Boolean)

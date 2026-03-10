@@ -270,6 +270,7 @@ const getMilliseconds = () => {
     : parseInt(userDetails.logoutMinutes) * 60 * 1000
 }
 
+
 let myTimeout = null
 export const handleSetTimeOut = (myTimeoutSec, miliseconds) => {
   if (!isNaN(myTimeoutSec)) {
@@ -315,7 +316,7 @@ export const handleSetTimeOut = (myTimeoutSec, miliseconds) => {
     }, myTimeoutSec)
   }
 }
-export const handleAutoLogout = () => {
+export function handleAutoLogout() {
   const userDetails = getUserDetails()
   const miliseconds = getMilliseconds()
 
