@@ -291,7 +291,8 @@ const DataTableAdvSearch = () => {
       if (s._id !== null && s._id !== undefined) byId.set(String(s._id), s)
       if (s.id !== null && s.id !== undefined) byId.set(String(s.id), s)
       if (s.ID !== null && s.ID !== undefined) byId.set(String(s.ID), s)
-      if (s.StudyInstanceUID !== null && s.StudyInstanceUID !== undefined) byId.set(String(s.StudyInstanceUID), s)
+      if (s.StudyInstanceUID !== null && s.StudyInstanceUID !== undefined)
+        byId.set(String(s.StudyInstanceUID), s)
     })
     const editedId = lastEditedStudyIdRef.current
     const editedAt = lastEditedAtRef.current
@@ -368,7 +369,8 @@ const DataTableAdvSearch = () => {
         filters: filerData,
         sort: sortField && sortOrder ? `${sortField},${sortOrder}` : '',
       }
-      if (selectedDropDownFilter?._id) params.filterId = selectedDropDownFilter._id
+      if (selectedDropDownFilter?._id)
+        params.filterId = selectedDropDownFilter._id
     }
     axios
       .get(apiEndpoint, { params })
@@ -393,7 +395,8 @@ const DataTableAdvSearch = () => {
       !study ||
       ((study._id === null || study._id === undefined) &&
         (study.id === null || study.id === undefined))
-    ) return null
+    )
+      return null
     const p = study.patient || {}
     const d = study.details || {}
     const patientName = p.PatientName ?? study.patientPatientName ?? '-'
@@ -1223,7 +1226,8 @@ const DataTableAdvSearch = () => {
     } else if (selectValue?.value === 'Patient') {
       // Set form values
       if (form_data.patientName) setValue('patientName', form_data.patientName)
-      if (form_data.patientEmail) setValue('patientEmail', form_data.patientEmail)
+      if (form_data.patientEmail)
+        setValue('patientEmail', form_data.patientEmail)
 
       if (form_data.patientName && form_data.patientEmail) {
         clearErrors(['patientName', 'patientEmail'])
@@ -2250,7 +2254,8 @@ const DataTableAdvSearch = () => {
           ? { 'content-type': error.response.headers['content-type'] }
           : undefined,
       })
-      if (error?.stack) console.error(LOG, 'POST prepare error stack', error.stack)
+      if (error?.stack)
+        console.error(LOG, 'POST prepare error stack', error.stack)
       showDownloadError(error)
     }
   }
@@ -2638,7 +2643,8 @@ const DataTableAdvSearch = () => {
       currentId === null ||
       currentId === undefined ||
       String(currentId).trim() === ''
-    ) return false
+    )
+      return false
     const id = String(currentId).trim()
     return getRowStudyId(row) === id
   }
