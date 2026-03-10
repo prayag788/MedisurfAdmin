@@ -16,7 +16,7 @@ export default class JwtService {
   }
 
   onAccessTokenFetched(accessToken) {
-    this.subscribers = this.subscribers.filter(callback => {
+    this.subscribers = this.subscribers.filter((callback) => {
       return callback(accessToken)
     })
   }

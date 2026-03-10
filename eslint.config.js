@@ -32,7 +32,10 @@ module.exports = [
       'no-return-assign': 'error',
       'no-useless-concat': 'error',
       'no-useless-return': 'off', // Disabled - allows return statements for code clarity
-      'no-use-before-define': 'error',
+      'no-use-before-define': [
+        'error',
+        { functions: false, classes: true, variables: false },
+      ],
       'brace-style': ['error', '1tbs', { allowSingleLine: true }],
       'block-spacing': 'error',
       'comma-dangle': 'off',
@@ -48,7 +51,10 @@ module.exports = [
       'no-unneeded-ternary': 'error',
       'no-whitespace-before-property': 'error',
       'nonblock-statement-body-position': 'error',
-      'object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }],
+      'object-property-newline': [
+        'error',
+        { allowAllPropertiesOnSameLine: true },
+      ],
       'quote-props': ['error', 'as-needed'],
       semi: ['error', 'never'],
       'semi-spacing': 'error',
@@ -66,4 +72,3 @@ module.exports = [
     },
   },
 ]
-

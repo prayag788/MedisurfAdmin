@@ -52,7 +52,10 @@ const AnalyticsCards = () => {
           <Revenue primary={context.colors.primary.main} />
         </Col>
         <Col lg="4" sm="12">
-          <Sales primary={context.colors.primary.main} info={context.colors.info.main} />
+          <Sales
+            primary={context.colors.primary.main}
+            info={context.colors.info.main}
+          />
         </Col>
       </Row>
       <Row className="match-height">

@@ -47,8 +47,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
         email: yup
           .string()
           .email('Please provide valid email address')
-          .required('Please provide your email address. This field is required.'),
-        cno: yup.string().matches(PHONE_REGEXP, 'Please enter a valid contact number'),
+          .required(
+            'Please provide your email address. This field is required.'
+          ),
+        cno: yup
+          .string()
+          .matches(PHONE_REGEXP, 'Please enter a valid contact number'),
         status: yup
           .number()
           .oneOf([0, 1], 'Please select a valid status')
@@ -70,13 +74,16 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   })
 
   // ** Form field mapping
-  const formFields = useMemo(() => ['fname', 'lname', 'email', 'cno', 'status'], [])
+  const formFields = useMemo(
+    () => ['fname', 'lname', 'email', 'cno', 'status'],
+    []
+  )
 
   // ** Initialize form with data
   useEffect(() => {
     if (editData && Object.keys(editData).length > 0) {
       // Set form values efficiently
-      formFields.forEach(field => {
+      formFields.forEach((field) => {
         if (editData[field] !== undefined && editData[field] !== null) {
           setValue(field, editData[field], { shouldValidate: false })
         }
@@ -87,13 +94,13 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   // ** Handle modal open/close
   useEffect(() => {
     if (!open) {
-      setIsValidSelect(prev => true)
+      setIsValidSelect((prev) => true)
     }
   }, [open])
 
   // ** Form submission handler
   const onSubmit = useCallback(
-    data => {
+    (data) => {
       const formData = {
         ...data,
         _id: editData._id,
@@ -106,7 +113,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   // ** Status change handler
   const handleStatusChange = useCallback(
-    selectedOption => {
+    (selectedOption) => {
       setValue('status', selectedOption.value, { shouldValidate: true })
     },
     [setValue]
@@ -123,7 +130,14 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   // ** Reusable FormField component
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -159,13 +173,28 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-3" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-3"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit Power-user Details</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormField name="fname" label="First Name" placeholder="John" required />
-          <FormField name="lname" label="Last Name" placeholder="Doe" required />
+          <FormField
+            name="fname"
+            label="First Name"
+            placeholder="John"
+            required
+          />
+          <FormField
+            name="lname"
+            label="Last Name"
+            placeholder="Doe"
+            required
+          />
           <FormField
             name="email"
             label="Email"
@@ -173,7 +202,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             placeholder="bruce.wayne@email.com"
             required
           />
-          <FormField name="cno" label="Contact Number" type="number" placeholder="+1" />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="number"
+            placeholder="+1"
+          />
           <FormGroup>
             <Label for="status">
               Status <span style={{ color: '#FF0000' }}>*</span>
@@ -188,7 +222,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                   isClearable={false}
                   theme={selectThemeColors}
                   value={
-                    STATUS_OPTIONS.find(option => option.value === statusValue) || STATUS_OPTIONS[0]
+                    STATUS_OPTIONS.find(
+                      (option) => option.value === statusValue
+                    ) || STATUS_OPTIONS[0]
                   }
                   name="status"
                   id="status"
@@ -200,14 +236,21 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
               )}
             />
             {errors.status && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.status?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.status?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <div className="d-flex justify-content-end gap-2 mt-3">
             <Button type="submit" className="me-1" color="primary">
               Update Power User
             </Button>
-            <Button type="button" color="secondary" onClick={handleModal} outline>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={handleModal}
+              outline
+            >
               Cancel
             </Button>
           </div>

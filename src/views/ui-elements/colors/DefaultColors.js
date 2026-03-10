@@ -1,5 +1,12 @@
 import { ChevronsRight } from 'react-feather'
-import { Card, CardHeader, CardTitle, CardBody, CardText, Alert } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  CardText,
+  Alert,
+} from 'reactstrap'
 
 const DefaultColors = () => {
   return (
@@ -11,12 +18,19 @@ const DefaultColors = () => {
         <Alert color="primary">
           <div className="alert-body">
             For more color classes options please read the{' '}
-            <a className="alert-link" href="http://" target="_blank" rel="noopener noreferrer">
+            <a
+              className="alert-link"
+              href="http://"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Documentation
             </a>
           </div>
         </Alert>
-        <CardText>We have a series of colors that are used by default. They include:</CardText>
+        <CardText>
+          We have a series of colors that are used by default. They include:
+        </CardText>
         <ul className="colors-list list-unstyled">
           <li>
             <ChevronsRight size="18" />
@@ -44,9 +58,10 @@ const DefaultColors = () => {
           </li>
         </ul>
         <CardText>
-          For each color, we think has its functionality in the application as alerts of errors{' '}
-          <b>(danger)</b>, warnings to the user <b>(warning)</b>, communications of approval{' '}
-          <b>(success)</b>, or main color of the application <b>(primary)</b>.
+          For each color, we think has its functionality in the application as
+          alerts of errors <b>(danger)</b>, warnings to the user{' '}
+          <b>(warning)</b>, communications of approval <b>(success)</b>, or main
+          color of the application <b>(primary)</b>.
         </CardText>
         <div className="d-flex justify-content-start flex-wrap">
           <div className="text-center bg-primary colors-container rounded text-white width-100 height-100 d-flex align-items-center justify-content-center mr-1 ml-50 my-1 shadow">

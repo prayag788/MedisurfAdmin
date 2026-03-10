@@ -26,7 +26,9 @@ const CustomModal = ({
   closable = true,
   ...props
 }) => {
-  const CloseBtn = closable ? <X className="cursor-pointer" size={15} onClick={toggle} /> : null
+  const CloseBtn = closable ? (
+    <X className="cursor-pointer" size={15} onClick={toggle} />
+  ) : null
 
   const getModalClassName = () => {
     const baseClass = `modal-dialog-centered modal-${size}`
@@ -70,7 +72,7 @@ export const FormModal = ({
   isLoading = false,
   ...props
 }) => {
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     if (onSubmit) {
       onSubmit(e)
@@ -79,17 +81,34 @@ export const FormModal = ({
 
   const footer = (
     <>
-      <Button type="submit" className="me-1" color="primary" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="me-1"
+        color="primary"
+        disabled={isLoading}
+      >
         {isLoading ? 'Loading...' : submitText}
       </Button>
-      <Button type="button" color="secondary" outline onClick={toggle} disabled={isLoading}>
+      <Button
+        type="button"
+        color="secondary"
+        outline
+        onClick={toggle}
+        disabled={isLoading}
+      >
         {cancelText}
       </Button>
     </>
   )
 
   return (
-    <CustomModal isOpen={isOpen} toggle={toggle} title={title} footer={footer} {...props}>
+    <CustomModal
+      isOpen={isOpen}
+      toggle={toggle}
+      title={title}
+      footer={footer}
+      {...props}
+    >
       <form onSubmit={handleSubmit}>{children}</form>
     </CustomModal>
   )
@@ -128,7 +147,14 @@ export const ConfirmModal = ({
   )
 
   return (
-    <CustomModal isOpen={isOpen} toggle={toggle} title={title} footer={footer} size="sm" {...props}>
+    <CustomModal
+      isOpen={isOpen}
+      toggle={toggle}
+      title={title}
+      footer={footer}
+      size="sm"
+      {...props}
+    >
       <p>{message}</p>
     </CustomModal>
   )

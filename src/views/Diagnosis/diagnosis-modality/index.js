@@ -59,7 +59,7 @@ const DiagnosisModality = () => {
             sortcolumn: sortColumn,
           },
         })
-        .then(res => {
+        .then((res) => {
           setData(res.data.list)
           setTotal(res.data.numberOfRecord)
           setStartsrno(res.data.startsrno ? res.data.startsrno : 0)
@@ -85,7 +85,7 @@ const DiagnosisModality = () => {
   }
 
   // Confirmation Sweet Alert
-  const handleConfirm = async row => {
+  const handleConfirm = async (row) => {
     try {
       const result = await showConfirm({
         title: '<p>Are you sure to delete this modality?</p>',
@@ -97,9 +97,14 @@ const DiagnosisModality = () => {
       if (result?.isConfirmed) {
         try {
           showLoadingAlert()
-          await axios.delete(`${process.env.REACT_APP_API_URL}/diagnosis/modality/${row?._id}`)
+          await axios.delete(
+            `${process.env.REACT_APP_API_URL}/diagnosis/modality/${row?._id}`
+          )
           hideLoadingAlert()
-          await showSuccessAlert('Modality Deleted Successfully!', '<p>Deleted!</p>')
+          await showSuccessAlert(
+            'Modality Deleted Successfully!',
+            '<p>Deleted!</p>'
+          )
           getData()
         } catch (err) {
           hideLoadingAlert()
@@ -112,29 +117,29 @@ const DiagnosisModality = () => {
   }
 
   // ** Table item Button Handlers
-  const editHandler = row => {
+  const editHandler = (row) => {
     navigate(`/diagnosis-modality/${row._id}/edit`)
   }
 
   const columns = [
     {
       name: 'Name',
-      selector: row => (row['name'] ? row['name'] : '-'),
+      selector: (row) => (row['name'] ? row['name'] : '-'),
       sortable: true,
       reorder: true,
       id: 'name',
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.name}</div>
       },
     },
     {
       name: 'Status',
-      selector: row => (row['status'] ? row['status'] : '-'),
+      selector: (row) => (row['status'] ? row['status'] : '-'),
       sortable: true,
       reorder: true,
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         return (
           <Badge color={row.status ? 'light-success' : 'light-danger'} pill>
             {row.status ? 'Active' : 'In Active'}
@@ -144,12 +149,14 @@ const DiagnosisModality = () => {
     },
     {
       name: 'Template count',
-      selector: row => (row['templateCount'] ? row['templateCount'] : '-'),
+      selector: (row) => (row['templateCount'] ? row['templateCount'] : '-'),
       sortable: false,
       reorder: true,
       id: 'template-count',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.templateCount}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>{row.templateCount}</div>
+        )
       },
     },
     {
@@ -158,7 +165,7 @@ const DiagnosisModality = () => {
       sortable: false,
       reorder: true,
       id: 'Actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -210,7 +217,11 @@ const DiagnosisModality = () => {
           </div>
         </CardHeader>
         <Row className="justify-content-end mx-0">
-          <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+          <Col
+            className="d-flex align-items-center justify-content-end mt-1"
+            md="6"
+            sm="12"
+          >
             <Label className="mr-1" for="search-input">
               Search
             </Label>
@@ -220,7 +231,7 @@ const DiagnosisModality = () => {
               bsSize="sm"
               id="search-input"
               value={searchValue}
-              onChange={e => {
+              onChange={(e) => {
                 setSearchValue(e.target.value)
               }}
             />
@@ -239,9 +250,9 @@ const DiagnosisModality = () => {
                 onSort: handleSort,
                 sortField,
                 sortOrder,
-                onPage: e => {
+                onPage: (e) => {
                   setPage(e.first++)
-                  setRowsPerPage(prev => e.rows)
+                  setRowsPerPage((prev) => e.rows)
                 },
               }}
             />

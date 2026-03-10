@@ -969,25 +969,29 @@ export const searchArr = [
       {
         title: 'Mia Davis',
         email: 'miadavis@teleworm.us',
-        img: require('@src/assets/images/portrait/small/avatar-s-8.jpg').default,
+        img: require('@src/assets/images/portrait/small/avatar-s-8.jpg')
+          .default,
         date: '01/03/2020',
       },
       {
         title: 'Norris Carrière',
         email: 'NorrisCarriere@rhyta.com',
-        img: require('@src/assets/images/portrait/small/avatar-s-3.jpg').default,
+        img: require('@src/assets/images/portrait/small/avatar-s-3.jpg')
+          .default,
         date: '07/03/2020',
       },
       {
         title: 'Charlotte Gordon',
         email: 'CharlotteGordon@jourrapide.com',
-        img: require('@src/assets/images/portrait/small/avatar-s-26.jpg').default,
+        img: require('@src/assets/images/portrait/small/avatar-s-26.jpg')
+          .default,
         date: '14/03/2020',
       },
       {
         title: 'Robert Nash',
         email: 'RobertNash@dayrep.com',
-        img: require('@src/assets/images/portrait/small/avatar-s-25.jpg').default,
+        img: require('@src/assets/images/portrait/small/avatar-s-25.jpg')
+          .default,
         date: '21/03/2020',
       },
     ],
@@ -995,22 +999,22 @@ export const searchArr = [
 ]
 
 // GET Search Data
-mock.onGet('/api/main-search/data').reply(config => {
+mock.onGet('/api/main-search/data').reply((config) => {
   return [200, { searchArr }]
 })
 
 // GET Search Data & Bookmarks
-mock.onGet('/api/bookmarks/data').reply(config => {
-  const bookmarks = searchArr[0].data.filter(item => item.isBookmarked)
+mock.onGet('/api/bookmarks/data').reply((config) => {
+  const bookmarks = searchArr[0].data.filter((item) => item.isBookmarked)
   const suggestions = searchArr[0].data
   return [200, { suggestions, bookmarks }]
 })
 
 // POST Update isBookmarked
-mock.onPost('/api/bookmarks/update').reply(config => {
+mock.onPost('/api/bookmarks/update').reply((config) => {
   const { id } = JSON.parse(config.data)
 
-  const obj = searchArr[0].data.find(item => item.id === id)
+  const obj = searchArr[0].data.find((item) => item.id === id)
 
   Object.assign(obj, { isBookmarked: !obj.isBookmarked })
 

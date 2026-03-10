@@ -39,34 +39,54 @@ const ShareStudyList = ({ toggleAuth }) => {
 
   const ThemeToggler = () => {
     if (skin === 'dark') {
-      return <Sun className="ficon cursor-pointer" onClick={() => setSkin('light')} />
+      return (
+        <Sun
+          className="ficon cursor-pointer"
+          onClick={() => setSkin('light')}
+        />
+      )
     } else {
-      return <Moon className="ficon cursor-pointer" onClick={() => setSkin('dark')} />
+      return (
+        <Moon
+          className="ficon cursor-pointer"
+          onClick={() => setSkin('dark')}
+        />
+      )
     }
   }
 
   const handleLogOut = async () => {
-    await axios.get(`${process.env.REACT_APP_API_URL}/user/logout`).then(data => {
-      localStorage.removeItem('sharedUserData', JSON.stringify(data))
-      document.cookie = `sharedAuth=; domain=${process.env.REACT_APP_COOKIE_DOMAIN}; path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`
-      if (localStorage.getItem('sharedUrl')) {
-        localStorage.setItem('sharedAuth', false)
-      } else {
-        // localStorage.removeItem(`shared${config.storageTokenKeyName}`)
-        // localStorage.removeItem(`shared${config.storageRefreshTokenKeyName}`)
-      }
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}/user/logout`)
+      .then((data) => {
+        localStorage.removeItem('sharedUserData', JSON.stringify(data))
+        document.cookie = `sharedAuth=; domain=${process.env.REACT_APP_COOKIE_DOMAIN}; path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+        if (localStorage.getItem('sharedUrl')) {
+          localStorage.setItem('sharedAuth', false)
+        } else {
+          // localStorage.removeItem(`shared${config.storageTokenKeyName}`)
+          // localStorage.removeItem(`shared${config.storageRefreshTokenKeyName}`)
+        }
 
-      localStorage.removeItem('lastActivity')
-      toggleAuth(() => false)
-    })
+        localStorage.removeItem('lastActivity')
+        toggleAuth(() => false)
+      })
   }
 
   return (
     <div className="shared-studyListDiv">
       <Fragment>
         <Row className="px-4 py-2">
-          <Link className="brand-logo d-flex" to="/" onClick={e => e.preventDefault()}>
-            <img id="medisurf-logo" src={themeConfig.app.appLogoImage} alt="Medisurf logo" />
+          <Link
+            className="brand-logo d-flex"
+            to="/"
+            onClick={(e) => e.preventDefault()}
+          >
+            <img
+              id="medisurf-logo"
+              src={themeConfig.app.appLogoImage}
+              alt="Medisurf logo"
+            />
           </Link>
         </Row>
         <Card>

@@ -35,10 +35,11 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   // ** State
   const [isValidSelect, setIsValidSelect] = useState(true)
   const isInitialInput = useRef(true)
-  const dropdowndata = useSelector(state => state.dropdownDataReducer)
+  const dropdowndata = useSelector((state) => state.dropdownDataReducer)
 
   // ** Validation schema (matching old flow)
-  const phoneRegExp = /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
+  const phoneRegExp =
+    /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
   const NewUserSchema = yup.object().shape({
     fname: yup
       .string('Name should be a string')
@@ -52,7 +53,9 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
       .string()
       .email('Please provide valid email address')
       .required('Please provide your email address. This field is required.'),
-    cno: yup.string().matches(phoneRegExp, 'Please enter a valid contact number'),
+    cno: yup
+      .string()
+      .matches(phoneRegExp, 'Please enter a valid contact number'),
     status: yup
       .number()
       .oneOf([0, 1], 'Please select a valid status')
@@ -67,8 +70,8 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
     mode: 'onSubmit',
     resolver: yupResolver(NewUserSchema),
     defaultValues: {
-      status: 1
-    }
+      status: 1,
+    },
   })
 
   // ** Reset form when modal opens/closes
@@ -79,7 +82,7 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   }, [open])
 
   // ** Form submission handler (matching old flow)
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       await addUser(data)
     } catch (err) {
@@ -95,7 +98,14 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
 
   // ** Reusable FormField component
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -124,7 +134,9 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   )
 
   // ** Custom close btn
-  const CloseBtn = <X className="cursor-pointer" size={15} onClick={handleModal} />
+  const CloseBtn = (
+    <X className="cursor-pointer" size={15} onClick={handleModal} />
+  )
 
   return (
     <Modal
@@ -134,13 +146,28 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Add New</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormField name="fname" label="First Name" placeholder="Bruce" required />
-          <FormField name="lname" label="Last Name" placeholder="Wayne" required />
+          <FormField
+            name="fname"
+            label="First Name"
+            placeholder="Bruce"
+            required
+          />
+          <FormField
+            name="lname"
+            label="Last Name"
+            placeholder="Wayne"
+            required
+          />
           <FormField
             name="email"
             label="Email"
@@ -148,7 +175,12 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
             placeholder="bruce.wayne@email.com"
             required
           />
-          <FormField name="cno" label="Contact Number" type="number" placeholder="+1" />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="number"
+            placeholder="+1"
+          />
           <FormGroup>
             <Label for="status">
               Status <span style={{ color: '#FF0000' }}>*</span>
@@ -162,25 +194,38 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
                   {...field}
                   isClearable={false}
                   theme={selectThemeColors}
-                  value={STATUS_OPTIONS.find(option => option.value === field.value) || null}
+                  value={
+                    STATUS_OPTIONS.find(
+                      (option) => option.value === field.value
+                    ) || null
+                  }
                   name="status"
                   id="status"
                   options={STATUS_OPTIONS}
                   className="react-select"
                   classNamePrefix="select"
-                  onChange={option => field.onChange(option ? option.value : undefined)}
+                  onChange={(option) =>
+                    field.onChange(option ? option.value : undefined)
+                  }
                 />
               )}
             />
             {errors.status && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.status?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.status?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <div className="d-flex justify-content-end gap-2 mt-3">
             <Button type="submit" className="me-1" color="primary">
               Submit
             </Button>
-            <Button type="button" color="secondary" onClick={handleModal} outline>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={handleModal}
+              outline
+            >
               Cancel
             </Button>
           </div>

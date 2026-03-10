@@ -7,7 +7,9 @@ const SiteTraffic = () => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    axios.get('/card/card-statistics/site-traffic').then(res => setData(res.data))
+    axios
+      .get('/card/card-statistics/site-traffic')
+      .then((res) => setData(res.data))
   }, [])
 
   return data !== null ? (

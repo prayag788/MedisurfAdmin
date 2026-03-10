@@ -23,7 +23,7 @@ const CardPayment = () => {
         </CardTitle>
       </CardHeader>
       <CardBody>
-        <Form className="form" onSubmit={e => e.preventDefault()}>
+        <Form className="form" onSubmit={(e) => e.preventDefault()}>
           <Row>
             <Col sm="12">
               <FormGroup className="mb-2">
@@ -42,7 +42,11 @@ const CardPayment = () => {
                 <Cleave
                   className="form-control"
                   placeholder="MM / YY"
-                  options={{ date: true, delimiter: '/', datePattern: ['Y', 'm'] }}
+                  options={{
+                    date: true,
+                    delimiter: '/',
+                    datePattern: ['Y', 'm'],
+                  }}
                   id="payment-expiry"
                 />
               </FormGroup>

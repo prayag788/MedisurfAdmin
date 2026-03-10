@@ -56,7 +56,7 @@ const QuarterlySales = ({ danger }) => {
   }
 
   useEffect(() => {
-    axios.get('/card/card-statistics/sales').then(res => setData(res.data))
+    axios.get('/card/card-statistics/sales').then((res) => setData(res.data))
   }, [])
 
   return data !== null ? (

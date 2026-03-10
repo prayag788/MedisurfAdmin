@@ -60,14 +60,23 @@ const ErrorDisplay = ({
   }
 
   return (
-    <Alert color={getColor()} className={`d-flex align-items-start ${className}`} {...props}>
+    <Alert
+      color={getColor()}
+      className={`d-flex align-items-start ${className}`}
+      {...props}
+    >
       <div className="me-2 mt-1">{getIcon()}</div>
       <div className="flex-grow-1">
         {title && <h4 className="alert-heading">{title}</h4>}
         {renderMessage()}
       </div>
       {dismissible && onDismiss && (
-        <button type="button" className="btn-close" onClick={onDismiss} aria-label="Close">
+        <button
+          type="button"
+          className="btn-close"
+          onClick={onDismiss}
+          aria-label="Close"
+        >
           <XCircle size={16} />
         </button>
       )}
@@ -96,7 +105,9 @@ export const FormErrorSummary = ({
 
   const errorMessages = Object.entries(errors).map(([field, error]) => {
     if (Array.isArray(error)) {
-      return error.map((err, index) => `${field}[${index}]: ${err.message || err}`).join(', ')
+      return error
+        .map((err, index) => `${field}[${index}]: ${err.message || err}`)
+        .join(', ')
     }
     return `${field}: ${error.message || error}`
   })
@@ -124,7 +135,9 @@ export const FieldError = ({ error, className = '' }) => {
 
   const errorMessage = error.message || error
 
-  return <small className={`text-danger d-block ${className}`}>{errorMessage}</small>
+  return (
+    <small className={`text-danger d-block ${className}`}>{errorMessage}</small>
+  )
 }
 
 export default ErrorDisplay

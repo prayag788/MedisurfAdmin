@@ -23,21 +23,25 @@ const setupLiveUpdateInterceptor = () => {
   axios.interceptors.response.use(
     (response) => {
       // Check for refresh headers or flags
-      const shouldRefresh = response.data?.refresh || 
-                           response.headers['x-refresh-required'] ||
-                           response.headers['x-fresh-data']
-      
+      const shouldRefresh =
+        response.data?.refresh ||
+        response.headers['x-refresh-required'] ||
+        response.headers['x-fresh-data']
+
       if (shouldRefresh) {
         // Emit custom event for components to listen to
-        window.dispatchEvent(new CustomEvent('userDataRefresh', {
-          detail: {
-            action: response.headers['x-action'] || response.data?.action,
-            role: response.headers['x-role'] || response.data?.role,
-            userId: response.headers['x-user-updated'] || response.data?.userId
-          }
-        }))
+        window.dispatchEvent(
+          new CustomEvent('userDataRefresh', {
+            detail: {
+              action: response.headers['x-action'] || response.data?.action,
+              role: response.headers['x-role'] || response.data?.role,
+              userId:
+                response.headers['x-user-updated'] || response.data?.userId,
+            },
+          })
+        )
       }
-      
+
       return response
     },
     (error) => Promise.reject(error)

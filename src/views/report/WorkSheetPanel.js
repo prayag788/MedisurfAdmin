@@ -3,8 +3,22 @@ import { Fragment, useEffect } from 'react'
 import DataTable from 'react-data-table-component'
 // ** Third Party Components
 import { ChevronDown } from 'react-feather'
-import { Input, CardTitle, FormGroup, Button, Col, Row, CardBody, Card, Label } from 'reactstrap'
-import { checkForOtherOperationDm, getStudyLockDataAPIDm, setLockPatientIdsDm } from '@utils'
+import {
+  Input,
+  CardTitle,
+  FormGroup,
+  Button,
+  Col,
+  Row,
+  CardBody,
+  Card,
+  Label,
+} from 'reactstrap'
+import {
+  checkForOtherOperationDm,
+  getStudyLockDataAPIDm,
+  setLockPatientIdsDm,
+} from '@utils'
 import STUDYSTATUS from '@configs/studyStatus'
 import { socket } from '../../socket'
 const WorkSheetPanel = ({
@@ -19,7 +33,7 @@ const WorkSheetPanel = ({
   worksheetUploadHandler,
 }) => {
   useEffect(() => {
-    socket.on('reloadRouteStudy', Data => {
+    socket.on('reloadRouteStudy', (Data) => {
       if (Data) {
         // setLockPatientIdsDm(Data)
       }
@@ -55,9 +69,11 @@ const WorkSheetPanel = ({
                           id="studyWorksheet"
                           name="studyWorksheet"
                           multiple
-                          onChange={e => setWorksheetFile(e.target.files)}
+                          onChange={(e) => setWorksheetFile(e.target.files)}
                         />
-                        <Label>*Accepted File Formats: PDF. Max file size: 5 MB.</Label>
+                        <Label>
+                          *Accepted File Formats: PDF. Max file size: 5 MB.
+                        </Label>
                       </FormGroup>
                       <FormGroup className="w-100">
                         <Button
@@ -105,7 +121,9 @@ const WorkSheetPanel = ({
                 )}
             </Col>
             <Col
-              className={!previewWorksheet && `rounded border border-secondary p-0`}
+              className={
+                !previewWorksheet && `rounded border border-secondary p-0`
+              }
               md="7"
               lg="7"
               xl="8"

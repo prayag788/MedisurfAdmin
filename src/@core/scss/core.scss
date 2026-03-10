@@ -229,7 +229,10 @@
         .swiper {
           > .swiper-pagination-bullets {
             .swiper-pagination-bullet-active {
-              background: var(--swiper-pagination-color, var(--swiper-theme-color));
+              background: var(
+                --swiper-pagination-color,
+                var(--swiper-theme-color)
+              );
               opacity: var(--swiper-pagination-bullet-inactive-opacity, 1);
             }
             span {
@@ -437,11 +440,20 @@ body.swal2-height-auto.swal2-shown {
   overflow: auto !important;
 }
 
-.dark-layout .p-datatable .p-datatable-table .p-datatable-tbody tr.bg-row-stat:hover {
+.dark-layout
+  .p-datatable
+  .p-datatable-table
+  .p-datatable-tbody
+  tr.bg-row-stat:hover {
   background: #7367f0 !important;
 }
 
-.dark-layout .p-datatable .p-datatable-table .p-datatable-tbody tr.bg-row-stat td {
+.dark-layout
+  .p-datatable
+  .p-datatable-table
+  .p-datatable-tbody
+  tr.bg-row-stat
+  td {
   color: #ffffff;
 }
 
@@ -527,7 +539,14 @@ body.swal2-height-auto.swal2-shown {
   }
 
   .print-qr-page body *,
-  .print-qr-page #root > .wrapper > .app-content > .content-wrapper > .card > .row *,
+  .print-qr-page
+    #root
+    > .wrapper
+    > .app-content
+    > .content-wrapper
+    > .card
+    > .row
+    *,
   .print-qr-page #root > .wrapper > .main-menu,
   .print-qr-page #root > .wrapper > .header-navbar,
   .print-qr-page #root > .wrapper > .app-content > .header-navbar-shadow {
@@ -544,8 +563,21 @@ body.swal2-height-auto.swal2-shown {
   .print-qr-page #root > .wrapper > .app-content,
   .print-qr-page #root > .wrapper > .app-content > .content-wrapper,
   .print-qr-page #root > .wrapper > .app-content > .content-wrapper > .card,
-  .print-qr-page #root > .wrapper > .app-content > .content-wrapper > .card > .printQrUpperDiv,
-  .print-qr-page #root > .wrapper > .app-content > .content-wrapper > .card > .printQrUpperDiv * {
+  .print-qr-page
+    #root
+    > .wrapper
+    > .app-content
+    > .content-wrapper
+    > .card
+    > .printQrUpperDiv,
+  .print-qr-page
+    #root
+    > .wrapper
+    > .app-content
+    > .content-wrapper
+    > .card
+    > .printQrUpperDiv
+    * {
     display: block;
   }
 

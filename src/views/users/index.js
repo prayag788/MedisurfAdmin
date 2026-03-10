@@ -66,8 +66,8 @@ const Users = () => {
             sortcolumn: sortColumn,
           },
         })
-        .then(response => {
-          setData(prev =>
+        .then((response) => {
+          setData((prev) =>
             response.data.list.map((obj, index) => {
               obj.sl = startsrno + index + 1
               obj.full_name = `${obj.fname} ${obj.lname}`
@@ -90,17 +90,20 @@ const Users = () => {
   const handleEditModal = () => SetEditModal(!editModal)
 
   // ** CRUD Handlers
-  const addNewUser = requestData => {
+  const addNewUser = (requestData) => {
     return new Promise((resolve, reject) => {
       requestData = { ...requestData, status: 1, pwdCng: false, byAdmin: true }
       showLoadingAlert()
       axios
-        .post(`${process.env.REACT_APP_API_URL}/user/register/user`, requestData)
-        .then(response => {
+        .post(
+          `${process.env.REACT_APP_API_URL}/user/register/user`,
+          requestData
+        )
+        .then((response) => {
           hideLoadingAlert()
           handleModal() // Close modal only on success
           showSuccessAlert('User Added Successfully!')
-          setData(prev => {
+          setData((prev) => {
             prev = [response.data.user].concat(prev)
             prev.map((obj, index) => {
               obj.sl = startsrno + index + 1
@@ -111,10 +114,13 @@ const Users = () => {
           })
           resolve(response)
         })
-        .catch(err => {
+        .catch((err) => {
           hideLoadingAlert()
           // Use enhanced error handling
-          const errorMessage = extractErrorMessage(err, 'Failed to create user. Please try again.')
+          const errorMessage = extractErrorMessage(
+            err,
+            'Failed to create user. Please try again.'
+          )
           showErrorAlert(errorMessage)
           reject(err)
         })
@@ -128,15 +134,15 @@ const Users = () => {
     showLoadingAlert()
     axios
       .patch(`${process.env.REACT_APP_API_URL}/user/${data._id}`, data)
-      .then(response => {
+      .then((response) => {
         hideLoadingAlert()
         showSuccessAlert(
           `Doctor ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
         )
-        setData(prev => {
+        setData((prev) => {
           const Mprev = [...prev]
           Mprev.splice(
-            Mprev.findIndex(obj => obj._id === response.data.user._id),
+            Mprev.findIndex((obj) => obj._id === response.data.user._id),
             1,
             response.data.user
           )
@@ -149,25 +155,28 @@ const Users = () => {
           return prev
         })
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         // Use enhanced error handling for better error messages
         handleApiError(err, {
           type: 'alert',
           title: 'Update Error',
-          fallback: 'Failed to update user details. Please try again.'
+          fallback: 'Failed to update user details. Please try again.',
         })
       })
   }
 
   function deleteUser(id) {
     axios
-      .patch(`${process.env.REACT_APP_API_URL}/user/${id}`, { _id: id, status: -1 })
-      .then(response => {
+      .patch(`${process.env.REACT_APP_API_URL}/user/${id}`, {
+        _id: id,
+        status: -1,
+      })
+      .then((response) => {
         showSuccessAlert('Doctor Deleted Successfully!')
-        setData(prev => {
+        setData((prev) => {
           let Mprev = [...data]
-          Mprev = Mprev.filter(obj => obj._id !== response.data.user._id)
+          Mprev = Mprev.filter((obj) => obj._id !== response.data.user._id)
           prev = Mprev
           prev.map((obj, index) => {
             obj.sl = startsrno + index + 1
@@ -177,30 +186,32 @@ const Users = () => {
           return prev
         })
       })
-      .catch(err => {
+      .catch((err) => {
         handleEditModal()
         // Use enhanced error handling
         handleApiError(err, {
           type: 'alert',
           title: 'Delete Error',
-          fallback: 'Failed to delete user. Please try again.'
+          fallback: 'Failed to delete user. Please try again.',
         })
       })
   }
 
   // Confirmation Sweet Alert
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
       }
-    })
+    )
   }
 
   // ** Table item Button Handlers
-  const editHandler = id => {
-    const Udata = data.filter(obj => obj._id === id)[0]
-    setSelectedItem(prev => {
+  const editHandler = (id) => {
+    const Udata = data.filter((obj) => obj._id === id)[0]
+    setSelectedItem((prev) => {
       const newData = { ...prev }
       const keys = Object.keys(prev)
       for (const key of keys) {
@@ -215,11 +226,11 @@ const Users = () => {
     handleEditModal()
   }
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     deleteUser(id)
   }
 
-  const DeactivationHandler = id => {
+  const DeactivationHandler = (id) => {
     const deactivationOptions = {
       _id: id,
       status: 0,
@@ -227,7 +238,7 @@ const Users = () => {
     updateUserDetails(deactivationOptions, 'deactivate')
   }
 
-  const ActivationHandler = id => {
+  const ActivationHandler = (id) => {
     const activationOptions = {
       _id: id,
       status: 1,
@@ -244,7 +255,7 @@ const Users = () => {
   const doctorColumns = [
     {
       name: 'S.No',
-      selector: row => (row['sl'] ? row['sl'] : '-'),
+      selector: (row) => (row['sl'] ? row['sl'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -253,31 +264,31 @@ const Users = () => {
     },
     {
       name: 'Name',
-      selector: row => (row['full_name'] ? row['full_name'] : '-'),
+      selector: (row) => (row['full_name'] ? row['full_name'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'fname',
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.full_name}</div>
       },
     },
     {
       name: 'Email',
-      selector: row => (row['email'] ? row['email'] : '-'),
+      selector: (row) => (row['email'] ? row['email'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'email',
       minWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.email}</div>
       },
     },
     {
       name: 'Hospital Name',
-      selector: row => (row['hospitalname'] ? row['hospitalname'] : '-'),
+      selector: (row) => (row['hospitalname'] ? row['hospitalname'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -286,7 +297,7 @@ const Users = () => {
     },
     {
       name: 'Designation',
-      selector: row => (row['designation'] ? row['designation'] : '-'),
+      selector: (row) => (row['designation'] ? row['designation'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -294,7 +305,7 @@ const Users = () => {
     },
     {
       name: 'Contact Number',
-      selector: row => (row['cno'] ? row['cno'] : '-'),
+      selector: (row) => (row['cno'] ? row['cno'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -303,12 +314,12 @@ const Users = () => {
     },
     {
       name: 'Status',
-      selector: row => (row['status'] ? row['status'] : '-'),
+      selector: (row) => (row['status'] ? row['status'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         return (
           <Badge color={status[row.status].color} pill>
             {status[row.status].title}
@@ -322,7 +333,7 @@ const Users = () => {
       sortable: false,
       reorder: false,
 
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -439,7 +450,11 @@ const Users = () => {
           />
         </Col>
       </Row>
-      <AddNewModal addUser={addNewUser} open={modal} handleModal={handleModal} />
+      <AddNewModal
+        addUser={addNewUser}
+        open={modal}
+        handleModal={handleModal}
+      />
       <EditModal
         updateUser={updateUserDetails}
         open={editModal}

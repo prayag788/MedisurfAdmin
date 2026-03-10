@@ -1,6 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Card, Col, Form, FormGroup, Label, Row, Spinner } from 'reactstrap'
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  FormGroup,
+  Label,
+  Row,
+  Spinner,
+} from 'reactstrap'
 import axios from 'axios'
 
 import Select from 'react-select'
@@ -33,15 +42,18 @@ const ListTabContent = () => {
   const onSubmit = async () => {
     showLoadingAlert()
     try {
-      const data = modules.map(m => {
+      const data = modules.map((m) => {
         return {
           moduleName: m.moduleName,
           columns: m.selected,
         }
       })
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/lists-setting`, {
-        modules: data,
-      })
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/user/lists-setting`,
+        {
+          modules: data,
+        }
+      )
 
       hideLoadingAlert()
       showToastSuccess(res.data?.message)
@@ -57,12 +69,12 @@ const ListTabContent = () => {
     setLoading(true)
     axios
       .get(`${process.env.REACT_APP_API_URL}/user/lists-setting`)
-      .then(res => {
+      .then((res) => {
         const tempModules = []
 
-        res?.data?.allModules?.map(module => {
+        res?.data?.allModules?.map((module) => {
           const tempColumns = []
-          module.columns.map(column => {
+          module.columns.map((column) => {
             tempColumns.push({
               value: column.id,
               label: column.name,
@@ -70,9 +82,9 @@ const ListTabContent = () => {
           })
 
           let tmpselected = []
-          res?.data?.result?.modules?.map(m => {
+          res?.data?.result?.modules?.map((m) => {
             if (m.moduleName === module.moduleName) {
-              tmpselected = m.columns.map(c => {
+              tmpselected = m.columns.map((c) => {
                 return {
                   value: c.id,
                   label: c.name,
@@ -90,7 +102,7 @@ const ListTabContent = () => {
         setModules(tempModules)
         setLoading(false)
       })
-      .catch(err => {
+      .catch((err) => {
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
         }
@@ -110,10 +122,13 @@ const ListTabContent = () => {
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row>
         {modules &&
-          modules.map(module => (
+          modules.map((module) => (
             <Col lg={6} md={6} sm={12}>
               <FormGroup>
-                <Label for={module.moduleName} className="text-capitalize font-weight-bold">
+                <Label
+                  for={module.moduleName}
+                  className="text-capitalize font-weight-bold"
+                >
                   {module.moduleName?.replace('-', ' ')} Module Columns
                 </Label>
                 <Select
@@ -127,7 +142,7 @@ const ListTabContent = () => {
                   options={module.columns}
                   className="react-select"
                   classNamePrefix="select"
-                  onChange={value => {
+                  onChange={(value) => {
                     module.selected = value
                   }}
                 />
@@ -141,7 +156,12 @@ const ListTabContent = () => {
           <Button color="primary" type="submit">
             Save
           </Button>
-          <Button className="ml-2" onClick={() => navigate(-1)} color="danger" type="button">
+          <Button
+            className="ml-2"
+            onClick={() => navigate(-1)}
+            color="danger"
+            type="button"
+          >
             Close
           </Button>
         </Col>

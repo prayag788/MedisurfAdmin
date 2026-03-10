@@ -138,14 +138,17 @@ const DataTableAdvSearch = () => {
   const [searchParams] = useSearchParams()
   const hasInitialParam = searchParams.get('initial')
   const editorRef = useRef(null)
-  const userDataRedux = useSelector(state => state.auth.userData)
-  const LicenseData = useSelector(state => state.license)
-  const { showBackgroundLoader, hideBackgroundLoader } = useContext(BackgroundProcessContext)
+  const userDataRedux = useSelector((state) => state.auth.userData)
+  // userData hoisted above to be available for early functions
+  const LicenseData = useSelector((state) => state.license)
+  const { showBackgroundLoader, hideBackgroundLoader } = useContext(
+    BackgroundProcessContext
+  )
 
   // ** States
   const [Picker, setPicker] = useState('')
   const [PatientDOBPicker, setPatientDOBPickerPicker] = useState('')
-  
+
   const [isFilter, setFilter] = useState(false)
   const [isFilterLoading, setFilterLoading] = useState(false)
   const [searchData, setSearchData] = useState({
@@ -162,7 +165,9 @@ const DataTableAdvSearch = () => {
   const [data, setTableData] = useState([])
 
   const statusColors = JSON.parse(localStorage.getItem('userData'))?.statusColor
-  const [userDataMain, setUserDataMain] = useState(JSON.parse(localStorage.getItem('userData')))
+  const [userDataMain, setUserDataMain] = useState(
+    JSON.parse(localStorage.getItem('userData'))
+  )
   const [modalities, setModalities] = useState([])
   const [refresh, setRefresh] = useState(null)
   const [openPrintStudy, setOpenPrintStudy] = useState(false)
@@ -172,12 +177,17 @@ const DataTableAdvSearch = () => {
   const [assigningStudy, setAssigningStudy] = useState({})
   const [emailIdOfSharedStudy, setEmailIdOfSharedStudy] = useState({})
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('studylistrow') ? JSON.parse(localStorage.getItem('studylistrow')) : 7
+    localStorage.getItem('studylistrow')
+      ? JSON.parse(localStorage.getItem('studylistrow'))
+      : 7
   )
   const [currentPage, setCurrentPage] = useState(0)
   const [totalStudies, setTotalStudies] = useState(0)
   const [totalFilteredStudies, setFilteredStudies] = useState(null)
   const [userRole, setUserRole] = useState()
+  const [sortField, setSortField] = useState(null)
+  const [sortOrder, setSortOrder] = useState(null)
+  const [selectedDropDownFilter, setSelectedDropDownFilter] = useState(null)
   const [crossPatient, setcrossPatient] = useState(false)
   const [crossPatientID, setcrossPatientID] = useState(false)
   const [crossAccession, setcrossAccession] = useState(false)
@@ -199,7 +209,10 @@ const DataTableAdvSearch = () => {
   const [modal, setModal] = useState(false)
   const isInitialInput = useRef(true)
   const isInitialLoad = useRef(true)
-  const [selectValue, setSelectValue] = useState({ value: 'Doctor', label: 'Doctor' })
+  const [selectValue, setSelectValue] = useState({
+    value: 'Doctor',
+    label: 'Doctor',
+  })
   const [selectedRow, setSelectedRow] = useState([])
   const [btnEvent, setBtnEvent] = useState('share')
   const [refreshLoading, setRefreshLoading] = useState(false)
@@ -245,45 +258,60 @@ const DataTableAdvSearch = () => {
   const updateTableRowRef = useRef(null)
 
   const updateTableRow = (studyId, updates) => {
-    const idStr = studyId != null ? String(studyId) : ''
+    const idStr =
+      studyId !== null && studyId !== undefined ? String(studyId) : ''
     if (!idStr) return
-    setTableData(prev =>
-      prev.map(r => {
+    setTableData((prev) =>
+      prev.map((r) => {
         const match =
-          (r._id != null && String(r._id) === idStr) ||
-          (r.id != null && String(r.id) === idStr) ||
-          (r.ID != null && String(r.ID) === idStr)
+          (r._id !== null && r._id !== undefined && String(r._id) === idStr) ||
+          (r.id !== null && r.id !== undefined && String(r.id) === idStr) ||
+          (r.ID !== null && r.ID !== undefined && String(r.ID) === idStr)
         return match ? { ...r, ...updates } : r
       })
     )
   }
 
-  const removeTableRow = studyId => {
-    if (studyId == null) return
-    setTableData(prev =>
+  const removeTableRow = (studyId) => {
+    if (studyId === null || studyId === undefined) return
+    setTableData((prev) =>
       prev.filter(
-        r => r._id !== studyId && r.id !== studyId && String(r.ID) !== String(studyId)
+        (r) =>
+          r._id !== studyId &&
+          r.id !== studyId &&
+          String(r.ID) !== String(studyId)
       )
     )
   }
 
-  const mergeStudyListIntoTable = newList => {
+  const mergeStudyListIntoTable = (newList) => {
     if (!Array.isArray(newList) || newList.length === 0) return
     const byId = new Map()
-    newList.forEach(s => {
-      if (s._id != null) byId.set(String(s._id), s)
-      if (s.id != null) byId.set(String(s.id), s)
-      if (s.ID != null) byId.set(String(s.ID), s)
-      if (s.StudyInstanceUID != null) byId.set(String(s.StudyInstanceUID), s)
+    newList.forEach((s) => {
+      if (s._id !== null && s._id !== undefined) byId.set(String(s._id), s)
+      if (s.id !== null && s.id !== undefined) byId.set(String(s.id), s)
+      if (s.ID !== null && s.ID !== undefined) byId.set(String(s.ID), s)
+      if (s.StudyInstanceUID !== null && s.StudyInstanceUID !== undefined)
+        byId.set(String(s.StudyInstanceUID), s)
     })
     const editedId = lastEditedStudyIdRef.current
     const editedAt = lastEditedAtRef.current
     const protectEditedMs = 60 * 1000
-    const isProtected = editedId != null && editedAt && Date.now() - editedAt < protectEditedMs
-    setTableData(prev =>
-      prev.map(row => {
+    const isProtected =
+      editedId !== null &&
+      editedId !== undefined &&
+      editedAt &&
+      Date.now() - editedAt < protectEditedMs
+    setTableData((prev) =>
+      prev.map((row) => {
         const rowIdStr =
-          row._id != null ? String(row._id) : row.id != null ? String(row.id) : row.ID != null ? String(row.ID) : ''
+          row._id !== null && row._id !== undefined
+            ? String(row._id)
+            : row.id !== null && row.id !== undefined
+              ? String(row.id)
+              : row.ID !== null && row.ID !== undefined
+                ? String(row.ID)
+                : ''
         if (isProtected && editedId && rowIdStr === String(editedId)) {
           return row
         }
@@ -292,7 +320,9 @@ const DataTableAdvSearch = () => {
           byId.get(String(row.id)) ||
           byId.get(String(row.ID)) ||
           (row.StudyInstanceUID ? byId.get(String(row.StudyInstanceUID)) : null)
-        return updated != null ? { ...row, ...updated } : row
+        return updated !== null && updated !== undefined
+          ? { ...row, ...updated }
+          : row
       })
     )
   }
@@ -307,7 +337,7 @@ const DataTableAdvSearch = () => {
     } else {
       const filerData = JSON.stringify(
         Object.keys(searchData)
-          .map(key => {
+          .map((key) => {
             const value = searchData[key]
             if (
               value === '' ||
@@ -318,10 +348,10 @@ const DataTableAdvSearch = () => {
               return {}
             }
             if (key === 'Physicians' && Array.isArray(value)) {
-              return { [key]: value.map(d => d.physicianname) }
+              return { [key]: value.map((d) => d.physicianname) }
             }
             if (key === 'clinicNames' && Array.isArray(value)) {
-              return { [key]: value.map(d => d.clinicName) }
+              return { [key]: value.map((d) => d.clinicName) }
             }
             return { [key]: value }
           })
@@ -339,11 +369,12 @@ const DataTableAdvSearch = () => {
         filters: filerData,
         sort: sortField && sortOrder ? `${sortField},${sortOrder}` : '',
       }
-      if (selectedDropDownFilter?._id) params.filterId = selectedDropDownFilter._id
+      if (selectedDropDownFilter?._id)
+        params.filterId = selectedDropDownFilter._id
     }
     axios
       .get(apiEndpoint, { params })
-      .then(res => {
+      .then((res) => {
         if (res?.data?.data && Array.isArray(res.data.data)) {
           mergeStudyListIntoTable(res.data.data)
         }
@@ -352,14 +383,20 @@ const DataTableAdvSearch = () => {
   }
 
   useEffect(() => {
-    fetchStudyListInBackgroundAndMergeRef.current = fetchStudyListInBackgroundAndMerge
+    fetchStudyListInBackgroundAndMergeRef.current =
+      fetchStudyListInBackgroundAndMerge
     updateTableRowRef.current = updateTableRow
   })
 
   // Map studyData API response (single study) to the same flat shape as study-list rows.
   // Used to update the edited study in place so it stays on the same page with full server data (no reorder).
-  const studyDataResponseToListRow = study => {
-    if (!study || (study._id == null && study.id == null)) return null
+  const studyDataResponseToListRow = (study) => {
+    if (
+      !study ||
+      ((study._id === null || study._id === undefined) &&
+        (study.id === null || study.id === undefined))
+    )
+      return null
     const p = study.patient || {}
     const d = study.details || {}
     const patientName = p.PatientName ?? study.patientPatientName ?? '-'
@@ -368,14 +405,22 @@ const DataTableAdvSearch = () => {
     const patientSex = p.PatientSex ?? study.patientPatientSex ?? '-'
     const desc = d.StudyDescription ?? study.detailsStudyDescription ?? '-'
     const examDesc = study.detailsExamDescription ?? desc
-    const reportDesc = study.detailsReportDescription ?? d.ReportDescription ?? study.ReportDescription ?? ''
-    const referPhysician = d.ReferringPhysicianName ?? study.detailsReferringPhysicianName ?? '-'
-    const accessionNumber = d.AccessionNumber ?? study.detailsAccessionNumber ?? '-'
+    const reportDesc =
+      study.detailsReportDescription ??
+      d.ReportDescription ??
+      study.ReportDescription ??
+      ''
+    const referPhysician =
+      d.ReferringPhysicianName ?? study.detailsReferringPhysicianName ?? '-'
+    const accessionNumber =
+      d.AccessionNumber ?? study.detailsAccessionNumber ?? '-'
     const studyDate = d.StudyDate ?? study.detailsStudyDate
     const studyTime = d.StudyTime ?? study.detailsStudyTime
     const startTimeStamp =
       study.startTimeStamp ||
-      (studyDate && studyTime ? `${studyDate} ${studyTime}`.trim() : studyDate || studyTime || '-')
+      (studyDate && studyTime
+        ? `${studyDate} ${studyTime}`.trim()
+        : studyDate || studyTime || '-')
     const modality = study.modality ?? study.Modality ?? '-'
     const id = study.id ?? study._id
     const _id = study._id ?? study.id
@@ -387,7 +432,9 @@ const DataTableAdvSearch = () => {
       PatientName: patientName,
       PatientID: patientId,
       PatientBirthDate: patientDob,
-      PatientDOB: patientDob ? (moment(patientDob).format('YYYY-MM-DD') || patientDob) : '-',
+      PatientDOB: patientDob
+        ? moment(patientDob).format('YYYY-MM-DD') || patientDob
+        : '-',
       PatientSex: patientSex,
       patientPatientName: patientName,
       patientPatientId: patientId,
@@ -406,16 +453,26 @@ const DataTableAdvSearch = () => {
       Modality: modality,
       status: study.status ?? '-',
       priority: study.priority ?? '-',
-      patient: { PatientName: patientName, PatientID: patientId, PatientBirthDate: patientDob, PatientSex: patientSex },
-      details: { ...d, StudyDescription: desc, ReferringPhysicianName: referPhysician, AccessionNumber: accessionNumber },
+      patient: {
+        PatientName: patientName,
+        PatientID: patientId,
+        PatientBirthDate: patientDob,
+        PatientSex: patientSex,
+      },
+      details: {
+        ...d,
+        StudyDescription: desc,
+        ReferringPhysicianName: referPhysician,
+        AccessionNumber: accessionNumber,
+      },
       radiologist: study.radiologist,
       createdOn: study.createdOn,
       lastUpdatedOn: study.lastUpdatedOn,
     }
   }
 
-  const fetchSingleStudyAsListRow = async studyId => {
-    if (studyId == null) return null
+  const fetchSingleStudyAsListRow = async (studyId) => {
+    if (studyId === null || studyId === undefined) return null
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_API_URL}/explorer/studies/studyData/${studyId}`
@@ -428,31 +485,41 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const [sortField, setSortField] = useState(null)
-  const [sortOrder, setSortOrder] = useState(0)
   const [selectedProducts, setSelectedProducts] = useState(null)
   const [Flatpicker, showFlatpicker] = useState(true)
-  const [isSelectingStudyDateRange, setIsSelectingStudyDateRange] = useState(false)
-  const [isSelectingPatientDOBRange, setIsSelectingPatientDOBRange] = useState(true)
+  const [isSelectingStudyDateRange, setIsSelectingStudyDateRange] =
+    useState(false)
+  const [isSelectingPatientDOBRange, setIsSelectingPatientDOBRange] =
+    useState(true)
   const [addNewFilter, setAddNewFilter] = useState(false)
   const [tableListData, setTableListData] = useState({})
   const ability = useContext(AbilityContext)
-  const dropdownData = useSelector(state => state.dropdownDataReducer)
-  
+  const dropdownData = useSelector((state) => state.dropdownDataReducer)
+
   // Initialize drag scroll functionality
   useDragScroll()
-
-  const [selectedDropDownFilter, setSelectedDropDownFilter] = useState([])
-  const modalityOptionsForFilters = useSelector(state => state.ModalityReducer) || []
+  const modalityOptionsForFilters =
+    useSelector((state) => state.ModalityReducer) || []
   const dispatch = useDispatch()
-  const ClinicNamesForFilters = useSelector(state => state.dropdownDataReducer.clinicNames)
-  const PhysiciansForFilters = useSelector(state => state.dropdownDataReducer.Physicians)
+  const ClinicNamesForFilters = useSelector(
+    (state) => state.dropdownDataReducer.clinicNames
+  )
+  const PhysiciansForFilters = useSelector(
+    (state) => state.dropdownDataReducer.Physicians
+  )
 
   // Log modality dropdown source so we can confirm Orthanc list is used
   useEffect(() => {
     const count = modalityOptionsForFilters?.length ?? 0
-    const values = (modalityOptionsForFilters || []).map(o => o?.value ?? o?.label).filter(Boolean).slice(0, 12)
-    console.log('[StudyList Modality] Dropdown options from Redux:', count, count ? values.join(', ') + (count > 12 ? '...' : '') : '(empty)')
+    const values = (modalityOptionsForFilters || [])
+      .map((o) => o?.value ?? o?.label)
+      .filter(Boolean)
+      .slice(0, 12)
+    console.log(
+      '[StudyList Modality] Dropdown options from Redux:',
+      count,
+      count ? values.join(', ') + (count > 12 ? '...' : '') : '(empty)'
+    )
   }, [modalityOptionsForFilters])
 
   // Refs for date pickers (must be declared before useEffect hooks that use them)
@@ -467,12 +534,16 @@ const DataTableAdvSearch = () => {
     if (patientDOBPreventClose.current && patientDOBfp.current?.flatpickr) {
       const fpInstance = patientDOBfp.current.flatpickr
       const selectedDates = fpInstance.selectedDates || []
-      
+
       // If only one date is selected, ensure calendar stays open
       if (selectedDates.length === 1 && !fpInstance.isOpen) {
         // Use multiple strategies to reopen
         requestAnimationFrame(() => {
-          if (fpInstance && !fpInstance.isOpen && patientDOBPreventClose.current) {
+          if (
+            fpInstance &&
+            !fpInstance.isOpen &&
+            patientDOBPreventClose.current
+          ) {
             try {
               fpInstance.open()
             } catch (error) {
@@ -487,7 +558,11 @@ const DataTableAdvSearch = () => {
   // Handle URL parameters for filter initialization
   useEffect(() => {
     const filterIdFromUrl = searchParams.get('filterId')
-    if (filterIdFromUrl && !selectedDropDownFilter?._id && filterIdFromUrl !== selectedDropDownFilter?._id) {
+    if (
+      filterIdFromUrl &&
+      !selectedDropDownFilter?._id &&
+      filterIdFromUrl !== selectedDropDownFilter?._id
+    ) {
       // Load filter data from API if filterId is in URL
       const loadFilterFromUrl = async () => {
         try {
@@ -543,10 +618,10 @@ const DataTableAdvSearch = () => {
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/user/status/color`)
-      .then(res => {
+      .then((res) => {
         setStatusColor(res.data.message)
       })
-      .catch(err => {
+      .catch((err) => {
         // Only handle response errors, let global interceptor handle network errors
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -555,7 +630,7 @@ const DataTableAdvSearch = () => {
   }, [])
 
   useEffect(() => {
-    socket.on('reloadRouteStudyNew', Data => {
+    socket.on('reloadRouteStudyNew', (Data) => {
       if (Data) {
         // setLockPatientIdsDm(Data)
       }
@@ -563,18 +638,20 @@ const DataTableAdvSearch = () => {
   }, [])
 
   useEffect(() => {
-    socket.on('reloadRouteStudy', Data => {
+    socket.on('reloadRouteStudy', (Data) => {
       if (Data) {
         try {
           const NewData = typeof Data === 'string' ? JSON.parse(Data) : Data
-          if (NewData?.lockData != null) {
+          if (NewData?.lockData !== null && NewData?.lockData !== undefined) {
             setLockPatientIdsDm(NewData)
             setStudyLockData(NewData.lockData)
           }
           if (
-            NewData?.userId != null &&
+            NewData?.userId !== null &&
+            NewData?.userId !== undefined &&
             NewData?.IsLock === false &&
-            userData?._id != null &&
+            userData?._id !== null &&
+            userData?._id !== undefined &&
             String(NewData.userId) === String(userData._id)
           ) {
             setTimeout(() => {
@@ -593,7 +670,7 @@ const DataTableAdvSearch = () => {
     const userId = userData?._id
     if (!userId) return
     const eventName = `completedPatientEditProcess_${userId}`
-    const handler = value => {
+    const handler = (value) => {
       try {
         const payload = typeof value === 'string' ? JSON.parse(value) : value
         if (payload?.status !== true) return
@@ -601,7 +678,9 @@ const DataTableAdvSearch = () => {
         lastEditedAtRef.current = 0
         studyIdUnderModificationRef.current = null
         setStudyIdUnderModification(null)
-        setRefresh(prev => (prev == null ? 1 : prev + 1))
+        setRefresh((prev) =>
+          prev === null || prev === undefined ? 1 : prev + 1
+        )
       } catch (e) {
         // ignore
       }
@@ -616,8 +695,9 @@ const DataTableAdvSearch = () => {
         const res = await axios.get(
           `${process.env.REACT_APP_API_URL}/explorer/studies/getStudyLockData`
         )
-        const payload = typeof res?.data === 'string' ? JSON.parse(res.data) : res?.data || {}
-        if (payload?.lockData != null) {
+        const payload =
+          typeof res?.data === 'string' ? JSON.parse(res.data) : res?.data || {}
+        if (payload?.lockData !== null && payload?.lockData !== undefined) {
           setLockPatientIdsDm(payload)
           setStudyLockData(payload.lockData)
         }
@@ -637,7 +717,7 @@ const DataTableAdvSearch = () => {
       if (refreshLoading && isInitialLoad.current) {
         return
       }
-      
+
       // Handle initial parameter - remove it from URL after first load
       if (hasInitialParam && isInitialLoad.current) {
         const newParams = new URLSearchParams(searchParams)
@@ -645,7 +725,7 @@ const DataTableAdvSearch = () => {
         const newUrl = `${location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`
         navigate(newUrl, { replace: true })
       }
-      
+
       setRefreshLoading(true)
       try {
         let studylist
@@ -688,15 +768,30 @@ const DataTableAdvSearch = () => {
         } else {
           // Build filters
           console.log('🔍 Raw searchData before building filters:', searchData)
-          console.log('🔍 StudyDate value:', searchData.StudyDate, 'Type:', typeof searchData.StudyDate)
-          console.log('🔍 PatientBirthDate value:', searchData.PatientBirthDate, 'Type:', typeof searchData.PatientBirthDate)
-          
+          console.log(
+            '🔍 StudyDate value:',
+            searchData.StudyDate,
+            'Type:',
+            typeof searchData.StudyDate
+          )
+          console.log(
+            '🔍 PatientBirthDate value:',
+            searchData.PatientBirthDate,
+            'Type:',
+            typeof searchData.PatientBirthDate
+          )
+
           const filerData = JSON.stringify(
             Object.keys(searchData)
-              .map(key => {
+              .map((key) => {
                 const value = searchData[key]
-                console.log(`🔍 Processing filter key: ${key}, value:`, value, 'type:', typeof value)
-                
+                console.log(
+                  `🔍 Processing filter key: ${key}, value:`,
+                  value,
+                  'type:',
+                  typeof value
+                )
+
                 // Skip empty values but keep date filters even if they might be empty strings initially
                 if (
                   value === '' ||
@@ -707,51 +802,60 @@ const DataTableAdvSearch = () => {
                   console.log(`⏭️ Skipping empty filter: ${key}`)
                   return {}
                 }
-                
+
                 if (key === 'Physicians') {
                   console.log(
                     'Physicians',
-                    value.map(data => data._id)
+                    value.map((data) => data._id)
                   )
-                  return { [key]: value.map(data => data.physicianname) }
+                  return { [key]: value.map((data) => data.physicianname) }
                 }
                 if (key === 'clinicNames') {
-                  return { [key]: value.map(data => data.clinicName) }
+                  return { [key]: value.map((data) => data.clinicName) }
                 }
-                
+
                 // Explicitly handle date filters
                 if (key === 'StudyDate' || key === 'PatientBirthDate') {
                   console.log(`✅ Including date filter ${key}:`, value)
                   return { [key]: value }
                 }
-                
+
                 return { [key]: value }
               })
               .reduce((acc, curr) => {
                 if (Object.keys(curr).length) {
                   const key = Object.keys(curr)[0]
                   acc[key] = curr[key]
-                  console.log(`✅ Added filter to accumulator: ${key} =`, curr[key])
+                  console.log(
+                    `✅ Added filter to accumulator: ${key} =`,
+                    curr[key]
+                  )
                 }
                 return acc
               }, {})
           )
-          
+
           // Debug: Log filter data to verify StudyDate and PatientBirthDate are included
           const parsedFilters = JSON.parse(filerData)
           console.log('🔍 Final filter data being sent:', parsedFilters)
           console.log('🔍 Filter keys:', Object.keys(parsedFilters))
           if (parsedFilters.StudyDate) {
-            console.log('✅ StudyDate filter included:', parsedFilters.StudyDate)
+            console.log(
+              '✅ StudyDate filter included:',
+              parsedFilters.StudyDate
+            )
           } else {
             console.warn('⚠️ StudyDate filter NOT included in filters!')
           }
           if (parsedFilters.PatientBirthDate) {
-            console.log('✅ PatientBirthDate filter included:', parsedFilters.PatientBirthDate)
+            console.log(
+              '✅ PatientBirthDate filter included:',
+              parsedFilters.PatientBirthDate
+            )
           } else {
             console.warn('⚠️ PatientBirthDate filter NOT included in filters!')
           }
-          
+
           // Use unified endpoint - backend handles OpenSearch/PostgreSQL automatically
           const params = {
             limit: rowsPerPage,
@@ -763,15 +867,20 @@ const DataTableAdvSearch = () => {
           // Add filterId if a filter is selected
           if (selectedDropDownFilter && selectedDropDownFilter._id) {
             params.filterId = selectedDropDownFilter._id
-            console.log(`🔍 Adding filterId to API call: ${selectedDropDownFilter._id}`)
+            console.log(
+              `🔍 Adding filterId to API call: ${selectedDropDownFilter._id}`
+            )
           }
 
           console.log('🔍 API params being sent:', params)
 
-          studylist = await axios.get(`${process.env.REACT_APP_API_URL}/orthanc/study-list`, {
-            params,
-            signal: controller.signal,
-          })
+          studylist = await axios.get(
+            `${process.env.REACT_APP_API_URL}/orthanc/study-list`,
+            {
+              params,
+              signal: controller.signal,
+            }
+          )
 
           if (!studylist || !studylist.data) {
             setTableData(() => [])
@@ -822,49 +931,58 @@ const DataTableAdvSearch = () => {
       // Always fetch to ensure we have the latest notes data
       if (openNotes && studyNotes?.id) {
         try {
-          console.log('[Notes Modal] Fetching notes for study ID:', studyNotes.id)
+          console.log(
+            '[Notes Modal] Fetching notes for study ID:',
+            studyNotes.id
+          )
           const response = await axios.get(
             `${process.env.REACT_APP_API_URL}/explorer/studies/studyData/${studyNotes.id}`
           )
-          
+
           console.log('[Notes Modal] Full API Response:', response.data)
           console.log('[Notes Modal] API Response Structure:', {
             hasData: !!response.data,
             hasDataData: !!response.data?.data,
             responseKeys: response.data ? Object.keys(response.data) : [],
-            dataKeys: response.data?.data ? Object.keys(response.data.data || {}) : [],
+            dataKeys: response.data?.data
+              ? Object.keys(response.data.data || {})
+              : [],
             notesType: typeof response.data?.data?.notes,
             notesIsArray: Array.isArray(response.data?.data?.notes),
-            notesLength: Array.isArray(response.data?.data?.notes) ? response.data.data.notes.length : 'N/A',
-            notesData: response.data?.data?.notes
+            notesLength: Array.isArray(response.data?.data?.notes)
+              ? response.data.data.notes.length
+              : 'N/A',
+            notesData: response.data?.data?.notes,
           })
-          
+
           // API returns: { data: { ...Study, reportString: ... } }
           // Study object contains notes array
-          const studyData = response.data?.data || response.data?.study || response.data
-          
+          const studyData =
+            response.data?.data || response.data?.study || response.data
+
           if (studyData) {
             // API returns notes as an array with structure: { _id, userId, time, note, username, role }
-            const notes = Array.isArray(studyData.notes) 
-              ? studyData.notes 
-              : []
-            
+            const notes = Array.isArray(studyData.notes) ? studyData.notes : []
+
             console.log('[Notes Modal] Extracted notes:', {
               count: notes.length,
               firstNote: notes.length > 0 ? notes[0] : null,
               notesStructure: notes.length > 0 ? Object.keys(notes[0]) : [],
-              allNotes: notes
+              allNotes: notes,
             })
-            
-            setStudyNotes(prev => ({
+
+            setStudyNotes((prev) => ({
               ...prev,
-              notes: notes
+              notes,
             }))
           } else {
-            console.warn('[Notes Modal] No study data found in response:', response.data)
-            setStudyNotes(prev => ({
+            console.warn(
+              '[Notes Modal] No study data found in response:',
+              response.data
+            )
+            setStudyNotes((prev) => ({
               ...prev,
-              notes: []
+              notes: [],
             }))
           }
         } catch (error) {
@@ -872,12 +990,12 @@ const DataTableAdvSearch = () => {
           console.error('[Notes Modal] Error details:', {
             message: error.message,
             response: error.response?.data,
-            status: error.response?.status
+            status: error.response?.status,
           })
           // Set empty array on error
-          setStudyNotes(prev => ({
+          setStudyNotes((prev) => ({
             ...prev,
-            notes: []
+            notes: [],
           }))
         }
       }
@@ -893,8 +1011,17 @@ const DataTableAdvSearch = () => {
       console.log('[StudyList Modality] Fetching from Orthanc:', url)
       try {
         const res = await axios.get(url, {})
-        if (res?.status !== 200 || res?.data == null || (typeof res.data === 'object' && res.data.success === false)) {
-          console.log('[StudyList Modality] Response not OK or error body:', res?.status, res?.data)
+        if (
+          res?.status !== 200 ||
+          res?.data === null ||
+          res?.data === undefined ||
+          (typeof res.data === 'object' && res.data.success === false)
+        ) {
+          console.log(
+            '[StudyList Modality] Response not OK or error body:',
+            res?.status,
+            res?.data
+          )
           return
         }
         const data = res.data
@@ -905,7 +1032,8 @@ const DataTableAdvSearch = () => {
           const names = new Set()
           Object.keys(data).forEach((key) => {
             const config = data[key]
-            const aet = config && (config.AET ?? config.AeTitle ?? config.aeTitle)
+            const aet =
+              config && (config.AET ?? config.AeTitle ?? config.aeTitle)
             if (aet && typeof aet === 'string') names.add(String(aet).trim())
             else names.add(String(key).trim())
           })
@@ -913,24 +1041,37 @@ const DataTableAdvSearch = () => {
         }
         const apiOptions = raw
           .filter(Boolean)
-          .map(m => (typeof m === 'string' ? m : (m?.Name ?? m?.name ?? m?.value ?? String(m))))
+          .map((m) =>
+            typeof m === 'string'
+              ? m
+              : (m?.Name ?? m?.name ?? m?.value ?? String(m))
+          )
           .filter(Boolean)
-          .map(name => ({ value: name, label: name }))
+          .map((name) => ({ value: name, label: name }))
         setModalities(raw)
-        const apiValues = new Set(apiOptions.map(o => o.value))
+        const apiValues = new Set(apiOptions.map((o) => o.value))
         const merged = [...apiOptions]
-        ;(fallbackModalityOptions || []).forEach(f => {
+        ;(fallbackModalityOptions || []).forEach((f) => {
           if (!apiValues.has(f.value)) merged.push(f)
         })
         merged.sort((a, b) => (a.value || '').localeCompare(b.value || ''))
         if (merged.length > 0) {
-          console.log('[StudyList Modality] Fetched and dispatching to Redux:', merged.length)
+          console.log(
+            '[StudyList Modality] Fetched and dispatching to Redux:',
+            merged.length
+          )
           dispatch(handleModalityUpdate(merged))
         } else {
-          console.log('[StudyList Modality] Fetched but empty list, not updating Redux.')
+          console.log(
+            '[StudyList Modality] Fetched but empty list, not updating Redux.'
+          )
         }
       } catch (err) {
-        console.log('[StudyList Modality] Fetch failed:', err?.response?.status, err?.response?.data?.message || err?.message)
+        console.log(
+          '[StudyList Modality] Fetch failed:',
+          err?.response?.status,
+          err?.response?.data?.message || err?.message
+        )
       }
     }
 
@@ -943,20 +1084,20 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const onDataScroll = e => {
+  const onDataScroll = (e) => {
     if (document.getElementById('blank_div')) {
       document.getElementById('blank_div').scrollLeft = e.target.scrollLeft
     }
   }
 
-  const getTable = e => {
+  const getTable = (e) => {
     return table_data?.current?.children[0]?.children[0]?.children[0]
   }
-  const onBlankScroll = async e => {
+  const onBlankScroll = async (e) => {
     const table = await getTable()
     table.scrollLeft = e.target.scrollLeft
   }
-  const onBlankWidthSet = async e => {
+  const onBlankWidthSet = async (e) => {
     const table = await getTable()
     if (table) {
       blank_div.current.style.width = `${table.scrollWidth}px`
@@ -964,7 +1105,7 @@ const DataTableAdvSearch = () => {
       ReactDOM.findDOMNode(table).addEventListener('scroll', onDataScroll)
     }
   }
-  const onBlankWidth = e => {
+  const onBlankWidth = (e) => {
     setTimeout(onBlankWidthSet, 100)
   }
   useEffect(() => {
@@ -983,7 +1124,7 @@ const DataTableAdvSearch = () => {
   //   })
 
   // }
-  const rowClassFn = data => {
+  const rowClassFn = (data) => {
     const status =
       data.status === STUDYSTATUS.Unread ||
       data.status === STUDYSTATUS.Preliminary ||
@@ -1006,7 +1147,9 @@ const DataTableAdvSearch = () => {
     doctorEmail: yup
       .string()
       .email('Invalid email format!')
-      .required('Doctor Please provide your email address. This field is required.'),
+      .required(
+        'Doctor Please provide your email address. This field is required.'
+      ),
   })
 
   const PatientSchema = yup.object().shape({
@@ -1014,7 +1157,9 @@ const DataTableAdvSearch = () => {
     patientEmail: yup
       .string()
       .email('Invalid email format!')
-      .required('Patient Please provide your email address. This field is required.'),
+      .required(
+        'Patient Please provide your email address. This field is required.'
+      ),
   })
 
   const StudyEditSchema = yup.object().shape({
@@ -1039,7 +1184,9 @@ const DataTableAdvSearch = () => {
     getValues,
   } = useForm({
     mode: 'onBlur',
-    resolver: yupResolver(selectValue?.value === 'Patient' ? PatientSchema : DoctorSchema),
+    resolver: yupResolver(
+      selectValue?.value === 'Patient' ? PatientSchema : DoctorSchema
+    ),
   })
 
   const {
@@ -1055,7 +1202,7 @@ const DataTableAdvSearch = () => {
     setModal(!modal)
     if (!modal) {
       // Reset form data and clear errors when opening modal
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         doctorName: '',
         doctorEmail: '',
@@ -1079,7 +1226,8 @@ const DataTableAdvSearch = () => {
     } else if (selectValue?.value === 'Patient') {
       // Set form values
       if (form_data.patientName) setValue('patientName', form_data.patientName)
-      if (form_data.patientEmail) setValue('patientEmail', form_data.patientEmail)
+      if (form_data.patientEmail)
+        setValue('patientEmail', form_data.patientEmail)
 
       if (form_data.patientName && form_data.patientEmail) {
         clearErrors(['patientName', 'patientEmail'])
@@ -1087,7 +1235,7 @@ const DataTableAdvSearch = () => {
     }
   }, [form_data, selectValue, clearErrors, setValue])
 
-  const shareformSubmit = data => {
+  const shareformSubmit = (data) => {
     // Validate form before submission
     const currentValues = getValues()
     const hasValidData =
@@ -1119,16 +1267,16 @@ const DataTableAdvSearch = () => {
         username,
         urlOrigin: `${window.location.origin}/shared-study/`,
       })
-      .then(response => {
+      .then((response) => {
         hideLoadingAlert()
         if (response.data !== null) {
           showToastSuccess('Email sent to respective email address')
-          setDataUpdate(prev => !prev)
+          setDataUpdate((prev) => !prev)
           setSelectValue({ value: 'Doctor', label: 'Doctor' })
 
           // Only clear form data and close modal on success
           isInitialInput.current = true
-          setFormData(prev => {
+          setFormData((prev) => {
             return {
               ...prev,
               doctorName: '',
@@ -1143,14 +1291,14 @@ const DataTableAdvSearch = () => {
           showToastError('something went wrong', { position: 'top-center' })
         }
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         // Don't clear form data or close modal on error
         // Let global axios interceptor handle error alerting
       })
   }
 
-  const sharePrintformSubmit = data => {
+  const sharePrintformSubmit = (data) => {
     // Validate form before submission
     const currentValues = getValues()
     const hasValidData =
@@ -1173,27 +1321,30 @@ const DataTableAdvSearch = () => {
     showLoadingAlert()
 
     axios
-      .post(`${process.env.REACT_APP_API_URL}/studyShare/createShareLinkForPrintandEmail`, {
-        studies: selectedRows,
-        name: data.doctorName ? data.doctorName : data.patientName,
-        email: data.doctorEmail ? data.doctorEmail : data.patientEmail,
-        type: selectValue.value,
-        username,
-        urlOrigin: `${window.location.origin}/shared-study/`,
-        btnEvent,
-      })
-      .then(response => {
+      .post(
+        `${process.env.REACT_APP_API_URL}/studyShare/createShareLinkForPrintandEmail`,
+        {
+          studies: selectedRows,
+          name: data.doctorName ? data.doctorName : data.patientName,
+          email: data.doctorEmail ? data.doctorEmail : data.patientEmail,
+          type: selectValue.value,
+          username,
+          urlOrigin: `${window.location.origin}/shared-study/`,
+          btnEvent,
+        }
+      )
+      .then((response) => {
         hideLoadingAlert()
         if (response.data !== null) {
           if (btnEvent !== 'print') {
             showToastSuccess('Email sent to respective email address')
           }
-          setDataUpdate(prev => !prev)
+          setDataUpdate((prev) => !prev)
           setSelectValue({ value: 'Doctor', label: 'Doctor' })
 
           // Only clear form data and close modal on success
           isInitialInput.current = true
-          setFormData(prev => {
+          setFormData((prev) => {
             return {
               ...prev,
               doctorName: '',
@@ -1212,7 +1363,7 @@ const DataTableAdvSearch = () => {
           showToastError('something went wrong', { position: 'top-center' })
         }
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         // Don't clear form data or close modal on error
         // Let global axios interceptor handle error alerting
@@ -1224,12 +1375,15 @@ const DataTableAdvSearch = () => {
     const username = JSON.parse(localStorage.getItem('userData')).username
     const selectedRows = selectedRow
     axios
-      .post(`${process.env.REACT_APP_API_URL}/studyShare/createShareLinkForPrint`, {
-        studies: selectedRows,
-        username,
-        urlOrigin: `${window.location.origin}/shared-study/`,
-      })
-      .then(response => {
+      .post(
+        `${process.env.REACT_APP_API_URL}/studyShare/createShareLinkForPrint`,
+        {
+          studies: selectedRows,
+          username,
+          urlOrigin: `${window.location.origin}/shared-study/`,
+        }
+      )
+      .then((response) => {
         if (response.data !== null) {
           setSelectValue({ value: 'Doctor', label: 'Doctor' })
           handleModal()
@@ -1241,21 +1395,28 @@ const DataTableAdvSearch = () => {
       })
   }
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     data.access = form_data.access.flat()
 
     sharePrintformSubmit(data)
     // }
   }
 
-  const onSubmitStudyEdit = async data => {
-    const studyId = (editingStudyIdRef.current != null && String(editingStudyIdRef.current).trim() !== '')
-      ? String(editingStudyIdRef.current).trim()
-      : (inputStudyEdit?.sId != null && String(inputStudyEdit.sId).trim() !== '')
-        ? String(inputStudyEdit.sId).trim()
-        : ''
+  const onSubmitStudyEdit = async (data) => {
+    const studyId =
+      editingStudyIdRef.current !== null &&
+      editingStudyIdRef.current !== undefined &&
+      String(editingStudyIdRef.current).trim() !== ''
+        ? String(editingStudyIdRef.current).trim()
+        : inputStudyEdit?.sId !== null &&
+            inputStudyEdit?.sId !== undefined &&
+            String(inputStudyEdit.sId).trim() !== ''
+          ? String(inputStudyEdit.sId).trim()
+          : ''
     if (!studyId) {
-      showErrorAlert('Study reference is missing. Please close the dialog, refresh the list, and try editing again.')
+      showErrorAlert(
+        'Study reference is missing. Please close the dialog, refresh the list, and try editing again.'
+      )
       return
     }
     try {
@@ -1264,13 +1425,34 @@ const DataTableAdvSearch = () => {
       showBackgroundLoader('Study edit in progress...')
       // Send form data (data) so all edited fields are persisted; use studyId for URL
       const payload = {
-        newName: data.newName != null ? String(data.newName).trim() : '',
-        patientId: data.patientId != null ? String(data.patientId).trim() : '',
-        dob: data.dob != null ? String(data.dob).trim() : '',
-        sex: data.sex != null ? String(data.sex).trim() : '',
-        referPhysician: data.referPhysician != null ? String(data.referPhysician).trim() : '',
-        startTimeStamp: data.startTimeStamp != null ? String(data.startTimeStamp).trim() : '',
-        StudyDescription: data.StudyDescription != null ? String(data.StudyDescription).trim() : '',
+        newName:
+          data.newName !== null && data.newName !== undefined
+            ? String(data.newName).trim()
+            : '',
+        patientId:
+          data.patientId !== null && data.patientId !== undefined
+            ? String(data.patientId).trim()
+            : '',
+        dob:
+          data.dob !== null && data.dob !== undefined
+            ? String(data.dob).trim()
+            : '',
+        sex:
+          data.sex !== null && data.sex !== undefined
+            ? String(data.sex).trim()
+            : '',
+        referPhysician:
+          data.referPhysician !== null && data.referPhysician !== undefined
+            ? String(data.referPhysician).trim()
+            : '',
+        startTimeStamp:
+          data.startTimeStamp !== null && data.startTimeStamp !== undefined
+            ? String(data.startTimeStamp).trim()
+            : '',
+        StudyDescription:
+          data.StudyDescription !== null && data.StudyDescription !== undefined
+            ? String(data.StudyDescription).trim()
+            : '',
       }
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/explorer/studies/${studyId}/modify`,
@@ -1287,9 +1469,15 @@ const DataTableAdvSearch = () => {
         return
       }
 
-      showSuccessAlert('The study edit process has been successfully configured in the background.')
+      showSuccessAlert(
+        'The study edit process has been successfully configured in the background.'
+      )
 
-      if (res?.data?.lockData != null && typeof res.data.lockData === 'object') {
+      if (
+        res?.data?.lockData !== null &&
+        res?.data?.lockData !== undefined &&
+        typeof res.data.lockData === 'object'
+      ) {
         setLockPatientIdsDm({ lockData: res.data.lockData })
         setStudyLockData(res.data.lockData)
       }
@@ -1332,7 +1520,7 @@ const DataTableAdvSearch = () => {
     }
   }
   const setInputStudyEditValue = (name, value) => {
-    setInputStudyEdit(prevState => ({ ...prevState, [name]: value })) // Use bracket notation to dynamically set the key
+    setInputStudyEdit((prevState) => ({ ...prevState, [name]: value })) // Use bracket notation to dynamically set the key
     setPatientValue(name, value) // Pass the name and value correctly
 
     // Clear errors when field has value
@@ -1340,7 +1528,7 @@ const DataTableAdvSearch = () => {
       clearEditErrors(name)
     }
   }
-  const clearField = field => setInputStudyEditValue(field, '')
+  const clearField = (field) => setInputStudyEditValue(field, '')
   const formatAndValidateDate = (dateInput, format, field) => {
     const formattedDate = moment(dateInput).format(format)
     if (moment(formattedDate, format, true).isValid()) {
@@ -1368,7 +1556,9 @@ const DataTableAdvSearch = () => {
     setRefreshLoading(true)
     showBackgroundLoader('Syncing Orthanc...')
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/explorer/studies/syncOrthanc`)
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/explorer/studies/syncOrthanc`
+      )
 
       showSuccessAlert(
         'The Orthanc syncing process has been successfully configured in the background.'
@@ -1388,9 +1578,12 @@ const DataTableAdvSearch = () => {
     setRefreshLoading(true)
     showBackgroundLoader('Syncing exams...')
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/report/manually-start-exam-sync`, {
-        pin: 'MANUALLY@EXAM-SYNC',
-      })
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/report/manually-start-exam-sync`,
+        {
+          pin: 'MANUALLY@EXAM-SYNC',
+        }
+      )
 
       showSuccessAlert(
         'The Exam syncing process has been successfully configured in the background.'
@@ -1409,9 +1602,12 @@ const DataTableAdvSearch = () => {
   const syncDBBkup = async () => {
     setRefreshLoading(true)
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/user/databaseBkup`)
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/user/databaseBkup`
+      )
       showSuccessAlert(
-        res.data.success.message || 'The Database backup process is completed successfully.'
+        res.data.success.message ||
+          'The Database backup process is completed successfully.'
       )
       setRefreshLoading(false)
     } catch (err) {
@@ -1423,11 +1619,11 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
 
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: value }
     })
 
@@ -1477,30 +1673,35 @@ const DataTableAdvSearch = () => {
 
   // ** Function to handle date filter
   const handleDateFilter = (range, isSelect) => {
-    console.log('🔍 handleDateFilter called with range:', range, 'isSelect:', isSelect)
+    console.log(
+      '🔍 handleDateFilter called with range:',
+      range,
+      'isSelect:',
+      isSelect
+    )
     setPicker(range)
-    
+
     if (!range || (Array.isArray(range) && range.length === 0)) {
       console.log('⚠️ Empty range, clearing StudyDate')
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, StudyDate: '' }
       })
       setcrossStudyDate(false)
       setIsSelectingStudyDateRange(false)
       return
     }
-    
+
     // Handle both single date and date range
     const dates = Array.isArray(range) ? range : [range]
-    const format = dates.map(date => {
+    const format = dates.map((date) => {
       return moment(date).format('YYYYMMDD')
     })
-    
+
     if (format.length >= 2) {
       // Date range - both dates selected
       const studyDateValue = `${format[0]}-${format[1]}`
       console.log('✅ Setting StudyDate range:', studyDateValue)
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, StudyDate: studyDateValue }
       })
       if (!crossStudyDate) {
@@ -1518,7 +1719,7 @@ const DataTableAdvSearch = () => {
         // Single date selection (not range mode)
         const studyDateValue = `${format[0]}-${format[0]}`
         console.log('✅ Setting StudyDate single date:', studyDateValue)
-        setSearchData(prev => {
+        setSearchData((prev) => {
           return { ...prev, StudyDate: studyDateValue }
         })
         if (!crossStudyDate) {
@@ -1530,31 +1731,36 @@ const DataTableAdvSearch = () => {
   }
 
   const handlePatientDOBDateFilter = (range, isSelect) => {
-    console.log('🔍 handlePatientDOBDateFilter called with range:', range, 'isSelect:', isSelect)
-    
+    console.log(
+      '🔍 handlePatientDOBDateFilter called with range:',
+      range,
+      'isSelect:',
+      isSelect
+    )
+
     if (!range || (Array.isArray(range) && range.length === 0)) {
       console.log('⚠️ Empty range, clearing PatientBirthDate')
       setPatientDOBPickerPicker('')
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, PatientBirthDate: '' }
       })
       setcrossPatientDOBDate(false)
       setIsSelectingPatientDOBRange(true)
       return
     }
-    
+
     // Handle both single date and date range
     const dates = Array.isArray(range) ? range : [range]
-    const format = dates.map(date => {
+    const format = dates.map((date) => {
       return moment(date).format('YYYYMMDD')
     })
-    
+
     if (format.length >= 2) {
       // Date range - both dates selected
       const patientBirthDateValue = `${format[0]}-${format[1]}`
       console.log('✅ Setting PatientBirthDate range:', patientBirthDateValue)
       setPatientDOBPickerPicker(range) // Update picker only after both dates selected
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, PatientBirthDate: patientBirthDateValue }
       })
       if (!crossPatientDOBDate) {
@@ -1572,9 +1778,12 @@ const DataTableAdvSearch = () => {
       } else {
         // Single date selection (not range mode)
         const patientBirthDateValue = `${format[0]}-${format[0]}`
-        console.log('✅ Setting PatientBirthDate single date:', patientBirthDateValue)
+        console.log(
+          '✅ Setting PatientBirthDate single date:',
+          patientBirthDateValue
+        )
         setPatientDOBPickerPicker(range)
-        setSearchData(prev => {
+        setSearchData((prev) => {
           return { ...prev, PatientBirthDate: patientBirthDateValue }
         })
         if (!crossPatientDOBDate) {
@@ -1585,7 +1794,7 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const checkSelectedOption = value => {
+  const checkSelectedOption = (value) => {
     if (value.value === 'customdate') {
       // Set state to show Flatpickr instead of dropdown
       setSelectedOption(value)
@@ -1603,10 +1812,10 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const checkSelectedModalities = value => {
+  const checkSelectedModalities = (value) => {
     setCurrentPage(0)
     if (value.length === 0) {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, Modality: null }
       })
       setSelectedModalities(null)
@@ -1614,8 +1823,8 @@ const DataTableAdvSearch = () => {
         setSelectedDropDownFilter(null)
       }
     } else {
-      const modalityArray = value.map(modalityList => modalityList.value)
-      setSearchData(prev => {
+      const modalityArray = value.map((modalityList) => modalityList.value)
+      setSearchData((prev) => {
         return { ...prev, Modality: modalityArray }
       })
       setSelectedModalities(value)
@@ -1629,12 +1838,12 @@ const DataTableAdvSearch = () => {
       setcrossModality(false)
     }
     // Refresh worklist when modality selection changes (no need to click Search)
-    setFilter(prev => !prev)
+    setFilter((prev) => !prev)
   }
-  const checkSelectedStatus = value => {
+  const checkSelectedStatus = (value) => {
     setCurrentPage(0)
     if (value.length === 0) {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, status: null }
       })
       setSelectedstatus(null)
@@ -1642,12 +1851,14 @@ const DataTableAdvSearch = () => {
         setSelectedDropDownFilter(null)
       }
     } else {
-      const studyStatusArray = value.map(statusList => statusList.value)
-      setSearchData(prev => {
+      const studyStatusArray = value.map((statusList) => statusList.value)
+      setSearchData((prev) => {
         return { ...prev, status: studyStatusArray }
       })
       setSelectedstatus(value)
-      if (selectedDropDownFilter?.studyStatus?.length !== studyStatusArray?.length) {
+      if (
+        selectedDropDownFilter?.studyStatus?.length !== studyStatusArray?.length
+      ) {
         setSelectedDropDownFilter(null)
       }
     }
@@ -1656,13 +1867,13 @@ const DataTableAdvSearch = () => {
     } else {
       setcrossStatus(false)
     }
-    setFilter(prev => !prev)
+    setFilter((prev) => !prev)
   }
 
-  const checkSelectedClinics = value => {
+  const checkSelectedClinics = (value) => {
     setCurrentPage(0)
     if (value.length === 0) {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, clinicNames: null }
       })
       setSelectedClinics([])
@@ -1670,7 +1881,7 @@ const DataTableAdvSearch = () => {
         setSelectedDropDownFilter(null)
       }
     } else {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, clinicNames: value }
       })
       setSelectedClinics(value)
@@ -1683,13 +1894,13 @@ const DataTableAdvSearch = () => {
     } else {
       setcrossClinic(false)
     }
-    setFilter(prev => !prev)
+    setFilter((prev) => !prev)
   }
-  const checkSelectedPhysicians = value => {
+  const checkSelectedPhysicians = (value) => {
     setCurrentPage(0)
     console.log('first checkSelectedPhysicians', value)
     if (value.length === 0) {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, Physicians: null }
       })
       setSelectedPhysicians([])
@@ -1697,7 +1908,7 @@ const DataTableAdvSearch = () => {
         setSelectedDropDownFilter(null)
       }
     } else {
-      setSearchData(prev => {
+      setSearchData((prev) => {
         return { ...prev, Physicians: value }
       })
       console.log('searchData', searchData)
@@ -1711,10 +1922,10 @@ const DataTableAdvSearch = () => {
     } else {
       setcrossPhysician(false)
     }
-    setFilter(prev => !prev)
+    setFilter((prev) => !prev)
   }
 
-  const updateFilterData = value => {
+  const updateFilterData = (value) => {
     const obj = {}
     if (
       value?.filterfor === 'Physician' ||
@@ -1743,7 +1954,7 @@ const DataTableAdvSearch = () => {
       setPatientValue('clinicNames', value.clinicNames)
       setSelectedClinics(value.clinicNames)
     }
-    setSearchData(prev => {
+    setSearchData((prev) => {
       return { ...prev, ...obj }
     })
   }
@@ -1753,10 +1964,10 @@ const DataTableAdvSearch = () => {
       showErrorAlert(' Please select at least one study to send!')
     } else {
       const options = {}
-      modalities.forEach(mod => {
+      modalities.forEach((mod) => {
         options[mod] = mod
       })
-      
+
       MySwal.fire({
         title: 'Select Destination Node',
         input: 'select',
@@ -1785,13 +1996,13 @@ const DataTableAdvSearch = () => {
           axios
             .post(`${process.env.REACT_APP_API_URL}/orthanc/modalities`, {
               modality,
-              resources: selectedProducts.map(obj => obj.ID),
+              resources: selectedProducts.map((obj) => obj.ID),
             })
-            .then(response => {
+            .then((response) => {
               hideLoadingAlert()
               showSuccessAlert('Queued Successfully!')
             })
-            .catch(err => {
+            .catch((err) => {
               // Only handle response errors, let global interceptor handle network errors
               if (err && err.response) {
                 showErrorAlert(getErrorMessage(err))
@@ -1802,7 +2013,7 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const actionDelete = row => {
+  const actionDelete = (row) => {
     return showConfirm({
       title: 'Are you sure to delete this study?',
       text: 'This action is irreversible.',
@@ -1820,7 +2031,9 @@ const DataTableAdvSearch = () => {
         try {
           showLoadingAlert()
 
-          await axios.delete(`${process.env.REACT_APP_API_URL}/explorer/studies/${row?._id}`)
+          await axios.delete(
+            `${process.env.REACT_APP_API_URL}/explorer/studies/${row?._id}`
+          )
           hideLoadingAlert()
           setRefreshLoading(false)
           removeTableRow(row?._id)
@@ -1837,7 +2050,7 @@ const DataTableAdvSearch = () => {
     })
   }
 
-  const serializeErrForLog = err => {
+  const serializeErrForLog = (err) => {
     if (!err) return null
     try {
       return {
@@ -1850,14 +2063,16 @@ const DataTableAdvSearch = () => {
         configUrl: err?.config?.url,
         configMethod: err?.config?.method,
         configTimeout: err?.config?.timeout,
-        stack: err?.stack ? String(err.stack).split('\n').slice(0, 6).join(' | ') : undefined,
+        stack: err?.stack
+          ? String(err.stack).split('\n').slice(0, 6).join(' | ')
+          : undefined,
       }
     } catch (e) {
       return { message: String(err) }
     }
   }
 
-  const studyDownloadHanlderNew = async studyId => {
+  const studyDownloadHanlderNew = async (studyId) => {
     const LOG = '[StudyDownload]'
     const flowStart = Date.now()
     const userId = userData?._id
@@ -1866,13 +2081,18 @@ const DataTableAdvSearch = () => {
       showErrorAlert('Session expired. Please log in again.')
       return
     }
-    const orthancStudyId = studyId != null ? String(studyId).trim() : ''
+    const orthancStudyId =
+      studyId !== null && studyId !== undefined ? String(studyId).trim() : ''
     if (!orthancStudyId) {
       console.warn(LOG, 'Missing study ID')
       showErrorAlert('Study is not available for download.')
       return
     }
-    console.log(LOG, 'Start', { orthancStudyId, userId: userId?.toString?.()?.slice(-6), ts: flowStart })
+    console.log(LOG, 'Start', {
+      orthancStudyId,
+      userId: userId?.toString?.()?.slice(-6),
+      ts: flowStart,
+    })
 
     const eventName = `studyDownloadReady_${userId}`
     socket.off(eventName)
@@ -1891,54 +2111,92 @@ const DataTableAdvSearch = () => {
       if (timeoutId) clearTimeout(timeoutId)
     }
 
-    const showDownloadError = (errOrMessage, fallback = 'Study download failed. Please try again.') => {
-      const msg = typeof errOrMessage === 'string' ? errOrMessage : getErrorMessage(errOrMessage, fallback)
+    const showDownloadError = (
+      errOrMessage,
+      fallback = 'Study download failed. Please try again.'
+    ) => {
+      const msg =
+        typeof errOrMessage === 'string'
+          ? errOrMessage
+          : getErrorMessage(errOrMessage, fallback)
       showErrorAlert(msg)
     }
 
-    const onReady = async payloadStr => {
+    const onReady = async (payloadStr) => {
       const onReadyStart = Date.now()
       try {
         let payload
         try {
-          payload = typeof payloadStr === 'string' ? JSON.parse(payloadStr) : payloadStr
+          payload =
+            typeof payloadStr === 'string' ? JSON.parse(payloadStr) : payloadStr
         } catch (parseErr) {
-          console.error(LOG, 'Socket payload parse error', { raw: String(payloadStr).slice(0, 200), error: parseErr?.message })
+          console.error(LOG, 'Socket payload parse error', {
+            raw: String(payloadStr).slice(0, 200),
+            error: parseErr?.message,
+          })
           finish()
           showDownloadError('Invalid download notification.')
           return
         }
-        console.log(LOG, 'Socket event', { jobId: payload?.jobId, success: payload?.success, message: payload?.message, elapsed: Date.now() - flowStart })
+        console.log(LOG, 'Socket event', {
+          jobId: payload?.jobId,
+          success: payload?.success,
+          message: payload?.message,
+          elapsed: Date.now() - flowStart,
+        })
         if (payload.jobId !== jobId) {
-          console.log(LOG, 'Ignore socket event – jobId mismatch', { expected: jobId, got: payload?.jobId })
+          console.log(LOG, 'Ignore socket event – jobId mismatch', {
+            expected: jobId,
+            got: payload?.jobId,
+          })
           return
         }
         finish()
         if (!payload.success) {
-          console.warn(LOG, 'Prepare failed (socket)', { message: payload?.message, jobId: payload?.jobId })
-          showDownloadError(payload.message || 'Failed to prepare study download.')
+          console.warn(LOG, 'Prepare failed (socket)', {
+            message: payload?.message,
+            jobId: payload?.jobId,
+          })
+          showDownloadError(
+            payload.message || 'Failed to prepare study download.'
+          )
           return
         }
         if (!payload.downloadToken) {
-          console.warn(LOG, 'Socket success but no downloadToken – fallback to fetch', { jobId: payload.jobId })
+          console.warn(
+            LOG,
+            'Socket success but no downloadToken – fallback to fetch',
+            { jobId: payload.jobId }
+          )
           showDownloadError('Download link not ready. Please try again.')
           return
         }
         const downloadUrl = `${process.env.REACT_APP_API_URL}/orthanc/study/download-by-token/${payload.jobId}?token=${encodeURIComponent(payload.downloadToken)}`
-        console.log(LOG, 'Opening download URL (browser handles file)', { jobId: payload.jobId, totalElapsed: Date.now() - flowStart })
+        console.log(LOG, 'Opening download URL (browser handles file)', {
+          jobId: payload.jobId,
+          totalElapsed: Date.now() - flowStart,
+        })
         const link = document.createElement('a')
         link.setAttribute('href', downloadUrl)
-        link.setAttribute('download', payload.filename || `study_${orthancStudyId}.zip`)
+        link.setAttribute(
+          'download',
+          payload.filename || `study_${orthancStudyId}.zip`
+        )
         link.setAttribute('target', '_blank')
         link.setAttribute('rel', 'noopener noreferrer')
         link.style.visibility = 'hidden'
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
-        showToastSuccess('Study download started. If the file does not open, check your browser downloads.')
+        showToastSuccess(
+          'Study download started. If the file does not open, check your browser downloads.'
+        )
       } catch (err) {
         const errDetail = serializeErrForLog(err)
-        console.error(LOG, 'Download error (in-depth)', { ...errDetail, elapsed: Date.now() - onReadyStart })
+        console.error(LOG, 'Download error (in-depth)', {
+          ...errDetail,
+          elapsed: Date.now() - onReadyStart,
+        })
         if (err?.stack) console.error(LOG, 'Download error stack', err.stack)
         showDownloadError(err)
       }
@@ -1955,32 +2213,54 @@ const DataTableAdvSearch = () => {
       )
       const prepareMs = Date.now() - prepareStart
       jobId = data?.jobId
-      console.log(LOG, 'POST prepare response', { jobId: jobId ?? null, prepareMs, fullResponse: data })
+      console.log(LOG, 'POST prepare response', {
+        jobId: jobId ?? null,
+        prepareMs,
+        fullResponse: data,
+      })
       if (!jobId) {
         finish()
         console.warn(LOG, 'Prepare returned no jobId', { data })
         showDownloadError('Server did not start download. Please try again.')
         return
       }
-      timeoutId = setTimeout(() => {
-        finish()
-        console.warn(LOG, 'Timeout waiting for socket', { jobId, elapsed: Date.now() - flowStart })
-        showDownloadError('Study download is taking too long. Please try again.')
-      }, 10 * 60 * 1000)
+      timeoutId = setTimeout(
+        () => {
+          finish()
+          console.warn(LOG, 'Timeout waiting for socket', {
+            jobId,
+            elapsed: Date.now() - flowStart,
+          })
+          showDownloadError(
+            'Study download is taking too long. Please try again.'
+          )
+        },
+        10 * 60 * 1000
+      )
       socket.once(eventName, onReady)
     } catch (error) {
       finish()
       const errDetail = serializeErrForLog(error)
-      const responseDataPreview = error?.response?.data != null
-        ? (typeof error.response.data === 'string' ? error.response.data.slice(0, 300) : JSON.stringify(error.response.data).slice(0, 300))
-        : undefined
-      console.error(LOG, 'POST prepare error (in-depth)', { ...errDetail, responseDataPreview, responseHeaders: error?.response?.headers ? { 'content-type': error.response.headers['content-type'] } : undefined })
-      if (error?.stack) console.error(LOG, 'POST prepare error stack', error.stack)
+      const responseDataPreview =
+        error?.response?.data !== null && error?.response?.data !== undefined
+          ? typeof error.response.data === 'string'
+            ? error.response.data.slice(0, 300)
+            : JSON.stringify(error.response.data).slice(0, 300)
+          : undefined
+      console.error(LOG, 'POST prepare error (in-depth)', {
+        ...errDetail,
+        responseDataPreview,
+        responseHeaders: error?.response?.headers
+          ? { 'content-type': error.response.headers['content-type'] }
+          : undefined,
+      })
+      if (error?.stack)
+        console.error(LOG, 'POST prepare error stack', error.stack)
       showDownloadError(error)
     }
   }
 
-  const studyDownloadHanlder = async studyId => {
+  const studyDownloadHanlder = async (studyId) => {
     showLoadingAlert() // Show loading indicator
 
     try {
@@ -2017,13 +2297,13 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const Inputemail = selectedRows => {
+  const Inputemail = (selectedRows) => {
     setSelectedRow(selectedRows)
     setSelectValue({ value: 'Doctor', label: 'Doctor' })
     handleModal()
   }
 
-  const handleStudyAssignment = study => {
+  const handleStudyAssignment = (study) => {
     if (!study) {
       console.error('Study data is null/undefined for assignment')
       showErrorAlert('Invalid study data. Please try again.')
@@ -2035,14 +2315,14 @@ const DataTableAdvSearch = () => {
       return
     }
     setAssigningStudy(study)
-    setAssignToDocModelToggler(prev => !prev)
+    setAssignToDocModelToggler((prev) => !prev)
   }
 
-  const handleSharedStudy = study => {
-    setEmailIdOfSharedStudy(prev => study)
-    setSharedStudyToggler(prev => !prev)
+  const handleSharedStudy = (study) => {
+    setEmailIdOfSharedStudy((prev) => study)
+    setSharedStudyToggler((prev) => !prev)
     // Reset form data and clear errors when opening share modal
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       doctorName: '',
       doctorEmail: '',
@@ -2052,25 +2332,28 @@ const DataTableAdvSearch = () => {
     clearErrors()
   }
 
-  const selectedStudy = row => {
+  const selectedStudy = (row) => {
     if (row.ID) {
       Inputemail(row._id)
     }
-    setchangeOption(prev => !prev)
+    setchangeOption((prev) => !prev)
   }
 
-  const handleStudyReportUpload = row => {
+  const handleStudyReportUpload = (row) => {
     if (row.ID) {
       setSelectRowForUploadStudy(row._id)
     }
     setOpenStudyUpload(true)
   }
 
-  const handleFilter = e => {
-    setSearchData(prev => {
+  const handleFilter = (e) => {
+    setSearchData((prev) => {
       return {
         ...prev,
-        [e.target.id]: e.target.id === 'Modality' ? e.target.value.toUpperCase() : e.target.value,
+        [e.target.id]:
+          e.target.id === 'Modality'
+            ? e.target.value.toUpperCase()
+            : e.target.value,
       }
     })
     if (e.target.value) {
@@ -2117,13 +2400,13 @@ const DataTableAdvSearch = () => {
     setCurrentPage(0)
   }
 
-  const handleClearFilter = e => {
-    setSearchData(prev => {
+  const handleClearFilter = (e) => {
+    setSearchData((prev) => {
       return { ...prev, [e]: '' }
     })
   }
 
-  const changeDateFormat = date => {
+  const changeDateFormat = (date) => {
     if (date && date !== '-') {
       const addSpace = `${date.substring(0, 17)} ${date.substring(17, date.length)}`
       const tempDate = moment(addSpace, 'YYYY-MM-DD HH:mm:ss').valueOf()
@@ -2133,7 +2416,7 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const changeDateFormatinDOB = date => {
+  const changeDateFormatinDOB = (date) => {
     if (date && date !== '-') {
       const addSpace = `${date.substring(0, date.length - 7)}${date.substring(
         date.length - 5,
@@ -2182,12 +2465,12 @@ const DataTableAdvSearch = () => {
     return 0
   }
 
-  const activityLogHandler = async row => {
+  const activityLogHandler = async (row) => {
     // Updated by JCasp developer (Mehul) at 06-02-2024 to get activity of study by unique identification.
     await axios
       .get(`${process.env.REACT_APP_API_URL}/report/activityLog/${row._id}`)
-      .then(res => {
-        const activityLogArray = res.data.activityData.map(log => {
+      .then((res) => {
+        const activityLogArray = res.data.activityData.map((log) => {
           return {
             ...log,
             meta: moment(log.meta, 'YYYY-MM-DD hh:mm:ss').format(
@@ -2198,7 +2481,7 @@ const DataTableAdvSearch = () => {
         setActivityDataLog(activityLogArray)
         setOpenActivity(true)
       })
-      .catch(err => {
+      .catch((err) => {
         // Only handle response errors, let global interceptor handle network errors
         if (err && err.response) {
           console.log('err', err)
@@ -2209,12 +2492,15 @@ const DataTableAdvSearch = () => {
   const updatePriorityHandler = async () => {
     if (priorityValue) {
       await axios
-        .patch(`${process.env.REACT_APP_API_URL}/explorer/studies/updateStudyPriority`, {
-          id: rowId,
-          priority: priorityValue,
-          activity: 'priority',
-        })
-        .then(res => {
+        .patch(
+          `${process.env.REACT_APP_API_URL}/explorer/studies/updateStudyPriority`,
+          {
+            id: rowId,
+            priority: priorityValue,
+            activity: 'priority',
+          }
+        )
+        .then((res) => {
           if (res.status) {
             showSuccessAlert('Priority updated successfully!')
             updateTableRow(rowId, { priority: priorityValue })
@@ -2222,7 +2508,7 @@ const DataTableAdvSearch = () => {
             setOpenStatus(false)
           }
         })
-        .catch(err => {
+        .catch((err) => {
           // Only handle response errors, let global interceptor handle network errors
           if (err && err.response) {
             showErrorAlert(getErrorMessage(err))
@@ -2243,29 +2529,31 @@ const DataTableAdvSearch = () => {
             },
           }
         )
-        .then(res => {
+        .then((res) => {
           if (res?.status === 200 || res?.data) {
             showSuccessAlert('Status updated successfully!')
             updateTableRow(rowId, { status: statusValue })
             setOpenStatus(false)
           }
         })
-        .catch(err => {
+        .catch((err) => {
           if (err?.response) showErrorAlert(getErrorMessage(err))
         })
     }
   }
 
-  const createReportHandler = async id => {
+  const createReportHandler = async (id) => {
     if (handleModificationLock(id)) return
     await axios
       .get(`${process.env.REACT_APP_API_URL}/report/check/${id.ID}/lock`)
-      .then(res => {
+      .then((res) => {
         if (res.data.message) {
-        return showInfoAlert(
-          typeof res.data.message === 'string' ? res.data.message : 'Study is locked or not available.',
-          'Information!'
-        )
+          return showInfoAlert(
+            typeof res.data.message === 'string'
+              ? res.data.message
+              : 'Study is locked or not available.',
+            'Information!'
+          )
         } else {
           if (id.status !== STUDYSTATUS.Unread) {
             window.open(`/report/preview?mode=preview&id=${id?._id}`, '_blank')
@@ -2274,9 +2562,12 @@ const DataTableAdvSearch = () => {
           }
         }
       })
-      .catch(err => {
+      .catch((err) => {
         const msg = err?.response?.data?.message || err?.response?.data?.error
-        if (err?.response?.status === 423 || (msg && String(msg).toLowerCase().includes('modification'))) {
+        if (
+          err?.response?.status === 423 ||
+          (msg && String(msg).toLowerCase().includes('modification'))
+        ) {
           return showInfoAlert(STUDY_MODIFICATION_RUNNING_MSG)
         }
         return showInfoAlert(
@@ -2286,15 +2577,18 @@ const DataTableAdvSearch = () => {
       })
   }
 
-  const handlePrintReport = async id => {
+  const handlePrintReport = async (id) => {
     showLoadingAlert()
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/report/download/${id}`, {
-        responseType: 'blob', // Important: Tell axios to expect binary data
-        headers: {
-          Accept: 'application/pdf',
-        },
-      })
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/report/download/${id}`,
+        {
+          responseType: 'blob', // Important: Tell axios to expect binary data
+          headers: {
+            Accept: 'application/pdf',
+          },
+        }
+      )
 
       // Create blob URL for PDF viewer
       const blob = new Blob([response.data], { type: 'application/pdf' })
@@ -2307,8 +2601,14 @@ const DataTableAdvSearch = () => {
       hideLoadingAlert()
       const status = err?.response?.status
       const msg = err?.response?.data?.message || err?.response?.data?.error
-      if (status === 423 || (msg && String(msg).toLowerCase().includes('modification'))) {
-        showInfoAlert(typeof msg === 'string' ? msg : STUDY_MODIFICATION_RUNNING_MSG, 'Modification in progress')
+      if (
+        status === 423 ||
+        (msg && String(msg).toLowerCase().includes('modification'))
+      ) {
+        showInfoAlert(
+          typeof msg === 'string' ? msg : STUDY_MODIFICATION_RUNNING_MSG,
+          'Modification in progress'
+        )
       } else {
         showErrorAlert(getErrorMessage(err) || 'Failed to load PDF report')
       }
@@ -2318,34 +2618,57 @@ const DataTableAdvSearch = () => {
   const STUDY_MODIFICATION_RUNNING_MSG =
     'Study modification is running. Please wait until the modification is complete.'
 
-  const getRowStudyId = row => {
+  const getRowStudyId = (row) => {
     if (!row) return ''
-    const v = (row?.ID != null && String(row.ID).trim() !== '') ? String(row.ID).trim()
-      : (row?.id != null && String(row.id).trim() !== '') ? String(row.id).trim()
-      : (row?._id != null && String(row._id).trim() !== '') ? String(row._id).trim()
-      : ''
+    const v =
+      row?.ID !== null && row?.ID !== undefined && String(row.ID).trim() !== ''
+        ? String(row.ID).trim()
+        : row?.id !== null &&
+            row?.id !== undefined &&
+            String(row.id).trim() !== ''
+          ? String(row.id).trim()
+          : row?._id !== null &&
+              row?._id !== undefined &&
+              String(row._id).trim() !== ''
+            ? String(row._id).trim()
+            : ''
     return v
   }
 
-  const isRowUnderModification = row => {
-    const currentId = studyIdUnderModificationRef.current ?? studyIdUnderModification
-    if (!row || currentId == null || String(currentId).trim() === '') return false
+  const isRowUnderModification = (row) => {
+    const currentId =
+      studyIdUnderModificationRef.current ?? studyIdUnderModification
+    if (
+      !row ||
+      currentId === null ||
+      currentId === undefined ||
+      String(currentId).trim() === ''
+    )
+      return false
     const id = String(currentId).trim()
     return getRowStudyId(row) === id
   }
 
-  const handleModificationLock = row => {
+  const handleModificationLock = (row) => {
     if (!row) return false
     if (isRowUnderModification(row)) {
       showInfoAlert(STUDY_MODIFICATION_RUNNING_MSG, 'Modification in progress')
       return true
     }
-    if (row.orthancPatientId == null || String(row.orthancPatientId || '').trim() === '') {
+    if (
+      row.orthancPatientId === null ||
+      row.orthancPatientId === undefined ||
+      String(row.orthancPatientId || '').trim() === ''
+    ) {
       return false
     }
     try {
       const lockData = getLockPatientIdsDm()
-      if (!lockData || typeof lockData !== 'object' || Array.isArray(lockData)) {
+      if (
+        !lockData ||
+        typeof lockData !== 'object' ||
+        Array.isArray(lockData)
+      ) {
         return false
       }
       if (lockData[row.orthancPatientId]) {
@@ -2361,7 +2684,9 @@ const DataTableAdvSearch = () => {
   useEffect(() => {
     const fetchTableColumns = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/user/list-columns/study-list`)
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/user/list-columns/study-list`
+        )
         setTableListData(res?.data?.result)
       } catch (err) {
         if (err && err.response) {
@@ -2373,7 +2698,7 @@ const DataTableAdvSearch = () => {
     fetchTableColumns()
   }, [])
 
-  const previewReportHandler = id => {
+  const previewReportHandler = (id) => {
     // For finalized reports, always use preview mode to show actual finalized content
     // For other statuses, use create mode for editing
     const mode = id.status === STUDYSTATUS.Final ? 'preview' : 'create'
@@ -2383,7 +2708,7 @@ const DataTableAdvSearch = () => {
     )
   }
 
-  const actionUnlock = async row => {
+  const actionUnlock = async (row) => {
     if (row.lock !== true) {
       return showInfoAlert('Study already unlocked!', 'Information!')
     }
@@ -2410,11 +2735,19 @@ const DataTableAdvSearch = () => {
       try {
         showLoadingAlert()
         setRefreshLoading(true)
-        await axios.put(`${process.env.REACT_APP_API_URL}/explorer/studies/unlockstudy/${row?._id}`)
+        await axios.put(
+          `${process.env.REACT_APP_API_URL}/explorer/studies/unlockstudy/${row?._id}`
+        )
         hideLoadingAlert()
         setRefreshLoading(false)
-        if (row?.orthancPatientId != null) {
-          setStudyLockData(prev => ({ ...prev, [row.orthancPatientId]: false }))
+        if (
+          row?.orthancPatientId !== null &&
+          row?.orthancPatientId !== undefined
+        ) {
+          setStudyLockData((prev) => ({
+            ...prev,
+            [row.orthancPatientId]: false,
+          }))
         }
         showSuccessAlert('Study Unlocked Successfully!.')
       } catch (err) {
@@ -2435,9 +2768,11 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'lock',
-      cell: row => {
+      cell: (row) => {
         const isLocked =
-          row?.orthancPatientId != null && studyLockData[row.orthancPatientId] !== undefined
+          row?.orthancPatientId !== null &&
+          row?.orthancPatientId !== undefined &&
+          studyLockData[row.orthancPatientId] !== undefined
             ? studyLockData[row.orthancPatientId]
             : row['lock']
         return isLocked ? (
@@ -2452,6 +2787,7 @@ const DataTableAdvSearch = () => {
                 }
               }}
             />
+
             {}
           </>
         ) : (
@@ -2467,7 +2803,7 @@ const DataTableAdvSearch = () => {
 
       id: 'PatientName',
       reorder: true,
-      cell: row => (row && row['PatientName'] ? row['PatientName'] : '-'),
+      cell: (row) => (row && row['PatientName'] ? row['PatientName'] : '-'),
       minWidth: '145px',
     },
     {
@@ -2476,7 +2812,7 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'PatientID',
-      cell: row => (row && row['PatientID'] ? row['PatientID'] : '-'),
+      cell: (row) => (row && row['PatientID'] ? row['PatientID'] : '-'),
       minWidth: '130px',
     },
     {
@@ -2485,7 +2821,8 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'AccessionNumber',
-      cell: row => (row && row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
+      cell: (row) =>
+        row && row['AccessionNumber'] ? row['AccessionNumber'] : '-',
       minWidth: '130px',
     },
     {
@@ -2494,7 +2831,7 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'startTimeStamp',
-      cell: row =>
+      cell: (row) =>
         row && row['startTimeStamp']
           ? moment(row['startTimeStamp']).format(
               userData?.dateFormats?.dateTimeFormat || 'MM/DD/YYYY hh:mmA'
@@ -2510,7 +2847,7 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'Modality',
-      cell: row => (row && row['Modality'] ? row['Modality'] : '-'),
+      cell: (row) => (row && row['Modality'] ? row['Modality'] : '-'),
       minWidth: '115px',
     },
     {
@@ -2520,9 +2857,11 @@ const DataTableAdvSearch = () => {
 
       id: 'PatientDOB',
 
-      cell: row =>
+      cell: (row) =>
         row && row['PatientDOB'] && row['PatientDOB'] !== '-'
-          ? moment(row['PatientDOB']).format(userData?.dateFormats?.dateFormat || 'MM/DD/YYYY')
+          ? moment(row['PatientDOB']).format(
+              userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'
+            )
           : '-',
       minWidth: '185px',
       sortType: 'datetime',
@@ -2533,22 +2872,25 @@ const DataTableAdvSearch = () => {
       sortable: false,
       reorder: true,
       id: 'notes',
-      cell: row => {
+      cell: (row) => {
         // Get notes count from either notesCount field or notes array length
         // Backend sends notesCount as a number, but we also check notes array for compatibility
-        const notesCount = row?.notesCount !== undefined && row.notesCount !== null
-          ? Number(row.notesCount)
-          : (Array.isArray(row?.notes) ? row.notes.length : 0);
-        
+        const notesCount =
+          row?.notesCount !== undefined && row.notesCount !== null
+            ? Number(row.notesCount)
+            : Array.isArray(row?.notes)
+              ? row.notes.length
+              : 0
+
         // Material-UI Badge automatically hides when badgeContent is 0
         // So we pass the actual count, and it will show when > 0
         return (
           <Badge
             badgeContent={notesCount || 0}
             color="primary"
-            style={{ 
-              cursor: 'pointer', 
-              zIndex: 0
+            style={{
+              cursor: 'pointer',
+              zIndex: 0,
             }}
             onClick={async () => {
               if (row && row.ID) {
@@ -2563,7 +2905,7 @@ const DataTableAdvSearch = () => {
           >
             <Book size={20} id="notes" className="mr-45" color={'blue'} />
           </Badge>
-        );
+        )
       },
       minWidth: '70px',
     },
@@ -2572,18 +2914,22 @@ const DataTableAdvSearch = () => {
       sortable: true,
       reorder: true,
       id: 'status',
-      cell: row =>
+      cell: (row) =>
         row && row['status'] === STUDYSTATUS.Unread ? (
           <div
             className="worklist-status"
-            style={{ background: statusColor?.completed || statusColors?.completed }}
+            style={{
+              background: statusColor?.completed || statusColors?.completed,
+            }}
           >
             <span>{STUDYSTATUS.Unread}</span>
           </div>
         ) : row['status'] === STUDYSTATUS.Preliminary ? (
           <div
             className="worklist-status"
-            style={{ background: statusColor?.preliminary || statusColors?.preliminary }}
+            style={{
+              background: statusColor?.preliminary || statusColors?.preliminary,
+            }}
           >
             <span>{STUDYSTATUS.Preliminary}</span>
           </div>
@@ -2604,6 +2950,7 @@ const DataTableAdvSearch = () => {
         ) : (
           '-'
         ),
+
       minWidth: '120px',
       sortFunction: genderSort,
     },
@@ -2613,7 +2960,7 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'PatientSex',
-      cell: row =>
+      cell: (row) =>
         row && row['PatientSex'] === 'M' ? (
           <img src={maleIcon} width={25} alt="Player" />
         ) : row['PatientSex'] === 'F' ? (
@@ -2623,6 +2970,7 @@ const DataTableAdvSearch = () => {
         ) : (
           '-'
         ),
+
       minWidth: '70px',
       sortFunction: genderSort,
     },
@@ -2632,7 +2980,7 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'Description',
-      cell: row => (row && row['Description'] ? row['Description'] : '-'),
+      cell: (row) => (row && row['Description'] ? row['Description'] : '-'),
       minWidth: '200px',
     },
     {
@@ -2641,9 +2989,10 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'sharedCount',
-      selector: row => (row && row['sharedCount'] ? row['sharedCount'].length : '-'),
+      selector: (row) =>
+        row && row['sharedCount'] ? row['sharedCount'].length : '-',
       minWidth: '100px',
-      cell: row => {
+      cell: (row) => {
         const uniqueId = `sharedStudy-${row._id}`
         return (
           <>
@@ -2683,7 +3032,7 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'SeriesNumber',
-      cell: row => (row && row['SeriesNumber'] ? row['SeriesNumber'] : '-'),
+      cell: (row) => (row && row['SeriesNumber'] ? row['SeriesNumber'] : '-'),
       minWidth: '100px',
     },
     {
@@ -2692,7 +3041,7 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'ImagesNumber',
-      cell: row => (row && row['ImagesNumber'] ? row['ImagesNumber'] : '-'),
+      cell: (row) => (row && row['ImagesNumber'] ? row['ImagesNumber'] : '-'),
       minWidth: '100px',
     },
     {
@@ -2701,7 +3050,8 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'referPhysician',
-      cell: row => (row && row['referPhysician'] ? row['referPhysician'] : '-'),
+      cell: (row) =>
+        row && row['referPhysician'] ? row['referPhysician'] : '-',
       minWidth: '150px',
     },
     {
@@ -2710,7 +3060,7 @@ const DataTableAdvSearch = () => {
       reorder: true,
 
       id: 'approvedBy',
-      cell: row => (row && row['approvedBy'] ? row['approvedBy'] : '-'),
+      cell: (row) => (row && row['approvedBy'] ? row['approvedBy'] : '-'),
       minWidth: '150px',
     },
 
@@ -2724,7 +3074,7 @@ const DataTableAdvSearch = () => {
       id: 'Actions',
       style: {},
       minWidth: '200px',
-      cell: row => {
+      cell: (row) => {
         if (!row || !row._id || !row.StudyInstanceUID) {
           return <div>-</div>
         }
@@ -2733,18 +3083,30 @@ const DataTableAdvSearch = () => {
             <a
               href={`${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${row.StudyInstanceUID}&accessToken=${localStorage.getItem('accessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${row._id}&mode=${row.status === STUDYSTATUS.Unread ? 'create' : 'preview'}`}
               style={{ color: 'inherit' }}
-              target={JSON.parse(localStorage.getItem('userData'))?.viewerPreference || '_self'}
-              onClick={e => {
+              target={
+                JSON.parse(localStorage.getItem('userData'))
+                  ?.viewerPreference || '_self'
+              }
+              onClick={(e) => {
                 if (handleModificationLock(row)) {
                   e.preventDefault()
                   return
                 }
-                setUpdateState(prev => !prev)
+                setUpdateState((prev) => !prev)
               }}
             >
-              <Eye size={15} id="view" className="ml-50" style={{ cursor: 'pointer' }} />
+              <Eye
+                size={15}
+                id="view"
+                className="ml-50"
+                style={{ cursor: 'pointer' }}
+              />
             </a>
-            <UncontrolledTooltip target="view" className="tooltip-react-strap" placement="right">
+            <UncontrolledTooltip
+              target="view"
+              className="tooltip-react-strap"
+              placement="right"
+            >
               Click to view study
             </UncontrolledTooltip>
 
@@ -2758,7 +3120,7 @@ const DataTableAdvSearch = () => {
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   if (handleModificationLock(row)) return
-                  setUpdateState(prev => !prev)
+                  setUpdateState((prev) => !prev)
                   studyDownloadHanlderNew(row.ID)
                 }}
               />
@@ -2778,7 +3140,8 @@ const DataTableAdvSearch = () => {
             {(userData.role === ROLES.ClinicAdmin ||
               userData.role === ROLES.RadiologistUser ||
               userData.role === ROLES.TechnicianUser ||
-              (userData.role === ROLES.ClinicUser && row.allow_edit === true)) &&
+              (userData.role === ROLES.ClinicUser &&
+                row.allow_edit === true)) &&
               (userData.role !== ROLES.TechnicianUser ||
                 (userData.role === ROLES.TechnicianUser &&
                   row.status !== STUDYSTATUS.Preliminary &&
@@ -2789,46 +3152,71 @@ const DataTableAdvSearch = () => {
                     id="editStudy"
                     className="ml-50"
                     style={{
-                      cursor: isRowUnderModification(row) ? 'not-allowed' : 'pointer',
+                      cursor: isRowUnderModification(row)
+                        ? 'not-allowed'
+                        : 'pointer',
                       opacity: isRowUnderModification(row) ? 0.5 : 1,
                     }}
-                    onClick={e => {
+                    onClick={(e) => {
                       const studyIdForEdit = getRowStudyId(row)
-                      const currentUnderMod = studyIdUnderModificationRef.current ?? studyIdUnderModification
-                      if (studyIdForEdit && String(currentUnderMod || '').trim() === studyIdForEdit) {
+                      const currentUnderMod =
+                        studyIdUnderModificationRef.current ??
+                        studyIdUnderModification
+                      if (
+                        studyIdForEdit &&
+                        String(currentUnderMod || '').trim() === studyIdForEdit
+                      ) {
                         e.preventDefault()
                         e.stopPropagation()
-                        showInfoAlert(STUDY_MODIFICATION_RUNNING_MSG, 'Modification in progress')
+                        showInfoAlert(
+                          STUDY_MODIFICATION_RUNNING_MSG,
+                          'Modification in progress'
+                        )
                         return
                       }
                       if (handleModificationLock(row)) return
                       if (!studyIdForEdit) {
-                        showErrorAlert('Cannot edit: study identifier is missing. Please refresh the list and try again.')
+                        showErrorAlert(
+                          'Cannot edit: study identifier is missing. Please refresh the list and try again.'
+                        )
                         return
                       }
                       editingStudyIdRef.current = studyIdForEdit
                       setOpenStudyEdit(true)
 
-                      const rawDob = row?.PatientBirthDate || row?.patient?.PatientBirthDate
+                      const rawDob =
+                        row?.PatientBirthDate || row?.patient?.PatientBirthDate
                       const rawStartTimeStamp = row?.startTimeStamp // Adjust based on where your data comes from
 
                       const formattedDob = moment(rawDob).isValid()
-                        ? moment(rawDob).format(userData?.dateFormats?.dateFormat || 'MM/DD/YYYY') // Convert to JavaScript Date object
-                        : null // Set to null for invalid dates
-
-                      const formattedStartTimeStamp = moment(rawStartTimeStamp).isValid()
-                        ? moment(rawStartTimeStamp).format(
-                            userData?.dateFormats?.dateTimeFormat || 'MM/DD/YYYY hh:mmA'
+                        ? moment(rawDob).format(
+                            userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'
                           ) // Convert to JavaScript Date object
                         : null // Set to null for invalid dates
 
-                      console.log({ rawStartTimeStamp, formattedStartTimeStamp })
+                      const formattedStartTimeStamp = moment(
+                        rawStartTimeStamp
+                      ).isValid()
+                        ? moment(rawStartTimeStamp).format(
+                            userData?.dateFormats?.dateTimeFormat ||
+                              'MM/DD/YYYY hh:mmA'
+                          ) // Convert to JavaScript Date object
+                        : null // Set to null for invalid dates
+
+                      console.log({
+                        rawStartTimeStamp,
+                        formattedStartTimeStamp,
+                      })
 
                       const editData = {
-                        newName: row?.PatientName || row?.patient?.PatientName || '',
-                        patientId: row?.PatientID || row?.patient?.PatientID || '',
+                        newName:
+                          row?.PatientName || row?.patient?.PatientName || '',
+                        patientId:
+                          row?.PatientID || row?.patient?.PatientID || '',
                         dob: formattedDob,
-                        sex: ['M', 'F', 'O'].includes(row?.PatientSex || row?.patient?.PatientSex)
+                        sex: ['M', 'F', 'O'].includes(
+                          row?.PatientSex || row?.patient?.PatientSex
+                        )
                           ? row?.PatientSex || row?.patient?.PatientSex
                           : '',
                         referPhysician: row?.referPhysician || '',
@@ -2839,15 +3227,18 @@ const DataTableAdvSearch = () => {
 
                       setInputStudyEdit(editData)
                       resetEditForm(editData)
-                      setUpdateState(prev => !prev)
+                      setUpdateState((prev) => !prev)
                     }}
                   />
+
                   <UncontrolledTooltip
                     target="editStudy"
                     className="tooltip-react-strap"
                     placement="right"
                   >
-                    {isRowUnderModification(row) ? 'Modification in progress' : 'Edit study'}
+                    {isRowUnderModification(row)
+                      ? 'Modification in progress'
+                      : 'Edit study'}
                   </UncontrolledTooltip>
 
                   <Clock
@@ -2857,9 +3248,10 @@ const DataTableAdvSearch = () => {
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
                       activityLogHandler(row)
-                      setUpdateState(prev => !prev)
+                      setUpdateState((prev) => !prev)
                     }}
                   />
+
                   <UncontrolledTooltip
                     target="activitylog"
                     className="tooltip-react-strap"
@@ -2870,7 +3262,8 @@ const DataTableAdvSearch = () => {
                 </>
               )}
 
-            {(userData.role === ROLES.ClinicAdmin || userData.role === ROLES.TechnicianUser) && (
+            {(userData.role === ROLES.ClinicAdmin ||
+              userData.role === ROLES.TechnicianUser) && (
               <>
                 <Edit
                   size={15}
@@ -2890,9 +3283,10 @@ const DataTableAdvSearch = () => {
                       setRowId(row.ID)
                       setPriorityValue(row.priority)
                     }
-                    setUpdateState(prev => !prev)
+                    setUpdateState((prev) => !prev)
                   }}
                 />
+
                 <UncontrolledTooltip
                   target="edit"
                   className="tooltip-react-strap"
@@ -2933,12 +3327,14 @@ const DataTableAdvSearch = () => {
                           cursor: 'pointer',
                         }}
                       />
+
                       <UncontrolledTooltip
                         target={`abc${row.ID}`}
                         className="tooltip-react-strap"
                         placement="right"
                       >
-                        {userData.role === ROLES.RadiologistUser && row.status === STUDYSTATUS.Final
+                        {userData.role === ROLES.RadiologistUser &&
+                        row.status === STUDYSTATUS.Final
                           ? 'View/Adden Report'
                           : (userData.role === ROLES.RadiologistUser &&
                                 row.status === STUDYSTATUS.Unread) ||
@@ -2972,21 +3368,35 @@ const DataTableAdvSearch = () => {
                       id={`preview_pdf-${row.ID}`}
                       className="ml-50"
                       style={{
-                        cursor: isRowUnderModification(row) ? 'not-allowed' : 'pointer',
+                        cursor: isRowUnderModification(row)
+                          ? 'not-allowed'
+                          : 'pointer',
                         opacity: isRowUnderModification(row) ? 0.5 : 1,
                       }}
-                      onClick={e => {
-                        const rowStudyId = getRowStudyId(row) || (row?.ID != null ? String(row.ID) : '')
-                        const currentUnderMod = studyIdUnderModificationRef.current ?? studyIdUnderModification
-                        if (rowStudyId && String(currentUnderMod || '').trim() === rowStudyId) {
+                      onClick={(e) => {
+                        const rowStudyId =
+                          getRowStudyId(row) ||
+                          (row?.ID !== null && row?.ID !== undefined
+                            ? String(row.ID)
+                            : '')
+                        const currentUnderMod =
+                          studyIdUnderModificationRef.current ??
+                          studyIdUnderModification
+                        if (
+                          rowStudyId &&
+                          String(currentUnderMod || '').trim() === rowStudyId
+                        ) {
                           e.preventDefault()
                           e.stopPropagation()
-                          showInfoAlert(STUDY_MODIFICATION_RUNNING_MSG, 'Modification in progress')
+                          showInfoAlert(
+                            STUDY_MODIFICATION_RUNNING_MSG,
+                            'Modification in progress'
+                          )
                           return
                         }
                         if (handleModificationLock(row)) return
                         handlePrintReport(row.ID)
-                        setUpdateState(prev => !prev)
+                        setUpdateState((prev) => !prev)
                       }}
                     />
 
@@ -2995,7 +3405,9 @@ const DataTableAdvSearch = () => {
                       className="tooltip-react-strap"
                       placement="right"
                     >
-                      {isRowUnderModification(row) ? 'Modification in progress' : 'Print & Download Report'}
+                      {isRowUnderModification(row)
+                        ? 'Modification in progress'
+                        : 'Print & Download Report'}
                     </UncontrolledTooltip>
                   </>
                 )}
@@ -3014,15 +3426,24 @@ const DataTableAdvSearch = () => {
                   className="ml-50 assingExamBlack"
                   onClick={() => {
                     if (!row) {
-                      console.error('Row data is null/undefined for study assignment')
-                      showErrorAlert('Invalid study data. Please refresh the page and try again.')
+                      console.error(
+                        'Row data is null/undefined for study assignment'
+                      )
+                      showErrorAlert(
+                        'Invalid study data. Please refresh the page and try again.'
+                      )
                       return
                     }
-                    
+
                     if (handleModificationLock(row)) return
                     if (!row._id) {
-                      console.error('Row missing _id for study assignment:', row)
-                      showErrorAlert('Invalid study data. Please refresh the page and try again.')
+                      console.error(
+                        'Row missing _id for study assignment:',
+                        row
+                      )
+                      showErrorAlert(
+                        'Invalid study data. Please refresh the page and try again.'
+                      )
                       return
                     }
                     handleStudyAssignment(row)
@@ -3031,6 +3452,7 @@ const DataTableAdvSearch = () => {
                     cursor: 'pointer',
                   }}
                 />
+
                 <UncontrolledTooltip
                   target="doctor"
                   className="tooltip-react-strap"
@@ -3048,10 +3470,15 @@ const DataTableAdvSearch = () => {
               style={{ cursor: 'pointer' }}
               onClick={() => {
                 selectedStudy(row)
-                setUpdateState(prev => !prev)
+                setUpdateState((prev) => !prev)
               }}
             />
-            <UncontrolledTooltip target="share" className="tooltip-react-strap" placement="right">
+
+            <UncontrolledTooltip
+              target="share"
+              className="tooltip-react-strap"
+              placement="right"
+            >
               Click to share study
             </UncontrolledTooltip>
 
@@ -3068,6 +3495,7 @@ const DataTableAdvSearch = () => {
                       handleStudyReportUpload(row)
                     }}
                   />
+
                   <UncontrolledTooltip
                     target="upload"
                     className="tooltip-react-strap"
@@ -3084,11 +3512,14 @@ const DataTableAdvSearch = () => {
     },
   ]
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     if (e.data?.StudyInstanceUID) {
       const viewer_url = `${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${e.data.StudyInstanceUID}&accessToken=${localStorage.getItem('accessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${e.data._id}&mode=${e.data.status === STUDYSTATUS.Unread ? 'create' : 'preview'}`
 
-      window.open(viewer_url, JSON.parse(localStorage.getItem('userData'))?.viewerPreference)
+      window.open(
+        viewer_url,
+        JSON.parse(localStorage.getItem('userData'))?.viewerPreference
+      )
     }
   }
 
@@ -3109,10 +3540,10 @@ const DataTableAdvSearch = () => {
     handleClearFilter('StudyDate')
     handleClearFilter('PatientBirthDate')
     // Explicitly clear date fields in searchData
-    setSearchData(prev => ({
+    setSearchData((prev) => ({
       ...prev,
       StudyDate: '',
-      PatientBirthDate: ''
+      PatientBirthDate: '',
     }))
     searchData.Modality = ''
     setSelectedModalities([])
@@ -3130,7 +3561,7 @@ const DataTableAdvSearch = () => {
     handleClearFilter('StudyDescription')
     showFlatpicker(() => true)
     setSelectedOption(null)
-    setSearchData(prev => {
+    setSearchData((prev) => {
       return { ...prev, Physicians: null, clinicNames: null }
     })
     setSelectedDropDownFilter(undefined)
@@ -3144,7 +3575,7 @@ const DataTableAdvSearch = () => {
     handleSeach()
   }
 
-  const onKeyPressed = e => {
+  const onKeyPressed = (e) => {
     if (e.key === 'Backspace' || e.key === 'Delete') {
       setPicker('')
       setcrossStudyDate(false)
@@ -3152,7 +3583,7 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const onPatientKeyPressed = e => {
+  const onPatientKeyPressed = (e) => {
     if (e.key === 'Backspace' || e.key === 'Delete') {
       setPatientDOBPickerPicker('')
       setcrossPatientDOBDate(false)
@@ -3216,15 +3647,18 @@ const DataTableAdvSearch = () => {
   const noteHandler = async () => {
     if (!updateNoteStatus.status) {
       await axios
-        .post(`${process.env.REACT_APP_API_URL}/explorer/studies/${studyNotes.id}/note`, {
-          note:
-            editorRef.current.getContent() !== ''
-              ? editorRef.current.getContent()
-              : '<p>No notes added.</p>',
-        })
-        .then(res => {
+        .post(
+          `${process.env.REACT_APP_API_URL}/explorer/studies/${studyNotes.id}/note`,
+          {
+            note:
+              editorRef.current.getContent() !== ''
+                ? editorRef.current.getContent()
+                : '<p>No notes added.</p>',
+          }
+        )
+        .then((res) => {
           showSuccessAlert(res.data.message)
-          setStudyNotes(state => {
+          setStudyNotes((state) => {
             return {
               id: state.id,
               notes: [...state.notes, res.data.note],
@@ -3234,7 +3668,7 @@ const DataTableAdvSearch = () => {
           editorRef.current.setContent('')
           setOpenNotes(false)
         })
-        .catch(err => {
+        .catch((err) => {
           // Only handle response errors, let global interceptor handle network errors
           if (err && err.response) {
             showErrorAlert(getErrorMessage(err))
@@ -3252,9 +3686,9 @@ const DataTableAdvSearch = () => {
                 : '<p>No notes added.</p>',
           }
         )
-        .then(res => {
+        .then((res) => {
           showSuccessAlert(res.data.message)
-          setStudyNotes(state => {
+          setStudyNotes((state) => {
             return {
               id: state.id,
               notes: res.data.data,
@@ -3264,7 +3698,7 @@ const DataTableAdvSearch = () => {
           setOpenNotesUpdated(res.data)
           editorRef.current.setContent('')
         })
-        .catch(err => {
+        .catch((err) => {
           // Only handle response errors, let global interceptor handle network errors
           if (err && err.response) {
             showErrorAlert(getErrorMessage(err))
@@ -3298,21 +3732,39 @@ const DataTableAdvSearch = () => {
     },
   })
 
-  const onSort = async d => {
+  const onSort = async (d) => {
     setSortOrder(d.sortOrder)
     setSortField(d.sortField)
 
     // Build filters - unified endpoint handles OpenSearch/PostgreSQL automatically
-    console.log('🔍 Raw searchData before building filters (onSort):', searchData)
-    console.log('🔍 StudyDate value (onSort):', searchData.StudyDate, 'Type:', typeof searchData.StudyDate)
-    console.log('🔍 PatientBirthDate value (onSort):', searchData.PatientBirthDate, 'Type:', typeof searchData.PatientBirthDate)
-    
+    console.log(
+      '🔍 Raw searchData before building filters (onSort):',
+      searchData
+    )
+    console.log(
+      '🔍 StudyDate value (onSort):',
+      searchData.StudyDate,
+      'Type:',
+      typeof searchData.StudyDate
+    )
+    console.log(
+      '🔍 PatientBirthDate value (onSort):',
+      searchData.PatientBirthDate,
+      'Type:',
+      typeof searchData.PatientBirthDate
+    )
+
     const filerData = JSON.stringify(
       Object.keys(searchData)
-        .map(key => {
+        .map((key) => {
           const value = searchData[key]
-          console.log(`🔍 Processing filter key (onSort): ${key}, value:`, value, 'type:', typeof value)
-          
+          console.log(
+            `🔍 Processing filter key (onSort): ${key}, value:`,
+            value,
+            'type:',
+            typeof value
+          )
+
           if (
             value === '' ||
             value === null ||
@@ -3324,56 +3776,72 @@ const DataTableAdvSearch = () => {
           }
           if (key === 'Physicians') {
             console.log('pphhyyssiian', value)
-            return { [key]: value.map(data => data.physicianname || data._id) }
+            return {
+              [key]: value.map((data) => data.physicianname || data._id),
+            }
           }
           if (key === 'clinicNames') {
-            return { [key]: value.map(data => data.clinicName || data._id) }
+            return { [key]: value.map((data) => data.clinicName || data._id) }
           }
-          
+
           // Explicitly handle date filters
           if (key === 'StudyDate' || key === 'PatientBirthDate') {
             console.log(`✅ Including date filter (onSort) ${key}:`, value)
             return { [key]: value }
           }
-          
+
           return { [key]: value }
         })
         .reduce((acc, curr) => {
           if (Object.keys(curr).length) {
             const key = Object.keys(curr)[0]
             acc[key] = curr[key]
-            console.log(`✅ Added filter to accumulator (onSort): ${key} =`, curr[key])
+            console.log(
+              `✅ Added filter to accumulator (onSort): ${key} =`,
+              curr[key]
+            )
           }
           return acc
         }, {})
     )
-    
+
     // Debug: Log filter data to verify StudyDate and PatientBirthDate are included
     const parsedFilters = JSON.parse(filerData)
     console.log('🔍 Final filter data being sent (onSort):', parsedFilters)
     console.log('🔍 Filter keys (onSort):', Object.keys(parsedFilters))
     if (parsedFilters.StudyDate) {
-      console.log('✅ StudyDate filter included (onSort):', parsedFilters.StudyDate)
+      console.log(
+        '✅ StudyDate filter included (onSort):',
+        parsedFilters.StudyDate
+      )
     } else {
       console.warn('⚠️ StudyDate filter NOT included in filters (onSort)!')
     }
     if (parsedFilters.PatientBirthDate) {
-      console.log('✅ PatientBirthDate filter included (onSort):', parsedFilters.PatientBirthDate)
+      console.log(
+        '✅ PatientBirthDate filter included (onSort):',
+        parsedFilters.PatientBirthDate
+      )
     } else {
-      console.warn('⚠️ PatientBirthDate filter NOT included in filters (onSort)!')
+      console.warn(
+        '⚠️ PatientBirthDate filter NOT included in filters (onSort)!'
+      )
     }
-    
+
     setCurrentPage(0)
     try {
-      const studylist = await axios.get(`${process.env.REACT_APP_API_URL}/orthanc/study-list`, {
-        params: {
-          limit: rowsPerPage,
-          since: 0,
-          filters: filerData,
-          sort: `${d.sortField},${d.sortOrder}`,
-        },
-        signal: controller.signal,
-      })
+      const studylist = await axios.get(
+        `${process.env.REACT_APP_API_URL}/orthanc/study-list`,
+        {
+          params: {
+            limit: rowsPerPage,
+            since: 0,
+            filters: filerData,
+            sort: `${d.sortField},${d.sortOrder}`,
+          },
+          signal: controller.signal,
+        }
+      )
       setTableData(() => studylist.data.data)
     } catch (error) {
       console.error('Study list API failed during sort:', error)
@@ -3381,7 +3849,7 @@ const DataTableAdvSearch = () => {
     }
   }
 
-  const MuiAccordionSummary = styled(props => (
+  const MuiAccordionSummary = styled((props) => (
     <AccordionSummary
       id="panel-header-1"
       aria-controls="panel-content-1"
@@ -3421,48 +3889,64 @@ const DataTableAdvSearch = () => {
   useEffect(() => {
     if (selectedDropDownFilter) {
       // Handle modality
-      if (selectedDropDownFilter.modality && selectedDropDownFilter.modality.length > 0) {
-        const modalityOptions = selectedDropDownFilter.modality.map(modality => {
-          if (typeof modality === 'string') {
-            return { value: modality, label: modality }
+      if (
+        selectedDropDownFilter.modality &&
+        selectedDropDownFilter.modality.length > 0
+      ) {
+        const modalityOptions = selectedDropDownFilter.modality.map(
+          (modality) => {
+            if (typeof modality === 'string') {
+              return { value: modality, label: modality }
+            }
+            return {
+              value: modality?.value || modality?.label || String(modality),
+              label: modality?.label || modality?.value || String(modality),
+            }
           }
-          return {
-            value: modality?.value || modality?.label || String(modality),
-            label: modality?.label || modality?.value || String(modality)
-          }
-        })
+        )
         checkSelectedModalities(modalityOptions)
       }
-      
+
       // Handle study status
-      if (selectedDropDownFilter.studyStatus && selectedDropDownFilter.studyStatus.length > 0) {
-        const statusOptions = selectedDropDownFilter.studyStatus.map(status => {
-          if (typeof status === 'string') {
-            return { value: status, label: status }
+      if (
+        selectedDropDownFilter.studyStatus &&
+        selectedDropDownFilter.studyStatus.length > 0
+      ) {
+        const statusOptions = selectedDropDownFilter.studyStatus.map(
+          (status) => {
+            if (typeof status === 'string') {
+              return { value: status, label: status }
+            }
+            return {
+              value: status?.value || status?.label || String(status),
+              label: status?.label || status?.value || String(status),
+            }
           }
-          return {
-            value: status?.value || status?.label || String(status),
-            label: status?.label || status?.value || String(status)
-          }
-        })
+        )
         checkSelectedStatus(statusOptions)
       }
-      
+
       // Handle clinics - prioritize clinicDetailsForDisplay for most accurate data
-      const clinicData = selectedDropDownFilter.clinicDetailsForDisplay?.length > 0
-        ? selectedDropDownFilter.clinicDetailsForDisplay
-        : selectedDropDownFilter.clinic_names?.length > 0 && selectedDropDownFilter.clinicNames?.length > 0
-          ? selectedDropDownFilter.clinicNames.map((name, index) => ({
-              _id: selectedDropDownFilter.clinicNames?.[index] || `clinic-${index}`,
-              name
-            }))
-          : selectedDropDownFilter.clinicNamesDisplay?.length > 0
-            ? selectedDropDownFilter.clinicNamesDisplay.map((name, index) => ({
-                _id: `clinic-${index}`,
-                name
+      const clinicData =
+        selectedDropDownFilter.clinicDetailsForDisplay?.length > 0
+          ? selectedDropDownFilter.clinicDetailsForDisplay
+          : selectedDropDownFilter.clinic_names?.length > 0 &&
+              selectedDropDownFilter.clinicNames?.length > 0
+            ? selectedDropDownFilter.clinicNames.map((name, index) => ({
+                _id:
+                  selectedDropDownFilter.clinicNames?.[index] ||
+                  `clinic-${index}`,
+                name,
               }))
-            : []
-      
+            : selectedDropDownFilter.clinicNamesDisplay?.length > 0
+              ? selectedDropDownFilter.clinicNamesDisplay.map(
+                  (name, index) => ({
+                    _id: `clinic-${index}`,
+                    name,
+                  })
+                )
+              : []
+
       if (clinicData.length > 0) {
         const clinicOptions = clinicData.map((clinic) => ({
           _id: clinic._id,
@@ -3470,17 +3954,19 @@ const DataTableAdvSearch = () => {
         }))
         checkSelectedClinics(clinicOptions)
       }
-      
+
       // Handle physicians - prioritize physicianDetailsForDisplay for most accurate data
-      const physicianData = selectedDropDownFilter.physicianDetailsForDisplay?.length > 0
-        ? selectedDropDownFilter.physicianDetailsForDisplay
-        : selectedDropDownFilter.physicianNames?.length > 0 && selectedDropDownFilter.physicians?.length > 0
-          ? selectedDropDownFilter.physicians.map((id, index) => ({
-              _id: id,
-              name: selectedDropDownFilter.physicianNames[index] || id
-            }))
-          : []
-      
+      const physicianData =
+        selectedDropDownFilter.physicianDetailsForDisplay?.length > 0
+          ? selectedDropDownFilter.physicianDetailsForDisplay
+          : selectedDropDownFilter.physicianNames?.length > 0 &&
+              selectedDropDownFilter.physicians?.length > 0
+            ? selectedDropDownFilter.physicians.map((id, index) => ({
+                _id: id,
+                name: selectedDropDownFilter.physicianNames[index] || id,
+              }))
+            : []
+
       if (physicianData.length > 0) {
         const physicianOptions = physicianData.map((physician) => ({
           _id: physician._id,
@@ -3488,18 +3974,24 @@ const DataTableAdvSearch = () => {
         }))
         checkSelectedPhysicians(physicianOptions)
       }
-      
+
       // Handle clinic users - use users array (IDs) with clinicUserNames for display
-      if (selectedDropDownFilter.users && selectedDropDownFilter.users.length > 0 && 
-          selectedDropDownFilter.clinicUserNames && selectedDropDownFilter.clinicUserNames.length > 0) {
-        const userOptions = selectedDropDownFilter.users.map((userId, index) => ({
-          _id: userId,
-          username: selectedDropDownFilter.clinicUserNames[index],
-        }))
+      if (
+        selectedDropDownFilter.users &&
+        selectedDropDownFilter.users.length > 0 &&
+        selectedDropDownFilter.clinicUserNames &&
+        selectedDropDownFilter.clinicUserNames.length > 0
+      ) {
+        const userOptions = selectedDropDownFilter.users.map(
+          (userId, index) => ({
+            _id: userId,
+            username: selectedDropDownFilter.clinicUserNames[index],
+          })
+        )
         // Note: This would be handled by updateFilterData since there's no checkSelectedUsers function
       }
     }
-    
+
     updateFilterData(selectedDropDownFilter)
   }, [selectedDropDownFilter])
 
@@ -3537,7 +4029,11 @@ const DataTableAdvSearch = () => {
                 <div className="d-flex mt-md-0 mt-1 study-button-container">
                   {ability.can('manage', 'filter-listings') &&
                     userData.role !== ROLES.ClinicUser && (
-                      <Button className="ml-2" color="primary" onClick={handleAddFilter}>
+                      <Button
+                        className="ml-2"
+                        color="primary"
+                        onClick={handleAddFilter}
+                      >
                         <span className="align-middle">Add New Filter</span>
                       </Button>
                     )}
@@ -3551,15 +4047,24 @@ const DataTableAdvSearch = () => {
                   crossClinic ||
                   crossStatus ||
                   crossDescription ? (
-                    <Button className="ml-2" color="primary" onClick={clearSearch}>
+                    <Button
+                      className="ml-2"
+                      color="primary"
+                      onClick={clearSearch}
+                    >
                       <span className="align-middle">Clear filter(s)</span>
                     </Button>
                   ) : (
                     ''
                   )}
-                  {(userData.role === ROLES.ClinicAdmin || userData.role === ROLES.SuperAdmin) &&
+                  {(userData.role === ROLES.ClinicAdmin ||
+                    userData.role === ROLES.SuperAdmin) &&
                     (refreshLoading ? (
-                      <Button className="ml-2" color="primary" style={{ width: '100px' }}>
+                      <Button
+                        className="ml-2"
+                        color="primary"
+                        style={{ width: '100px' }}
+                      >
                         <Spinner color="white" size="sm" />
                       </Button>
                     ) : (
@@ -3570,12 +4075,19 @@ const DataTableAdvSearch = () => {
                           syncDBBkup()
                         }}
                       >
-                        <span className="align-middle">Get Database backup</span>
+                        <span className="align-middle">
+                          Get Database backup
+                        </span>
                       </Button>
                     ))}
-                  {(userData.role === ROLES.ClinicAdmin || userData.role === ROLES.SuperAdmin) &&
+                  {(userData.role === ROLES.ClinicAdmin ||
+                    userData.role === ROLES.SuperAdmin) &&
                     (refreshLoading ? (
-                      <Button className="ml-2" color="primary" style={{ width: '100px' }}>
+                      <Button
+                        className="ml-2"
+                        color="primary"
+                        style={{ width: '100px' }}
+                      >
                         <Spinner color="white" size="sm" />
                       </Button>
                     ) : (
@@ -3590,9 +4102,14 @@ const DataTableAdvSearch = () => {
                       </Button>
                     ))}
 
-                  {(userData.role === ROLES.ClinicAdmin || userData.role === ROLES.SuperAdmin) &&
+                  {(userData.role === ROLES.ClinicAdmin ||
+                    userData.role === ROLES.SuperAdmin) &&
                     (refreshLoading ? (
-                      <Button className="ml-2" color="primary" style={{ width: '100px' }}>
+                      <Button
+                        className="ml-2"
+                        color="primary"
+                        style={{ width: '100px' }}
+                      >
                         <Spinner color="white" size="sm" />
                       </Button>
                     ) : (
@@ -3630,7 +4147,11 @@ const DataTableAdvSearch = () => {
                     </Button>
                   )}
 
-                  <Button className="ml-2" color="primary send_dicom" onClick={sendDicomHandler}>
+                  <Button
+                    className="ml-2"
+                    color="primary send_dicom"
+                    onClick={sendDicomHandler}
+                  >
                     <span className="align-middle">Send Dicom</span>
                   </Button>
                 </div>
@@ -3647,6 +4168,7 @@ const DataTableAdvSearch = () => {
                           value={searchData.PatientName}
                           onChange={handleFilter}
                         />
+
                         {crossPatient ? (
                           <img
                             width="15"
@@ -3678,6 +4200,7 @@ const DataTableAdvSearch = () => {
                           value={searchData.PatientID}
                           onChange={handleFilter}
                         />
+
                         {crossPatientID ? (
                           <img
                             src={crossicon}
@@ -3773,7 +4296,10 @@ const DataTableAdvSearch = () => {
                                         instance.open()
                                       }
                                     } catch (error) {
-                                      console.warn('Error opening calendar:', error)
+                                      console.warn(
+                                        'Error opening calendar:',
+                                        error
+                                      )
                                     }
                                   })
                                 } else {
@@ -3782,9 +4308,11 @@ const DataTableAdvSearch = () => {
                               },
                               onClose: (selectedDates, dateStr, instance) => {
                                 // Only allow closing if both dates are selected or no dates selected
-                                const selectedCount = selectedDates ? selectedDates.length : 0
+                                const selectedCount = selectedDates
+                                  ? selectedDates.length
+                                  : 0
                                 const fpInstance = fp.current?.flatpickr
-                                
+
                                 if (selectedCount === 0) {
                                   // No dates selected - reset to dropdown
                                   showFlatpicker(true)
@@ -3797,20 +4325,23 @@ const DataTableAdvSearch = () => {
                                   // Set end date = start date to ensure date range works properly
                                   const startDate = selectedDates[0]
                                   const dateRange = [startDate, startDate]
-                                  
+
                                   // Update the picker and search data with the date range
                                   setPicker(dateRange)
                                   handleDateFilter(dateRange, false)
                                   setIsSelectingStudyDateRange(false)
                                   studyDatePreventClose.current = false
-                                  
+
                                   // Ensure calendar stays closed
                                   setTimeout(() => {
                                     if (fpInstance && fpInstance.isOpen) {
                                       try {
                                         fpInstance.close()
                                       } catch (error) {
-                                        console.warn('Error closing calendar:', error)
+                                        console.warn(
+                                          'Error closing calendar:',
+                                          error
+                                        )
                                       }
                                     }
                                   }, 50)
@@ -3822,13 +4353,19 @@ const DataTableAdvSearch = () => {
                               },
                             }}
                             onChange={(selectedDates, dateStr, instance) => {
-                              console.log('🔍 Flatpickr onChange - selectedDates:', selectedDates, 'dateStr:', dateStr)
+                              console.log(
+                                '🔍 Flatpickr onChange - selectedDates:',
+                                selectedDates,
+                                'dateStr:',
+                                dateStr
+                              )
                               // Flatpickr passes selectedDates array, dateStr string, and instance
                               if (selectedDates && selectedDates.length > 0) {
                                 if (selectedDates.length === 1) {
                                   // First date selected - prevent closing and keep calendar open
                                   studyDatePreventClose.current = true
-                                  studyDateTempSelection.current = selectedDates[0]
+                                  studyDateTempSelection.current =
+                                    selectedDates[0]
                                   // Don't update state here to avoid re-render flicker
                                   // Flatpickr handles visual selection internally
                                   // We'll update state only when both dates are selected
@@ -3846,7 +4383,10 @@ const DataTableAdvSearch = () => {
                                       try {
                                         fpInstance.close()
                                       } catch (error) {
-                                        console.warn('Error closing calendar:', error)
+                                        console.warn(
+                                          'Error closing calendar:',
+                                          error
+                                        )
                                       }
                                     }
                                   }, 50)
@@ -3906,28 +4446,33 @@ const DataTableAdvSearch = () => {
                             },
                             onClose: (selectedDates, dateStr, instance) => {
                               // Check if calendar closed with only one date selected (user clicked outside)
-                              const selectedCount = selectedDates ? selectedDates.length : 0
+                              const selectedCount = selectedDates
+                                ? selectedDates.length
+                                : 0
                               const fpInstance = patientDOBfp.current?.flatpickr
-                              
+
                               if (selectedCount === 1) {
                                 // Only one date selected - calendar closed (user clicked outside)
                                 // Set end date = start date to ensure date range works properly
                                 const startDate = selectedDates[0]
                                 const dateRange = [startDate, startDate] // Set end date = start date
-                                
+
                                 // Update the picker and search data with the date range
                                 setPatientDOBPickerPicker(dateRange)
                                 handlePatientDOBDateFilter(dateRange, false)
                                 setIsSelectingPatientDOBRange(true)
                                 patientDOBPreventClose.current = false
-                                
+
                                 // Ensure calendar stays closed
                                 setTimeout(() => {
                                   if (fpInstance && fpInstance.isOpen) {
                                     try {
                                       fpInstance.close()
                                     } catch (error) {
-                                      console.warn('Error closing calendar:', error)
+                                      console.warn(
+                                        'Error closing calendar:',
+                                        error
+                                      )
                                     }
                                   }
                                 }, 50)
@@ -3944,17 +4489,23 @@ const DataTableAdvSearch = () => {
                             },
                           }}
                           onChange={(selectedDates, dateStr, instance) => {
-                            console.log('🔍 Flatpickr PatientDOB onChange - selectedDates:', selectedDates, 'dateStr:', dateStr)
+                            console.log(
+                              '🔍 Flatpickr PatientDOB onChange - selectedDates:',
+                              selectedDates,
+                              'dateStr:',
+                              dateStr
+                            )
                             // Flatpickr passes selectedDates array, dateStr string, and instance
                             if (selectedDates && selectedDates.length > 0) {
                               if (selectedDates.length === 1) {
                                 // First date selected - prevent closing and keep calendar open
                                 patientDOBPreventClose.current = true
                                 handlePatientDOBDateFilter(selectedDates, false)
-                                
+
                                 // Immediately try to keep calendar open - use multiple strategies
-                                const fpInstance = patientDOBfp.current?.flatpickr
-                                
+                                const fpInstance =
+                                  patientDOBfp.current?.flatpickr
+
                                 if (fpInstance) {
                                   // Strategy 1: Check immediately and reopen if needed
                                   if (!fpInstance.isOpen) {
@@ -3964,10 +4515,14 @@ const DataTableAdvSearch = () => {
                                       // Ignore errors
                                     }
                                   }
-                                  
+
                                   // Strategy 2: Use requestAnimationFrame
                                   requestAnimationFrame(() => {
-                                    if (fpInstance && !fpInstance.isOpen && patientDOBPreventClose.current) {
+                                    if (
+                                      fpInstance &&
+                                      !fpInstance.isOpen &&
+                                      patientDOBPreventClose.current
+                                    ) {
                                       try {
                                         fpInstance.open()
                                       } catch (error) {
@@ -3975,10 +4530,14 @@ const DataTableAdvSearch = () => {
                                       }
                                     }
                                   })
-                                  
+
                                   // Strategy 3: Use setTimeout (multiple attempts)
                                   setTimeout(() => {
-                                    if (fpInstance && !fpInstance.isOpen && patientDOBPreventClose.current) {
+                                    if (
+                                      fpInstance &&
+                                      !fpInstance.isOpen &&
+                                      patientDOBPreventClose.current
+                                    ) {
                                       try {
                                         fpInstance.open()
                                       } catch (error) {
@@ -3986,9 +4545,13 @@ const DataTableAdvSearch = () => {
                                       }
                                     }
                                   }, 0)
-                                  
+
                                   setTimeout(() => {
-                                    if (fpInstance && !fpInstance.isOpen && patientDOBPreventClose.current) {
+                                    if (
+                                      fpInstance &&
+                                      !fpInstance.isOpen &&
+                                      patientDOBPreventClose.current
+                                    ) {
                                       try {
                                         fpInstance.open()
                                       } catch (error) {
@@ -3996,9 +4559,13 @@ const DataTableAdvSearch = () => {
                                       }
                                     }
                                   }, 5)
-                                  
+
                                   setTimeout(() => {
-                                    if (fpInstance && !fpInstance.isOpen && patientDOBPreventClose.current) {
+                                    if (
+                                      fpInstance &&
+                                      !fpInstance.isOpen &&
+                                      patientDOBPreventClose.current
+                                    ) {
                                       try {
                                         fpInstance.open()
                                       } catch (error) {
@@ -4013,12 +4580,16 @@ const DataTableAdvSearch = () => {
                                 handlePatientDOBDateFilter(selectedDates, false)
                                 // Close the calendar automatically after a brief delay
                                 setTimeout(() => {
-                                  const fpInstance = patientDOBfp.current?.flatpickr
+                                  const fpInstance =
+                                    patientDOBfp.current?.flatpickr
                                   if (fpInstance && fpInstance.isOpen) {
                                     try {
                                       fpInstance.close()
                                     } catch (error) {
-                                      console.warn('Error closing calendar:', error)
+                                      console.warn(
+                                        'Error closing calendar:',
+                                        error
+                                      )
                                     }
                                   }
                                 }, 50)
@@ -4030,6 +4601,7 @@ const DataTableAdvSearch = () => {
                           }}
                           onKeyDown={onPatientKeyPressed}
                         />
+
                         {crossPatientDOBDate ? (
                           <img
                             src={crossicon}
@@ -4075,7 +4647,8 @@ const DataTableAdvSearch = () => {
                       </FormGroup>
                     </Col>
                     <Col lg="3" md="6">
-                      {ClinicNamesForFilters && ClinicNamesForFilters?.length > 0 ? (
+                      {ClinicNamesForFilters &&
+                      ClinicNamesForFilters?.length > 0 ? (
                         <FormGroup>
                           <Label for="Modality">Clinics:</Label>
                           <Select
@@ -4088,10 +4661,19 @@ const DataTableAdvSearch = () => {
                             value={selectedClinics}
                             onChange={checkSelectedClinics}
                             theme={selectThemeColors}
-                            getOptionValue={option => typeof option === 'string' ? option : (option?._id || String(option))}
-                            getOptionLabel={option => {
+                            getOptionValue={(option) =>
+                              typeof option === 'string'
+                                ? option
+                                : option?._id || String(option)
+                            }
+                            getOptionLabel={(option) => {
                               if (typeof option === 'string') return option
-                              return option?.clinicName || option?.name || String(option) || 'Unknown'
+                              return (
+                                option?.clinicName ||
+                                option?.name ||
+                                String(option) ||
+                                'Unknown'
+                              )
                             }}
                             className="react-select staticmodality"
                             classNamePrefix="select"
@@ -4112,41 +4694,52 @@ const DataTableAdvSearch = () => {
                       {}
                     </Col>
                     <Col lg="3" md="6">
-                      {
-                        (PhysiciansForFilters && PhysiciansForFilters?.length > 0 ? (
-                          <FormGroup>
-                            <Label for="Physicians">Physicians:</Label>
-                            <Select
-                              styles={{
-                                control: (provided, state) => ({
-                                  ...provided,
-                                  borderColor: '#D8D6DE',
-                                }),
-                              }}
-                              value={selectedPhysicians}
-                              onChange={checkSelectedPhysicians}
-                              theme={selectThemeColors}
-                              getOptionValue={option => typeof option === 'string' ? option : (option?._id || String(option))}
-                              getOptionLabel={option => {
-                                if (typeof option === 'string') return option
-                                return option?.physicianname || option?.name || option?.username || option?.clinicName || String(option) || 'Unknown'
-                              }}
-                              className="react-select staticmodality"
-                              classNamePrefix="select"
-                              options={PhysiciansForFilters}
-                              isMulti
-                            />
-                          </FormGroup>
-                        ) : (
-                          <NewDynamicDropdown
-                            fileName={'Physicians'}
-                            labelName={'Physicians:'}
-                            roleName={'Physician'}
-                            className={'w-100'}
-                            alreadyValue={selectedPhysicians}
+                      {PhysiciansForFilters &&
+                      PhysiciansForFilters?.length > 0 ? (
+                        <FormGroup>
+                          <Label for="Physicians">Physicians:</Label>
+                          <Select
+                            styles={{
+                              control: (provided, state) => ({
+                                ...provided,
+                                borderColor: '#D8D6DE',
+                              }),
+                            }}
+                            value={selectedPhysicians}
                             onChange={checkSelectedPhysicians}
+                            theme={selectThemeColors}
+                            getOptionValue={(option) =>
+                              typeof option === 'string'
+                                ? option
+                                : option?._id || String(option)
+                            }
+                            getOptionLabel={(option) => {
+                              if (typeof option === 'string') return option
+                              return (
+                                option?.physicianname ||
+                                option?.name ||
+                                option?.username ||
+                                option?.clinicName ||
+                                String(option) ||
+                                'Unknown'
+                              )
+                            }}
+                            className="react-select staticmodality"
+                            classNamePrefix="select"
+                            options={PhysiciansForFilters}
+                            isMulti
                           />
-                        ))}
+                        </FormGroup>
+                      ) : (
+                        <NewDynamicDropdown
+                          fileName={'Physicians'}
+                          labelName={'Physicians:'}
+                          roleName={'Physician'}
+                          className={'w-100'}
+                          alreadyValue={selectedPhysicians}
+                          onChange={checkSelectedPhysicians}
+                        />
+                      )}
                     </Col>
                     <Col lg="3" md="6">
                       <FormGroup>
@@ -4161,10 +4754,19 @@ const DataTableAdvSearch = () => {
                           value={selectedStatus}
                           onChange={checkSelectedStatus}
                           theme={selectThemeColors}
-                          getOptionValue={option => typeof option === 'string' ? option : (option?.value || option?._id || String(option))}
-                          getOptionLabel={option => {
+                          getOptionValue={(option) =>
+                            typeof option === 'string'
+                              ? option
+                              : option?.value || option?._id || String(option)
+                          }
+                          getOptionLabel={(option) => {
                             if (typeof option === 'string') return option
-                            return option?.label || option?.value || String(option) || 'Unknown'
+                            return (
+                              option?.label ||
+                              option?.value ||
+                              String(option) ||
+                              'Unknown'
+                            )
                           }}
                           className="react-select staticmodality"
                           classNamePrefix="select"
@@ -4183,6 +4785,7 @@ const DataTableAdvSearch = () => {
                           value={searchData.StudyDescription}
                           onChange={handleFilter}
                         />
+
                         {crossDescription ? (
                           <img
                             src={crossicon}
@@ -4222,15 +4825,17 @@ const DataTableAdvSearch = () => {
                       </FormGroup>
                     </Col>
                   </Row>
-                  {totalFilteredStudies !== null && totalFilteredStudies !== totalStudies && (
-                    <Row className="mt-1 mb-50">
-                      <Col>
-                        <div className="searchTotal">
-                          {totalFilteredStudies} filtered from total {totalStudies} studies.
-                        </div>
-                      </Col>
-                    </Row>
-                  )}
+                  {totalFilteredStudies !== null &&
+                    totalFilteredStudies !== totalStudies && (
+                      <Row className="mt-1 mb-50">
+                        <Col>
+                          <div className="searchTotal">
+                            {totalFilteredStudies} filtered from total{' '}
+                            {totalStudies} studies.
+                          </div>
+                        </Col>
+                      </Row>
+                    )}
                 </CardBody>
               </AccordionDetails>
             </Accordion>
@@ -4245,9 +4850,10 @@ const DataTableAdvSearch = () => {
               <ListTable
                 {...{
                   moduleName: 'study-list',
-                  selectionMode: userData.role === ROLES.SuperAdmin ? null : 'checkbox',
+                  selectionMode:
+                    userData.role === ROLES.SuperAdmin ? null : 'checkbox',
                   selection: selectedProducts,
-                  onSelectionChange: e => setSelectedProducts(e.value),
+                  onSelectionChange: (e) => setSelectedProducts(e.value),
                   tableData: data,
                   visibleColumns: columns,
                   defaultCol: 'PatientName',
@@ -4258,9 +4864,9 @@ const DataTableAdvSearch = () => {
                   onSort,
                   sortField,
                   sortOrder,
-                  onPage: e => {
+                  onPage: (e) => {
                     setCurrentPage(e.first++)
-                    setRowsPerPage(prev => e.rows)
+                    setRowsPerPage((prev) => e.rows)
                     localStorage.setItem('studylistrow', e.rows)
                   },
                   onBlankWidth,
@@ -4344,7 +4950,10 @@ const DataTableAdvSearch = () => {
                       }
                     }}
                   />
-                  {errors?.doctorName && <FormFeedback>{errors.doctorName.message}</FormFeedback>}
+
+                  {errors?.doctorName && (
+                    <FormFeedback>{errors.doctorName.message}</FormFeedback>
+                  )}
                 </FormGroup>
                 <FormGroup>
                   <Label for="doctorEmail">
@@ -4364,7 +4973,10 @@ const DataTableAdvSearch = () => {
                       }
                     }}
                   />
-                  {errors?.doctorEmail && <FormFeedback>{errors.doctorEmail.message}</FormFeedback>}
+
+                  {errors?.doctorEmail && (
+                    <FormFeedback>{errors.doctorEmail.message}</FormFeedback>
+                  )}
                 </FormGroup>
               </>
             )}
@@ -4388,7 +5000,10 @@ const DataTableAdvSearch = () => {
                       }
                     }}
                   />
-                  {errors?.patientName && <FormFeedback>{errors.patientName.message}</FormFeedback>}
+
+                  {errors?.patientName && (
+                    <FormFeedback>{errors.patientName.message}</FormFeedback>
+                  )}
                 </FormGroup>
                 <FormGroup>
                   <Label for="patientEmail">
@@ -4408,6 +5023,7 @@ const DataTableAdvSearch = () => {
                       }
                     }}
                   />
+
                   {errors?.patientEmail && (
                     <FormFeedback>{errors.patientEmail.message}</FormFeedback>
                   )}
@@ -4446,7 +5062,11 @@ const DataTableAdvSearch = () => {
 
       {}
       <Modal isOpen={openActivity} className="activity-modal">
-        <ModalHeader className="activity-log-header" close={ActivityLogCloseBtn} tag="div">
+        <ModalHeader
+          className="activity-log-header"
+          close={ActivityLogCloseBtn}
+          tag="div"
+        >
           <div className="d-flex align-items-center">
             <List className="user-timeline-title-icon" />
             <h4 className="mb-0">Activity Log</h4>
@@ -4461,14 +5081,23 @@ const DataTableAdvSearch = () => {
             )}
           </CardBody>
         </Card>
-        <Button className="m-15" color="danger" onClick={() => setOpenActivity(false)}>
+        <Button
+          className="m-15"
+          color="danger"
+          onClick={() => setOpenActivity(false)}
+        >
           Close
         </Button>
       </Modal>
       {}
 
       {}
-      <Modal isOpen={openStatus} size="sm" className="sidebar-sm sm-w-100" contentClassName="pt-0">
+      <Modal
+        isOpen={openStatus}
+        size="sm"
+        className="sidebar-sm sm-w-100"
+        contentClassName="pt-0"
+      >
         <ModalHeader
           close={PriorityModalCloseBtn}
           toggle={() => {
@@ -4478,14 +5107,17 @@ const DataTableAdvSearch = () => {
           <h4>Priority</h4>
         </ModalHeader>
         <ModalBody className="flex-grow-1 p-0">
-          <div className="d-flex flex-row mh-50 mx-2" style={{ minHeight: '100px' }}>
+          <div
+            className="d-flex flex-row mh-50 mx-2"
+            style={{ minHeight: '100px' }}
+          >
             <div className="p-1 w-50">
               <Label for="priority">Study status:</Label>
               <Input
                 type="select"
                 name="priority"
                 id="priority"
-                onChange={e => setPriorityValue(e.target.value)}
+                onChange={(e) => setPriorityValue(e.target.value)}
                 value={priorityValue}
               >
                 <option value="Normal">Normal</option>
@@ -4507,7 +5139,11 @@ const DataTableAdvSearch = () => {
             >
               Cancel
             </Button>
-            <Button color="primary" type="submit" onClick={updatePriorityHandler}>
+            <Button
+              color="primary"
+              type="submit"
+              onClick={updatePriorityHandler}
+            >
               Update
             </Button>
           </div>
@@ -4515,7 +5151,11 @@ const DataTableAdvSearch = () => {
       </Modal>
 
       {}
-      <Modal isOpen={openStudyUpload} className="Upload-study-report" contentClassName="pt-0">
+      <Modal
+        isOpen={openStudyUpload}
+        className="Upload-study-report"
+        contentClassName="pt-0"
+      >
         <ModalHeader
           close={UploadStudyModalCloseBtn}
           toggle={() => {
@@ -4535,13 +5175,21 @@ const DataTableAdvSearch = () => {
 
       {}
       <Modal isOpen={openStudyEdit} className="patient-edit-modal">
-        <ModalHeader close={editPatientModalCloseBtn} toggle={() => { editingStudyIdRef.current = null; setOpenStudyEdit(false) }}>
+        <ModalHeader
+          close={editPatientModalCloseBtn}
+          toggle={() => {
+            editingStudyIdRef.current = null
+            setOpenStudyEdit(false)
+          }}
+        >
           <h4>Edit Study Patient's Details</h4>
         </ModalHeader>
         <Form
           key={`edit-study-${editingStudyIdRef.current ?? inputStudyEdit.sId ?? 'new'}`}
           onSubmit={handleSubmitEdit(onSubmitStudyEdit, () => {
-            showErrorAlert('Please fill all required fields (Patient name, Patient ID, Sex, DOB, Study date/time, Study description) and try again.')
+            showErrorAlert(
+              'Please fill all required fields (Patient name, Patient ID, Sex, DOB, Study date/time, Study description) and try again.'
+            )
           })}
         >
           <Card className="mb-0">
@@ -4563,7 +5211,10 @@ const DataTableAdvSearch = () => {
                     }
                   }}
                 />
-                {errorEdit?.newName && <FormFeedback>{errorEdit.newName.message}</FormFeedback>}
+
+                {errorEdit?.newName && (
+                  <FormFeedback>{errorEdit.newName.message}</FormFeedback>
+                )}
               </FormGroup>
               <FormGroup>
                 <Label for="patientId">Patient Id:</Label>
@@ -4582,7 +5233,10 @@ const DataTableAdvSearch = () => {
                     }
                   }}
                 />
-                {errorEdit?.patientId && <FormFeedback>{errorEdit.patientId.message}</FormFeedback>}
+
+                {errorEdit?.patientId && (
+                  <FormFeedback>{errorEdit.patientId.message}</FormFeedback>
+                )}
               </FormGroup>
               <FormGroup>
                 <Label for="sex">Sex:</Label>
@@ -4598,10 +5252,10 @@ const DataTableAdvSearch = () => {
                       clearEditErrors('sex')
                     }
                   }}
-                  onChange={e => {
+                  onChange={(e) => {
                     const val = e.target.value
                     setPatientValue('sex', val)
-                    setInputStudyEdit(prev => ({ ...prev, sex: val }))
+                    setInputStudyEdit((prev) => ({ ...prev, sex: val }))
                     if (val && val.trim() !== '') clearEditErrors('sex')
                   }}
                 >
@@ -4610,7 +5264,9 @@ const DataTableAdvSearch = () => {
                   <option value="F">Female</option>
                   <option value="O">Other</option>
                 </Input>
-                {errorEdit?.sex && <FormFeedback>{errorEdit.sex.message}</FormFeedback>}
+                {errorEdit?.sex && (
+                  <FormFeedback>{errorEdit.sex.message}</FormFeedback>
+                )}
               </FormGroup>
               <FormGroup>
                 <Label>Date of birth:</Label>
@@ -4632,6 +5288,7 @@ const DataTableAdvSearch = () => {
                     }
                   }}
                 />
+
                 <Input
                   type="hidden"
                   {...registerEdit('dob', { required: true })}
@@ -4639,7 +5296,10 @@ const DataTableAdvSearch = () => {
                   invalid={errorEdit?.dob && true}
                   name="dob"
                 />
-                {errorEdit?.dob && <FormFeedback>{errorEdit.dob.message}</FormFeedback>}
+
+                {errorEdit?.dob && (
+                  <FormFeedback>{errorEdit.dob.message}</FormFeedback>
+                )}
               </FormGroup>
               <FormGroup>
                 <Label for="referPhysician">Referring Physician:</Label>
@@ -4653,8 +5313,11 @@ const DataTableAdvSearch = () => {
                   placeholder="Physician name"
                   onChange={studyEditHandler}
                 />
+
                 {errorEdit?.referPhysician && (
-                  <FormFeedback>{errorEdit.referPhysician.message}</FormFeedback>
+                  <FormFeedback>
+                    {errorEdit.referPhysician.message}
+                  </FormFeedback>
                 )}
               </FormGroup>
               <FormGroup>
@@ -4686,8 +5349,11 @@ const DataTableAdvSearch = () => {
                   invalid={errorEdit?.startTimeStamp && true}
                   name="startTimeStamp"
                 />
+
                 {errorEdit?.startTimeStamp && (
-                  <FormFeedback>{errorEdit.startTimeStamp.message}</FormFeedback>
+                  <FormFeedback>
+                    {errorEdit.startTimeStamp.message}
+                  </FormFeedback>
                 )}
               </FormGroup>
               <FormGroup>
@@ -4702,13 +5368,22 @@ const DataTableAdvSearch = () => {
                   placeholder="Study Description"
                   onChange={studyEditHandler}
                 />
+
                 {errorEdit?.StudyDescription && (
-                  <FormFeedback>{errorEdit.StudyDescription.message}</FormFeedback>
+                  <FormFeedback>
+                    {errorEdit.StudyDescription.message}
+                  </FormFeedback>
                 )}
               </FormGroup>
             </CardBody>
             <CardFooter>
-              <Button color="danger" onClick={() => { editingStudyIdRef.current = null; setOpenStudyEdit(false) }}>
+              <Button
+                color="danger"
+                onClick={() => {
+                  editingStudyIdRef.current = null
+                  setOpenStudyEdit(false)
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" className="ml-1" color="primary">
@@ -4720,7 +5395,8 @@ const DataTableAdvSearch = () => {
       </Modal>
       {}
       {}
-      {userData.role === ROLES.TechnicianUser || userData.role === ROLES.RadiologistUser ? (
+      {userData.role === ROLES.TechnicianUser ||
+      userData.role === ROLES.RadiologistUser ? (
         <Modal isOpen={openNotes}>
           <ModalHeader
             className="mb-2"
@@ -4744,7 +5420,7 @@ const DataTableAdvSearch = () => {
           studyNotes.notes.length > 0 &&
           studyNotes.notes !== '-' ? (
             <div className="noteDiv">
-              {studyNotes.notes.map(noteDetails => {
+              {studyNotes.notes.map((noteDetails) => {
                 return (
                   <CustomAccordion>
                     <AccordionSummary
@@ -4753,21 +5429,31 @@ const DataTableAdvSearch = () => {
                       className="accordionSummary"
                     >
                       <Typography sx={{ width: '38%' }}>
-                        {moment(noteDetails.time).format('DD-MMMM-YYYY HH:mm:ss ')}
+                        {moment(noteDetails.time).format(
+                          'DD-MMMM-YYYY HH:mm:ss '
+                        )}
                       </Typography>
                       <Typography sx={{ color: 'text.secondary' }}>
                         {noteDetails.username}
-                        {noteDetails.role === 'RDU' ? ' (Radiologist)' : ' (Technologist)'}
+                        {noteDetails.role === 'RDU'
+                          ? ' (Radiologist)'
+                          : ' (Technologist)'}
                       </Typography>
-                      <IconButton sx={{ width: '13%' }} className="actionButtons">
+                      <IconButton
+                        sx={{ width: '13%' }}
+                        className="actionButtons"
+                      >
                         {noteDetails.userId === userData._id ? (
                           <>
                             <Edit2
                               size={16}
                               className="mr-45 noteAction"
-                              onClick={event =>
+                              onClick={(event) =>
                                 handleEditNoteButtonClick(event, {
-                                  note: { id: noteDetails._id, value: noteDetails.note },
+                                  note: {
+                                    id: noteDetails._id,
+                                    value: noteDetails.note,
+                                  },
                                   studyId: studyNotes?.id,
                                 })
                               }
@@ -4780,7 +5466,8 @@ const DataTableAdvSearch = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography sx={{ color: 'text.secondary' }}>
-                        {noteDetails.note && typeof noteDetails.note === 'string'
+                        {noteDetails.note &&
+                        typeof noteDetails.note === 'string'
                           ? parse(noteDetails.note)
                           : noteDetails.note || 'No content'}
                       </Typography>
@@ -4820,6 +5507,7 @@ const DataTableAdvSearch = () => {
                   'help',
                   'wordcount',
                 ],
+
                 toolbar:
                   'undo redo | formatselect | code' +
                   'bold italic backcolor | alignleft aligncenter ' +
@@ -4880,28 +5568,38 @@ const DataTableAdvSearch = () => {
               hasNotes: !!studyNotes?.notes,
               notesType: typeof studyNotes?.notes,
               notesIsArray: Array.isArray(studyNotes?.notes),
-              notesLength: Array.isArray(studyNotes?.notes) ? studyNotes.notes.length : 'N/A',
+              notesLength: Array.isArray(studyNotes?.notes)
+                ? studyNotes.notes.length
+                : 'N/A',
               notesValue: studyNotes?.notes,
-              notesSample: Array.isArray(studyNotes?.notes) && studyNotes.notes.length > 0 ? studyNotes.notes[0] : null
+              notesSample:
+                Array.isArray(studyNotes?.notes) && studyNotes.notes.length > 0
+                  ? studyNotes.notes[0]
+                  : null,
             })
-            
+
             // Check if notes exist and are valid array
-            const hasValidNotes = studyNotes && 
-                                 studyNotes.notes && 
-                                 Array.isArray(studyNotes.notes) && 
-                                 studyNotes.notes.length > 0 &&
-                                 studyNotes.notes !== '-'
-            
+            const hasValidNotes =
+              studyNotes &&
+              studyNotes.notes &&
+              Array.isArray(studyNotes.notes) &&
+              studyNotes.notes.length > 0 &&
+              studyNotes.notes !== '-'
+
             if (hasValidNotes) {
               return (
                 <div className="noteDiv-other">
                   {studyNotes.notes.map((noteDetails, index) => {
                     // Validate note structure
                     if (!noteDetails || typeof noteDetails !== 'object') {
-                      console.warn('[Notes Modal] Invalid note at index:', index, noteDetails)
+                      console.warn(
+                        '[Notes Modal] Invalid note at index:',
+                        index,
+                        noteDetails
+                      )
                       return null
                     }
-                    
+
                     return (
                       <CustomAccordion key={noteDetails._id || `note-${index}`}>
                         <AccordionSummary
@@ -4910,20 +5608,26 @@ const DataTableAdvSearch = () => {
                           className="accordionSummary"
                         >
                           <Typography sx={{ width: '50%', flexShrink: 0 }}>
-                            {noteDetails.time 
-                              ? moment(noteDetails.time).format('DD-MMMM-YYYY HH:mm:ss ')
+                            {noteDetails.time
+                              ? moment(noteDetails.time).format(
+                                  'DD-MMMM-YYYY HH:mm:ss '
+                                )
                               : 'No date'}
                           </Typography>
                           <Typography sx={{ color: 'text.secondary' }}>
                             {noteDetails.username || 'Unknown'}
-                            {noteDetails.role === 'RDU' ? ' (Radiologist)' : 
-                             noteDetails.role ? ` (${noteDetails.role})` : ' (Technologist)'}
+                            {noteDetails.role === 'RDU'
+                              ? ' (Radiologist)'
+                              : noteDetails.role
+                                ? ` (${noteDetails.role})`
+                                : ' (Technologist)'}
                           </Typography>
                           <IconButton className="closeButton"></IconButton>
                         </AccordionSummary>
                         <AccordionDetails>
                           <Typography sx={{ color: 'text.secondary' }}>
-                            {noteDetails.note && typeof noteDetails.note === 'string'
+                            {noteDetails.note &&
+                            typeof noteDetails.note === 'string'
                               ? parse(noteDetails.note)
                               : noteDetails.note || 'No content'}
                           </Typography>
@@ -4938,34 +5642,40 @@ const DataTableAdvSearch = () => {
               // Only show "Loading" if notes is undefined (not yet fetched)
               // If notes is an empty array, fetch completed but no notes exist
               const isLoading = studyNotes?.notes === undefined
-              const hasNoNotes = Array.isArray(studyNotes?.notes) && studyNotes.notes.length === 0
-              
+              const hasNoNotes =
+                Array.isArray(studyNotes?.notes) &&
+                studyNotes.notes.length === 0
+
               console.log('[Notes Modal] Display state:', {
                 isLoading,
                 hasNoNotes,
                 notesValue: studyNotes?.notes,
-                notesType: typeof studyNotes?.notes
+                notesType: typeof studyNotes?.notes,
               })
-              
+
               return (
                 <div className="text-center p-4">
                   <Typography sx={{ color: 'text.secondary' }}>
-                    {isLoading 
+                    {isLoading
                       ? 'Loading notes...'
                       : hasNoNotes
-                      ? 'No notes available for this study.'
-                      : 'Unable to load notes.'}
+                        ? 'No notes available for this study.'
+                        : 'Unable to load notes.'}
                   </Typography>
                 </div>
               )
             }
           })()}
           <div className="text-center">
-            <Button className="m-2" color="primary" onClick={() => {
-              setOpenNotes(false)
-              // Reset notes when closing modal to ensure fresh fetch on next open
-              setStudyNotes(null)
-            }}>
+            <Button
+              className="m-2"
+              color="primary"
+              onClick={() => {
+                setOpenNotes(false)
+                // Reset notes when closing modal to ensure fresh fetch on next open
+                setStudyNotes(null)
+              }}
+            >
               Done
             </Button>
           </div>
@@ -5005,7 +5715,9 @@ const DataTableAdvSearch = () => {
               title="PDF Report Viewer"
             />
           ) : (
-            <div style={{ textAlign: 'center', padding: '20px' }}>Loading PDF...</div>
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              Loading PDF...
+            </div>
           )}
         </ModalBody>
       </Modal>
@@ -5023,6 +5735,7 @@ const DataTableAdvSearch = () => {
         handlePrintReport={handlePrintReport}
         studyDownloadHandler={studyDownloadHanlderNew}
       />
+
       <Modal isOpen={openPrintStudy} size="lg">
         <ModalHeader
           className="mb-2"
@@ -5054,7 +5767,9 @@ const DataTableAdvSearch = () => {
               title="PDF Report Viewer"
             />
           ) : (
-            <div style={{ textAlign: 'center', padding: '20px' }}>Loading PDF...</div>
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              Loading PDF...
+            </div>
           )}
         </ModalBody>
       </Modal>

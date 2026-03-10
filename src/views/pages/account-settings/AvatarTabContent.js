@@ -19,18 +19,35 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 // removed inline toast components in favor of utils/toast
 import ROLES from '@configs/roles'
-import { Pagination } from 'swiper' // for using swiper this setting is only support with swiper@7.3.1
+import { Pagination } from 'swiper/modules'
+// for using swiper this setting is only support with swiper@7.3.1
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { useDispatch } from 'react-redux'
 import { handleUserAvatar } from '@store/actions/navbar'
-import { showErrorAlert, showSuccessAlert, getErrorMessage } from '../../../utils/alerts'
+import {
+  showErrorAlert,
+  showSuccessAlert,
+  getErrorMessage,
+} from '../../../utils/alerts'
 const AdminImages = require.context('@src/assets/images/roleAvatar/admin', true)
-const RadiologistImages = require.context('@src/assets/images/roleAvatar/radiologist', true)
-const TechnicianImages = require.context('@src/assets/images/roleAvatar/technician', true)
-const DoctorImages = require.context('@src/assets/images/roleAvatar/doctor', true)
-const PowerUserImages = require.context('@src/assets/images/roleAvatar/power-user', true)
+const RadiologistImages = require.context(
+  '@src/assets/images/roleAvatar/radiologist',
+  true
+)
+const TechnicianImages = require.context(
+  '@src/assets/images/roleAvatar/technician',
+  true
+)
+const DoctorImages = require.context(
+  '@src/assets/images/roleAvatar/doctor',
+  true
+)
+const PowerUserImages = require.context(
+  '@src/assets/images/roleAvatar/power-user',
+  true
+)
 const ReferringDoctorImages = require.context(
   '@src/assets/images/roleAvatar/referring-doctor',
   true
@@ -50,7 +67,12 @@ const AvatarTabContent = () => {
     {
       from: [
         { label: 'From name', type: 'text', key: 'From name', id: 'from_name' },
-        { label: 'From address', type: 'email', key: 'From address', id: 'from_address' },
+        {
+          label: 'From address',
+          type: 'email',
+          key: 'From address',
+          id: 'from_address',
+        },
       ],
     },
   ])
@@ -80,17 +102,25 @@ const AvatarTabContent = () => {
         role === ROLES.Admin ||
         role === ROLES.SuperAdmin
       ) {
-        images = AdminImages.keys().map(key => getUrl(AdminImages, key))
+        images = AdminImages.keys().map((key) => getUrl(AdminImages, key))
       } else if (role === ROLES.Doctor) {
-        images = DoctorImages.keys().map(key => getUrl(DoctorImages, key))
+        images = DoctorImages.keys().map((key) => getUrl(DoctorImages, key))
       } else if (role === ROLES.PowerUser) {
-        images = PowerUserImages.keys().map(key => getUrl(PowerUserImages, key))
+        images = PowerUserImages.keys().map((key) =>
+          getUrl(PowerUserImages, key)
+        )
       } else if (role === ROLES.TechnicianUser) {
-        images = TechnicianImages.keys().map(key => getUrl(TechnicianImages, key))
+        images = TechnicianImages.keys().map((key) =>
+          getUrl(TechnicianImages, key)
+        )
       } else if (role === ROLES.RadiologistUser) {
-        images = RadiologistImages.keys().map(key => getUrl(RadiologistImages, key))
+        images = RadiologistImages.keys().map((key) =>
+          getUrl(RadiologistImages, key)
+        )
       } else if (role === ROLES.ReferringDoctor) {
-        images = ReferringDoctorImages.keys().map(key => getUrl(ReferringDoctorImages, key))
+        images = ReferringDoctorImages.keys().map((key) =>
+          getUrl(ReferringDoctorImages, key)
+        )
       }
       setImageList(images.filter(Boolean))
     } catch (error) {
@@ -116,7 +146,7 @@ const AvatarTabContent = () => {
     resolver: yupResolver(selectAvatar),
   })
 
-  const selectImageHandler = item => {
+  const selectImageHandler = (item) => {
     setSelectedImage(item)
     setValue('avatarImage', item)
   }
@@ -125,7 +155,7 @@ const AvatarTabContent = () => {
     setLoading(true)
     axios
       .get(`${process.env.REACT_APP_API_URL}/user/avatar`)
-      .then(res => {
+      .then((res) => {
         if (res?.data?.status) {
           const avatarValue = res?.data?.avatar
           if (avatarValue) {
@@ -134,7 +164,7 @@ const AvatarTabContent = () => {
         }
         setLoading(false)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err, 'err')
         showErrorAlert(getErrorMessage(err) || 'Something went wrong')
         setLoading(false)
@@ -144,16 +174,17 @@ const AvatarTabContent = () => {
   // When we have both imageList and avatarFromApi, resolve selection: use API avatar if it exists in list, otherwise default to first avatar
   useEffect(() => {
     if (imageList.length === 0) return
-    const apiAvatarInList = avatarFromApi && imageList.some(img => img === avatarFromApi)
+    const apiAvatarInList =
+      avatarFromApi && imageList.some((img) => img === avatarFromApi)
     const effectiveSelected = apiAvatarInList ? avatarFromApi : imageList[0]
     setSelectedImage(effectiveSelected)
     setValue('avatarImage', effectiveSelected)
   }, [imageList, avatarFromApi])
 
-  const onSubmit = async bodyData => {
+  const onSubmit = async (bodyData) => {
     axios
       .put(`${process.env.REACT_APP_API_URL}/user/avatar`, bodyData)
-      .then(data => {
+      .then((data) => {
         // Update header avatar immediately so it reflects without waiting for alert dismiss
         const userDetails = JSON.parse(localStorage.getItem('userData')) || {}
         userDetails.avatar = bodyData.avatarImage
@@ -161,7 +192,7 @@ const AvatarTabContent = () => {
         localStorage.setItem('userData', JSON.stringify(userDetails))
         showSuccessAlert(data.data.message.message || 'User avatar is updated!')
       })
-      .catch(err => {
+      .catch((err) => {
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
         }
@@ -199,26 +230,30 @@ const AvatarTabContent = () => {
         >
           {imageList.length > 0 ? (
             imageList.map((item, index) => (
-                <SwiperSlide
-                  key={index}
-                  className="mh-25"
-                  style={{ maxHeight: '500px', maxWidth: '100px' }}
+              <SwiperSlide
+                key={index}
+                className="mh-25"
+                style={{ maxHeight: '500px', maxWidth: '100px' }}
+              >
+                <Input
+                  type="radio"
+                  id={`image-${index + 1}`}
+                  name="avatarImage"
+                  className="image-checkbox"
+                  value={item}
+                  {...register('avatarImage', { required: true })}
+                  onChange={() => selectImageHandler(item)}
+                  checked={selectedImage === item}
+                />
+
+                <label
+                  className="avatar-image-label"
+                  htmlFor={`image-${index + 1}`}
                 >
-                  <Input
-                    type="radio"
-                    id={`image-${index + 1}`}
-                    name="avatarImage"
-                    className="image-checkbox"
-                    value={item}
-                    {...register('avatarImage', { required: true })}
-                    onChange={() => selectImageHandler(item)}
-                    checked={selectedImage === item}
-                  />
-                  <label className="avatar-image-label" htmlFor={`image-${index + 1}`}>
-                    <img src={item} alt={`Avatar ${index + 1}`} height="100%" />
-                  </label>
-                </SwiperSlide>
-              ))
+                  <img src={item} alt={`Avatar ${index + 1}`} height="100%" />
+                </label>
+              </SwiperSlide>
+            ))
           ) : (
             <div className="text-center p-3">
               <p>No avatar images available for your role.</p>
@@ -226,20 +261,30 @@ const AvatarTabContent = () => {
           )}
         </Swiper>
         {imageList.map((item, index) => (
-          <UncontrolledTooltip target={`image-${index + 1}`} className="tooltip-react-strap">
+          <UncontrolledTooltip
+            target={`image-${index + 1}`}
+            className="tooltip-react-strap"
+          >
             Check to set image as avatar
           </UncontrolledTooltip>
         ))}
       </Row>
       {errors?.avatarImage && (
         <Row>
-          <p className="mb-0 avatar-image-error">{errors.avatarImage.message}</p>
+          <p className="mb-0 avatar-image-error">
+            {errors.avatarImage.message}
+          </p>
         </Row>
       )}
 
       <Row>
         <Col sm="12">
-          <Button.Ripple className="mr-1 sm-mb-1" color="secondary" outline onClick={CancelForm}>
+          <Button.Ripple
+            className="mr-1 sm-mb-1"
+            color="secondary"
+            outline
+            onClick={CancelForm}
+          >
             Cancel
           </Button.Ripple>
           <Button.Ripple type="submit" className="mr-1 sm-mb-1" color="primary">

@@ -36,17 +36,26 @@ export const SafeFormField = ({
               {...field}
               isClearable={false}
               theme={selectThemeColors}
-              value={options.find(option => option.value === field.value) || options[0]}
+              value={
+                options.find((option) => option.value === field.value) ||
+                options[0]
+              }
               name={name}
               id={name}
               options={options}
               className="react-select"
               classNamePrefix="select"
-              onChange={option => field.onChange(option ? option.value : null)}
+              onChange={(option) =>
+                field.onChange(option ? option.value : null)
+              }
             />
           )}
         />
-        {hasError && <FormFeedback style={{ display: 'block' }}>{error.message}</FormFeedback>}
+        {hasError && (
+          <FormFeedback style={{ display: 'block' }}>
+            {error.message}
+          </FormFeedback>
+        )}
       </FormGroup>
     )
   }

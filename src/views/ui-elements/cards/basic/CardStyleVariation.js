@@ -12,7 +12,9 @@ const CardStyleVariation = () => {
               <CardTitle className="text-white" tag="h4">
                 Primary Card Title
               </CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -22,7 +24,9 @@ const CardStyleVariation = () => {
               <CardTitle className="text-white" tag="h4">
                 Secondary Card Title
               </CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -32,7 +36,9 @@ const CardStyleVariation = () => {
               <CardTitle className="text-white" tag="h4">
                 Success Card Title
               </CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -42,7 +48,9 @@ const CardStyleVariation = () => {
               <CardTitle className="text-white" tag="h4">
                 Danger Card Title
               </CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -52,7 +60,9 @@ const CardStyleVariation = () => {
               <CardTitle className="text-white" tag="h4">
                 Warning Card Title
               </CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -62,7 +72,9 @@ const CardStyleVariation = () => {
               <CardTitle className="text-white" tag="h4">
                 Info Card Title
               </CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -72,7 +84,9 @@ const CardStyleVariation = () => {
           <Card className="bg-transparent border-primary shadow-none">
             <CardBody>
               <CardTitle tag="h4">Primary Card Title</CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -80,7 +94,9 @@ const CardStyleVariation = () => {
           <Card className="bg-transparent border-secondary shadow-none">
             <CardBody>
               <CardTitle tag="h4">Secondary Card Title</CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -88,7 +104,9 @@ const CardStyleVariation = () => {
           <Card className="bg-transparent border-success shadow-none">
             <CardBody>
               <CardTitle tag="h4">Success Card Title</CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -96,7 +114,9 @@ const CardStyleVariation = () => {
           <Card className="bg-transparent border-danger shadow-none">
             <CardBody>
               <CardTitle tag="h4">Danger Card Title</CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -104,7 +124,9 @@ const CardStyleVariation = () => {
           <Card className="bg-transparent border-warning shadow-none">
             <CardBody>
               <CardTitle tag="h4">Warning Card Title</CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>
@@ -112,7 +134,9 @@ const CardStyleVariation = () => {
           <Card className="bg-transparent border-info shadow-none">
             <CardBody>
               <CardTitle tag="h4">Info Card Title</CardTitle>
-              <CardText>Some quick example text to build on the card title and make up.</CardText>
+              <CardText>
+                Some quick example text to build on the card title and make up.
+              </CardText>
             </CardBody>
           </Card>
         </Col>

@@ -47,17 +47,22 @@ const printQRcode = () => {
             <Row className="mt-5">
               <Col>
                 <div>
-                  <p>Patient Name: {props && props.patientName ? props.patientName : '-'}</p>
+                  <p>
+                    Patient Name:{' '}
+                    {props && props.patientName ? props.patientName : '-'}
+                  </p>
                   <p>Exam ID: {props && props.examId ? props.examId : '-'}</p>
                   <p>
-                    Doctor access code: <b>{props && props.password ? props.password : '-'}</b>
+                    Doctor access code:{' '}
+                    <b>{props && props.password ? props.password : '-'}</b>
                   </p>
                   <p>
                     ( Exp:{' '}
                     {props && props.expiryDate
-                      ? moment(props.expiryDate.slice(0, -3), 'MM-DD-YYYY HH:mm').format(
-                          userData?.dateFormats?.dateTimeFormat
-                        )
+                      ? moment(
+                          props.expiryDate.slice(0, -3),
+                          'MM-DD-YYYY HH:mm'
+                        ).format(userData?.dateFormats?.dateTimeFormat)
                       : '-'}
                     (UTC) )
                   </p>
@@ -67,8 +72,14 @@ const printQRcode = () => {
                 <div>
                   <h4>Doctor details:-</h4>
                   <p>Name: {props && props.username ? props.username : '-'}</p>
-                  <p>Designation: {props && props.designation ? props.designation : '-'}</p>
-                  <p>hospital: {props && props.hospitalname ? props.hospitalname : '-'}</p>
+                  <p>
+                    Designation:{' '}
+                    {props && props.designation ? props.designation : '-'}
+                  </p>
+                  <p>
+                    hospital:{' '}
+                    {props && props.hospitalname ? props.hospitalname : '-'}
+                  </p>
                   <p>Contact.: {props && props.cno ? props.cno : '-'}</p>
                 </div>
               </Col>
@@ -79,7 +90,9 @@ const printQRcode = () => {
                   <img src={QrcodeSrc} />
                 </div>
                 <p>How to use it?</p>
-                <p>It will redirect to a web page, enter the doctor access code</p>
+                <p>
+                  It will redirect to a web page, enter the doctor access code
+                </p>
               </Col>
             </Row>
           </CardBody>
@@ -93,7 +106,10 @@ const printQRcode = () => {
           >
             Back
           </button>
-          <button className="ml-1 mb-2 btn btn-primary printQrButton" onClick={handlePrint}>
+          <button
+            className="ml-1 mb-2 btn btn-primary printQrButton"
+            onClick={handlePrint}
+          >
             Print
           </button>
         </Row>

@@ -3,7 +3,11 @@
 // ** Base Components
 export { default as ValidatedFormField } from './ValidatedFormField'
 export { default as FormValidationWrapper } from './FormValidationWrapper'
-export { default as ErrorDisplay, FormErrorSummary, FieldError } from './ErrorDisplay'
+export {
+  default as ErrorDisplay,
+  FormErrorSummary,
+  FieldError,
+} from './ErrorDisplay'
 
 // ** Specialized Field Components
 export { default as EmailField } from './EmailField'

@@ -18,7 +18,8 @@ const SelectField = ({
 }) => {
   const validation = {
     validate: {
-      notEmpty: value => (value && value !== '') || 'Please select a valid option',
+      notEmpty: (value) =>
+        (value && value !== '') || 'Please select a valid option',
     },
   }
 

@@ -4,7 +4,11 @@ import { useMemo, useCallback } from 'react'
 import { FORM_DEFAULTS } from '../constants'
 
 // ** Common Form Hooks
-export const useFormWithValidation = (schema, defaultValues = {}, options = {}) => {
+export const useFormWithValidation = (
+  schema,
+  defaultValues = {},
+  options = {}
+) => {
   const formOptions = {
     mode: 'onChange',
     resolver: yupResolver(schema),
@@ -24,9 +28,13 @@ export const createFormResetHandler = (reset, defaultValues) => {
 }
 
 // ** Form Submission Handler
-export const createFormSubmitHandler = (submitFunction, reset, defaultValues) => {
+export const createFormSubmitHandler = (
+  submitFunction,
+  reset,
+  defaultValues
+) => {
   return useCallback(
-    async data => {
+    async (data) => {
       try {
         await submitFunction(data)
         reset(defaultValues)
@@ -59,7 +67,7 @@ export const formFieldUtils = {
   createSelectProps: (field, errors, options = []) => ({
     ...field,
     invalid: errors && true,
-    children: options.map(option => (
+    children: options.map((option) => (
       <option key={option.value} value={option.value}>
         {option.label}
       </option>
@@ -70,16 +78,16 @@ export const formFieldUtils = {
 // ** Form Validation Utilities
 export const validationUtils = {
   // Check if form is valid
-  isFormValid: errors => Object.keys(errors).length === 0,
+  isFormValid: (errors) => Object.keys(errors).length === 0,
 
   // Get first error message
-  getFirstError: errors => {
+  getFirstError: (errors) => {
     const firstError = Object.values(errors)[0]
     return firstError?.message || ''
   },
 
   // Get all error messages
-  getAllErrors: errors => {
+  getAllErrors: (errors) => {
     return Object.entries(errors).map(([field, error]) => ({
       field,
       message: error.message,
@@ -115,22 +123,34 @@ export const formStateUtils = {
 }
 
 // ** Pre-configured Form Hooks for Common Use Cases
-export const useUserForm = (defaultValues = FORM_DEFAULTS.USER, options = {}) => {
+export const useUserForm = (
+  defaultValues = FORM_DEFAULTS.USER,
+  options = {}
+) => {
   const { USER_BASIC_SCHEMA } = require('../validation/schemas')
   return useFormWithValidation(USER_BASIC_SCHEMA, defaultValues, options)
 }
 
-export const useClinicForm = (defaultValues = FORM_DEFAULTS.CLINIC, options = {}) => {
+export const useClinicForm = (
+  defaultValues = FORM_DEFAULTS.CLINIC,
+  options = {}
+) => {
   const { CLINIC_SCHEMA } = require('../validation/schemas')
   return useFormWithValidation(CLINIC_SCHEMA, defaultValues, options)
 }
 
-export const usePhysicianForm = (defaultValues = FORM_DEFAULTS.PHYSICIAN, options = {}) => {
+export const usePhysicianForm = (
+  defaultValues = FORM_DEFAULTS.PHYSICIAN,
+  options = {}
+) => {
   const { PHYSICIAN_SCHEMA } = require('../validation/schemas')
   return useFormWithValidation(PHYSICIAN_SCHEMA, defaultValues, options)
 }
 
-export const useFilterForm = (defaultValues = FORM_DEFAULTS.FILTER, options = {}) => {
+export const useFilterForm = (
+  defaultValues = FORM_DEFAULTS.FILTER,
+  options = {}
+) => {
   const { FILTER_SCHEMA } = require('../validation/schemas')
   return useFormWithValidation(FILTER_SCHEMA, defaultValues, options)
 }
@@ -207,7 +227,7 @@ export const formDataUtils = {
   },
 
   // Clean form data (remove empty strings, null values)
-  cleanFormData: formData => {
+  cleanFormData: (formData) => {
     const cleaned = {}
 
     Object.entries(formData).forEach(([key, value]) => {

@@ -1,7 +1,7 @@
 // ** Third Party Components
 import PropTypes from 'prop-types'
 
-const Repeater = props => {
+const Repeater = (props) => {
   // ** Props
   const { count, tag = 'div', component, children, ...rest } = props
 

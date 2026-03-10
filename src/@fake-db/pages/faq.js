@@ -11,7 +11,8 @@ const data = {
           ans: 'Pastry pudding cookie toffee bonbon jujubes jujubes powder topping. Jelly beans gummi bears sweet roll bonbon muffin liquorice. Wafer lollipop sesame snaps. Brownie macaroon cookie muffin cupcake candy caramels tiramisu. Oat cake chocolate cake sweet jelly-o brownie biscuit marzipan. Jujubes donut marzipan chocolate bar. Jujubes sugar plum jelly beans tiramisu icing cheesecake.',
         },
         {
-          question: 'Can I store the item on an intranet so everyone has access?',
+          question:
+            'Can I store the item on an intranet so everyone has access?',
           ans: 'Sweet pie candy jelly. Sesame snaps biscuit sugar plum. Sweet roll topping fruitcake. Caramels liquorice biscuit ice cream fruitcake cotton candy tart. Donut caramels gingerbread jelly-o gingerbread pudding. Gummi bears pastry marshmallow candy canes pie. Pie apple pie carrot cake.',
         },
         {
@@ -19,7 +20,8 @@ const data = {
           ans: 'Tart gummies dragée lollipop fruitcake pastry oat cake. Cookie jelly jelly macaroon icing jelly beans soufflé cake sweet. Macaroon sesame snaps cheesecake tart cake sugar plum. Dessert jelly-o sweet muffin chocolate candy pie tootsie roll marzipan.',
         },
         {
-          question: 'Is the Regular License the same thing as an editorial license?',
+          question:
+            'Is the Regular License the same thing as an editorial license?',
           ans: 'Cheesecake muffin cupcake dragée lemon drops tiramisu cake gummies chocolate cake. Marshmallow tart croissant. Tart dessert tiramisu marzipan lollipop lemon drops. Cake bonbon bonbon gummi bears topping jelly beans brownie jujubes muffin. Donut croissant jelly-o cake marzipan. Liquorice marzipan cookie wafer tootsie roll. Tootsie roll sweet cupcake.',
         },
         {
@@ -32,7 +34,8 @@ const data = {
           ans: 'At tempor commodo ullamcorper a lacus vestibulum. Ultrices neque ornare aenean euismod. Dui vivamus arcu felis bibendum. Turpis in eu mi bibendum neque egestas congue. Nullam ac tortor vitae purus faucibus ornare suspendisse sed.',
         },
         {
-          question: 'Can I re-distribute an item? What about under an Extended License?',
+          question:
+            'Can I re-distribute an item? What about under an Extended License?',
           ans: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Euismod lacinia at quis risus sed vulputate odio ut enim. Dictum at tempor commodo ullamcorper a lacus vestibulum.',
         },
       ],
@@ -75,7 +78,8 @@ const data = {
       subtitle: 'Which license do I need?',
       qandA: [
         {
-          question: 'Can my security guard or neighbour receive my shipment if I am not available?',
+          question:
+            'Can my security guard or neighbour receive my shipment if I am not available?',
           ans: 'Pastry pudding cookie toffee bonbon jujubes jujubes powder topping. Jelly beans gummi bears sweet roll bonbon muffin liquorice. Wafer lollipop sesame snaps. Brownie macaroon cookie muffin cupcake candy caramels tiramisu. Oat cake chocolate cake sweet jelly-o brownie biscuit marzipan. Jujubes donut marzipan chocolate bar. Jujubes sugar plum jelly beans tiramisu icing cheesecake.',
         },
         {
@@ -87,7 +91,8 @@ const data = {
           ans: 'Tart gummies dragée lollipop fruitcake pastry oat cake. Cookie jelly jelly macaroon icing jelly beans soufflé cake sweet. Macaroon sesame snaps cheesecake tart cake sugar plum. Dessert jelly-o sweet muffin chocolate candy pie tootsie roll marzipan.',
         },
         {
-          question: 'I have received a defective/damaged product. What do I do?',
+          question:
+            'I have received a defective/damaged product. What do I do?',
           ans: 'Cheesecake muffin cupcake dragée lemon drops tiramisu cake gummies chocolate cake. Marshmallow tart croissant. Tart dessert tiramisu marzipan lollipop lemon drops. Cake bonbon bonbon gummi bears topping jelly beans brownie jujubes muffin. Donut croissant jelly-o cake marzipan. Liquorice marzipan cookie wafer tootsie roll. Tootsie roll sweet cupcake.',
         },
         {
@@ -95,11 +100,13 @@ const data = {
           ans: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         },
         {
-          question: 'What documents do I need to carry for self-collection of my shipment?',
+          question:
+            'What documents do I need to carry for self-collection of my shipment?',
           ans: 'At tempor commodo ullamcorper a lacus vestibulum. Ultrices neque ornare aenean euismod. Dui vivamus arcu felis bibendum. Turpis in eu mi bibendum neque egestas congue. Nullam ac tortor vitae purus faucibus ornare suspendisse sed. Commodo viverra maecenas accumsan lacus vel facilisis volutpat est velit. Tortor consequat id porta nibh. Id aliquet lectus proin nibh nisl condimentum id venenatis a. Faucibus nisl tincidunt eget nullam non nisi. Enim nunc faucibus a pellentesque. Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus. Nec nam aliquam sem et tortor consequat id. Fringilla est ullamcorper eget nulla facilisi. Morbi tristique senectus et netus et.',
         },
         {
-          question: 'What are the timings for self-collecting shipments from the Delhivery Branch?',
+          question:
+            'What are the timings for self-collecting shipments from the Delhivery Branch?',
           ans: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Euismod lacinia at quis risus sed vulputate odio ut enim. Dictum at tempor commodo ullamcorper a lacus vestibulum.',
         },
       ],
@@ -115,7 +122,8 @@ const data = {
           ans: 'Pastry pudding cookie toffee bonbon jujubes jujubes powder topping. Jelly beans gummi bears sweet roll bonbon muffin liquorice. Wafer lollipop sesame snaps. Brownie macaroon cookie muffin cupcake candy caramels tiramisu. Oat cake chocolate cake sweet jelly-o brownie biscuit marzipan. Jujubes donut marzipan chocolate bar. Jujubes sugar plum jelly beans tiramisu icing cheesecake.',
         },
         {
-          question: 'I haven’t received the refund of my returned shipment. What do I do?',
+          question:
+            'I haven’t received the refund of my returned shipment. What do I do?',
           ans: 'Sweet pie candy jelly. Sesame snaps biscuit sugar plum. Sweet roll topping fruitcake. Caramels liquorice biscuit ice cream fruitcake cotton candy tart. Donut caramels gingerbread jelly-o gingerbread pudding. Gummi bears pastry marshmallow candy canes pie. Pie apple pie carrot cake.',
         },
         {
@@ -123,7 +131,8 @@ const data = {
           ans: 'Tart gummies dragée lollipop fruitcake pastry oat cake. Cookie jelly jelly macaroon icing jelly beans soufflé cake sweet. Macaroon sesame snaps cheesecake tart cake sugar plum. Dessert jelly-o sweet muffin chocolate candy pie tootsie roll marzipan.',
         },
         {
-          question: 'I missed the delivery of my order today. What should I do?',
+          question:
+            'I missed the delivery of my order today. What should I do?',
           ans: 'Cheesecake muffin cupcake dragée lemon drops tiramisu cake gummies chocolate cake. Marshmallow tart croissant. Tart dessert tiramisu marzipan lollipop lemon drops. Cake bonbon bonbon gummi bears topping jelly beans brownie jujubes muffin. Donut croissant jelly-o cake marzipan. Liquorice marzipan cookie wafer tootsie roll. Tootsie roll sweet cupcake.',
         },
         {
@@ -144,7 +153,8 @@ const data = {
           ans: 'Pastry pudding cookie toffee bonbon jujubes jujubes powder topping. Jelly beans gummi bears sweet roll bonbon muffin liquorice. Wafer lollipop sesame snaps. Brownie macaroon cookie muffin cupcake candy caramels tiramisu. Oat cake chocolate cake sweet jelly-o brownie biscuit marzipan. Jujubes donut marzipan chocolate bar. Jujubes sugar plum jelly beans tiramisu icing cheesecake.',
         },
         {
-          question: 'The status for my shipment shows as ‘not picked up’. What do I do?',
+          question:
+            'The status for my shipment shows as ‘not picked up’. What do I do?',
           ans: 'Sweet pie candy jelly. Sesame snaps biscuit sugar plum. Sweet roll topping fruitcake. Caramels liquorice biscuit ice cream fruitcake cotton candy tart. Donut caramels gingerbread jelly-o gingerbread pudding. Gummi bears pastry marshmallow candy canes pie. Pie apple pie carrot cake.',
         },
         {
@@ -160,19 +170,22 @@ const data = {
   },
 }
 
-mock.onGet('/faq/data').reply(config => {
+mock.onGet('/faq/data').reply((config) => {
   const { q = '' } = config.params
   const queryLowered = q.toLowerCase()
 
   const filteredData = {}
 
-  Object.entries(data.faqData).forEach(entry => {
+  Object.entries(data.faqData).forEach((entry) => {
     const [categoryName, categoryObj] = entry
-    const filteredQAndAOfCategory = categoryObj.qandA.filter(qAndAObj => {
+    const filteredQAndAOfCategory = categoryObj.qandA.filter((qAndAObj) => {
       return qAndAObj.question.toLowerCase().includes(queryLowered)
     })
     if (filteredQAndAOfCategory.length) {
-      filteredData[categoryName] = { ...categoryObj, qandA: filteredQAndAOfCategory }
+      filteredData[categoryName] = {
+        ...categoryObj,
+        qandA: filteredQAndAOfCategory,
+      }
     }
   })
 

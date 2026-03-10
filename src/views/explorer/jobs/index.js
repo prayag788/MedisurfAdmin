@@ -22,7 +22,9 @@ import Header from '../components/header'
 const Jobs = () => {
   const [jobDetail, setJobDetail] = useState([])
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('jobsrow') ? JSON.parse(localStorage.getItem('jobsrow')) : 7
+    localStorage.getItem('jobsrow')
+      ? JSON.parse(localStorage.getItem('jobsrow'))
+      : 7
   )
   const [currentPage, setCurrentPage] = useState(0)
   const [totalJobs, setTotalJobs] = useState(0)
@@ -35,17 +37,20 @@ const Jobs = () => {
 
   useEffect(() => {
     const jobsRefresh = async () => {
-      const jobsList = await axios.get(`${process.env.REACT_APP_API_URL}/explorer/jobs`, {
-        params: {
-          limit: rowsPerPage,
-          since: currentPage,
-        },
-      })
+      const jobsList = await axios.get(
+        `${process.env.REACT_APP_API_URL}/explorer/jobs`,
+        {
+          params: {
+            limit: rowsPerPage,
+            since: currentPage,
+          },
+        }
+      )
       setJobDetail(() => jobsList.data.jobs)
       setTotalJobs(() => jobsList.data.total)
 
       let flag = 0
-      jobsList.data.jobs.map(data => {
+      jobsList.data.jobs.map((data) => {
         if (data.State === 'Running') {
           flag += 1
         }
@@ -59,13 +64,15 @@ const Jobs = () => {
     jobsRefresh()
   }, [rowsPerPage, currentPage, tip])
 
-  const jobsHandler = async row => {
+  const jobsHandler = async (row) => {
     setTip(!tip)
 
     try {
-      const jobsList = await axios.get(`${process.env.REACT_APP_API_URL}/explorer/jobs/${row.ID}`)
+      const jobsList = await axios.get(
+        `${process.env.REACT_APP_API_URL}/explorer/jobs/${row.ID}`
+      )
 
-      setJobDetail(prev => {
+      setJobDetail((prev) => {
         prev.map((item, index) => {
           if (item.ID === row.ID) {
             prev[index] = jobsList.data
@@ -78,11 +85,13 @@ const Jobs = () => {
     }
   }
 
-  const resubmitHandler = async id => {
+  const resubmitHandler = async (id) => {
     setTip(!tip)
-    const jobsList = await axios.post(`${process.env.REACT_APP_API_URL}/explorer/jobs/${id}/resubmit`)
+    const jobsList = await axios.post(
+      `${process.env.REACT_APP_API_URL}/explorer/jobs/${id}/resubmit`
+    )
 
-    setJobDetail(prev => {
+    setJobDetail((prev) => {
       prev.map((item, index) => {
         if (item.ID === id) {
           prev[index] = jobsList.data
@@ -95,7 +104,7 @@ const Jobs = () => {
   const columns = [
     {
       name: 'Job ID',
-      cell: row => (row.ID ? row.ID : '-'),
+      cell: (row) => (row.ID ? row.ID : '-'),
       sortable: true,
       reorder: true,
 
@@ -104,8 +113,12 @@ const Jobs = () => {
     },
     {
       name: 'Remote AET',
-      cell: row => {
-        return row.Content ? (row.Content.RemoteAet ? row.Content.RemoteAet : '-') : '-'
+      cell: (row) => {
+        return row.Content
+          ? row.Content.RemoteAet
+            ? row.Content.RemoteAet
+            : '-'
+          : '-'
       },
       sortable: true,
       reorder: true,
@@ -115,7 +128,7 @@ const Jobs = () => {
     },
     {
       name: 'State',
-      cell: row => (row.State ? row.State : '-'),
+      cell: (row) => (row.State ? row.State : '-'),
       sortable: true,
       reorder: true,
 
@@ -124,9 +137,12 @@ const Jobs = () => {
     },
     {
       name: 'Completed Time',
-      cell: row => {
+      cell: (row) => {
         return row.CompletionTime
-          ? moment.utc(row.CompletionTime).local().format(userData?.dateFormats?.dateTimeFormat)
+          ? moment
+              .utc(row.CompletionTime)
+              .local()
+              .format(userData?.dateFormats?.dateTimeFormat)
           : '-'
       },
       sortable: true,
@@ -137,17 +153,21 @@ const Jobs = () => {
     },
     {
       name: 'Progress',
-      selector: row => (row.Progress ? row.Progress : '-'),
+      selector: (row) => (row.Progress ? row.Progress : '-'),
       sortable: true,
       reorder: true,
 
       id: 'Progress',
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         return row.Progress ? (
           <Progress
             className="progress-bar-success"
-            style={row.State === 'Failure' ? { background: '#ea5455' } : { backgroud: '#28c76f' }}
+            style={
+              row.State === 'Failure'
+                ? { background: '#ea5455' }
+                : { backgroud: '#28c76f' }
+            }
             value={row.Progress}
           />
         ) : (
@@ -160,7 +180,7 @@ const Jobs = () => {
       sortable: false,
       reorder: true,
       id: 'Actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <>
             <div>
@@ -170,7 +190,7 @@ const Jobs = () => {
                   size={15}
                   className="mr-1"
                   style={{ cursor: 'pointer' }}
-                  onClick={e => {
+                  onClick={(e) => {
                     e.preventDefault()
                     jobsHandler(row)
                   }}
@@ -180,10 +200,17 @@ const Jobs = () => {
                   id="Refresh"
                   size={15}
                   className="mr-1"
-                  style={{ opacity: 0.2, pointerEvents: 'none', cursor: 'default' }}
+                  style={{
+                    opacity: 0.2,
+                    pointerEvents: 'none',
+                    cursor: 'default',
+                  }}
                 />
               )}
-              <UncontrolledTooltip className="tooltip-react-strap" target="Refresh">
+              <UncontrolledTooltip
+                className="tooltip-react-strap"
+                target="Refresh"
+              >
                 Refresh
               </UncontrolledTooltip>
               {row.State !== 'Success' ? (
@@ -199,10 +226,17 @@ const Jobs = () => {
                   id="Resubmit"
                   size={15}
                   className="mr-1"
-                  style={{ opacity: 0.2, pointerEvents: 'none', cursor: 'default' }}
+                  style={{
+                    opacity: 0.2,
+                    pointerEvents: 'none',
+                    cursor: 'default',
+                  }}
                 />
               )}
-              <UncontrolledTooltip className="tooltip-react-strap" target="Resubmit">
+              <UncontrolledTooltip
+                className="tooltip-react-strap"
+                target="Resubmit"
+              >
                 Resubmit
               </UncontrolledTooltip>
             </div>
@@ -220,15 +254,19 @@ const Jobs = () => {
     )
   }
 
-  const handleSort = d => {
+  const handleSort = (d) => {
     if (d.sortField) {
       setSortOrder(d.sortOrder)
       setSortField(d.sortField)
 
       if (sortOrder === -1) {
-        jobDetail.sort((a, b) => String(b[d.sortField]).localeCompare(String(a[d.sortField])))
+        jobDetail.sort((a, b) =>
+          String(b[d.sortField]).localeCompare(String(a[d.sortField]))
+        )
       } else {
-        jobDetail.sort((a, b) => String(a[d.sortField]).localeCompare(String(b[d.sortField])))
+        jobDetail.sort((a, b) =>
+          String(a[d.sortField]).localeCompare(String(b[d.sortField]))
+        )
       }
       setJobDetail(jobDetail)
     }
@@ -260,9 +298,9 @@ const Jobs = () => {
                     onSort: handleSort,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setCurrentPage(e.first++)
-                      setRowsPerPage(prev => e.rows)
+                      setRowsPerPage((prev) => e.rows)
                       localStorage.setItem('jobsrow', e.rows)
                     },
                   }}

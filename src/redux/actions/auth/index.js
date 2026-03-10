@@ -4,21 +4,25 @@ import useJwt from '@src/auth/jwt/useJwt'
 const config = useJwt.jwtConfig
 
 // ** Handle User Login
-export const handleLogin = data => {
-  return dispatch => {
+export const handleLogin = (data) => {
+  return (dispatch) => {
     dispatch({
       type: 'LOGIN',
       data,
       config,
       [config.storageTokenKeyName]: data[config.storageTokenKeyName],
-      [config.storageRefreshTokenKeyName]: data[config.storageRefreshTokenKeyName],
+      [config.storageRefreshTokenKeyName]:
+        data[config.storageRefreshTokenKeyName],
     })
 
     // ** Add to user, accessToken & refreshToken to localStorage
     localStorage.setItem('userData', JSON.stringify(data))
     document.cookie = `loginAuth=true; domain=${process.env.REACT_APP_COOKIE_DOMAIN}; path=/`
     localStorage.setItem(config.storageTokenKeyName, data.accessToken)
-    localStorage.setItem(config.storageRefreshTokenKeyName, data.refreshToken || data.accessToken)
+    localStorage.setItem(
+      config.storageRefreshTokenKeyName,
+      data.refreshToken || data.accessToken
+    )
 
     // ** Set lastActivity to prevent immediate auto-logout
     const currentTime = require('moment')().unix()
@@ -30,7 +34,7 @@ export const handleLogin = data => {
 
 // ** Handle User Logout
 export const handleLogout = () => {
-  return dispatch => {
+  return (dispatch) => {
     // ** Set auth to false in session
     localStorage.removeItem('lastActivity')
     localStorage.removeItem('userData')
@@ -49,5 +53,5 @@ export const handleLogout = () => {
   // }
 }
 
-export const handleuserDataUpdate = value => dispatch =>
+export const handleuserDataUpdate = (value) => (dispatch) =>
   dispatch({ type: 'UPDATE_USERDATA', data: value })

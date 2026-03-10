@@ -36,7 +36,7 @@ const SharedAuth = ({ props, toggleAuth }) => {
   const [error, setError] = useState({})
   const [loading, setLoading] = useState(false)
 
-  const validate = obj => {
+  const validate = (obj) => {
     const isValid = []
     for (const item in obj) {
       if (obj[item] === '') {
@@ -46,7 +46,7 @@ const SharedAuth = ({ props, toggleAuth }) => {
     return isValid
   }
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault()
     const pass = validate(creds)
     if (!pass.length) {
@@ -57,7 +57,7 @@ const SharedAuth = ({ props, toggleAuth }) => {
           password: creds.password,
           token,
         })
-        .then(response => {
+        .then((response) => {
           localStorage.setItem('sharedAuth', true)
           const data = {
             ...response.data,
@@ -76,17 +76,23 @@ const SharedAuth = ({ props, toggleAuth }) => {
 
           document.cookie = `sharedAuth=true; domain=${process.env.REACT_APP_COOKIE_DOMAIN}; path=/`
 
-          toggleAuth(prev => true)
+          toggleAuth((prev) => true)
         })
-        .catch(err => {
+        .catch((err) => {
           const responseMessage = err?.response?.data?.message
           const responseStatus = err?.response?.status
 
           if (responseMessage === 'expired') {
             navigate('/misc/expiredLink?query=shared')
-          } else if (responseMessage === 'Unauthorized' || responseStatus === 401) {
+          } else if (
+            responseMessage === 'Unauthorized' ||
+            responseStatus === 401
+          ) {
             toast.error(
-              <ToastContentForError message={'Enter correct password'} type={'error'} />,
+              <ToastContentForError
+                message={'Enter correct password'}
+                type={'error'}
+              />,
               {
                 position: 'top-center',
                 autoClose: 5000,
@@ -100,16 +106,19 @@ const SharedAuth = ({ props, toggleAuth }) => {
           } else {
             // Unexpected error – still show a generic toast so the user isn't left blank
             toast.error(
-              <ToastContentForError message={'Something went wrong. Please try again.'} type={'error'} />,
+              <ToastContentForError
+                message={'Something went wrong. Please try again.'}
+                type={'error'}
+              />,
               { position: 'top-center', autoClose: 5000 }
             )
             console.error('SharedAuth login error:', err)
           }
         })
     } else {
-      setError(prev => {
+      setError((prev) => {
         const errors = {}
-        pass.map(item => {
+        pass.map((item) => {
           errors[item] = 1
         })
         return errors
@@ -117,30 +126,30 @@ const SharedAuth = ({ props, toggleAuth }) => {
     }
   }
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
 
     // Remove authentication error
-    setError(prev => {
+    setError((prev) => {
       delete prev.auth
       return prev
     })
 
     // Remove/Set input error
     if (!value) {
-      setError(prev => {
+      setError((prev) => {
         return { ...prev, [name]: 1 }
       })
     } else {
-      setError(prev => {
+      setError((prev) => {
         delete prev[name]
         return prev
       })
     }
 
     // Update input value
-    setCreds(prev => {
+    setCreds((prev) => {
       return { ...prev, [name]: value }
     })
   }
@@ -172,10 +181,17 @@ const SharedAuth = ({ props, toggleAuth }) => {
                       tabIndex="2"
                       value={creds.password}
                       onChange={inputHandler}
-                      invalid={(error && error.password && true) || (error && error.auth && true)}
+                      invalid={
+                        (error && error.password && true) ||
+                        (error && error.auth && true)
+                      }
                     />
                     <img
-                      style={{ position: 'relative', float: 'right', top: '-31px' }}
+                      style={{
+                        position: 'relative',
+                        float: 'right',
+                        top: '-31px',
+                      }}
                       src={lock}
                       alt=""
                     />
@@ -192,7 +208,11 @@ const SharedAuth = ({ props, toggleAuth }) => {
                     )}
                   </div>
                   <div className="login-btn">
-                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={loading}
+                    >
                       {!loading ? 'LOGIN' : <Spinner color="white" size="sm" />}
                     </button>
                   </div>
@@ -212,7 +232,11 @@ const SharedAuth = ({ props, toggleAuth }) => {
       <div className="float-md-right footer">
         Powered by &nbsp;
         <Heart size={20} /> &nbsp;
-        <a href={`${process.env.REACT_APP_POWER_BY_URL}`} target="_blank" rel="noopener noreferrer">
+        <a
+          href={`${process.env.REACT_APP_POWER_BY_URL}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {`${process.env.REACT_APP_POWER_BY_NAME}`}
         </a>
       </div>

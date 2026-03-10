@@ -20,7 +20,12 @@ src/utils/
 
 ```javascript
 // Import everything from utils
-import { useUserForm, showSuccessAlert, STATUS_OPTIONS, FormField } from '../../utils'
+import {
+  useUserForm,
+  showSuccessAlert,
+  STATUS_OPTIONS,
+  FormField,
+} from '../../utils'
 
 // Or import specific utilities
 import { useUserForm } from '../../utils/forms'
@@ -54,9 +59,15 @@ const MyComponent = ({ onSubmit }) => {
   const defaultValues = { fname: '', lname: '', email: '' }
   const { control, handleSubmit, reset } = useUserForm(defaultValues)
 
-  const handleFormSubmit = createFormSubmitHandler(onSubmit, reset, defaultValues)
+  const handleFormSubmit = createFormSubmitHandler(
+    onSubmit,
+    reset,
+    defaultValues
+  )
 
-  return <form onSubmit={handleSubmit(handleFormSubmit)}>{/* Form fields */}</form>
+  return (
+    <form onSubmit={handleSubmit(handleFormSubmit)}>{/* Form fields */}</form>
+  )
 }
 ```
 
@@ -77,8 +88,11 @@ const MyComponent = ({ onSubmit }) => {
 ```javascript
 import { showSuccessAlert, handleApiResponse } from '../../utils'
 
-const saveData = async data => {
-  await handleApiResponse(() => api.post('/users', data), 'User created successfully!')
+const saveData = async (data) => {
+  await handleApiResponse(
+    () => api.post('/users', data),
+    'User created successfully!'
+  )
 }
 ```
 
@@ -98,8 +112,11 @@ const saveData = async data => {
 ```javascript
 import { userApi, apiUtils } from '../../utils'
 
-const createUser = async userData => {
-  return apiUtils.createWithAlert(() => userApi.create(userData), 'User created successfully!')
+const createUser = async (userData) => {
+  return apiUtils.createWithAlert(
+    () => userApi.create(userData),
+    'User created successfully!'
+  )
 }
 ```
 

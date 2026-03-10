@@ -22,7 +22,7 @@ export const columns = {
   patients: [
     {
       name: 'Patient ID',
-      selector: row => (row['PatientID'] ? row['PatientID'] : '-'),
+      selector: (row) => (row['PatientID'] ? row['PatientID'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -31,7 +31,7 @@ export const columns = {
     },
     {
       name: 'Patient Name',
-      selector: row => (row['PatientName'] ? row['PatientName'] : '-'),
+      selector: (row) => (row['PatientName'] ? row['PatientName'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -40,20 +40,23 @@ export const columns = {
     },
     {
       name: 'Patient Birth Date',
-      selector: row => (row['PatientBirthDate'] ? row['PatientBirthDate'] : '-'),
+      selector: (row) =>
+        row['PatientBirthDate'] ? row['PatientBirthDate'] : '-',
       sortable: false,
       reorder: true,
 
       id: 'PatientBirthDate',
       minWidth: '205px',
       sortFunction: studyDateSort,
-      cell: row => {
-        return moment(row['PatientBirthDate']).format(userData?.dateFormats?.dateFormat)
+      cell: (row) => {
+        return moment(row['PatientBirthDate']).format(
+          userData?.dateFormats?.dateFormat
+        )
       },
     },
     {
       name: 'Sex',
-      selector: row =>
+      selector: (row) =>
         row['PatientSex'] === 'M' ? (
           <img src={maleIcon} width={25} alt="Player" />
         ) : row['PatientSex'] === 'F' ? (
@@ -74,7 +77,7 @@ export const columns = {
   studies: [
     {
       name: 'Patient Name',
-      selector: row => (row['PatientName'] ? row['PatientName'] : '-'),
+      selector: (row) => (row['PatientName'] ? row['PatientName'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -83,7 +86,8 @@ export const columns = {
     },
     {
       name: 'Study Description',
-      selector: row => (row['StudyDescription'] ? row['StudyDescription'] : '-'),
+      selector: (row) =>
+        row['StudyDescription'] ? row['StudyDescription'] : '-',
       sortable: false,
       reorder: true,
 
@@ -92,20 +96,23 @@ export const columns = {
     },
     {
       name: 'Patient Birth Date',
-      selector: row => (row['PatientBirthDate'] ? row['PatientBirthDate'] : '-'),
+      selector: (row) =>
+        row['PatientBirthDate'] ? row['PatientBirthDate'] : '-',
       sortable: false,
       reorder: true,
 
       id: 'PatientBirthDate',
       minWidth: '205px',
       sortFunction: studyDateSort,
-      cell: row => {
-        return moment(row['PatientBirthDate']).format(userData?.dateFormats?.dateTimeFormat)
+      cell: (row) => {
+        return moment(row['PatientBirthDate']).format(
+          userData?.dateFormats?.dateTimeFormat
+        )
       },
     },
     {
       name: 'Patient ID',
-      selector: row => (row['PatientID'] ? row['PatientID'] : '-'),
+      selector: (row) => (row['PatientID'] ? row['PatientID'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -114,7 +121,7 @@ export const columns = {
     },
     {
       name: 'Sex',
-      selector: row =>
+      selector: (row) =>
         row['PatientSex'] === 'M' ? (
           <img src={maleIcon} width={25} alt="Player" />
         ) : row['PatientSex'] === 'F' ? (
@@ -133,7 +140,8 @@ export const columns = {
     },
     {
       name: 'Accession Number',
-      selector: row => (row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
+      selector: (row) =>
+        row['AccessionNumber'] ? row['AccessionNumber'] : '-',
       sortable: false,
       reorder: true,
 
@@ -142,7 +150,8 @@ export const columns = {
     },
     {
       name: 'Institution Name',
-      selector: row => (row['InstitutionName'] ? row['InstitutionName'] : '-'),
+      selector: (row) =>
+        row['InstitutionName'] ? row['InstitutionName'] : '-',
       sortable: false,
       reorder: true,
 
@@ -151,7 +160,8 @@ export const columns = {
     },
     {
       name: 'Referring Physician Name',
-      selector: row => (row['ReferringPhysicianName'] ? row['ReferringPhysicianName'] : '-'),
+      selector: (row) =>
+        row['ReferringPhysicianName'] ? row['ReferringPhysicianName'] : '-',
       sortable: false,
       reorder: true,
 
@@ -160,20 +170,22 @@ export const columns = {
     },
     {
       name: 'Study Date',
-      selector: row => (row['StudyDate'] ? row['StudyDate'] : '-'),
+      selector: (row) => (row['StudyDate'] ? row['StudyDate'] : '-'),
       sortable: false,
       reorder: true,
 
       id: 'StudyDate',
       minWidth: '150px',
       sortFunction: studyDateSort,
-      cell: row => {
-        return moment(row['StudyDate']).format(userData?.dateFormats?.dateFormat)
+      cell: (row) => {
+        return moment(row['StudyDate']).format(
+          userData?.dateFormats?.dateFormat
+        )
       },
     },
     {
       name: 'Study ID',
-      selector: row => (row['StudyID'] ? row['StudyID'] : '-'),
+      selector: (row) => (row['StudyID'] ? row['StudyID'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -182,7 +194,8 @@ export const columns = {
     },
     {
       name: 'Study Instance UID',
-      selector: row => (row['StudyInstanceUID'] ? row['StudyInstanceUID'] : '-'),
+      selector: (row) =>
+        row['StudyInstanceUID'] ? row['StudyInstanceUID'] : '-',
       sortable: false,
       reorder: true,
 
@@ -193,7 +206,7 @@ export const columns = {
   series: [
     {
       name: 'Status',
-      selector: row => (row['Status'] ? row['Status'] : '-'),
+      selector: (row) => (row['Status'] ? row['Status'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -202,7 +215,8 @@ export const columns = {
     },
     {
       name: 'Body Part Examined',
-      selector: row => (row['BodyPartExamined'] ? row['BodyPartExamined'] : '-'),
+      selector: (row) =>
+        row['BodyPartExamined'] ? row['BodyPartExamined'] : '-',
       sortable: false,
       reorder: true,
 
@@ -211,7 +225,7 @@ export const columns = {
     },
     {
       name: 'Modality',
-      selector: row => (row['Modality'] ? row['Modality'] : '-'),
+      selector: (row) => (row['Modality'] ? row['Modality'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -220,7 +234,7 @@ export const columns = {
     },
     {
       name: 'Operators Name',
-      selector: row => (row['OperatorsName'] ? row['OperatorsName'] : '-'),
+      selector: (row) => (row['OperatorsName'] ? row['OperatorsName'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -229,7 +243,8 @@ export const columns = {
     },
     {
       name: 'SeriesInstance UID',
-      selector: row => (row['SeriesInstanceUID'] ? row['SeriesInstanceUID'] : '-'),
+      selector: (row) =>
+        row['SeriesInstanceUID'] ? row['SeriesInstanceUID'] : '-',
       sortable: false,
       reorder: true,
 
@@ -238,7 +253,7 @@ export const columns = {
     },
     {
       name: 'Series Number',
-      selector: row => (row['SeriesNumber'] ? row['SeriesNumber'] : '-'),
+      selector: (row) => (row['SeriesNumber'] ? row['SeriesNumber'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -247,7 +262,8 @@ export const columns = {
     },
     {
       name: 'Series Description',
-      selector: row => (row['SeriesDescription'] ? row['SeriesDescription'] : '-'),
+      selector: (row) =>
+        row['SeriesDescription'] ? row['SeriesDescription'] : '-',
       sortable: false,
       reorder: true,
 
@@ -258,7 +274,7 @@ export const columns = {
   instances: [
     {
       name: 'Index In Series',
-      selector: row => (row['IndexInSeries'] ? row['IndexInSeries'] : '-'),
+      selector: (row) => (row['IndexInSeries'] ? row['IndexInSeries'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -268,7 +284,7 @@ export const columns = {
     },
     {
       name: 'Image Comments',
-      selector: row => (row['ImageComments'] ? row['ImageComments'] : '-'),
+      selector: (row) => (row['ImageComments'] ? row['ImageComments'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -277,7 +293,7 @@ export const columns = {
     },
     {
       name: 'SOP Instance UID',
-      selector: row => (row['SOPInstanceUID'] ? row['SOPInstanceUID'] : '-'),
+      selector: (row) => (row['SOPInstanceUID'] ? row['SOPInstanceUID'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -286,7 +302,7 @@ export const columns = {
     },
     {
       name: 'Number Of Frames',
-      selector: row => (row['NumberOfFrames'] ? row['NumberOfFrames'] : '-'),
+      selector: (row) => (row['NumberOfFrames'] ? row['NumberOfFrames'] : '-'),
       sortable: false,
       reorder: true,
 

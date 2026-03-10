@@ -45,10 +45,10 @@ const FeatherIcons = () => {
     IconsArr.push(key)
   }
 
-  const handleFilter = val => {
+  const handleFilter = (val) => {
     const arr = []
     if (val.length) {
-      IconsArr.filter(icon => {
+      IconsArr.filter((icon) => {
         if (icon.toLowerCase().includes(val.toLowerCase())) {
           arr.push(icon)
         }
@@ -57,7 +57,7 @@ const FeatherIcons = () => {
     setFilteredArr([...arr])
   }
 
-  const handleIconCardClick = icon => {
+  const handleIconCardClick = (icon) => {
     setActive(icon)
     toast.success(<ToastContent icon={icon} />, { hideProgressBar: true })
   }
@@ -65,16 +65,19 @@ const FeatherIcons = () => {
   const renderIcons = () => {
     const dataToRender = query.length ? filteredArr : IconsArr
     if (dataToRender.length) {
-      return dataToRender.map(icon => {
+      return dataToRender.map((icon) => {
         const IconTag = Icons[icon]
         return (
           <Fragment key={icon}>
             <CopyToClipboard text={`<${icon} />`}>
               <Card
                 id={icon}
-                className={classnames('icon-card cursor-pointer text-center mb-2 mx-50', {
-                  active: active === icon,
-                })}
+                className={classnames(
+                  'icon-card cursor-pointer text-center mb-2 mx-50',
+                  {
+                    active: active === icon,
+                  }
+                )}
                 onClick={() => handleIconCardClick(icon)}
               >
                 <CardBody>
@@ -85,7 +88,11 @@ const FeatherIcons = () => {
                 </CardBody>
               </Card>
             </CopyToClipboard>
-            <UncontrolledTooltip className="tooltip-react-strap" placement="top" target={icon}>
+            <UncontrolledTooltip
+              className="tooltip-react-strap"
+              placement="top"
+              target={icon}
+            >
               {icon.replace(/([A-Z])/g, ' $1').trim()}
             </UncontrolledTooltip>
           </Fragment>
@@ -116,7 +123,7 @@ const FeatherIcons = () => {
               </InputGroupText>
               <Input
                 placeholder="Search icons..."
-                onChange={e => {
+                onChange={(e) => {
                   handleFilter(e.target.value)
                   setQuery(e.target.value)
                 }}

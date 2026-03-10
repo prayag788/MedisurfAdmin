@@ -1,7 +1,16 @@
 import classnames from 'classnames'
 import Avatar from '@components/avatar'
 import { TrendingUp, User, Box, DollarSign } from 'react-feather'
-import { Card, CardHeader, CardTitle, CardBody, CardText, Row, Col, Media } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  CardText,
+  Row,
+  Col,
+  Media,
+} from 'reactstrap'
 
 const StatsCard = ({ cols }) => {
   const data = [
@@ -58,7 +67,9 @@ const StatsCard = ({ cols }) => {
     <Card className="card-statistics">
       <CardHeader>
         <CardTitle tag="h4">Statistics</CardTitle>
-        <CardText className="card-text font-small-2 mr-25 mb-0">Updated 1 month ago</CardText>
+        <CardText className="card-text font-small-2 mr-25 mb-0">
+          Updated 1 month ago
+        </CardText>
       </CardHeader>
       <CardBody className="statistics-body">
         <Row>{renderData()}</Row>

@@ -34,19 +34,19 @@ const AdditionalDataComponent = ({
     const newValues = [...currentValues, '']
 
     setValue(fieldName, newValues)
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       ...getValues(),
       [fieldName]: newValues,
     }))
   }
 
-  const removeField = index => {
+  const removeField = (index) => {
     const currentValues = getValues()[fieldName] || []
     const newValues = currentValues.filter((_, i) => i !== index)
 
     setValue(fieldName, newValues)
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [fieldName]: newValues,
     }))
@@ -58,7 +58,7 @@ const AdditionalDataComponent = ({
     newValues[index] = value
 
     setValue(fieldName, newValues)
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [fieldName]: newValues,
     }))
@@ -69,7 +69,10 @@ const AdditionalDataComponent = ({
       {formData &&
         formData[fieldName]?.map((value, index) => (
           <FormGroup key={`${index + fieldName}`}>
-            <Label className="w-100 d-flex align-items-center" style={{ gap: '3px' }}>
+            <Label
+              className="w-100 d-flex align-items-center"
+              style={{ gap: '3px' }}
+            >
               <span>
                 {index + 2}
                 <sup>{`${ordinalSuffixOf(index + 2)}`}</sup> {title}
@@ -93,8 +96,13 @@ const AdditionalDataComponent = ({
               name={`${fieldName}[${index}]`}
               id={`${fieldName}.${index}`}
               value={value || ''}
-              onChange={e => updateField(index, e.target.value)}
-              invalid={errors && errors?.[fieldName] && errors[fieldName]?.[index] && true}
+              onChange={(e) => updateField(index, e.target.value)}
+              invalid={
+                errors &&
+                errors?.[fieldName] &&
+                errors[fieldName]?.[index] &&
+                true
+              }
               placeholder={placeholder}
             />
 
@@ -106,7 +114,12 @@ const AdditionalDataComponent = ({
 
       {formData && formData[fieldName]?.length < limit && (
         <div className="d-flex justify-content-end">
-          <Button color="primary" type="button" onClick={addMoreFields} className="cursor-pointer">
+          <Button
+            color="primary"
+            type="button"
+            onClick={addMoreFields}
+            className="cursor-pointer"
+          >
             <i className="pi pi-plus" style={{ fontSize: '1rem' }}></i>
             {title}
           </Button>

@@ -7,13 +7,9 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { Editor } from '@tinymce/tinymce-react'
 import { showLoadingAlert, hideLoadingAlert } from '../../utils/alerts'
-import {
-  showToastSuccess,
-  showToastError,
-} from '../../utils/toast'
+import { showToastSuccess, showToastError } from '../../utils/toast'
 import axios from 'axios'
 import { Button as MButton, FormGroup as FormGroupMui } from '@mui/material'
-import 'tinymce/plugins/image'
 
 // ** Third Party Components
 import {
@@ -73,12 +69,13 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     clearErrors,
   } = useForm({ mode: 'onSubmit', resolver: yupResolver(NewSchema) })
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
-    
-    setFormData(prev => ({ ...prev, [name]: value }))
-    
+    const value =
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value
+
+    setFormData((prev) => ({ ...prev, [name]: value }))
+
     if (value && value.toString().trim()) {
       clearErrors(name)
     }
@@ -90,12 +87,15 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     setPreviewText(templatePreview)
   }
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       showLoadingAlert()
       data.status = form_data.status
       data.default = form_data.default
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/report-template`, data)
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/report-template`,
+        data
+      )
       hideLoadingAlert()
       showToastSuccess(res.data?.success?.message)
       navigate('/report-template')
@@ -106,12 +106,12 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     }
   }
 
-  const handleVaribaleClick = tag => {
+  const handleVaribaleClick = (tag) => {
     const editor = editorRef.current
     editor.insertContent(`{{${tag}}}`)
   }
 
-  const handleSampleReportChange = report => {
+  const handleSampleReportChange = (report) => {
     let content = StandardTemplete
     if (report === 'classic') {
       content = ClassicTemplete
@@ -146,6 +146,7 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
         breadCrumbParent="Report Template"
         breadCrumbActive="Add"
       />
+
       <Row>
         <Col sm="12" md="6" lg="6">
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -162,7 +163,10 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                 value={form_data.name}
                 onChange={inputHandler}
               />
-              {errors?.name && <FormFeedback>{errors.name.message}</FormFeedback>}
+
+              {errors?.name && (
+                <FormFeedback>{errors.name.message}</FormFeedback>
+              )}
             </FormGroup>
 
             <FormGroup>
@@ -177,6 +181,7 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                 invalid={errors?.text && true}
                 onChange={inputHandler}
               />
+
               <Editor
                 onInit={(evt, editor) => {
                   editorRef.current = editor
@@ -214,15 +219,17 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     'wordcount',
                     'image',
                   ],
+
                   toolbar:
                     'undo redo | formatselect | code ' +
                     'bold italic backcolor | alignleft aligncenter ' +
                     'alignright alignjustify | bullist numlist outdent indent | ' +
                     'removeformat | help | image',
-                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  content_style:
+                    'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                   placeholder: `Anything entered here will be added to the report layout chosen from the report template.`,
-                  setup: editor => {
-                    editor.on('keydown', e => {
+                  setup: (editor) => {
+                    editor.on('keydown', (e) => {
                       handleAutoLogout()
                     })
                   },
@@ -266,18 +273,24 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                 value={form_data.status}
                 onChange={inputHandler}
               >
-                {STATUS_OPTIONS.map(option => (
+                {STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </Input>
-              {errors?.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+              {errors?.status && (
+                <FormFeedback>{errors.status.message}</FormFeedback>
+              )}
             </FormGroup>
             <Button color="primary" type="submit" className="mr-1 sm-mb-1">
               Submit
             </Button>
-            <Button.Ripple className="mr-1 sm-mb-1" color="info" onClick={showTemplatePreview}>
+            <Button.Ripple
+              className="mr-1 sm-mb-1"
+              color="info"
+              onClick={showTemplatePreview}
+            >
               Preview
             </Button.Ripple>
           </Form>
@@ -296,7 +309,7 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     id="sample_template"
                     name="sample_template"
                     type="select"
-                    onChange={e => handleSampleReportChange(e.target.value)}
+                    onChange={(e) => handleSampleReportChange(e.target.value)}
                   >
                     <option value="standard"> Standard </option>
                     <option value="classic"> Classic </option>
@@ -312,8 +325,9 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
             <CardBody>
               <Row className="mt-1 mb-50 pb-2 border-bottom">
                 <Col>
-                  If you want to add dynamic values to the template, please use the variables below.
-                  Click on a variable to add it to the template.{' '}
+                  If you want to add dynamic values to the template, please use
+                  the variables below. Click on a variable to add it to the
+                  template.{' '}
                 </Col>
               </Row>
               <Row className="mt-1 mb-50">

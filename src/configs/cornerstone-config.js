@@ -16,7 +16,7 @@ export default function initCornerstone() {
   cornerstoneWADOImageLoader.external.cornerstone = cornerstone
   cornerstoneWADOImageLoader.external.dicomParser = dicomParser
   cornerstoneWADOImageLoader.configure({
-    beforeSend: xhr => {
+    beforeSend: (xhr) => {
       xhr.setRequestHeader(
         'Authorization',
         `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}`

@@ -1,4 +1,11 @@
-import { Card, CardHeader, CardTitle, CardBody, CardText, Table } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  CardText,
+  Table,
+} from 'reactstrap'
 
 const HeadingColors = () => {
   return (
@@ -9,9 +16,10 @@ const HeadingColors = () => {
 
       <CardBody>
         <CardText>
-          Heading elements are also changed with different color options. Use class
-          <code>text-[primary/secondary/success/danger/info/warning]</code> class with heading
-          elements.
+          Heading elements are also changed with different color options. Use
+          class
+          <code>text-[primary/secondary/success/danger/info/warning]</code>{' '}
+          class with heading elements.
         </CardText>
       </CardBody>
       <Table responsive borderless className="mb-0">

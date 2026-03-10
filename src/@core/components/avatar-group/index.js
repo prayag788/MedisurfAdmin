@@ -9,7 +9,7 @@ import { UncontrolledTooltip } from 'reactstrap'
 // ** Custom Components
 import Avatar from '@components/avatar'
 
-const AvatarGroup = props => {
+const AvatarGroup = (props) => {
   // ** Props
   const { data, tag, className } = props
 
@@ -44,7 +44,9 @@ const AvatarGroup = props => {
             />
           ) : null}
           {item.meta ? (
-            <ItemTag className="d-flex align-items-center pl-1">{item.meta}</ItemTag>
+            <ItemTag className="d-flex align-items-center pl-1">
+              {item.meta}
+            </ItemTag>
           ) : null}
         </Fragment>
       )

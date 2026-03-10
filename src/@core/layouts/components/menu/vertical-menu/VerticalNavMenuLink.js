@@ -44,7 +44,7 @@ const VerticalNavMenuLink = ({
   }
 
   // ** URL Vars
-  const resetActiveGroup = navLink => {
+  const resetActiveGroup = (navLink) => {
     const parents = search(navigation, navLink, match)
     toggleActiveGroup(item.id, parents)
   }
@@ -78,11 +78,13 @@ const VerticalNavMenuLink = ({
           id={`${item.id}Target`}
           target={item.newTab ? '_blank' : undefined}
           href={item.navLink || '/'}
-          onClick={e => {
+          onClick={(e) => {
             if (!item.navLink.length) {
               e.preventDefault()
             }
-            parentItem ? resetActiveGroup(item.navLink) : resetActiveAndOpenGroups()
+            parentItem
+              ? resetActiveGroup(item.navLink)
+              : resetActiveAndOpenGroups()
           }}
           rel="noreferrer"
         >
@@ -108,17 +110,23 @@ const VerticalNavMenuLink = ({
               return false
             }
 
-            if (match.pathname && match.pathname !== '' && match.pathname === item.navLink) {
+            if (
+              match.pathname &&
+              match.pathname !== '' &&
+              match.pathname === item.navLink
+            ) {
               currentActiveItem = item.navLink
               return true
             }
             return false
           }}
-          onClick={e => {
+          onClick={(e) => {
             if (!item.navLink.length) {
               e.preventDefault()
             }
-            parentItem ? resetActiveGroup(item.navLink) : resetActiveAndOpenGroups()
+            parentItem
+              ? resetActiveGroup(item.navLink)
+              : resetActiveAndOpenGroups()
           }}
         >
           {item.icon}
@@ -133,7 +141,10 @@ const VerticalNavMenuLink = ({
           ) : null}
         </NavLink>
       )}
-      <UncontrolledTooltip target={`${item.id}Target`} className="tooltip-react-strap">
+      <UncontrolledTooltip
+        target={`${item.id}Target`}
+        className="tooltip-react-strap"
+      >
         {item.title}
       </UncontrolledTooltip>
     </li>

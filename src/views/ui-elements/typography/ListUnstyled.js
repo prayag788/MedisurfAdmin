@@ -9,10 +9,11 @@ const ListUnstyled = () => {
 
       <CardBody>
         <CardText>
-          Use class <code>.list-unstyled</code> for Lists Unstyled. It remove the default{' '}
-          <code>list-style</code> and left margin on list items (immediate children only).
-          <strong>This only applies to immediate children list items</strong>, meaning you will need
-          to add the class for any nested lists as well.
+          Use class <code>.list-unstyled</code> for Lists Unstyled. It remove
+          the default <code>list-style</code> and left margin on list items
+          (immediate children only).
+          <strong>This only applies to immediate children list items</strong>,
+          meaning you will need to add the class for any nested lists as well.
         </CardText>
         <ul className="list-unstyled">
           <li>Lorem ipsum dolor sit amet</li>

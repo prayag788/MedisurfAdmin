@@ -1,5 +1,14 @@
 import { useEffect, useState, useRef } from 'react'
-import { Col, Card, Spinner, Row, CardHeader, CardTitle, Label, Input } from 'reactstrap'
+import {
+  Col,
+  Card,
+  Spinner,
+  Row,
+  CardHeader,
+  CardTitle,
+  Label,
+  Input,
+} from 'reactstrap'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { flattenObj } from '../../utility/Utils'
@@ -11,7 +20,14 @@ import ListTable from '../../@core/components/list-table'
 import { isUserLoggedIn } from '@utils'
 
 const fieldSet = {
-  patients: ['ID', 'PatientName', 'PatientBirthDate', 'PatientID', 'PatientSex', 'ParentPatient'],
+  patients: [
+    'ID',
+    'PatientName',
+    'PatientBirthDate',
+    'PatientID',
+    'PatientSex',
+    'ParentPatient',
+  ],
   studies: [
     'ID',
     'PatientName',
@@ -36,9 +52,13 @@ const AllDetails = () => {
   const [extractedData, setextractedData] = useState([])
   const [refreshLoading, setRefreshLoading] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('allstudiesrow') ? JSON.parse(localStorage.getItem('allstudiesrow')) : 7
+    localStorage.getItem('allstudiesrow')
+      ? JSON.parse(localStorage.getItem('allstudiesrow'))
+      : 7
   )
-  const [level, setLevel] = useState(window.location.pathname.split('/explorer/all-')[1])
+  const [level, setLevel] = useState(
+    window.location.pathname.split('/explorer/all-')[1]
+  )
   const userData = JSON.parse(isUserLoggedIn())
 
   const [page, setPage] = useState(0)
@@ -107,7 +127,7 @@ const AllDetails = () => {
     if (!level || !data.length) return
 
     // Filter data based on Type to ensure correct data is shown
-    const filteredByType = data.filter(obj => {
+    const filteredByType = data.filter((obj) => {
       if (level === 'patients') {
         return obj.Type === 'Patient'
       } else if (level === 'studies') {
@@ -116,14 +136,16 @@ const AllDetails = () => {
       return true
     })
 
-    console.log(`Filtered ${data.length} items to ${filteredByType.length} ${level}`)
+    console.log(
+      `Filtered ${data.length} items to ${filteredByType.length} ${level}`
+    )
 
-    const returnedData = filteredByType.map(obj => {
+    const returnedData = filteredByType.map((obj) => {
       const extracted = {}
       const flatData = flattenObj(obj)
       const fields = [...fieldSet[level]]
 
-      fields.forEach(tag => {
+      fields.forEach((tag) => {
         if (flatData[tag] !== undefined) {
           extracted[tag] = flatData[tag]
         }
@@ -145,14 +167,16 @@ const AllDetails = () => {
   // Apply cached search filter when data is loaded
   useEffect(() => {
     if (extractedData.length > 0 && searchValue) {
-      const filteredDataArray = extractedData.filter(obj =>
-        Object.values(obj).some(val => val && val.toString().match(new RegExp(searchValue, 'i')))
+      const filteredDataArray = extractedData.filter((obj) =>
+        Object.values(obj).some(
+          (val) => val && val.toString().match(new RegExp(searchValue, 'i'))
+        )
       )
       setFilteredData(filteredDataArray)
     }
   }, [extractedData, searchValue])
 
-  const changeDateFormatinDOB = date => {
+  const changeDateFormatinDOB = (date) => {
     const tempDate = moment(date).format('YYYY-MM-DD hh:mm A')
     return tempDate
   }
@@ -193,10 +217,12 @@ const AllDetails = () => {
     return 0
   }
 
-  const onGlobalFilterChange = e => {
+  const onGlobalFilterChange = (e) => {
     const value = e.target.value
-    const filteredDataArray = extractedData.filter(obj =>
-      Object.values(obj).some(val => val && val.toString().match(new RegExp(value, 'i')))
+    const filteredDataArray = extractedData.filter((obj) =>
+      Object.values(obj).some(
+        (val) => val && val.toString().match(new RegExp(value, 'i'))
+      )
     )
     setFilteredData(filteredDataArray)
     setSearchValue(value)
@@ -208,7 +234,7 @@ const AllDetails = () => {
     patients: [
       {
         name: 'Patient ID',
-        cell: row => (row['PatientID'] ? row['PatientID'] : '-'),
+        cell: (row) => (row['PatientID'] ? row['PatientID'] : '-'),
         sortable: false,
         reorder: true,
         id: 'PatientID',
@@ -216,7 +242,7 @@ const AllDetails = () => {
       },
       {
         name: 'Patient Name',
-        cell: row => (row['PatientName'] ? row['PatientName'] : '-'),
+        cell: (row) => (row['PatientName'] ? row['PatientName'] : '-'),
         sortable: false,
         reorder: true,
         id: 'PatientName',
@@ -224,21 +250,24 @@ const AllDetails = () => {
       },
       {
         name: 'Patient Birth Date',
-        selector: row => (row['PatientBirthDate'] ? row['PatientBirthDate'] : '-'),
+        selector: (row) =>
+          row['PatientBirthDate'] ? row['PatientBirthDate'] : '-',
         sortable: false,
         reorder: true,
         id: 'PatientBirthDate',
         minWidth: '205px',
         sortFunction: studyDateSortDOB,
-        cell: row => {
+        cell: (row) => {
           return row['PatientBirthDate']
-            ? moment(row['PatientBirthDate']).format(userData?.dateFormats?.dateFormat)
+            ? moment(row['PatientBirthDate']).format(
+                userData?.dateFormats?.dateFormat
+              )
             : '-'
         },
       },
       {
         name: 'Sex',
-        cell: row =>
+        cell: (row) =>
           row['PatientSex'] === 'M' ? (
             <img src={maleIcon} width={25} alt="Player" />
           ) : row['PatientSex'] === 'F' ? (
@@ -259,7 +288,7 @@ const AllDetails = () => {
     studies: [
       {
         name: 'Patient Name',
-        cell: row => (row['PatientName'] ? row['PatientName'] : '-'),
+        cell: (row) => (row['PatientName'] ? row['PatientName'] : '-'),
         sortable: false,
         reorder: true,
         id: 'PatientName',
@@ -267,7 +296,8 @@ const AllDetails = () => {
       },
       {
         name: 'Study Description',
-        cell: row => (row['StudyDescription'] ? row['StudyDescription'] : '-'),
+        cell: (row) =>
+          row['StudyDescription'] ? row['StudyDescription'] : '-',
         sortable: false,
         reorder: true,
         id: 'StudyDescription',
@@ -275,21 +305,24 @@ const AllDetails = () => {
       },
       {
         name: 'Patient Birth Date',
-        selector: row => (row['PatientBirthDate'] ? row['PatientBirthDate'] : '-'),
+        selector: (row) =>
+          row['PatientBirthDate'] ? row['PatientBirthDate'] : '-',
         sortable: false,
         reorder: true,
         id: 'PatientBirthDate',
         minWidth: '190px',
         sortFunction: studyDateSortDOBinStudy,
-        cell: row => {
+        cell: (row) => {
           return row['PatientBirthDate']
-            ? moment(row['PatientBirthDate']).format(userData?.dateFormats?.dateFormat)
+            ? moment(row['PatientBirthDate']).format(
+                userData?.dateFormats?.dateFormat
+              )
             : '-'
         },
       },
       {
         name: 'Patient ID',
-        cell: row => (row['PatientID'] ? row['PatientID'] : '-'),
+        cell: (row) => (row['PatientID'] ? row['PatientID'] : '-'),
         sortable: false,
         reorder: true,
         id: 'PatientID',
@@ -297,7 +330,7 @@ const AllDetails = () => {
       },
       {
         name: 'Sex',
-        cell: row =>
+        cell: (row) =>
           row['PatientSex'] === 'M' ? (
             <img src={maleIcon} width={25} alt="Player" />
           ) : row['PatientSex'] === 'F' ? (
@@ -316,7 +349,7 @@ const AllDetails = () => {
       },
       {
         name: 'Accession Number',
-        cell: row => (row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
+        cell: (row) => (row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
         sortable: false,
         reorder: true,
         id: 'AccessionNumber',
@@ -324,7 +357,7 @@ const AllDetails = () => {
       },
       {
         name: 'Institution Name',
-        cell: row => (row['InstitutionName'] ? row['InstitutionName'] : '-'),
+        cell: (row) => (row['InstitutionName'] ? row['InstitutionName'] : '-'),
         sortable: false,
         reorder: true,
         id: 'InstitutionName',
@@ -332,7 +365,8 @@ const AllDetails = () => {
       },
       {
         name: 'Referring Physician Name',
-        cell: row => (row['ReferringPhysicianName'] ? row['ReferringPhysicianName'] : '-'),
+        cell: (row) =>
+          row['ReferringPhysicianName'] ? row['ReferringPhysicianName'] : '-',
         sortable: false,
         reorder: true,
         id: 'ReferringPhysicianName',
@@ -340,13 +374,13 @@ const AllDetails = () => {
       },
       {
         name: 'Study Date',
-        selector: row => (row['StudyDate'] ? row['StudyDate'] : '-'),
+        selector: (row) => (row['StudyDate'] ? row['StudyDate'] : '-'),
         sortable: false,
         reorder: true,
 
         id: 'StudyDate',
         minWidth: '100px',
-        cell: row => {
+        cell: (row) => {
           return row['StudyDate']
             ? moment(row['StudyDate']).format(userData?.dateFormats?.dateFormat)
             : '-'
@@ -354,7 +388,7 @@ const AllDetails = () => {
       },
       {
         name: 'Study ID',
-        cell: row => (row['StudyID'] ? row['StudyID'] : '-'),
+        cell: (row) => (row['StudyID'] ? row['StudyID'] : '-'),
         sortable: false,
         reorder: true,
         id: 'StudyID',
@@ -362,7 +396,8 @@ const AllDetails = () => {
       },
       {
         name: 'Study Instance UID',
-        cell: row => (row['StudyInstanceUID'] ? row['StudyInstanceUID'] : '-'),
+        cell: (row) =>
+          row['StudyInstanceUID'] ? row['StudyInstanceUID'] : '-',
         sortable: false,
         reorder: true,
         id: 'StudyInstanceUID',
@@ -394,7 +429,11 @@ const AllDetails = () => {
               </CardTitle>
             </CardHeader>
             <Row className="justify-content-end mx-0">
-              <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+              <Col
+                className="d-flex align-items-center justify-content-end mt-1"
+                md="6"
+                sm="12"
+              >
                 <Label className="mr-1" for="search-input">
                   Search
                 </Label>
@@ -404,7 +443,7 @@ const AllDetails = () => {
                   bsSize="sm"
                   id="search-input"
                   value={searchValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     onGlobalFilterChange(e)
                   }}
                 />
@@ -423,7 +462,7 @@ const AllDetails = () => {
                     onSort: handleSort,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setPage(e.first)
                       setRowsPerPage(e.rows)
                       localStorage.setItem('allstudiesrow', e.rows)

@@ -88,19 +88,24 @@ const TechnicianUser = () => {
       .get(`${process.env.REACT_APP_API_URL}/user`, {
         params,
       })
-      .then(response => {
+      .then((response) => {
         console.log('Technician users API response:', response.data)
-        console.log('Number of technician users found:', response.data.numberOfRecord)
+        console.log(
+          'Number of technician users found:',
+          response.data.numberOfRecord
+        )
         console.log('Technician users list:', response.data.list)
         setStartsrno(response.data.startsrno ? response.data.startsrno : 0)
-        setData(prev =>
+        setData((prev) =>
           response.data.list.map((obj, index) => {
             obj.sl = startsrno + index + 1
             obj.full_name = `${obj.fname} ${obj.lname}`
             return obj
           })
         )
-        if (response.data.numberOfRecord >= parseInt(userData.technician || 0)) {
+        if (
+          response.data.numberOfRecord >= parseInt(userData.technician || 0)
+        ) {
           setLimitReach(true)
         } else {
           setLimitReach(false)
@@ -108,7 +113,7 @@ const TechnicianUser = () => {
         SetNewUserId(response.data.nextId)
         setTotal(response.data.numberOfRecord)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error fetching technician users:', err)
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -119,8 +124,6 @@ const TechnicianUser = () => {
   useEffect(() => {
     getUpdatedData()
   }, [page, rowsPerPage, searchValue, sortColumn, sortDirection, limitReach])
-  
-
 
   function handleSort(d) {
     if (d.sortField) {
@@ -137,7 +140,7 @@ const TechnicianUser = () => {
   const handleEditModal = () => SetEditModal(!editModal)
 
   // ** CRUD Handlers
-  const addNewUser = requestData => {
+  const addNewUser = (requestData) => {
     requestData = {
       ...requestData,
       role: 'TCU',
@@ -148,7 +151,7 @@ const TechnicianUser = () => {
     showLoadingAlert()
     axios
       .post(`${process.env.REACT_APP_API_URL}/user/register/admin`, requestData)
-      .then(response => {
+      .then((response) => {
         console.log('Technician user created successfully:', response.data)
         handleModal()
         hideLoadingAlert()
@@ -158,10 +161,12 @@ const TechnicianUser = () => {
           getUpdatedData()
         }, 1000)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error creating technician user:', err)
         const isValidationError = err?.response?.status === 422
-        const message = err?.response ? undefined : 'Failed to create technician user'
+        const message = err?.response
+          ? undefined
+          : 'Failed to create technician user'
         hideLoadingThenShowError(err, message)
         if (!isValidationError) {
           handleModal()
@@ -180,40 +185,45 @@ const TechnicianUser = () => {
     showLoadingAlert()
     axios
       .patch(`${process.env.REACT_APP_API_URL}/user/${data._id}`, data)
-      .then(response => {
+      .then((response) => {
         hideLoadingAlert()
         showSuccessAlert(
           `Technologist User ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
         )
         // Update frontend state immediately
-        setData(prev => prev.map(user => {
-          if (user._id === data._id) {
-            const updatedUser = { ...user, ...data }
-            updatedUser.full_name = `${updatedUser.fname} ${updatedUser.lname}`
-            return updatedUser
-          }
-          return user
-        }))
+        setData((prev) =>
+          prev.map((user) => {
+            if (user._id === data._id) {
+              const updatedUser = { ...user, ...data }
+              updatedUser.full_name = `${updatedUser.fname} ${updatedUser.lname}`
+              return updatedUser
+            }
+            return user
+          })
+        )
         // Refresh from API with delay
         setTimeout(() => getUpdatedData(), 500)
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingThenShowError(err)
       })
   }
 
   function deleteUser(id) {
     axios
-      .patch(`${process.env.REACT_APP_API_URL}/user/${id}`, { _id: id, status: -1 })
-      .then(response => {
+      .patch(`${process.env.REACT_APP_API_URL}/user/${id}`, {
+        _id: id,
+        status: -1,
+      })
+      .then((response) => {
         showSuccessAlert('Technologist User Deleted Successfully!')
         // Immediately remove from frontend state
-        setData(prev => prev.filter(user => user._id !== id))
+        setData((prev) => prev.filter((user) => user._id !== id))
         // Refresh from API with longer delay
         setTimeout(() => getUpdatedData(), 500)
         setTimeout(() => getUpdatedData(), 1000)
       })
-      .catch(err => {
+      .catch((err) => {
         handleEditModal()
         showErrorAlert(err)
       })
@@ -221,17 +231,19 @@ const TechnicianUser = () => {
 
   // Confirmation Sweet Alert
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
       }
-    })
+    )
   }
 
   // ** Table item Button Handlers
 
-  const editHandler = row => {
-    SetUpdateData(prev => {
+  const editHandler = (row) => {
+    SetUpdateData((prev) => {
       const newData = { ...prev }
       const keys = Object.keys(prev)
       for (const key of keys) {
@@ -246,11 +258,11 @@ const TechnicianUser = () => {
     handleEditModal()
   }
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     deleteUser(id)
   }
 
-  const DeactivationHandler = id => {
+  const DeactivationHandler = (id) => {
     const deactivationOptions = {
       _id: id,
       status: 0,
@@ -258,7 +270,7 @@ const TechnicianUser = () => {
     updateUserDetails(deactivationOptions, 'deactivate')
   }
 
-  const ActivationHandler = id => {
+  const ActivationHandler = (id) => {
     const activationOptions = {
       _id: id,
       status: 1,
@@ -275,7 +287,7 @@ const TechnicianUser = () => {
   const columns = [
     {
       name: 'ID',
-      cell: row => (row['referenceId'] || row['reference_id'] || '-'),
+      cell: (row) => row['referenceId'] || row['reference_id'] || '-',
       sortable: true,
       reorder: true,
       id: 'referenceId',
@@ -291,45 +303,49 @@ const TechnicianUser = () => {
       id: 'fname',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.full_name}</div>
       },
     },
     {
       name: 'Contact Number',
-      selector: row => (row['cno'] ? row['cno'] : '-'),
+      selector: (row) => (row['cno'] ? row['cno'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'cno',
       minWidth: '200px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.cno ? row.cno : '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.cno ? row.cno : '-'}
+          </div>
+        )
       },
     },
     {
       name: 'Email',
-      selector: row => (row['email'] ? row['email'] : '-'),
+      selector: (row) => (row['email'] ? row['email'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'email',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.email}</div>
       },
     },
     {
       name: 'User Name',
-      selector: row => (row['username'] ? row['username'] : '-'),
+      selector: (row) => (row['username'] ? row['username'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'username',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.username}</div>
       },
     },
@@ -340,7 +356,7 @@ const TechnicianUser = () => {
       reorder: true,
 
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         return (
           <Badge color={status[row.status].color} pill>
             {status[row.status].title}
@@ -354,7 +370,7 @@ const TechnicianUser = () => {
       sortable: false,
       reorder: true,
       id: 'actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -479,7 +495,11 @@ const TechnicianUser = () => {
               </div>
             </CardHeader>
             <Row className="justify-content-end mx-0">
-              <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+              <Col
+                className="d-flex align-items-center justify-content-end mt-1"
+                md="6"
+                sm="12"
+              >
                 <Label className="mr-1" for="search-input">
                   Search
                 </Label>
@@ -489,7 +509,7 @@ const TechnicianUser = () => {
                   bsSize="sm"
                   id="search-input"
                   value={searchValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     setSearchValue(e.target.value)
                   }}
                 />
@@ -508,9 +528,9 @@ const TechnicianUser = () => {
                     onSort: handleSort,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setPage(e.first++)
-                      setRowsPerPage(prev => e.rows)
+                      setRowsPerPage((prev) => e.rows)
                       localStorage.setItem('technicianuserrow', e.rows)
                     },
                   }}

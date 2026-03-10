@@ -65,14 +65,22 @@ const CardMeetup = () => {
           </div>
         </div>
         <Media>
-          <Avatar color="light-primary" className="rounded mr-1" icon={<Calendar size={18} />} />
+          <Avatar
+            color="light-primary"
+            className="rounded mr-1"
+            icon={<Calendar size={18} />}
+          />
           <Media body>
             <h6 className="mb-0">Sat, May 25, 2020</h6>
             <small>10:AM to 6:PM</small>
           </Media>
         </Media>
         <Media className="mt-2">
-          <Avatar color="light-primary" className="rounded mr-1" icon={<MapPin size={18} />} />
+          <Avatar
+            color="light-primary"
+            className="rounded mr-1"
+            icon={<MapPin size={18} />}
+          />
           <Media body>
             <h6 className="mb-0">Central Park</h6>
             <small>Manhattan, New york City</small>

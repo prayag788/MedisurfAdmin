@@ -53,7 +53,9 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             `Hospital name cannot be longer than ${FIELD_LIMITS.HOSPITAL_NAME_MAX_LENGTH} characters.`
           ),
         designation: yup.string(),
-        cno: yup.string().matches(PHONE_REGEXP, 'Please enter a valid contact number'),
+        cno: yup
+          .string()
+          .matches(PHONE_REGEXP, 'Please enter a valid contact number'),
       }),
     [PHONE_REGEXP]
   )
@@ -70,13 +72,16 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   })
 
   // ** Form field mapping
-  const formFields = useMemo(() => ['fname', 'lname', 'hospitalname', 'designation', 'cno'], [])
+  const formFields = useMemo(
+    () => ['fname', 'lname', 'hospitalname', 'designation', 'cno'],
+    []
+  )
 
   // ** Initialize form with data
   useEffect(() => {
     if (editData && Object.keys(editData).length > 0) {
       // Set form values efficiently
-      formFields.forEach(field => {
+      formFields.forEach((field) => {
         if (editData[field] !== undefined && editData[field] !== null) {
           setValue(field, editData[field], { shouldValidate: false })
         }
@@ -86,7 +91,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   // ** Form submission handler with enhanced error handling
   const onSubmit = useCallback(
-    async data => {
+    async (data) => {
       try {
         const formData = {
           ...data,
@@ -110,7 +115,14 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   // ** Reusable FormField component
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -146,26 +158,55 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit User Details</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormField name="fname" label="First Name" placeholder="Bruce" required />
-          <FormField name="lname" label="Last Name" placeholder="Wayne" required />
+          <FormField
+            name="fname"
+            label="First Name"
+            placeholder="Bruce"
+            required
+          />
+          <FormField
+            name="lname"
+            label="Last Name"
+            placeholder="Wayne"
+            required
+          />
           <FormField
             name="hospitalname"
             label="Hospital Name"
             placeholder="Fortis"
             maxLength={FIELD_LIMITS.HOSPITAL_NAME_MAX_LENGTH}
           />
-          <FormField name="designation" label="Designation" placeholder="Doctor" />
-          <FormField name="cno" label="Contact Number" type="number" placeholder="+1" />
+          <FormField
+            name="designation"
+            label="Designation"
+            placeholder="Doctor"
+          />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="number"
+            placeholder="+1"
+          />
           <div className="d-flex justify-content-end gap-2 mt-3">
             <Button type="submit" className="me-1" color="primary">
               Update User
             </Button>
-            <Button type="button" color="secondary" onClick={handleModal} outline>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={handleModal}
+              outline
+            >
               Cancel
             </Button>
           </div>

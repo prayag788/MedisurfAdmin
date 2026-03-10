@@ -56,7 +56,7 @@ const RevenueGenerated = ({ kFormatter, success }) => {
   }
 
   useEffect(() => {
-    axios.get('/card/card-statistics/revenue').then(res => setData(res.data))
+    axios.get('/card/card-statistics/revenue').then((res) => setData(res.data))
   }, [])
 
   return data !== null ? (

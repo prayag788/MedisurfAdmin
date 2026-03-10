@@ -48,8 +48,8 @@ const JoditEditorComponent = ({ placeholder }) => {
       value={content}
       config={editorConfig}
       tabIndex={1} // tabIndex of textarea
-      onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-      onChange={newContent => {}}
+      onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+      onChange={(newContent) => {}}
     />
   )
 }

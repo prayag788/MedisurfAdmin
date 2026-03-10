@@ -9,7 +9,7 @@ import { Plus } from 'react-feather'
 import { Menu } from 'primereact/menu'
 import axios from 'axios'
 
-const ListTable = props => {
+const ListTable = (props) => {
   const {
     visibleColumns = [],
     moduleName = '',
@@ -42,7 +42,7 @@ const ListTable = props => {
     }
     return scrollWidth
   }
-  const setScrollWidth = async width => {
+  const setScrollWidth = async (width) => {
     const table = await getCurrentTable()
     if (table) {
       if (!width) {
@@ -69,7 +69,7 @@ const ListTable = props => {
         <Button
           className="columnManagement"
           color={'primary'}
-          onClick={event => menuLeft.current.toggle(event)}
+          onClick={(event) => menuLeft.current.toggle(event)}
         >
           <Plus size={15} />
         </Button>
@@ -77,24 +77,27 @@ const ListTable = props => {
       </>
     )
   }
-  const updateColumns = async columnsObject => {
+  const updateColumns = async (columnsObject) => {
     const scrollWidth = await getScrollWidth()
 
-    await axios.put(`${process.env.REACT_APP_API_URL}/user/update-columns/${moduleName}`, {
-      scrollWidth,
-      columns: columnsObject,
-    })
+    await axios.put(
+      `${process.env.REACT_APP_API_URL}/user/update-columns/${moduleName}`,
+      {
+        scrollWidth,
+        columns: columnsObject,
+      }
+    )
   }
   const changeColumnVisibility = async (id, visible) => {
     try {
       const items = []
-      setAllColumns(prev => {
+      setAllColumns((prev) => {
         let defaultColVal = defaultCol
         if (!defaultColVal) {
           defaultColVal = prev[0]['id']
         }
         let count_visible = 0
-        prev.map(c => {
+        prev.map((c) => {
           if (c.id === id) {
             c.visible = visible
           }
@@ -102,7 +105,7 @@ const ListTable = props => {
             count_visible++
           }
         })
-        prev.map(c => {
+        prev.map((c) => {
           if (c.id === id) {
             c.visible = visible
           }
@@ -119,7 +122,7 @@ const ListTable = props => {
                   id={c.name + c.id}
                   value={c.id}
                   checked={c.visible}
-                  onChange={e => {
+                  onChange={(e) => {
                     changeColumnVisibility(c.id, e.target.checked)
                   }}
                 />
@@ -129,7 +132,7 @@ const ListTable = props => {
               </FormGroup>
             ),
           })
-          columns.map(vc => {
+          columns.map((vc) => {
             if (vc.default === true) {
             } else if (c.id === vc.id) {
               vc.visible = c.visible
@@ -152,7 +155,7 @@ const ListTable = props => {
   useEffect(() => {
     if (allColumns && columns && allColumns.length && columns.length) {
       const items = []
-      allColumns.map(col => {
+      allColumns.map((col) => {
         items.push({
           template: (item, options) => (
             <FormGroup check inline>
@@ -161,18 +164,22 @@ const ListTable = props => {
                 id={col.name + col.id}
                 value={col.id}
                 checked={col.visible}
-                onChange={e => {
+                onChange={(e) => {
                   changeColumnVisibility(col.id, e.target.checked)
                 }}
               />
-              <Label for={col.name + col.id} check style={{ userSelect: 'none' }}>
+              <Label
+                for={col.name + col.id}
+                check
+                style={{ userSelect: 'none' }}
+              >
                 {col.name}
               </Label>
             </FormGroup>
           ),
         })
 
-        columns?.map(vc => {
+        columns?.map((vc) => {
           if (vc.default === true) {
           } else if (col.id === vc.id) {
             vc.visible = col.visible
@@ -192,7 +199,7 @@ const ListTable = props => {
         const colId = coldData['id']
         if (colId === null) {
         } else {
-          const column = columns.find(col => col.id === colId)
+          const column = columns.find((col) => col.id === colId)
           if (column) {
             const colData = { ...column, ...coldData }
             if (colData?.style) {
@@ -218,10 +225,17 @@ const ListTable = props => {
             )
             // Handle single-object result (e.g. { success, result: { columns, scrollWidth, moduleName } })
             const result = res?.data?.result
-            const savedColumns = result?.columns && Array.isArray(result.columns) ? result.columns : null
+            const savedColumns =
+              result?.columns && Array.isArray(result.columns)
+                ? result.columns
+                : null
             setAllColumns(savedColumns || visibleColumns || [])
             const scrollWidthVal = result?.scrollWidth
-            await setScrollWidth(scrollWidthVal == null ? undefined : scrollWidthVal)
+            await setScrollWidth(
+              scrollWidthVal === null || scrollWidthVal === undefined
+                ? undefined
+                : scrollWidthVal
+            )
           }
 
           if (onBlankWidth) {
@@ -231,7 +245,10 @@ const ListTable = props => {
       } catch (err) {
         // Only handle response errors, let global interceptor handle network errors
         if (err && err.response) {
-          console.log('Failed to fetch columns:', err.response.data?.message || err.message)
+          console.log(
+            'Failed to fetch columns:',
+            err.response.data?.message || err.message
+          )
         }
       }
     }
@@ -239,30 +256,32 @@ const ListTable = props => {
   }, [moduleName])
 
   let startSerialNumber = restProps.first
-  tableData = tableData.map(data => {
+  tableData = tableData.map((data) => {
     return {
       ...data,
       SNumber: ++startSerialNumber,
     }
   })
 
-  const selectAllCheckboxes = document.querySelectorAll('.p-column-header-content')
-  selectAllCheckboxes.forEach(elementAllCheckBox => {
+  const selectAllCheckboxes = document.querySelectorAll(
+    '.p-column-header-content'
+  )
+  selectAllCheckboxes.forEach((elementAllCheckBox) => {
     const componentToRemove = elementAllCheckBox.querySelector('.p-checkbox')
     if (componentToRemove) {
       elementAllCheckBox.removeChild(componentToRemove)
     }
   })
-  const onColReorderFn = async e => {
-    const coldOrder1 = e.columns.map(column => column.props)
+  const onColReorderFn = async (e) => {
+    const coldOrder1 = e.columns.map((column) => column.props)
 
-    const coldOrder = e.columns.map(column => column.props.field)
+    const coldOrder = e.columns.map((column) => column.props.field)
     const rearrangedColumns = []
     for (let order = 0; order < coldOrder.length; order++) {
       const colId = coldOrder[order]
       if (colId === null) {
       } else {
-        const column = allColumns && allColumns.find(col => col.id === colId)
+        const column = allColumns && allColumns.find((col) => col.id === colId)
         if (column) {
           rearrangedColumns.push({ ...column, order })
         }
@@ -274,9 +293,9 @@ const ListTable = props => {
       onBlankWidth()
     }
   }
-  const onColumnResizerClickFn = async e => {}
+  const onColumnResizerClickFn = async (e) => {}
 
-  const onColumnResizeEndFn = async e => {
+  const onColumnResizeEndFn = async (e) => {
     const colId = e.column.props.field
     const rearrangedColumns = []
     for (let order = 0; order < allColumns.length; order++) {
@@ -306,7 +325,7 @@ const ListTable = props => {
     }
   }
 
-  const rowClass = data => {
+  const rowClass = (data) => {
     if (rowClassFn) {
       return rowClassFn(data)
     }
@@ -334,7 +353,8 @@ const ListTable = props => {
             rows: 7,
             paginatorTemplate:
               'RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink',
-            currentPageReportTemplate: 'Showing {first} to {last} of {totalRecords} entries',
+            currentPageReportTemplate:
+              'Showing {first} to {last} of {totalRecords} entries',
             selectionMode: 'checkbox',
             emptyMessage: 'No records found.',
             columnResizeMode: 'expand',
@@ -350,12 +370,12 @@ const ListTable = props => {
             align="center"
             className="column_fixed"
             header={columnManagement}
-            body={row => (row['SNumber'] ? row['SNumber'] : '-')}
+            body={(row) => (row['SNumber'] ? row['SNumber'] : '-')}
             selectionMode={selectionMode ? 'multiple' : null}
           ></Column>
           {columns &&
             columns?.length > 0 &&
-            columns.map(col => (
+            columns.map((col) => (
               <Column
                 key={col.id}
                 {...{
@@ -364,7 +384,9 @@ const ListTable = props => {
                   field: col.id,
                   header: col.name,
                   body: col?.cell,
-                  hidden: !(col?.visible === undefined || col?.visible === true),
+                  hidden: !(
+                    col?.visible === undefined || col?.visible === true
+                  ),
                   style: col?.style,
                 }}
               />

@@ -9,10 +9,13 @@ const ListInline = () => {
 
       <CardBody>
         <CardText>
-          To create a inline list use <code>.list-inline</code> class with <code>&ltul&gt</code> tag
-          and, class <code>.list-inline-item</code> with <code>&ltli&gt</code> tag.
+          To create a inline list use <code>.list-inline</code> class with{' '}
+          <code>&ltul&gt</code> tag and, class <code>.list-inline-item</code>{' '}
+          with <code>&ltli&gt</code> tag.
         </CardText>
-        <p>Use inline numbers, alphabet, icons etc... for ordered Inline List.</p>
+        <p>
+          Use inline numbers, alphabet, icons etc... for ordered Inline List.
+        </p>
         <ul className="list-inline">
           <li className="list-inline-item">Chocolate</li>
           <li className="list-inline-item">Cake</li>

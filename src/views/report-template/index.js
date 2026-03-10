@@ -4,7 +4,12 @@ import axios from 'axios'
 
 import { useNavigate } from 'react-router-dom'
 // ** Centralized Alerts
-import { showConfirm, showSuccessAlert, showErrorAlert, getErrorMessage } from '../../utils/alerts'
+import {
+  showConfirm,
+  showSuccessAlert,
+  showErrorAlert,
+  getErrorMessage,
+} from '../../utils/alerts'
 
 // ** Third Party Components
 import {
@@ -45,15 +50,18 @@ const ReportTemplate = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/report-template`, {
-        params: {
-          page: page + 1,
-          size: rowsPerPage,
-          filter: searchValue,
-          sortdirection: sortDirection,
-          sortcolumn: sortColumn,
-        },
-      })
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/report-template`,
+        {
+          params: {
+            page: page + 1,
+            size: rowsPerPage,
+            filter: searchValue,
+            sortdirection: sortDirection,
+            sortcolumn: sortColumn,
+          },
+        }
+      )
 
       if (response.data.success) {
         setData(response.data.list || [])
@@ -85,7 +93,7 @@ const ReportTemplate = () => {
   }
 
   // Confirmation using centralized alerts
-  const handleConfirm = async row => {
+  const handleConfirm = async (row) => {
     const result = await showConfirm({
       title: '<p>Are you sure to delete this template?</p>',
       text: 'This action is irreversible.',
@@ -94,8 +102,13 @@ const ReportTemplate = () => {
     })
     if (result?.isConfirmed) {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}/report-template/${row?._id}`)
-        await showSuccessAlert('Template Deleted Successfully!.', '<p>Deleted!</p>')
+        await axios.delete(
+          `${process.env.REACT_APP_API_URL}/report-template/${row?._id}`
+        )
+        await showSuccessAlert(
+          'Template Deleted Successfully!.',
+          '<p>Deleted!</p>'
+        )
         getData()
       } catch (err) {
         await showErrorAlert(getErrorMessage(err))
@@ -104,11 +117,11 @@ const ReportTemplate = () => {
   }
 
   // ** Table item Button Handlers
-  const editHandler = row => {
+  const editHandler = (row) => {
     navigate(`/report-template/${row._id}/edit`)
   }
 
-  const previewHandler = row => {
+  const previewHandler = (row) => {
     setPreviewOpen(true)
     setPreviewText(row?.text)
   }
@@ -116,26 +129,29 @@ const ReportTemplate = () => {
   const columns = [
     {
       name: 'Name',
-      selector: row => (row['name'] ? row['name'] : '-'),
+      selector: (row) => (row['name'] ? row['name'] : '-'),
       sortable: true,
       reorder: true,
       visible: true,
       id: 'name',
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.name}</div>
       },
     },
     {
       name: 'Status',
-      selector: row => (row['status'] ? row['status'] : '-'),
+      selector: (row) => (row['status'] ? row['status'] : '-'),
       sortable: true,
       reorder: true,
       visible: true,
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         return (
-          <Badge color={row.status === '1' ? 'light-success' : 'light-danger'} pill>
+          <Badge
+            color={row.status === '1' ? 'light-success' : 'light-danger'}
+            pill
+          >
             {row.status === '1' ? 'Active' : 'In Active'}
           </Badge>
         )
@@ -148,7 +164,7 @@ const ReportTemplate = () => {
       sortable: false,
       reorder: false,
       id: 'Actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -178,7 +194,10 @@ const ReportTemplate = () => {
                 previewHandler(row)
               }}
             />
-            <UncontrolledTooltip target="preview" className="tooltip-react-strap">
+            <UncontrolledTooltip
+              target="preview"
+              className="tooltip-react-strap"
+            >
               Preview
             </UncontrolledTooltip>
             <UncontrolledTooltip className="tooltip-react-strap" target="edit">
@@ -220,7 +239,7 @@ const ReportTemplate = () => {
                 onSort: handleSort,
                 sortField,
                 sortOrder,
-                onPage: e => {
+                onPage: (e) => {
                   setPage(e.first)
                   setRowsPerPage(e.rows)
                 },

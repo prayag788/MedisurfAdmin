@@ -27,7 +27,7 @@ export default () => {
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/analytics`)
-      .then(doc => {
+      .then((doc) => {
         const raw = doc.data?.data || {}
         setData({
           totalUsers: raw.totalUsers ?? '-',
@@ -39,7 +39,7 @@ export default () => {
           totalFS: raw.totalFS ?? '-',
         })
       })
-      .catch(err => {
+      .catch((err) => {
         showErrorAlert(
           getErrorMessage(err) || 'Error occurred while fetching the data',
           '<p>Error!</p>'
@@ -47,7 +47,7 @@ export default () => {
       })
   }, [])
 
-  const redirectUser = userType => {
+  const redirectUser = (userType) => {
     if (userData.role === ROLES.ClinicAdmin) navigate(userType)
   }
 

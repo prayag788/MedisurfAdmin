@@ -24,7 +24,8 @@ const NameField = ({
       message: 'Name should contain only letters and spaces',
     },
     validate: {
-      noSpacesOnly: value => value.trim().length > 0 || VALIDATION_MESSAGES.NO_SPACES_ONLY(label),
+      noSpacesOnly: (value) =>
+        value.trim().length > 0 || VALIDATION_MESSAGES.NO_SPACES_ONLY(label),
     },
   }
 

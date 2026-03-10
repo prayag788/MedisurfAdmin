@@ -1,8 +1,9 @@
 // Global fetch configuration and interceptors
 
 const getToken = () => {
-  const tokenRaw = localStorage.getItem('accessToken') || localStorage.getItem('authToken')
-  
+  const tokenRaw =
+    localStorage.getItem('accessToken') || localStorage.getItem('authToken')
+
   if (!tokenRaw) {
     return null
   }
@@ -26,7 +27,7 @@ const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8005/api'
 export const fetchWithInterceptors = async (url, options = {}) => {
   const token = getToken()
   const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`
-  
+
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
@@ -63,15 +64,19 @@ export const fetchWithInterceptors = async (url, options = {}) => {
       throw new Error('Unauthorized')
     }
 
-    const shouldRefresh = response.headers.get('x-refresh-required') || response.headers.get('x-fresh-data')
+    const shouldRefresh =
+      response.headers.get('x-refresh-required') ||
+      response.headers.get('x-fresh-data')
     if (shouldRefresh) {
-      window.dispatchEvent(new CustomEvent('userDataRefresh', {
-        detail: {
-          action: response.headers.get('x-action'),
-          role: response.headers.get('x-role'),
-          userId: response.headers.get('x-user-updated'),
-        }
-      }))
+      window.dispatchEvent(
+        new CustomEvent('userDataRefresh', {
+          detail: {
+            action: response.headers.get('x-action'),
+            role: response.headers.get('x-role'),
+            userId: response.headers.get('x-user-updated'),
+          },
+        })
+      )
     }
 
     return response
@@ -89,7 +94,7 @@ import { getErrorMessage, showConfirm } from './alerts'
 
 // Request: attach token globally and convert status objects to integers
 axios.interceptors.request.use(
-  config => {
+  (config) => {
     try {
       const token = getToken()
 
@@ -107,8 +112,14 @@ axios.interceptors.request.use(
 
       if (config.data && typeof config.data === 'object') {
         if (config.data.status !== undefined) {
-          if (typeof config.data.status === 'object' && config.data.status !== null) {
-            config.data.status = parseInt(config.data.status.value || config.data.status, 10)
+          if (
+            typeof config.data.status === 'object' &&
+            config.data.status !== null
+          ) {
+            config.data.status = parseInt(
+              config.data.status.value || config.data.status,
+              10
+            )
           } else if (typeof config.data.status === 'string') {
             config.data.status = parseInt(config.data.status, 10)
           }
@@ -117,7 +128,7 @@ axios.interceptors.request.use(
     } catch (_) {}
     return config
   },
-  error => Promise.reject(error)
+  (error) => Promise.reject(error)
 )
 
 // Response: network error handling + 401
@@ -125,41 +136,48 @@ let isShowingNetworkAlert = false
 let suppressNetworkAlertUntil = 0
 
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     // Check if response data is a JWT token string instead of JSON
     if (typeof response.data === 'string' && response.data.startsWith('eyJ')) {
-      console.error('Received JWT token as response data, this indicates an authentication issue')
+      console.error(
+        'Received JWT token as response data, this indicates an authentication issue'
+      )
       // Treat this as an authentication error
       localStorage.removeItem('accessToken')
       localStorage.removeItem('authToken')
       window.location.href = '/login'
-      return Promise.reject(new Error('Authentication failed - received token instead of data'))
+      return Promise.reject(
+        new Error('Authentication failed - received token instead of data')
+      )
     }
-    
+
     // LIVE UPDATES: Handle refresh flags and emit events
-    const shouldRefresh = response.data?.refresh || 
-                         response.headers['x-refresh-required'] ||
-                         response.headers['x-fresh-data']
-    
+    const shouldRefresh =
+      response.data?.refresh ||
+      response.headers['x-refresh-required'] ||
+      response.headers['x-fresh-data']
+
     if (shouldRefresh) {
       // Emit custom event for components to listen to
-      window.dispatchEvent(new CustomEvent('userDataRefresh', {
-        detail: {
-          action: response.headers['x-action'] || response.data?.action,
-          role: response.headers['x-role'] || response.data?.role,
-          userId: response.headers['x-user-updated'] || response.data?.userId
-        }
-      }))
+      window.dispatchEvent(
+        new CustomEvent('userDataRefresh', {
+          detail: {
+            action: response.headers['x-action'] || response.data?.action,
+            role: response.headers['x-role'] || response.data?.role,
+            userId: response.headers['x-user-updated'] || response.data?.userId,
+          },
+        })
+      )
     }
-    
+
     return response
   },
-  async error => {
+  async (error) => {
     // Handle network errors (no response) with confirm and single retry
     if (!error?.response) {
       // Mark as network error for proper handling
       error.isNetworkError = true
-      
+
       const now = Date.now()
       const skipGlobalAlert = error?.config?.__skipGlobalNetworkAlert === true
       if (
@@ -197,7 +215,7 @@ axios.interceptors.response.use(
       const url = error.config?.url || ''
       // Don't auto-logout for migration endpoints - let the component handle it
       // if (url.includes('/api/migration/')) {
-        return Promise.reject(error)
+      return Promise.reject(error)
       // }
       // localStorage.removeItem('accessToken')
       // localStorage.removeItem('authToken')

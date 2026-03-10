@@ -86,11 +86,23 @@ const data = {
   },
 }
 
-mock.onGet('/card/card-analytics/support-tracker').reply(() => [200, data.support_tracker])
-mock.onGet('/card/card-analytics/avg-sessions').reply(() => [200, data.avg_sessions])
-mock.onGet('/card/card-analytics/revenue-report').reply(() => [200, data.revenue_report])
-mock.onGet('/card/card-analytics/goal-overview').reply(() => [200, data.goal_overview])
+mock
+  .onGet('/card/card-analytics/support-tracker')
+  .reply(() => [200, data.support_tracker])
+mock
+  .onGet('/card/card-analytics/avg-sessions')
+  .reply(() => [200, data.avg_sessions])
+mock
+  .onGet('/card/card-analytics/revenue-report')
+  .reply(() => [200, data.revenue_report])
+mock
+  .onGet('/card/card-analytics/goal-overview')
+  .reply(() => [200, data.goal_overview])
 mock.onGet('/card/card-analytics/revenue').reply(() => [200, data.revenue])
-mock.onGet('/card/card-analytics/product-orders').reply(() => [200, data.product_orders])
-mock.onGet('/card/card-analytics/sessions-device').reply(() => [200, data.sessions_device])
+mock
+  .onGet('/card/card-analytics/product-orders')
+  .reply(() => [200, data.product_orders])
+mock
+  .onGet('/card/card-analytics/sessions-device')
+  .reply(() => [200, data.sessions_device])
 mock.onGet('/card/card-analytics/customers').reply(() => [200, data.customers])

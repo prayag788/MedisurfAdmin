@@ -7,12 +7,16 @@ const DoctorListReducer = (state = [], action) => {
     case 'ADD_DOCTOR_EVENT':
       return state.concat(action.payload)
     case 'UPDATE_DOCTOR_EVENT':
-      return state.map(obj => (obj.id === action.payload.id ? action.payload : obj))
+      return state.map((obj) =>
+        obj.id === action.payload.id ? action.payload : obj
+      )
     case 'DELETE_DOCTOR_EVENT':
-      return state.filter(obj => obj.id !== action.payload)
+      return state.filter((obj) => obj.id !== action.payload)
     case 'UPDATE_FILTERS':
       // ** Updates Filters based on action filter
-      const filterIndex = state.selectedCalendars.findIndex(i => i === action.filter)
+      const filterIndex = state.selectedCalendars.findIndex(
+        (i) => i === action.filter
+      )
       if (state.selectedCalendars.includes(action.filter)) {
         state.selectedCalendars.splice(filterIndex, 1)
       } else {

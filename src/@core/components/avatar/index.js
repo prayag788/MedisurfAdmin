@@ -37,11 +37,11 @@ const Avatar = forwardRef((props, ref) => {
   }, [img])
 
   // ** Function to extract initials from content
-  const getInitials = str => {
+  const getInitials = (str) => {
     if (!str || typeof str !== 'string') return ''
     const results = []
     const wordArray = str.split(' ')
-    wordArray.forEach(e => {
+    wordArray.forEach((e) => {
       if (e[0]) results.push(e[0])
     })
     return results.join('')
@@ -70,7 +70,11 @@ const Avatar = forwardRef((props, ref) => {
           {initials ? getInitials(content) : content}
           {icon ? icon : null}
           {badgeUp ? (
-            <Badge color={badgeColor ? badgeColor : 'primary'} className="badge-sm badge-up" pill>
+            <Badge
+              color={badgeColor ? badgeColor : 'primary'}
+              className="badge-sm badge-up"
+              pill
+            >
               {badgeText ? badgeText : '0'}
             </Badge>
           ) : null}
@@ -155,7 +159,10 @@ Avatar.propTypes = {
     if (props['initials'] && typeof props['content'] !== 'string') {
       return new Error('content prop must be a string.')
     }
-    if (typeof props['initials'] !== 'boolean' && props['initials'] !== undefined) {
+    if (
+      typeof props['initials'] !== 'boolean' &&
+      props['initials'] !== undefined
+    ) {
       return new Error('initials must be a boolean!')
     }
   },

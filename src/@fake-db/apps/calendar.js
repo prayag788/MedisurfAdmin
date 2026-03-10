@@ -131,16 +131,21 @@ const data = {
 
 // GET: Return calendar events
 
-mock.onGet('/apps/calendar/events').reply(config => {
+mock.onGet('/apps/calendar/events').reply((config) => {
   // Get requested calendars as Array
   const calendars = config.calendars
 
-  return [200, data.events.filter(event => calendars.includes(event.extendedProps.calendar))]
+  return [
+    200,
+    data.events.filter((event) =>
+      calendars.includes(event.extendedProps.calendar)
+    ),
+  ]
 })
 
 // POST: Add new event
 
-mock.onPost('/apps/calendar/add-event').reply(config => {
+mock.onPost('/apps/calendar/add-event').reply((config) => {
   // Get event from post data
   const { event } = JSON.parse(config.data)
 
@@ -158,13 +163,13 @@ mock.onPost('/apps/calendar/add-event').reply(config => {
 
 // POST: Update Event
 
-mock.onPost('/apps/calendar/update-event').reply(config => {
+mock.onPost('/apps/calendar/update-event').reply((config) => {
   const { event: eventData } = JSON.parse(config.data)
 
   // Convert Id to number
   eventData.id = Number(eventData.id)
 
-  const event = data.events.find(ev => ev.id === Number(eventData.id))
+  const event = data.events.find((ev) => ev.id === Number(eventData.id))
   Object.assign(event, eventData)
 
   return [200, { event }]
@@ -172,14 +177,14 @@ mock.onPost('/apps/calendar/update-event').reply(config => {
 
 // DELETE: Remove Event
 
-mock.onDelete('/apps/calendar/remove-event').reply(config => {
+mock.onDelete('/apps/calendar/remove-event').reply((config) => {
   // Get event id from URL
   let { id } = config
 
   // Convert Id to number
   const eventId = Number(id)
 
-  const eventIndex = data.events.findIndex(ev => ev.id === eventId)
+  const eventIndex = data.events.findIndex((ev) => ev.id === eventId)
   data.events.splice(eventIndex, 1)
   return [200]
 })

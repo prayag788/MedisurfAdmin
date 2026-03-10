@@ -1,8 +1,20 @@
-import React, { useState, useTransition, useDeferredValue, useCallback, useMemo } from 'react'
+import React, {
+  useState,
+  useTransition,
+  useDeferredValue,
+  useCallback,
+  useMemo,
+} from 'react'
 import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap'
 
 // React 18 optimized form with concurrent features
-const OptimizedForm = ({ initialValues = {}, onSubmit, validationSchema, children, ...props }) => {
+const OptimizedForm = ({
+  initialValues = {},
+  onSubmit,
+  validationSchema,
+  children,
+  ...props
+}) => {
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
   const [isPending, startTransition] = useTransition()
@@ -19,7 +31,7 @@ const OptimizedForm = ({ initialValues = {}, onSubmit, validationSchema, childre
       return {}
     } catch (error) {
       const validationErrors = {}
-      error.inner?.forEach(err => {
+      error.inner?.forEach((err) => {
         validationErrors[err.path] = err.message
       })
       return validationErrors
@@ -30,14 +42,14 @@ const OptimizedForm = ({ initialValues = {}, onSubmit, validationSchema, childre
   const handleFieldChange = useCallback(
     (fieldName, value) => {
       startTransition(() => {
-        setValues(prev => ({
+        setValues((prev) => ({
           ...prev,
           [fieldName]: value,
         }))
 
         // Clear field-specific error
         if (errors[fieldName]) {
-          setErrors(prev => {
+          setErrors((prev) => {
             const newErrors = { ...prev }
             delete newErrors[fieldName]
             return newErrors
@@ -50,7 +62,7 @@ const OptimizedForm = ({ initialValues = {}, onSubmit, validationSchema, childre
 
   // Optimized form submission
   const handleSubmit = useCallback(
-    async e => {
+    async (e) => {
       e.preventDefault()
 
       if (Object.keys(validationErrors).length > 0) {
@@ -69,8 +81,14 @@ const OptimizedForm = ({ initialValues = {}, onSubmit, validationSchema, childre
 
   // Render optimized form field
   const renderField = useCallback(
-    fieldConfig => {
-      const { name, label, type = 'text', required = false, ...fieldProps } = fieldConfig
+    (fieldConfig) => {
+      const {
+        name,
+        label,
+        type = 'text',
+        required = false,
+        ...fieldProps
+      } = fieldConfig
 
       return (
         <FormGroup key={name}>
@@ -83,7 +101,7 @@ const OptimizedForm = ({ initialValues = {}, onSubmit, validationSchema, childre
             name={name}
             type={type}
             value={values[name] || ''}
-            onChange={e => handleFieldChange(name, e.target.value)}
+            onChange={(e) => handleFieldChange(name, e.target.value)}
             invalid={!!errors[name]}
             disabled={isPending}
             {...fieldProps}
@@ -98,11 +116,12 @@ const OptimizedForm = ({ initialValues = {}, onSubmit, validationSchema, childre
   return (
     <Form onSubmit={handleSubmit} {...props}>
       {children ? (
-        React.Children.map(children, child => {
+        React.Children.map(children, (child) => {
           if (React.isValidElement(child) && child.props.name) {
             return React.cloneElement(child, {
               value: values[child.props.name] || '',
-              onChange: e => handleFieldChange(child.props.name, e.target.value),
+              onChange: (e) =>
+                handleFieldChange(child.props.name, e.target.value),
               invalid: !!errors[child.props.name],
               disabled: isPending,
               error: errors[child.props.name],
@@ -112,7 +131,7 @@ const OptimizedForm = ({ initialValues = {}, onSubmit, validationSchema, childre
         })
       ) : (
         <div>
-          {Object.keys(initialValues).map(fieldName =>
+          {Object.keys(initialValues).map((fieldName) =>
             renderField({ name: fieldName, label: fieldName })
           )}
         </div>
@@ -127,7 +146,10 @@ const OptimizedForm = ({ initialValues = {}, onSubmit, validationSchema, childre
         >
           {isPending ? (
             <>
-              <div className="spinner-border spinner-border-sm me-2" role="status">
+              <div
+                className="spinner-border spinner-border-sm me-2"
+                role="status"
+              >
                 <span className="sr-only">Loading...</span>
               </div>
               Processing...

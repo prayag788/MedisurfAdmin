@@ -84,7 +84,7 @@ const Diagnosis = () => {
             sortcolumn: sortColumn,
           },
         })
-        .then(res => {
+        .then((res) => {
           setData(res.data.list)
           setTotal(res.data.numberOfRecord)
           setStartsrno(res.data.startsrno ? res.data.startsrno : 0)
@@ -95,7 +95,14 @@ const Diagnosis = () => {
   // ** Fetch data
   useEffect(() => {
     getData()
-  }, [page, rowsPerPage, searchValue, sortColumn, sortDirection, searchModalities])
+  }, [
+    page,
+    rowsPerPage,
+    searchValue,
+    sortColumn,
+    sortDirection,
+    searchModalities,
+  ])
 
   function handleSort(e) {
     setSortOrder(e.sortOrder)
@@ -111,7 +118,7 @@ const Diagnosis = () => {
   }
 
   // Confirmation Sweet Alert
-  const handleConfirm = row => {
+  const handleConfirm = (row) => {
     return showConfirm({
       title: '<p>Are you sure to delete this template?</p>',
       text: 'This action is irreversible.',
@@ -121,7 +128,9 @@ const Diagnosis = () => {
       if (result.isConfirmed) {
         try {
           showLoadingAlert('<p>Deleting...</p>')
-          await axios.delete(`${process.env.REACT_APP_API_URL}/diagnosis/${row?._id}`)
+          await axios.delete(
+            `${process.env.REACT_APP_API_URL}/diagnosis/${row?._id}`
+          )
           hideLoadingAlert()
           showSuccessAlert('Template Deleted Successfully!')
           getData()
@@ -137,11 +146,11 @@ const Diagnosis = () => {
   }
 
   // ** Table item Button Handlers
-  const editHandler = row => {
+  const editHandler = (row) => {
     navigate(`/diagnosis/${row._id}/edit`)
   }
 
-  const previewHandler = row => {
+  const previewHandler = (row) => {
     setPreviewOpen(true)
     setPreviewText(row?.text)
   }
@@ -149,12 +158,12 @@ const Diagnosis = () => {
   const columns = [
     {
       name: 'Name',
-      selector: row => (row['name'] ? row['name'] : '-'),
+      selector: (row) => (row['name'] ? row['name'] : '-'),
       sortable: true,
       reorder: true,
       id: 'name',
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.name}</div>
       },
     },
@@ -164,7 +173,7 @@ const Diagnosis = () => {
       reorder: true,
       id: 'text',
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         return (
           <>
             <div
@@ -176,7 +185,10 @@ const Diagnosis = () => {
             >
               Preview <Eye size={15} className="mr-50" />
             </div>
-            <UncontrolledTooltip target="preview" className="tooltip-react-strap">
+            <UncontrolledTooltip
+              target="preview"
+              className="tooltip-react-strap"
+            >
               Click to Preview Template
             </UncontrolledTooltip>
           </>
@@ -185,13 +197,16 @@ const Diagnosis = () => {
     },
     {
       name: 'Status',
-      selector: row => (row['status'] ? row['status'] : '-'),
+      selector: (row) => (row['status'] ? row['status'] : '-'),
       sortable: true,
       reorder: true,
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         return (
-          <Badge color={row.status === '1' ? 'light-success' : 'light-danger'} pill>
+          <Badge
+            color={row.status === '1' ? 'light-success' : 'light-danger'}
+            pill
+          >
             {row.status === '1' ? 'Active' : 'In Active'}
           </Badge>
         )
@@ -199,13 +214,18 @@ const Diagnosis = () => {
     },
     {
       name: 'Modality',
-      selector: row => (row['modality'] && row['modality'].name ? row['modality'].name : '-'),
+      selector: (row) =>
+        row['modality'] && row['modality'].name ? row['modality'].name : '-',
       sortable: true,
       reorder: true,
       id: 'modality',
       minWidth: '150px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row['modality']?.name || '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row['modality']?.name || '-'}
+          </div>
+        )
       },
     },
     {
@@ -214,7 +234,7 @@ const Diagnosis = () => {
       sortable: false,
       reorder: true,
       id: 'Actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -247,13 +267,13 @@ const Diagnosis = () => {
     },
   ]
 
-  const checkSelectedModalities = value => {
-    const modalityArray = value.map(modalityList => modalityList.value)
+  const checkSelectedModalities = (value) => {
+    const modalityArray = value.map((modalityList) => modalityList.value)
     setSearchModalities(modalityArray)
     setSelectedModalities(value)
   }
 
-  const toggleTab = tab => {
+  const toggleTab = (tab) => {
     setActiveTab(tab)
   }
 
@@ -296,7 +316,11 @@ const Diagnosis = () => {
                 </Col>
               </Row>
               <Row className="justify-content-end mx-0">
-                <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+                <Col
+                  className="d-flex align-items-center justify-content-end mt-1"
+                  md="6"
+                  sm="12"
+                >
                   <Label className="mr-1" for="search-input">
                     Search
                   </Label>
@@ -306,7 +330,7 @@ const Diagnosis = () => {
                     bsSize="sm"
                     id="search-input"
                     value={searchValue}
-                    onChange={e => {
+                    onChange={(e) => {
                       setSearchValue(e.target.value)
                     }}
                   />
@@ -325,9 +349,9 @@ const Diagnosis = () => {
                       onSort: handleSort,
                       sortField,
                       sortOrder,
-                      onPage: e => {
+                      onPage: (e) => {
                         setPage(e.first++)
-                        setRowsPerPage(prev => e.rows)
+                        setRowsPerPage((prev) => e.rows)
                       },
                     }}
                   />
@@ -345,7 +369,13 @@ const Diagnosis = () => {
       <Modal isOpen={previewOpen} toggle={() => setPreviewOpen(!previewOpen)}>
         <ModalHeader
           className="mb-2"
-          close={<X className="cursor-pointer" size={15} onClick={() => setPreviewOpen(false)} />}
+          close={
+            <X
+              className="cursor-pointer"
+              size={15}
+              onClick={() => setPreviewOpen(false)}
+            />
+          }
           tag="div"
         >
           <h5 className="modal-title">Preview Template</h5>

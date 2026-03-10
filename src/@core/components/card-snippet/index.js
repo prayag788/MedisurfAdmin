@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { Code } from 'react-feather'
 import { Card, CardHeader, CardBody, CardTitle, Collapse } from 'reactstrap'
 
-const CardSnippet = props => {
+const CardSnippet = (props) => {
   // ** Props
   const { title, children, noBody, code, iconCode } = props
 

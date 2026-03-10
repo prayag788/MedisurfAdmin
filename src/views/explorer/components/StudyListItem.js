@@ -16,14 +16,17 @@ const fieldSets = [
 ]
 
 const StudyListItem = ({ data }) => {
-  const [fieldDataHead, setFieldDataHead] = useState({ PatientName: '', StudyDescription: '' })
+  const [fieldDataHead, setFieldDataHead] = useState({
+    PatientName: '',
+    StudyDescription: '',
+  })
   const [fieldData, setFieldData] = useState({})
 
-  const isObject = obj => {
+  const isObject = (obj) => {
     return Object.prototype.toString.call(obj) === '[object Object]'
   }
 
-  const flattenObj = ob => {
+  const flattenObj = (ob) => {
     const result = {}
 
     for (const i in ob) {
@@ -42,23 +45,27 @@ const StudyListItem = ({ data }) => {
   useEffect(() => {
     const extractedData = {}
     const flatData = flattenObj(data)
-    fieldSets.forEach(tag => {
+    fieldSets.forEach((tag) => {
       if (flatData[tag] !== undefined) {
         extractedData[tag] = flatData[tag]
       }
     })
 
     if (extractedData.StudyDate) {
-      extractedData.StudyDate = moment(extractedData.StudyDate).format('MMMM Do YYYY')
+      extractedData.StudyDate = moment(extractedData.StudyDate).format(
+        'MMMM Do YYYY'
+      )
     }
 
     setFieldData(() => extractedData)
 
-    setFieldDataHead(prev => {
+    setFieldDataHead((prev) => {
       return {
         ...prev,
         PatientName: flatData['PatientName'] ? flatData['PatientName'] : '',
-        StudyDescription: flatData['StudyDescription'] ? flatData['StudyDescription'] : '',
+        StudyDescription: flatData['StudyDescription']
+          ? flatData['StudyDescription']
+          : '',
       }
     })
   }, [data])
@@ -72,7 +79,7 @@ const StudyListItem = ({ data }) => {
         <CardBody>
           <Row>
             <Col md={11}>
-              {Object.keys(fieldData).map(key => {
+              {Object.keys(fieldData).map((key) => {
                 return (
                   <p className="mb-0">
                     {key}: <strong>{fieldData[key]}</strong>

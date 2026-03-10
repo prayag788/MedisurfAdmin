@@ -51,7 +51,10 @@ const useDragScroll = () => {
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
           if (node.nodeType === 1) {
-            const valueContainers = node.querySelectorAll?.('.select__value-container.select__value-container--is-multi') || []
+            const valueContainers =
+              node.querySelectorAll?.(
+                '.select__value-container.select__value-container--is-multi'
+              ) || []
             valueContainers.forEach(addDragScrollToElement)
           }
         })
@@ -59,14 +62,16 @@ const useDragScroll = () => {
     }
 
     // Initial setup for existing elements
-    const existingContainers = document.querySelectorAll('.select__value-container.select__value-container--is-multi')
+    const existingContainers = document.querySelectorAll(
+      '.select__value-container.select__value-container--is-multi'
+    )
     existingContainers.forEach(addDragScrollToElement)
 
     // Setup MutationObserver for dynamic elements
     observerRef.current = new MutationObserver(handleMutations)
     observerRef.current.observe(document.body, {
       childList: true,
-      subtree: true
+      subtree: true,
     })
 
     return () => {

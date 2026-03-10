@@ -23,10 +23,14 @@ import {
 const InputFile = () => {
   const [image, setImage] = useState()
   const [fileUploading, setFileUploading] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0, percent: 0 })
+  const [uploadProgress, setUploadProgress] = useState({
+    current: 0,
+    total: 0,
+    percent: 0,
+  })
   const fileInputRef = useRef()
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     if (!image || !image.file.length) {
       showInfoAlert('Select a file please!')
@@ -41,7 +45,7 @@ const InputFile = () => {
       const results = []
       for (let i = 0; i < files.length; i++) {
         const file = files[i]
-        setUploadProgress(prev => ({ ...prev, current: i + 1, percent: 0 }))
+        setUploadProgress((prev) => ({ ...prev, current: i + 1, percent: 0 }))
         const formdata = new FormData()
         formdata.append('binary-data', file)
 
@@ -52,28 +56,38 @@ const InputFile = () => {
             {
               headers: { 'Content-Type': 'multipart/form-data' },
               timeout: 0,
-              onUploadProgress: ev => {
+              onUploadProgress: (ev) => {
                 if (ev.total) {
                   const percent = Math.round((ev.loaded / ev.total) * 100)
-                  setUploadProgress(prev => ({ ...prev, percent }))
+                  setUploadProgress((prev) => ({ ...prev, percent }))
                 }
               },
             }
           )
-          results.push({ file: file.name, success: res.data?.success, response: res.data })
+          results.push({
+            file: file.name,
+            success: res.data?.success,
+            response: res.data,
+          })
         } catch (err) {
-          results.push({ file: file.name, success: false, error: getErrorMessage(err) })
+          results.push({
+            file: file.name,
+            success: false,
+            error: getErrorMessage(err),
+          })
         }
       }
 
-      const failed = results.filter(r => !r.success)
-      const succeeded = results.filter(r => r.success)
+      const failed = results.filter((r) => !r.success)
+      const succeeded = results.filter((r) => r.success)
 
       if (succeeded.length) {
         showSuccessAlert(`${succeeded.length} file(s) uploaded successfully!`)
       }
       if (failed.length) {
-        const failedList = failed.map(f => `${f.file} (${f.error || 'failed'})`).join(', ')
+        const failedList = failed
+          .map((f) => `${f.file} (${f.error || 'failed'})`)
+          .join(', ')
         showErrorAlert(`Some files failed: ${failedList}`)
       }
 
@@ -90,7 +104,7 @@ const InputFile = () => {
     }
   }
 
-  const imageHandler = e => {
+  const imageHandler = (e) => {
     const files = Array.from(e.target.files)
     setImage({ file: files })
   }
@@ -125,13 +139,19 @@ const InputFile = () => {
                 disabled={fileUploading}
                 className="d-flex align-items-center"
               >
-                {!fileUploading ? 'Upload Image File' : <Spinner color="white" size="sm" />}
+                {!fileUploading ? (
+                  'Upload Image File'
+                ) : (
+                  <Spinner color="white" size="sm" />
+                )}
                 {fileUploading && (
                   <p className="ml-50 mb-0">
                     {uploadProgress.total > 1
                       ? `Uploading file ${uploadProgress.current} of ${uploadProgress.total}`
                       : 'Uploading'}
-                    {uploadProgress.percent > 0 ? ` (${uploadProgress.percent}%)` : ''}
+                    {uploadProgress.percent > 0
+                      ? ` (${uploadProgress.percent}%)`
+                      : ''}
                   </p>
                 )}
               </Button>

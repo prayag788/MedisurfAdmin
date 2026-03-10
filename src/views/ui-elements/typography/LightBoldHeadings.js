@@ -1,4 +1,11 @@
-import { Card, CardHeader, CardTitle, CardBody, CardText, Table } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  CardText,
+  Table,
+} from 'reactstrap'
 
 const LightBoldHeadings = () => {
   return (
@@ -10,8 +17,9 @@ const LightBoldHeadings = () => {
       <CardBody>
         <CardText>
           All HTML headings are available with light and bold font-weight. Use{' '}
-          <code>.font-weight-normal</code> for light heading and <code>.font-weight-bolderer</code>{' '}
-          for bold headings along with heading tags or classes.
+          <code>.font-weight-normal</code> for light heading and{' '}
+          <code>.font-weight-bolderer</code> for bold headings along with
+          heading tags or classes.
         </CardText>
       </CardBody>
       <Table responsive borderless className="mb-0">

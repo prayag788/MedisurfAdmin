@@ -37,10 +37,11 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   const [isValidSelect, setIsValidSelect] = useState(true)
   const [picker, setPicker] = useState(new Date())
   const isInitialInput = useRef(true)
-  const dropdowndata = useSelector(state => state.dropdownDataReducer)
+  const dropdowndata = useSelector((state) => state.dropdownDataReducer)
 
   // ** Validation schema (matching old flow)
-  const phoneRegExp = /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
+  const phoneRegExp =
+    /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
   const NewUserSchema = yup.object().shape({
     fname: yup
       .string('Name should be a string')
@@ -60,8 +61,12 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
         FIELD_LIMITS.HOSPITAL_NAME_MAX_LENGTH,
         `Hospital name cannot be longer than ${FIELD_LIMITS.HOSPITAL_NAME_MAX_LENGTH} characters.`
       ),
-    designation: yup.string().max(25, 'Designation name cannot be longer than 25 characters.'),
-    cno: yup.string().matches(phoneRegExp, 'Please enter a valid contact number'),
+    designation: yup
+      .string()
+      .max(25, 'Designation name cannot be longer than 25 characters.'),
+    cno: yup
+      .string()
+      .matches(phoneRegExp, 'Please enter a valid contact number'),
     location: yup.string(),
     status: yup
       .number()
@@ -77,8 +82,8 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
     mode: 'onSubmit',
     resolver: yupResolver(NewUserSchema),
     defaultValues: {
-      status: 1
-    }
+      status: 1,
+    },
   })
 
   // ** Reset form when modal opens/closes
@@ -89,7 +94,7 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   }, [open])
 
   // ** Date formatting function
-  const formatDate = date => {
+  const formatDate = (date) => {
     if (!date) return ''
     const d = new Date(date)
     const year = d.getFullYear()
@@ -99,7 +104,7 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   }
 
   // ** Form submission handler (matching old flow)
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       data.dob = formatDate(picker)
       await addUser(data)
@@ -116,11 +121,20 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   }
 
   // ** Custom close btn
-  const CloseBtn = <X className="cursor-pointer" size={15} onClick={handleModal} />
+  const CloseBtn = (
+    <X className="cursor-pointer" size={15} onClick={handleModal} />
+  )
 
   // ** Reusable FormField component (matching EditModal pattern)
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -156,13 +170,28 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Add New</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormField name="fname" label="First Name" placeholder="Bruce" required />
-          <FormField name="lname" label="Last Name" placeholder="Wayne" required />
+          <FormField
+            name="fname"
+            label="First Name"
+            placeholder="Bruce"
+            required
+          />
+          <FormField
+            name="lname"
+            label="Last Name"
+            placeholder="Wayne"
+            required
+          />
           <FormField
             name="email"
             label="Email"
@@ -176,7 +205,11 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
             placeholder="Fortis"
             maxLength={FIELD_LIMITS.HOSPITAL_NAME_MAX_LENGTH}
           />
-          <FormField name="designation" label="Designation" placeholder="Doctor" />
+          <FormField
+            name="designation"
+            label="Designation"
+            placeholder="Doctor"
+          />
           <FormGroup>
             <Label for="default-picker">Date of birth</Label>
             <Flatpickr
@@ -187,7 +220,7 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
                 allowInput: false,
                 closeOnSelect: true, // Close after selecting date for single date picker
               }}
-              onChange={date => {
+              onChange={(date) => {
                 if (date && date.length > 0) {
                   setPicker(date[0])
                 }
@@ -195,7 +228,12 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
               id="default-picker"
             />
           </FormGroup>
-          <FormField name="cno" label="Contact Number" type="number" placeholder="+1" />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="number"
+            placeholder="+1"
+          />
           <FormField name="location" label="Location" placeholder="New York" />
           <FormGroup>
             <Label for="status">
@@ -210,25 +248,38 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
                   {...field}
                   isClearable={false}
                   theme={selectThemeColors}
-                  value={STATUS_OPTIONS.find(option => option.value === field.value) || null}
+                  value={
+                    STATUS_OPTIONS.find(
+                      (option) => option.value === field.value
+                    ) || null
+                  }
                   name="status"
                   id="status"
                   options={STATUS_OPTIONS}
                   className="react-select"
                   classNamePrefix="select"
-                  onChange={option => field.onChange(option ? option.value : undefined)}
+                  onChange={(option) =>
+                    field.onChange(option ? option.value : undefined)
+                  }
                 />
               )}
             />
             {errors.status && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.status?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.status?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <div className="d-flex justify-content-end gap-2 mt-3">
             <Button type="submit" className="me-1" color="primary">
               Submit
             </Button>
-            <Button type="button" color="secondary" onClick={handleModal} outline>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={handleModal}
+              outline
+            >
               Cancel
             </Button>
           </div>

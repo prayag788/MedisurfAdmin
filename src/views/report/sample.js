@@ -377,10 +377,10 @@ export default function ColumnToggleDemo() {
   ])
   const [visibleColumns, setVisibleColumns] = useState(columns)
 
-  const onColumnToggle = event => {
+  const onColumnToggle = (event) => {
     const selectedColumns = event.value
-    const orderedSelectedColumns = columns.filter(col =>
-      selectedColumns.some(sCol => sCol.field === col.field)
+    const orderedSelectedColumns = columns.filter((col) =>
+      selectedColumns.some((sCol) => sCol.field === col.field)
     )
 
     setVisibleColumns(orderedSelectedColumns)
@@ -424,7 +424,7 @@ export default function ColumnToggleDemo() {
         emptyMessage="No customers found."
       >
         <Column field="code" header="Code" />
-        {visibleColumns.map(col => (
+        {visibleColumns.map((col) => (
           <Column
             sortable
             reorderable={false}

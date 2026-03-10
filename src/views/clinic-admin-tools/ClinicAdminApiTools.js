@@ -17,7 +17,16 @@ import {
   PaginationItem,
   PaginationLink,
 } from 'reactstrap'
-import { Shield, AlertTriangle, CheckCircle, Clock, RefreshCw, FileText, Play, Eye } from 'react-feather'
+import {
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  RefreshCw,
+  FileText,
+  Play,
+  Eye,
+} from 'react-feather'
 import axios from 'axios'
 import { showToastError, showToastSuccess } from '@src/utils/toast'
 import ROLES from '@configs/roles'
@@ -31,7 +40,7 @@ const methodColorMap = {
   PATCH: 'secondary',
 }
 
-const statusColorMap = status => {
+const statusColorMap = (status) => {
   switch (status) {
     case 'success':
     case 'healthy':
@@ -97,7 +106,7 @@ const ClinicAdminApiTools = () => {
     filteredCount: 0,
   })
 
-  const resolveEndpointUrl = useCallback(url => {
+  const resolveEndpointUrl = useCallback((url) => {
     if (!url) {
       return url
     }
@@ -143,7 +152,11 @@ const ClinicAdminApiTools = () => {
       const response = await axios.get(resolveEndpointUrl('/api/system/health'))
       setSystemHealth(response.data?.data || null)
     } catch (error) {
-      setHealthError(error?.response?.data?.message || error?.message || 'Failed to load system health')
+      setHealthError(
+        error?.response?.data?.message ||
+          error?.message ||
+          'Failed to load system health'
+      )
     } finally {
       setHealthLoading(false)
     }
@@ -160,7 +173,8 @@ const ClinicAdminApiTools = () => {
       {
         key: 'orthanc-sync',
         title: 'Orthanc Synchronization',
-        description: 'Manual controls for aligning Orthanc and PostgreSQL metadata.',
+        description:
+          'Manual controls for aligning Orthanc and PostgreSQL metadata.',
         endpoints: [
           {
             key: 'sync-orthanc-to-db',
@@ -228,7 +242,8 @@ const ClinicAdminApiTools = () => {
             label: 'Start Full Sync',
             method: 'POST',
             url: '/api/sync/full',
-            description: 'Performs a full synchronization of studies with OpenSearch.',
+            description:
+              'Performs a full synchronization of studies with OpenSearch.',
           },
           {
             key: 'sync-clear-errors',
@@ -259,14 +274,16 @@ const ClinicAdminApiTools = () => {
             label: 'Clear Cache',
             method: 'POST',
             url: '/api/cache/clear',
-            description: 'Clears all cache entries. Use carefully during off-peak hours.',
+            description:
+              'Clears all cache entries. Use carefully during off-peak hours.',
           },
         ],
       },
       {
         key: 'migration',
         title: 'MongoDB to PostgreSQL Migration',
-        description: 'Verify and migrate MongoDB ObjectId references to PostgreSQL UUIDs.',
+        description:
+          'Verify and migrate MongoDB ObjectId references to PostgreSQL UUIDs.',
         endpoints: [
           {
             key: 'migration-verify',
@@ -302,7 +319,8 @@ const ClinicAdminApiTools = () => {
       {
         key: 'db-schema',
         title: 'Database Schema Migrations',
-        description: 'Ensure the PostgreSQL schema matches the latest Sequelize migrations.',
+        description:
+          'Ensure the PostgreSQL schema matches the latest Sequelize migrations.',
         endpoints: [
           {
             key: 'db-migration-sync',
@@ -316,13 +334,13 @@ const ClinicAdminApiTools = () => {
         ],
       },
     ],
-    [],
+    []
   )
 
-  const handleTrigger = async endpoint => {
+  const handleTrigger = async (endpoint) => {
     const operationKey = endpoint.operation || endpoint.key
     setLoadingKey(operationKey)
-    setResults(prev => ({
+    setResults((prev) => ({
       ...prev,
       [operationKey]: {
         ...(prev[operationKey] || { history: [] }),
@@ -340,7 +358,9 @@ const ClinicAdminApiTools = () => {
 
     if (endpoint.payload) {
       requestConfig.data =
-        typeof endpoint.payload === 'function' ? endpoint.payload() : endpoint.payload
+        typeof endpoint.payload === 'function'
+          ? endpoint.payload()
+          : endpoint.payload
     }
 
     const startedAt = new Date()
@@ -352,10 +372,12 @@ const ClinicAdminApiTools = () => {
       const success = responseData.success !== false
       const message = responseData.message || 'Request completed successfully'
       const payload =
-        responseData.summary ?? responseData.data ?? (jobId ? null : responseData)
+        responseData.summary ??
+        responseData.data ??
+        (jobId ? null : responseData)
 
       if (jobId) {
-        setResults(prev => ({
+        setResults((prev) => ({
           ...prev,
           [operationKey]: {
             ...(prev[operationKey] || { history: [] }),
@@ -367,7 +389,7 @@ const ClinicAdminApiTools = () => {
           },
         }))
       } else {
-        setResults(prev => ({
+        setResults((prev) => ({
           ...prev,
           [operationKey]: {
             ...(prev[operationKey] || { history: [] }),
@@ -394,7 +416,11 @@ const ClinicAdminApiTools = () => {
       const statusCode = error?.response?.status
       const errorData = error?.response?.data || {}
       const errorMessage =
-        errorData?.message || errorData?.error?.message || errorData?.error || error?.message || 'Failed'
+        errorData?.message ||
+        errorData?.error?.message ||
+        errorData?.error ||
+        error?.message ||
+        'Failed'
 
       // Handle 401 (Unauthorized) specially for migration endpoints
       const isMigrationEndpoint =
@@ -403,10 +429,12 @@ const ClinicAdminApiTools = () => {
         endpoint.key?.includes('migration')
 
       if (statusCode === 401 && isMigrationEndpoint) {
-        const accessDeniedMessage = errorData?.message || 'Access denied. Only Clinic Admin users can access migration tools.'
+        const accessDeniedMessage =
+          errorData?.message ||
+          'Access denied. Only Clinic Admin users can access migration tools.'
         showToastError(accessDeniedMessage)
-        
-        setResults(prev => ({
+
+        setResults((prev) => ({
           ...prev,
           [operationKey]: {
             ...(prev[operationKey] || { history: [] }),
@@ -425,7 +453,7 @@ const ClinicAdminApiTools = () => {
         // Handle other errors normally
         showToastError(errorMessage)
 
-        setResults(prev => ({
+        setResults((prev) => ({
           ...prev,
           [operationKey]: {
             ...(prev[operationKey] || { history: [] }),
@@ -442,42 +470,42 @@ const ClinicAdminApiTools = () => {
     }
   }
 
-  const resetEndpointResult = endpointKey => {
-    setResults(prev => ({
+  const resetEndpointResult = (endpointKey) => {
+    setResults((prev) => ({
       ...prev,
       [endpointKey]: { ...initialResult },
     }))
   }
 
-  const collectFailureEntries = useCallback(data => {
+  const collectFailureEntries = useCallback((data) => {
     const failures = []
-    const inspect = payload => {
+    const inspect = (payload) => {
       if (!payload || typeof payload !== 'object') return
 
       if (Array.isArray(payload.failed)) {
         failures.push(
-          ...payload.failed.map(entry => ({
+          ...payload.failed.map((entry) => ({
             studyId: entry.studyId || entry.id || entry._id || null,
             reason: entry.reason || entry.message || JSON.stringify(entry),
-          })),
+          }))
         )
       }
 
       if (Array.isArray(payload.failedCreates)) {
         failures.push(
-          ...payload.failedCreates.map(entry => ({
+          ...payload.failedCreates.map((entry) => ({
             studyId: entry.studyId || entry.id || null,
             reason: entry.reason || entry.message || JSON.stringify(entry),
-          })),
+          }))
         )
       }
 
       if (Array.isArray(payload.errors)) {
         failures.push(
-          ...payload.errors.map(entry => ({
+          ...payload.errors.map((entry) => ({
             studyId: entry.studyId || entry.id || null,
             reason: entry.reason || entry.message || JSON.stringify(entry),
-          })),
+          }))
         )
       }
 
@@ -499,12 +527,12 @@ const ClinicAdminApiTools = () => {
   }, [])
 
   const handleJobEvent = useCallback(
-    event => {
+    (event) => {
       if (!event || !event.operation) {
         return
       }
 
-      setResults(prev => {
+      setResults((prev) => {
         const previous = prev[event.operation] || {}
         const history = [...(previous.history || []), event]
 
@@ -521,7 +549,8 @@ const ClinicAdminApiTools = () => {
             finishedAt: event.finishedAt ?? previous.finishedAt ?? null,
             durationMs: event.durationMs ?? previous.durationMs ?? null,
             data: event.data ?? previous.data ?? null,
-            error: event.error ?? (event.status === 'error' ? previous.error : null),
+            error:
+              event.error ?? (event.status === 'error' ? previous.error : null),
             timestamp: event.timestamp,
             history,
           },
@@ -535,14 +564,18 @@ const ClinicAdminApiTools = () => {
         event.triggeredBy === currentUserId
       ) {
         if (event.status === 'success') {
-          showToastSuccess(event.message || `${event.label || event.operation} completed`)
+          showToastSuccess(
+            event.message || `${event.label || event.operation} completed`
+          )
         } else if (event.status === 'error') {
-          showToastError(event.message || `${event.label || event.operation} failed`)
+          showToastError(
+            event.message || `${event.label || event.operation} failed`
+          )
         }
         fetchSystemHealth()
       }
     },
-    [currentUserId, fetchSystemHealth],
+    [currentUserId, fetchSystemHealth]
   )
 
   useEffect(() => {
@@ -553,82 +586,102 @@ const ClinicAdminApiTools = () => {
   }, [handleJobEvent])
 
   // Migration management functions
-  const fetchMigrations = useCallback(async (filters = null) => {
-    try {
-      setMigrationsLoading(true)
-      const activeFilters = filters || migrationFilters
-      const params = new URLSearchParams()
-      
-      if (activeFilters.status && activeFilters.status !== 'all') {
-        params.append('status', activeFilters.status)
-      }
-      if (activeFilters.dateFrom) {
-        params.append('dateFrom', activeFilters.dateFrom)
-      }
-      if (activeFilters.dateTo) {
-        params.append('dateTo', activeFilters.dateTo)
-      }
-      params.append('sortBy', activeFilters.sortBy)
-      params.append('sortOrder', activeFilters.sortOrder)
-      params.append('page', activeFilters.page)
-      params.append('limit', activeFilters.limit)
+  const fetchMigrations = useCallback(
+    async (filters = null) => {
+      try {
+        setMigrationsLoading(true)
+        const activeFilters = filters || migrationFilters
+        const params = new URLSearchParams()
 
-      const response = await axios.get(
-        `${resolveEndpointUrl('/api/db-migration/list')}?${params.toString()}`
-      )
-      
-      if (response.data?.success && response.data?.data) {
-        setMigrations(response.data.data.migrations || [])
-        setMigrationPagination(response.data.data.pagination || {})
-        setMigrationSummary(response.data.data.summary || {})
-      }
-    } catch (error) {
-      showToastError(error?.response?.data?.message || 'Failed to fetch migrations')
-      console.error('Failed to fetch migrations:', error)
-    } finally {
-      setMigrationsLoading(false)
-    }
-  }, [resolveEndpointUrl, migrationFilters])
+        if (activeFilters.status && activeFilters.status !== 'all') {
+          params.append('status', activeFilters.status)
+        }
+        if (activeFilters.dateFrom) {
+          params.append('dateFrom', activeFilters.dateFrom)
+        }
+        if (activeFilters.dateTo) {
+          params.append('dateTo', activeFilters.dateTo)
+        }
+        params.append('sortBy', activeFilters.sortBy)
+        params.append('sortOrder', activeFilters.sortOrder)
+        params.append('page', activeFilters.page)
+        params.append('limit', activeFilters.limit)
 
-  const handleViewMigration = useCallback(async (filename) => {
-    try {
-      setViewingMigration(filename)
-      setMigrationContentLoading(true)
-      const response = await axios.get(
-        resolveEndpointUrl(`/api/db-migration/${filename}/content`)
-      )
-      if (response.data?.success && response.data?.content) {
-        setMigrationContent(response.data.content)
-      } else {
+        const response = await axios.get(
+          `${resolveEndpointUrl('/api/db-migration/list')}?${params.toString()}`
+        )
+
+        if (response.data?.success && response.data?.data) {
+          setMigrations(response.data.data.migrations || [])
+          setMigrationPagination(response.data.data.pagination || {})
+          setMigrationSummary(response.data.data.summary || {})
+        }
+      } catch (error) {
+        showToastError(
+          error?.response?.data?.message || 'Failed to fetch migrations'
+        )
+        console.error('Failed to fetch migrations:', error)
+      } finally {
+        setMigrationsLoading(false)
+      }
+    },
+    [resolveEndpointUrl, migrationFilters]
+  )
+
+  const handleViewMigration = useCallback(
+    async (filename) => {
+      try {
+        setViewingMigration(filename)
+        setMigrationContentLoading(true)
+        const response = await axios.get(
+          resolveEndpointUrl(`/api/db-migration/${filename}/content`)
+        )
+        if (response.data?.success && response.data?.content) {
+          setMigrationContent(response.data.content)
+        } else {
+          setMigrationContent(null)
+        }
+      } catch (error) {
+        showToastError(
+          error?.response?.data?.message || 'Failed to load migration content'
+        )
         setMigrationContent(null)
+      } finally {
+        setMigrationContentLoading(false)
       }
-    } catch (error) {
-      showToastError(error?.response?.data?.message || 'Failed to load migration content')
-      setMigrationContent(null)
-    } finally {
-      setMigrationContentLoading(false)
-    }
-  }, [resolveEndpointUrl])
+    },
+    [resolveEndpointUrl]
+  )
 
-  const handleRunMigration = useCallback(async (filename) => {
-    try {
-      setMigrationsLoading(true)
-      const response = await axios.post(resolveEndpointUrl('/api/db-migration/run'), {
-        filename,
-      })
-      if (response.data?.success) {
-        showToastSuccess(response.data.message || 'Migration executed successfully')
-        // Auto-refresh after running migration
-        setTimeout(() => {
-          fetchMigrations(migrationFilters)
-        }, 500)
+  const handleRunMigration = useCallback(
+    async (filename) => {
+      try {
+        setMigrationsLoading(true)
+        const response = await axios.post(
+          resolveEndpointUrl('/api/db-migration/run'),
+          {
+            filename,
+          }
+        )
+        if (response.data?.success) {
+          showToastSuccess(
+            response.data.message || 'Migration executed successfully'
+          )
+          // Auto-refresh after running migration
+          setTimeout(() => {
+            fetchMigrations(migrationFilters)
+          }, 500)
+        }
+      } catch (error) {
+        showToastError(
+          error?.response?.data?.message || 'Failed to run migration'
+        )
+      } finally {
+        setMigrationsLoading(false)
       }
-    } catch (error) {
-      showToastError(error?.response?.data?.message || 'Failed to run migration')
-    } finally {
-      setMigrationsLoading(false)
-    }
-  }, [resolveEndpointUrl, fetchMigrations, migrationFilters])
+    },
+    [resolveEndpointUrl, fetchMigrations, migrationFilters]
+  )
 
   const handleRunAllMigrations = useCallback(async () => {
     if (
@@ -641,16 +694,22 @@ const ClinicAdminApiTools = () => {
 
     try {
       setMigrationsLoading(true)
-      const response = await axios.post(resolveEndpointUrl('/api/db-migration/run-all'))
+      const response = await axios.post(
+        resolveEndpointUrl('/api/db-migration/run-all')
+      )
       if (response.data?.success) {
-        showToastSuccess(response.data.message || 'All migrations executed successfully')
+        showToastSuccess(
+          response.data.message || 'All migrations executed successfully'
+        )
         // Auto-refresh after running all migrations
         setTimeout(() => {
           fetchMigrations(migrationFilters)
         }, 1000)
       }
     } catch (error) {
-      showToastError(error?.response?.data?.message || 'Failed to run migrations')
+      showToastError(
+        error?.response?.data?.message || 'Failed to run migrations'
+      )
     } finally {
       setMigrationsLoading(false)
     }
@@ -662,19 +721,24 @@ const ClinicAdminApiTools = () => {
 
     try {
       setMigrationsLoading(true)
-      const response = await axios.post(resolveEndpointUrl('/api/db-migration/generate'), {
-        description,
-      })
+      const response = await axios.post(
+        resolveEndpointUrl('/api/db-migration/generate'),
+        {
+          description,
+        }
+      )
       if (response.data?.success) {
         showToastSuccess('Migration file generated successfully')
         // Auto-refresh after generation
-        setMigrationFilters(prev => ({ ...prev, page: 1 }))
+        setMigrationFilters((prev) => ({ ...prev, page: 1 }))
         setTimeout(() => {
           fetchMigrations({ ...migrationFilters, page: 1 })
         }, 1000)
       }
     } catch (error) {
-      showToastError(error?.response?.data?.message || 'Failed to generate migration')
+      showToastError(
+        error?.response?.data?.message || 'Failed to generate migration'
+      )
     } finally {
       setMigrationsLoading(false)
     }
@@ -691,19 +755,23 @@ const ClinicAdminApiTools = () => {
 
     try {
       setMigrationsLoading(true)
-      const response = await axios.post(resolveEndpointUrl('/api/db-migration/generate-auto'))
+      const response = await axios.post(
+        resolveEndpointUrl('/api/db-migration/generate-auto')
+      )
       if (response.data?.success) {
         showToastSuccess(
           response.data.message || 'Migration files generated successfully'
         )
         // Auto-refresh after generation - reset to first page
-        setMigrationFilters(prev => ({ ...prev, page: 1 }))
+        setMigrationFilters((prev) => ({ ...prev, page: 1 }))
         setTimeout(() => {
           fetchMigrations({ ...migrationFilters, page: 1 })
         }, 1000) // Small delay to ensure files are written
       }
     } catch (error) {
-      showToastError(error?.response?.data?.message || 'Failed to generate migrations')
+      showToastError(
+        error?.response?.data?.message || 'Failed to generate migrations'
+      )
     } finally {
       setMigrationsLoading(false)
     }
@@ -716,7 +784,7 @@ const ClinicAdminApiTools = () => {
     }
   }, [userRole, fetchMigrations])
 
-  const renderResultRow = endpoint => {
+  const renderResultRow = (endpoint) => {
     const operationKey = endpoint.operation || endpoint.key
     const result = results[operationKey]
 
@@ -728,10 +796,14 @@ const ClinicAdminApiTools = () => {
     const isError = result.status === 'error'
     const alertColor = statusColorMap(result.status)
 
-    const formatStatus = value =>
-      value ? value.replace(/[-_]/g, ' ').replace(/\b\w/g, char => char.toUpperCase()) : 'Unknown'
+    const formatStatus = (value) =>
+      value
+        ? value
+            .replace(/[-_]/g, ' ')
+            .replace(/\b\w/g, (char) => char.toUpperCase())
+        : 'Unknown'
 
-    const formatDuration = durationMs => {
+    const formatDuration = (durationMs) => {
       if (durationMs === null || durationMs === undefined) {
         return null
       }
@@ -760,14 +832,20 @@ const ClinicAdminApiTools = () => {
                   <strong>{result.message}</strong>
                 </div>
                 <div className="small text-muted">
-                  {result.timestamp ? new Date(result.timestamp).toLocaleString() : 'Not available'}
-                  {result.status ? ` • Status: ${formatStatus(result.status)}` : ''}
+                  {result.timestamp
+                    ? new Date(result.timestamp).toLocaleString()
+                    : 'Not available'}
+                  {result.status
+                    ? ` • Status: ${formatStatus(result.status)}`
+                    : ''}
                   {result.statusCode ? ` • Status: ${result.statusCode}` : ''}
                   {result.durationMs !== null && result.durationMs !== undefined
                     ? ` • Duration: ${formatDuration(result.durationMs)}`
                     : ''}
                   {result.jobId ? ` • Job: ${result.jobId}` : ''}
-                  {result.triggeredBy ? ` • Triggered by: ${result.triggeredBy}` : ''}
+                  {result.triggeredBy
+                    ? ` • Triggered by: ${result.triggeredBy}`
+                    : ''}
                 </div>
                 {result.data ? (
                   <div className="mt-2">
@@ -777,64 +855,127 @@ const ClinicAdminApiTools = () => {
                         <strong>Verification Summary:</strong>
                         <ul className="mb-0 small">
                           <li>
-                            <strong>Filtermodels:</strong> {result.data.summary.filtermodels?.total || 0} issues found
+                            <strong>Filtermodels:</strong>{' '}
+                            {result.data.summary.filtermodels?.total || 0}{' '}
+                            issues found
                             {result.data.summary.filtermodels?.total > 0 && (
                               <ul className="mt-1 mb-0">
-                                {result.data.summary.filtermodels.byField?.users > 0 && (
-                                  <li>users: {result.data.summary.filtermodels.byField.users} filters</li>
+                                {result.data.summary.filtermodels.byField
+                                  ?.users > 0 && (
+                                  <li>
+                                    users:{' '}
+                                    {
+                                      result.data.summary.filtermodels.byField
+                                        .users
+                                    }{' '}
+                                    filters
+                                  </li>
                                 )}
-                                {result.data.summary.filtermodels.byField?.physicians > 0 && (
-                                  <li>physicians: {result.data.summary.filtermodels.byField.physicians} filters</li>
+                                {result.data.summary.filtermodels.byField
+                                  ?.physicians > 0 && (
+                                  <li>
+                                    physicians:{' '}
+                                    {
+                                      result.data.summary.filtermodels.byField
+                                        .physicians
+                                    }{' '}
+                                    filters
+                                  </li>
                                 )}
-                                {result.data.summary.filtermodels.byField?.clinic_names > 0 && (
-                                  <li>clinic_names: {result.data.summary.filtermodels.byField.clinic_names} filters</li>
+                                {result.data.summary.filtermodels.byField
+                                  ?.clinic_names > 0 && (
+                                  <li>
+                                    clinic_names:{' '}
+                                    {
+                                      result.data.summary.filtermodels.byField
+                                        .clinic_names
+                                    }{' '}
+                                    filters
+                                  </li>
                                 )}
-                                {result.data.summary.filtermodels.byField?.created_by > 0 && (
-                                  <li>created_by: {result.data.summary.filtermodels.byField.created_by} filters</li>
+                                {result.data.summary.filtermodels.byField
+                                  ?.created_by > 0 && (
+                                  <li>
+                                    created_by:{' '}
+                                    {
+                                      result.data.summary.filtermodels.byField
+                                        .created_by
+                                    }{' '}
+                                    filters
+                                  </li>
                                 )}
                               </ul>
                             )}
                           </li>
                           <li>
-                            <strong>Users:</strong> {result.data.summary.users?.total || 0} issues found
+                            <strong>Users:</strong>{' '}
+                            {result.data.summary.users?.total || 0} issues found
                             {result.data.summary.users?.total > 0 && (
                               <ul className="mt-1 mb-0">
-                                {result.data.summary.users.byField?.parent_user > 0 && (
-                                  <li>parent_user: {result.data.summary.users.byField.parent_user} users</li>
+                                {result.data.summary.users.byField
+                                  ?.parent_user > 0 && (
+                                  <li>
+                                    parent_user:{' '}
+                                    {
+                                      result.data.summary.users.byField
+                                        .parent_user
+                                    }{' '}
+                                    users
+                                  </li>
                                 )}
-                                {result.data.summary.users.byField?.physicianname_clinics > 0 && (
-                                  <li>physicianname_clinics: {result.data.summary.users.byField.physicianname_clinics} users</li>
+                                {result.data.summary.users.byField
+                                  ?.physicianname_clinics > 0 && (
+                                  <li>
+                                    physicianname_clinics:{' '}
+                                    {
+                                      result.data.summary.users.byField
+                                        .physicianname_clinics
+                                    }{' '}
+                                    users
+                                  </li>
                                 )}
-                                {result.data.summary.users.byField?.clinics > 0 && (
-                                  <li>clinics: {result.data.summary.users.byField.clinics} users</li>
+                                {result.data.summary.users.byField?.clinics >
+                                  0 && (
+                                  <li>
+                                    clinics:{' '}
+                                    {result.data.summary.users.byField.clinics}{' '}
+                                    users
+                                  </li>
                                 )}
                               </ul>
                             )}
                           </li>
                           <li>
-                            <strong>Studies:</strong> {result.data.summary.studies?.total || 0} issues found
+                            <strong>Studies:</strong>{' '}
+                            {result.data.summary.studies?.total || 0} issues
+                            found
                           </li>
                           <li>
-                            <strong>Other tables:</strong> {result.data.summary.other?.tables || 0} tables with{' '}
+                            <strong>Other tables:</strong>{' '}
+                            {result.data.summary.other?.tables || 0} tables with{' '}
                             {result.data.summary.other?.total || 0} issues
                           </li>
                         </ul>
                         <div className="mt-1">
-                          <strong>Total:</strong> {(result.data.summary.filtermodels?.total || 0) + 
-                            (result.data.summary.users?.total || 0) + 
-                            (result.data.summary.studies?.total || 0) + 
-                            (result.data.summary.other?.total || 0)} issues need migration
+                          <strong>Total:</strong>{' '}
+                          {(result.data.summary.filtermodels?.total || 0) +
+                            (result.data.summary.users?.total || 0) +
+                            (result.data.summary.studies?.total || 0) +
+                            (result.data.summary.other?.total || 0)}{' '}
+                          issues need migration
                         </div>
                       </div>
                     ) : null}
                     {/* Show migration results (updated/skipped counts) */}
-                    {(result.data.filtermodels?.updated !== undefined || result.data.users?.updated !== undefined) ? (
+                    {result.data.filtermodels?.updated !== undefined ||
+                    result.data.users?.updated !== undefined ? (
                       <div className="mb-2">
                         <strong>Migration Summary:</strong>
                         <ul className="mb-0 small">
                           {result.data.filtermodels && (
                             <li>
-                              Filtermodels: {result.data.filtermodels.updated || 0} updated,{' '}
+                              Filtermodels:{' '}
+                              {result.data.filtermodels.updated || 0} updated,{' '}
                               {result.data.filtermodels.skipped || 0} skipped
                             </li>
                           )}
@@ -846,20 +987,24 @@ const ClinicAdminApiTools = () => {
                           )}
                           {result.data.studies && (
                             <li>
-                              Studies: {result.data.studies.updated || 0} updated,{' '}
-                              {result.data.studies.skipped || 0} skipped
+                              Studies: {result.data.studies.updated || 0}{' '}
+                              updated, {result.data.studies.skipped || 0}{' '}
+                              skipped
                             </li>
                           )}
                           {result.data.other && (
                             <li>
-                              Other tables: {result.data.other.updated || 0} updated,{' '}
-                              {result.data.other.skipped || 0} skipped
+                              Other tables: {result.data.other.updated || 0}{' '}
+                              updated, {result.data.other.skipped || 0} skipped
                             </li>
                           )}
                         </ul>
                       </div>
                     ) : null}
-                    <pre className="mt-1 mb-0 small bg-light rounded p-1" style={{ maxHeight: '400px', overflow: 'auto' }}>
+                    <pre
+                      className="mt-1 mb-0 small bg-light rounded p-1"
+                      style={{ maxHeight: '400px', overflow: 'auto' }}
+                    >
                       {JSON.stringify(result.data, null, 2)}
                     </pre>
                   </div>
@@ -870,10 +1015,12 @@ const ClinicAdminApiTools = () => {
                       <Alert color="warning" className="mb-1">
                         <strong>⚠️ Access Denied</strong>
                         <p className="mb-0 small">
-                          {result.error.message || 'You do not have permission to access this feature.'}
+                          {result.error.message ||
+                            'You do not have permission to access this feature.'}
                           {result.error.role && (
                             <span className="d-block mt-1">
-                              Your role: <code>{result.error.role}</code> (Required: ClinicAdmin)
+                              Your role: <code>{result.error.role}</code>{' '}
+                              (Required: ClinicAdmin)
                             </span>
                           )}
                         </p>
@@ -901,7 +1048,8 @@ const ClinicAdminApiTools = () => {
                       ))}
                       {failureEntries.length > 10 ? (
                         <li>
-                          …and {failureEntries.length - 10} more (see detailed data above)
+                          …and {failureEntries.length - 10} more (see detailed
+                          data above)
                         </li>
                       ) : null}
                     </ul>
@@ -915,8 +1063,8 @@ const ClinicAdminApiTools = () => {
                     <ul className="small mb-0">
                       {result.history.map((item, index) => (
                         <li key={`${item.jobId || 'history'}-${index}`}>
-                          {new Date(item.timestamp).toLocaleString()} — {formatStatus(item.status)}:{' '}
-                          {item.message}
+                          {new Date(item.timestamp).toLocaleString()} —{' '}
+                          {formatStatus(item.status)}: {item.message}
                         </li>
                       ))}
                     </ul>
@@ -940,14 +1088,21 @@ const ClinicAdminApiTools = () => {
 
   if (userRole === null) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: '200px' }}
+      >
         <Spinner color="primary" />
       </div>
     )
   }
 
-  const formatStatusLabel = status =>
-    status ? status.replace(/[-_]/g, ' ').replace(/\b\w/g, char => char.toUpperCase()) : 'Unknown'
+  const formatStatusLabel = (status) =>
+    status
+      ? status
+          .replace(/[-_]/g, ' ')
+          .replace(/\b\w/g, (char) => char.toUpperCase())
+      : 'Unknown'
 
   if (userRole !== ROLES.ClinicAdmin) {
     return (
@@ -958,10 +1113,13 @@ const ClinicAdminApiTools = () => {
               <Shield size={32} className="text-danger mb-1" />
               <h4>Access Denied</h4>
               <p className="text-muted">
-                This toolkit is available to Clinic Admin users only. Please contact an administrator if you
-                believe this is an error.
+                This toolkit is available to Clinic Admin users only. Please
+                contact an administrator if you believe this is an error.
               </p>
-              <Button color="primary" onClick={() => (window.location.href = '/')}>
+              <Button
+                color="primary"
+                onClick={() => (window.location.href = '/')}
+              >
                 Go to Dashboard
               </Button>
             </CardBody>
@@ -980,11 +1138,18 @@ const ClinicAdminApiTools = () => {
               <div>
                 <h3 className="mb-0">System Health Status</h3>
                 <p className="text-muted mb-0">
-                  Real-time indicators for database, Redis cache, and OpenSearch services.
+                  Real-time indicators for database, Redis cache, and OpenSearch
+                  services.
                 </p>
               </div>
               <div className="d-flex align-items-center gap-1">
-                <Button color="primary" size="sm" outline onClick={fetchSystemHealth} disabled={healthLoading}>
+                <Button
+                  color="primary"
+                  size="sm"
+                  outline
+                  onClick={fetchSystemHealth}
+                  disabled={healthLoading}
+                >
                   {healthLoading ? (
                     <>
                       <Spinner size="sm" className="me-50" />
@@ -1011,14 +1176,22 @@ const ClinicAdminApiTools = () => {
                       <CardBody>
                         <div className="d-flex justify-content-between align-items-center mb-50">
                           <h5 className="mb-0">Database</h5>
-                          <Badge color={statusColorMap(systemHealth?.services?.database?.status)}>
-                            {formatStatusLabel(systemHealth?.services?.database?.status)}
+                          <Badge
+                            color={statusColorMap(
+                              systemHealth?.services?.database?.status
+                            )}
+                          >
+                            {formatStatusLabel(
+                              systemHealth?.services?.database?.status
+                            )}
                           </Badge>
                         </div>
                         <div className="small text-muted">
                           Latency:{' '}
-                          {systemHealth?.services?.database?.latencyMs !== null &&
-                          systemHealth?.services?.database?.latencyMs !== undefined
+                          {systemHealth?.services?.database?.latencyMs !==
+                            null &&
+                          systemHealth?.services?.database?.latencyMs !==
+                            undefined
                             ? `${systemHealth.services.database.latencyMs} ms`
                             : 'N/A'}
                         </div>
@@ -1035,8 +1208,14 @@ const ClinicAdminApiTools = () => {
                       <CardBody>
                         <div className="d-flex justify-content-between align-items-center mb-50">
                           <h5 className="mb-0">Redis</h5>
-                          <Badge color={statusColorMap(systemHealth?.services?.redis?.status)}>
-                            {formatStatusLabel(systemHealth?.services?.redis?.status)}
+                          <Badge
+                            color={statusColorMap(
+                              systemHealth?.services?.redis?.status
+                            )}
+                          >
+                            {formatStatusLabel(
+                              systemHealth?.services?.redis?.status
+                            )}
                           </Badge>
                         </div>
                         <div className="small text-muted">
@@ -1046,10 +1225,16 @@ const ClinicAdminApiTools = () => {
                             : 'N/A'}
                         </div>
                         <div className="small text-muted">
-                          Mode: {formatStatusLabel(systemHealth?.services?.redis?.mode || 'unknown')}
+                          Mode:{' '}
+                          {formatStatusLabel(
+                            systemHealth?.services?.redis?.mode || 'unknown'
+                          )}
                         </div>
                         <div className="small text-muted">
-                          Connected: {systemHealth?.services?.redis?.connected ? 'Yes' : 'No'}
+                          Connected:{' '}
+                          {systemHealth?.services?.redis?.connected
+                            ? 'Yes'
+                            : 'No'}
                         </div>
                       </CardBody>
                     </Card>
@@ -1059,17 +1244,28 @@ const ClinicAdminApiTools = () => {
                       <CardBody>
                         <div className="d-flex justify-content-between align-items-center mb-50">
                           <h5 className="mb-0">OpenSearch</h5>
-                          <Badge color={statusColorMap(systemHealth?.services?.opensearch?.status)}>
-                            {formatStatusLabel(systemHealth?.services?.opensearch?.status)}
+                          <Badge
+                            color={statusColorMap(
+                              systemHealth?.services?.opensearch?.status
+                            )}
+                          >
+                            {formatStatusLabel(
+                              systemHealth?.services?.opensearch?.status
+                            )}
                           </Badge>
                         </div>
                         <div className="small text-muted">
-                          Enabled: {systemHealth?.services?.opensearch?.enabled ? 'Yes' : 'No'}
+                          Enabled:{' '}
+                          {systemHealth?.services?.opensearch?.enabled
+                            ? 'Yes'
+                            : 'No'}
                         </div>
                         <div className="small text-muted">
                           Latency:{' '}
-                          {systemHealth?.services?.opensearch?.latencyMs !== null &&
-                          systemHealth?.services?.opensearch?.latencyMs !== undefined
+                          {systemHealth?.services?.opensearch?.latencyMs !==
+                            null &&
+                          systemHealth?.services?.opensearch?.latencyMs !==
+                            undefined
                             ? `${systemHealth.services.opensearch.latencyMs} ms`
                             : 'N/A'}
                         </div>
@@ -1080,7 +1276,9 @@ const ClinicAdminApiTools = () => {
               )}
               <div className="small text-muted mt-1">
                 Last updated:{' '}
-                {systemHealth?.timestamp ? new Date(systemHealth.timestamp).toLocaleString() : 'N/A'}
+                {systemHealth?.timestamp
+                  ? new Date(systemHealth.timestamp).toLocaleString()
+                  : 'N/A'}
               </div>
             </CardBody>
           </Card>
@@ -1094,7 +1292,9 @@ const ClinicAdminApiTools = () => {
               <div>
                 <h3 className="mb-0">Clinic Admin Sync Tools</h3>
                 <p className="text-muted mb-0">
-                  Manually coordinate Orthanc, PostgreSQL, and related maintenance tasks. Actions run immediately against the live system.
+                  Manually coordinate Orthanc, PostgreSQL, and related
+                  maintenance tasks. Actions run immediately against the live
+                  system.
                 </p>
               </div>
               <div className="d-flex align-items-center gap-1">
@@ -1110,7 +1310,7 @@ const ClinicAdminApiTools = () => {
         </Col>
       </Row>
 
-      {endpointGroups.map(group => (
+      {endpointGroups.map((group) => (
         <Row key={group.key} className="mb-3">
           <Col md="12">
             <Card>
@@ -1136,12 +1336,16 @@ const ClinicAdminApiTools = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {group.endpoints.map(endpoint => (
+                    {group.endpoints.map((endpoint) => (
                       <React.Fragment key={endpoint.key}>
                         <tr>
                           <td className="fw-bold">{endpoint.label}</td>
                           <td>
-                            <Badge color={methodColorMap[endpoint.method] || 'secondary'}>
+                            <Badge
+                              color={
+                                methodColorMap[endpoint.method] || 'secondary'
+                              }
+                            >
                               {endpoint.method}
                             </Badge>
                           </td>
@@ -1158,26 +1362,34 @@ const ClinicAdminApiTools = () => {
                           </td>
                           <td className="text-end">
                             <Button
-                              color={endpoint.key === 'migration-run' ? 'danger' : 'primary'}
+                              color={
+                                endpoint.key === 'migration-run'
+                                  ? 'danger'
+                                  : 'primary'
+                              }
                               size="sm"
                               onClick={() => {
                                 if (endpoint.key === 'migration-run') {
                                   const confirmed = window.confirm(
                                     '⚠️ WARNING: This will modify your database!\n\n' +
-                                    'Are you sure you want to run the LIVE migration?\n\n' +
-                                    'Make sure you have:\n' +
-                                    '1. Backed up your database\n' +
-                                    '2. Run verification first\n' +
-                                    '3. Run dry-run to see what will change\n\n' +
-                                    'Click OK to proceed, or Cancel to abort.'
+                                      'Are you sure you want to run the LIVE migration?\n\n' +
+                                      'Make sure you have:\n' +
+                                      '1. Backed up your database\n' +
+                                      '2. Run verification first\n' +
+                                      '3. Run dry-run to see what will change\n\n' +
+                                      'Click OK to proceed, or Cancel to abort.'
                                   )
                                   if (!confirmed) return
                                 }
                                 handleTrigger(endpoint)
                               }}
-                              disabled={loadingKey === (endpoint.operation || endpoint.key)}
+                              disabled={
+                                loadingKey ===
+                                (endpoint.operation || endpoint.key)
+                              }
                             >
-                              {loadingKey === (endpoint.operation || endpoint.key) ? (
+                              {loadingKey ===
+                              (endpoint.operation || endpoint.key) ? (
                                 <>
                                   <Spinner size="sm" className="me-50" />
                                   Working...
@@ -1264,13 +1476,19 @@ const ClinicAdminApiTools = () => {
               {/* Filters and Sorting */}
               <Row className="mb-3">
                 <Col md="3">
-                  <Label for="statusFilter" className="small">Status</Label>
+                  <Label for="statusFilter" className="small">
+                    Status
+                  </Label>
                   <Input
                     type="select"
                     id="statusFilter"
                     value={migrationFilters.status}
                     onChange={(e) => {
-                      const newFilters = { ...migrationFilters, status: e.target.value, page: 1 }
+                      const newFilters = {
+                        ...migrationFilters,
+                        status: e.target.value,
+                        page: 1,
+                      }
                       setMigrationFilters(newFilters)
                       fetchMigrations(newFilters)
                     }}
@@ -1283,13 +1501,19 @@ const ClinicAdminApiTools = () => {
                   </Input>
                 </Col>
                 <Col md="2">
-                  <Label for="dateFrom" className="small">Date From</Label>
+                  <Label for="dateFrom" className="small">
+                    Date From
+                  </Label>
                   <Input
                     type="date"
                     id="dateFrom"
                     value={migrationFilters.dateFrom}
                     onChange={(e) => {
-                      const newFilters = { ...migrationFilters, dateFrom: e.target.value, page: 1 }
+                      const newFilters = {
+                        ...migrationFilters,
+                        dateFrom: e.target.value,
+                        page: 1,
+                      }
                       setMigrationFilters(newFilters)
                       fetchMigrations(newFilters)
                     }}
@@ -1297,13 +1521,19 @@ const ClinicAdminApiTools = () => {
                   />
                 </Col>
                 <Col md="2">
-                  <Label for="dateTo" className="small">Date To</Label>
+                  <Label for="dateTo" className="small">
+                    Date To
+                  </Label>
                   <Input
                     type="date"
                     id="dateTo"
                     value={migrationFilters.dateTo}
                     onChange={(e) => {
-                      const newFilters = { ...migrationFilters, dateTo: e.target.value, page: 1 }
+                      const newFilters = {
+                        ...migrationFilters,
+                        dateTo: e.target.value,
+                        page: 1,
+                      }
                       setMigrationFilters(newFilters)
                       fetchMigrations(newFilters)
                     }}
@@ -1311,13 +1541,19 @@ const ClinicAdminApiTools = () => {
                   />
                 </Col>
                 <Col md="2">
-                  <Label for="sortBy" className="small">Sort By</Label>
+                  <Label for="sortBy" className="small">
+                    Sort By
+                  </Label>
                   <Input
                     type="select"
                     id="sortBy"
                     value={migrationFilters.sortBy}
                     onChange={(e) => {
-                      const newFilters = { ...migrationFilters, sortBy: e.target.value, page: 1 }
+                      const newFilters = {
+                        ...migrationFilters,
+                        sortBy: e.target.value,
+                        page: 1,
+                      }
                       setMigrationFilters(newFilters)
                       fetchMigrations(newFilters)
                     }}
@@ -1329,13 +1565,19 @@ const ClinicAdminApiTools = () => {
                   </Input>
                 </Col>
                 <Col md="2">
-                  <Label for="sortOrder" className="small">Order</Label>
+                  <Label for="sortOrder" className="small">
+                    Order
+                  </Label>
                   <Input
                     type="select"
                     id="sortOrder"
                     value={migrationFilters.sortOrder}
                     onChange={(e) => {
-                      const newFilters = { ...migrationFilters, sortOrder: e.target.value, page: 1 }
+                      const newFilters = {
+                        ...migrationFilters,
+                        sortOrder: e.target.value,
+                        page: 1,
+                      }
                       setMigrationFilters(newFilters)
                       fetchMigrations(newFilters)
                     }}
@@ -1375,11 +1617,22 @@ const ClinicAdminApiTools = () => {
                 <Col>
                   <div className="d-flex gap-3 align-items-center">
                     <small className="text-muted">
-                      Total: <strong>{migrationSummary.totalCount}</strong> | 
-                      Executed: <strong className="text-success">{migrationSummary.executedCount}</strong> | 
-                      Pending: <strong className="text-warning">{migrationSummary.pendingCount}</strong>
-                      {migrationSummary.filteredCount !== migrationSummary.totalCount && (
-                        <> | Filtered: <strong>{migrationSummary.filteredCount}</strong></>
+                      Total: <strong>{migrationSummary.totalCount}</strong> |
+                      Executed:{' '}
+                      <strong className="text-success">
+                        {migrationSummary.executedCount}
+                      </strong>{' '}
+                      | Pending:{' '}
+                      <strong className="text-warning">
+                        {migrationSummary.pendingCount}
+                      </strong>
+                      {migrationSummary.filteredCount !==
+                        migrationSummary.totalCount && (
+                        <>
+                          {' '}
+                          | Filtered:{' '}
+                          <strong>{migrationSummary.filteredCount}</strong>
+                        </>
                       )}
                     </small>
                   </div>
@@ -1418,15 +1671,15 @@ const ClinicAdminApiTools = () => {
                               migration.status === 'executed'
                                 ? 'success'
                                 : migration.status === 'pending'
-                                ? 'warning'
-                                : 'secondary'
+                                  ? 'warning'
+                                  : 'secondary'
                             }
                           >
                             {migration.status === 'executed'
                               ? 'Executed'
                               : migration.status === 'pending'
-                              ? 'Pending'
-                              : 'Unknown'}
+                                ? 'Pending'
+                                : 'Unknown'}
                           </Badge>
                         </td>
                         <td className="small text-muted">
@@ -1442,7 +1695,9 @@ const ClinicAdminApiTools = () => {
                             <Button
                               color="link"
                               size="sm"
-                              onClick={() => handleViewMigration(migration.filename)}
+                              onClick={() =>
+                                handleViewMigration(migration.filename)
+                              }
                               title="View Content"
                             >
                               <Eye size={14} />
@@ -1451,7 +1706,9 @@ const ClinicAdminApiTools = () => {
                               <Button
                                 color="primary"
                                 size="sm"
-                                onClick={() => handleRunMigration(migration.filename)}
+                                onClick={() =>
+                                  handleRunMigration(migration.filename)
+                                }
                                 disabled={migrationsLoading}
                                 title="Run Migration"
                               >
@@ -1465,14 +1722,21 @@ const ClinicAdminApiTools = () => {
                   </tbody>
                 </Table>
               )}
-              
+
               {/* Pagination */}
               {migrationPagination.totalPages > 1 && (
                 <div className="d-flex justify-content-between align-items-center p-3 border-top">
                   <div className="small text-muted">
-                    Showing {((migrationPagination.page - 1) * migrationPagination.limit) + 1} to{' '}
-                    {Math.min(migrationPagination.page * migrationPagination.limit, migrationPagination.total)} of{' '}
-                    {migrationPagination.total} migrations
+                    Showing{' '}
+                    {(migrationPagination.page - 1) *
+                      migrationPagination.limit +
+                      1}{' '}
+                    to{' '}
+                    {Math.min(
+                      migrationPagination.page * migrationPagination.limit,
+                      migrationPagination.total
+                    )}{' '}
+                    of {migrationPagination.total} migrations
                   </div>
                   <Pagination className="mb-0">
                     <PaginationItem disabled={!migrationPagination.hasPrev}>
@@ -1480,15 +1744,21 @@ const ClinicAdminApiTools = () => {
                         previous
                         onClick={() => {
                           if (migrationPagination.hasPrev) {
-                            const newFilters = { ...migrationFilters, page: migrationPagination.page - 1 }
+                            const newFilters = {
+                              ...migrationFilters,
+                              page: migrationPagination.page - 1,
+                            }
                             setMigrationFilters(newFilters)
                             fetchMigrations(newFilters)
                           }
                         }}
                       />
                     </PaginationItem>
-                    {Array.from({ length: migrationPagination.totalPages }, (_, i) => i + 1)
-                      .filter(page => {
+                    {Array.from(
+                      { length: migrationPagination.totalPages },
+                      (_, i) => i + 1
+                    )
+                      .filter((page) => {
                         // Show first, last, current, and pages around current
                         const current = migrationPagination.page
                         return (
@@ -1501,7 +1771,7 @@ const ClinicAdminApiTools = () => {
                         // Add ellipsis if there's a gap
                         const prevPage = array[index - 1]
                         const showEllipsis = prevPage && page - prevPage > 1
-                        
+
                         return (
                           <React.Fragment key={page}>
                             {showEllipsis && (
@@ -1509,10 +1779,15 @@ const ClinicAdminApiTools = () => {
                                 <PaginationLink>...</PaginationLink>
                               </PaginationItem>
                             )}
-                            <PaginationItem active={page === migrationPagination.page}>
+                            <PaginationItem
+                              active={page === migrationPagination.page}
+                            >
                               <PaginationLink
                                 onClick={() => {
-                                  const newFilters = { ...migrationFilters, page }
+                                  const newFilters = {
+                                    ...migrationFilters,
+                                    page,
+                                  }
                                   setMigrationFilters(newFilters)
                                   fetchMigrations(newFilters)
                                 }}
@@ -1528,7 +1803,10 @@ const ClinicAdminApiTools = () => {
                         next
                         onClick={() => {
                           if (migrationPagination.hasNext) {
-                            const newFilters = { ...migrationFilters, page: migrationPagination.page + 1 }
+                            const newFilters = {
+                              ...migrationFilters,
+                              page: migrationPagination.page + 1,
+                            }
                             setMigrationFilters(newFilters)
                             fetchMigrations(newFilters)
                           }
@@ -1559,7 +1837,9 @@ const ClinicAdminApiTools = () => {
           >
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Migration File: {viewingMigration}</h5>
+                <h5 className="modal-title">
+                  Migration File: {viewingMigration}
+                </h5>
                 <Button
                   color="link"
                   className="btn-close"
@@ -1588,7 +1868,9 @@ const ClinicAdminApiTools = () => {
                     {migrationContent}
                   </pre>
                 ) : (
-                  <Alert color="warning">Failed to load migration content</Alert>
+                  <Alert color="warning">
+                    Failed to load migration content
+                  </Alert>
                 )}
               </div>
               <div className="modal-footer">
@@ -1611,4 +1893,3 @@ const ClinicAdminApiTools = () => {
 }
 
 export default ClinicAdminApiTools
-

@@ -283,7 +283,10 @@
   justify-content: center;
 }
 
-.shared-studyListDiv .rdt_TableBody .rdt_TableRow:hover .rdt_TableCell:nth-child(9) {
+.shared-studyListDiv
+  .rdt_TableBody
+  .rdt_TableRow:hover
+  .rdt_TableCell:nth-child(9) {
   background-color: #7367f0;
   color: black;
   .reportEdit {

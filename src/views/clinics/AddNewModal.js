@@ -50,7 +50,7 @@ const AddNewModal = ({ addNewInstitutionClinics, open, handleModal }) => {
   }, [open])
 
   // ** Form submission handler using utility
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       await addNewInstitutionClinics(data)
       showSuccessAlert('Clinic created successfully!')
@@ -68,7 +68,9 @@ const AddNewModal = ({ addNewInstitutionClinics, open, handleModal }) => {
   }
 
   // ** Custom close btn
-  const CloseBtn = <X className="cursor-pointer" size={15} onClick={handleModal} />
+  const CloseBtn = (
+    <X className="cursor-pointer" size={15} onClick={handleModal} />
+  )
 
   return (
     <Modal
@@ -78,7 +80,12 @@ const AddNewModal = ({ addNewInstitutionClinics, open, handleModal }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Add New Clinic</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
@@ -87,7 +94,14 @@ const AddNewModal = ({ addNewInstitutionClinics, open, handleModal }) => {
           defaultValues={defaultValues}
           onSubmit={onSubmit}
         >
-          {({ control, errors, handleSubmit, setValue, getValues, isSubmitting }) => (
+          {({
+            control,
+            errors,
+            handleSubmit,
+            setValue,
+            getValues,
+            isSubmitting,
+          }) => (
             <>
               <FormErrorSummary errors={errors} />
 
@@ -179,7 +193,12 @@ const AddNewModal = ({ addNewInstitutionClinics, open, handleModal }) => {
               />
 
               <div className="d-flex justify-content-end mt-2">
-                <Button type="submit" className="me-1" color="primary" disabled={isSubmitting}>
+                <Button
+                  type="submit"
+                  className="me-1"
+                  color="primary"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? 'Submitting...' : 'Submit'}
                 </Button>
                 <Button

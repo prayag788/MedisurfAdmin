@@ -87,7 +87,11 @@ const HorizontalNavMenuLink = ({
               return false
             }
 
-            if (match.pathname && match.pathname !== '' && match.pathname === item.navLink) {
+            if (
+              match.pathname &&
+              match.pathname !== '' &&
+              match.pathname === item.navLink
+            ) {
               currentActiveItem = item.navLink
               return true
             }

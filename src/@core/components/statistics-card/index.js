@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import Chart from 'react-apexcharts'
 import { Card, CardBody } from 'reactstrap'
 
-const StatisticsCards = props => {
+const StatisticsCards = (props) => {
   // ** Props
   const {
     className,
@@ -26,8 +26,10 @@ const StatisticsCards = props => {
         className={classnames('stats-card-body d-flex pt-2', {
           [className]: className,
           'flex-column align-items-start': !iconRight && !hideChart,
-          'justify-content-between flex-row-reverse align-items-center': iconRight,
-          'justify-content-center flex-column text-center': hideChart && !iconRight,
+          'justify-content-between flex-row-reverse align-items-center':
+            iconRight,
+          'justify-content-center flex-column text-center':
+            hideChart && !iconRight,
           'pb-0': !hideChart,
           'pb-2': hideChart,
         })}
@@ -45,7 +47,12 @@ const StatisticsCards = props => {
         </div>
       </CardBody>
       {!hideChart && (
-        <Chart options={options} series={series} type={type} height={height ? height : 100} />
+        <Chart
+          options={options}
+          series={series}
+          type={type}
+          height={height ? height : 100}
+        />
       )}
     </Card>
   )

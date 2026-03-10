@@ -64,7 +64,9 @@ const ClinicUser = () => {
   const [refreshLoading, setRefreshLoading] = useState(false)
 
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('poweruserrow') ? JSON.parse(localStorage.getItem('poweruserrow')) : 7
+    localStorage.getItem('poweruserrow')
+      ? JSON.parse(localStorage.getItem('poweruserrow'))
+      : 7
   )
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
@@ -75,7 +77,7 @@ const ClinicUser = () => {
   const [visibleColumns, setVisibleColumns] = useState([])
   const [sortField, setSortField] = useState(null)
   const [sortOrder, setSortOrder] = useState(0)
-  const userData = useSelector(state => state.auth.userData)
+  const userData = useSelector((state) => state.auth.userData)
 
   // ** Fetch data
   const getData = async () => {
@@ -93,32 +95,43 @@ const ClinicUser = () => {
           sortcolumn: sortColumn,
         },
       })
-      .then(doc => {
+      .then((doc) => {
         const dataPayload = doc.data
         // Support both shapes: { list, numberOfRecord, startsrno } or { success, result } (single filter row)
         // Do not treat table-config (moduleName + columns) as filter list
         let list = Array.isArray(dataPayload?.list) ? dataPayload.list : null
-        if (list == null && dataPayload?.result != null) {
+        if (
+          (list === null || list === undefined) &&
+          dataPayload?.result !== null &&
+          dataPayload?.result !== undefined
+        ) {
           const result = dataPayload.result
           const isTableConfig =
-            result && (result.moduleName === 'filter-listings' || (result.columns && Array.isArray(result.columns)))
+            result &&
+            (result.moduleName === 'filter-listings' ||
+              (result.columns && Array.isArray(result.columns)))
           if (!isTableConfig) {
             list = Array.isArray(result) ? result : [result]
           }
         }
         list = list || []
         // Exclude soft-deleted (status === -1) from display
-        const activeList = list.filter(obj => {
+        const activeList = list.filter((obj) => {
           const row = typeof obj?.toJSON === 'function' ? obj.toJSON() : obj
-          return row != null && row.status !== -1
+          return row !== null && row !== undefined && row.status !== -1
         })
         const numberOfRecord = dataPayload?.numberOfRecord ?? activeList.length
-        const startsrnoVal = dataPayload?.startsrno != null ? dataPayload.startsrno : 0
+        const startsrnoVal =
+          dataPayload?.startsrno !== null &&
+          dataPayload?.startsrno !== undefined
+            ? dataPayload.startsrno
+            : 0
 
         setStartsrno(startsrnoVal)
         setData(
           activeList.map((obj, index) => {
-            const row = typeof obj?.toJSON === 'function' ? obj.toJSON() : { ...obj }
+            const row =
+              typeof obj?.toJSON === 'function' ? obj.toJSON() : { ...obj }
             row.sl = startsrnoVal + index + 1
             return row
           })
@@ -127,7 +140,7 @@ const ClinicUser = () => {
         setRefreshLoading(false)
         setTotal(numberOfRecord)
       })
-      .catch(err => {
+      .catch((err) => {
         setRefreshLoading(false)
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -138,7 +151,15 @@ const ClinicUser = () => {
     if (!modal && !editModal) {
       getData()
     }
-  }, [page, rowsPerPage, searchValue, sortColumn, sortDirection, modal, editModal])
+  }, [
+    page,
+    rowsPerPage,
+    searchValue,
+    sortColumn,
+    sortDirection,
+    modal,
+    editModal,
+  ])
 
   function handleSort(d) {
     if (d.sortField) {
@@ -156,7 +177,7 @@ const ClinicUser = () => {
   const handleEditModal = () => SetEditModal(!editModal)
 
   // ** CRUD Handlers
-  const addNewUser = requestData => {
+  const addNewUser = (requestData) => {
     const token = localStorage.getItem('accessToken')
     showLoadingAlert()
     axios
@@ -165,13 +186,13 @@ const ClinicUser = () => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(doc => {
+      .then((doc) => {
         handleModal()
         hideLoadingAlert()
         showSuccessAlert('Filter Added Successfully!')
         getData() // Refresh the list
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -186,19 +207,23 @@ const ClinicUser = () => {
     const token = localStorage.getItem('accessToken')
     showLoadingAlert()
     axios
-      .patch(`${process.env.REACT_APP_API_URL}/filter-module/update/${data._id}`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(doc => {
+      .patch(
+        `${process.env.REACT_APP_API_URL}/filter-module/update/${data._id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((doc) => {
         hideLoadingAlert()
         showSuccessAlert(
           `Filter ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
         )
         getData() // Refresh the list
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -217,12 +242,12 @@ const ClinicUser = () => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(doc => {
+      .then((doc) => {
         hideLoadingAlert()
         showSuccessAlert('Filter Deleted Successfully!')
         getData()
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         console.error('Delete error:', err)
         if (err && err.response) {
@@ -235,16 +260,18 @@ const ClinicUser = () => {
 
   // Confirmation Sweet Alert
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
+        setTip(!tip)
       }
-      setTip(!tip)
-    })
+    )
   }
 
   // ** Table item Button Handlers
-  const editHandler = row => {
+  const editHandler = (row) => {
     console.log('Edit handler called with row:', row)
 
     // Map the row data to the expected format for the edit modal
@@ -265,11 +292,11 @@ const ClinicUser = () => {
     handleEditModal()
   }
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     deleteFilter(id)
   }
 
-  const DeactivationHandler = id => {
+  const DeactivationHandler = (id) => {
     const deactivationOptions = {
       _id: id,
       status: 0,
@@ -277,7 +304,7 @@ const ClinicUser = () => {
     updateUserDetails(deactivationOptions, 'deactivate')
   }
 
-  const ActivationHandler = id => {
+  const ActivationHandler = (id) => {
     const activationOptions = {
       _id: id,
       status: 1,
@@ -290,8 +317,9 @@ const ClinicUser = () => {
     0: { title: 'Inactive', color: 'light-danger' },
     1: { title: 'Active', color: 'light-success' },
   }
-  const getStatusDisplay = rowStatus => {
-    const key = rowStatus != null ? Number(rowStatus) : null
+  const getStatusDisplay = (rowStatus) => {
+    const key =
+      rowStatus !== null && rowStatus !== undefined ? Number(rowStatus) : null
     return statusMap[key] || { title: 'Unknown', color: 'light-secondary' }
   }
 
@@ -304,7 +332,7 @@ const ClinicUser = () => {
       id: 'name',
       visible: true,
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.name}</div>
       },
     },
@@ -314,7 +342,7 @@ const ClinicUser = () => {
       reorder: true,
       id: 'physicians',
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         const names = row.physicianNames || []
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
@@ -329,12 +357,12 @@ const ClinicUser = () => {
       reorder: true,
       id: 'clinicUsers',
       minWidth: '150px',
-      cell: row => {
+      cell: (row) => {
         const clinicUsers = row.clinicUserNames || []
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {clinicUsers.length > 0
-              ? clinicUsers.filter(name => name && name.trim()).join(', ')
+              ? clinicUsers.filter((name) => name && name.trim()).join(', ')
               : '-'}
           </div>
         )
@@ -348,11 +376,13 @@ const ClinicUser = () => {
       visible: true,
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row['clinicNamesDisplay'] && row['clinicNamesDisplay'].length > 0
-              ? row['clinicNamesDisplay'].filter(name => name && name !== 'undefined').join(', ')
+              ? row['clinicNamesDisplay']
+                  .filter((name) => name && name !== 'undefined')
+                  .join(', ')
               : '-'}
           </div>
         )
@@ -365,11 +395,13 @@ const ClinicUser = () => {
       id: 'modality',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row.modality && row.modality.length > 0
-              ? row.modality.map(item => item.label || item.value || item).join(', ')
+              ? row.modality
+                  .map((item) => item.label || item.value || item)
+                  .join(', ')
               : '-'}
           </div>
         )
@@ -382,7 +414,7 @@ const ClinicUser = () => {
       id: 'studyStatus',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         const studyStatusMap = {
           examined: 'Examined',
           draft: 'Draft',
@@ -397,7 +429,7 @@ const ClinicUser = () => {
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row['studyStatus'] && row['studyStatus'].length > 0
               ? row['studyStatus']
-                  .map(item => {
+                  .map((item) => {
                     const value = item.value || item.label || item
                     return studyStatusMap[value.toLowerCase()] || value
                   })
@@ -414,7 +446,7 @@ const ClinicUser = () => {
       sortable: true,
       reorder: true,
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         const display = getStatusDisplay(row?.status)
         return (
           <Badge color={display.color} pill>
@@ -429,7 +461,7 @@ const ClinicUser = () => {
       sortable: false,
       reorder: true,
       id: 'action',
-      cell: row => {
+      cell: (row) => {
         return userData._id === row.created_by ? (
           <div className="d-flex">
             <Edit
@@ -455,6 +487,7 @@ const ClinicUser = () => {
                 )
               }}
             />
+
             <UncontrolledTooltip className="tooltip-react-strap" target="edit">
               Edit
             </UncontrolledTooltip>
@@ -524,7 +557,11 @@ const ClinicUser = () => {
               </div>
             </CardHeader>
             <Row className="justify-content-end mx-0">
-              <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+              <Col
+                className="d-flex align-items-center justify-content-end mt-1"
+                md="6"
+                sm="12"
+              >
                 <Label className="mr-1" for="search-input">
                   Search
                 </Label>
@@ -534,7 +571,7 @@ const ClinicUser = () => {
                   bsSize="sm"
                   id="search-input"
                   value={searchValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     setSearchValue(e.target.value)
                   }}
                 />
@@ -553,9 +590,9 @@ const ClinicUser = () => {
                     onSort: handleSort,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setPage(e.first++)
-                      setRowsPerPage(prev => e.rows)
+                      setRowsPerPage((prev) => e.rows)
                       localStorage.setItem('poweruserrow', e.rows)
                     },
                   }}
@@ -571,6 +608,7 @@ const ClinicUser = () => {
         handleModal={handleModal}
         newUserId={newUserId}
       />
+
       <EditModal
         key={selectedItem?._id || 'edit-modal'}
         updateUser={updateUserDetails}

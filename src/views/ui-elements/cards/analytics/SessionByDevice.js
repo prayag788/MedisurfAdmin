@@ -14,11 +14,13 @@ import {
 import Chart from 'react-apexcharts'
 import * as Icon from 'react-feather'
 
-const SessionByDevice = props => {
+const SessionByDevice = (props) => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    axios.get('/card/card-analytics/sessions-device').then(res => setData(res.data))
+    axios
+      .get('/card/card-analytics/sessions-device')
+      .then((res) => setData(res.data))
   }, [])
 
   const options = {
@@ -76,11 +78,14 @@ const SessionByDevice = props => {
       <CardHeader className="align-items-end">
         <CardTitle tag="h4">Session By Device</CardTitle>
         <UncontrolledDropdown className="chart-dropdown">
-          <DropdownToggle color="" className="bg-transparent btn-sm border-0 p-50">
+          <DropdownToggle
+            color=""
+            className="bg-transparent btn-sm border-0 p-50"
+          >
             Last 7 days
           </DropdownToggle>
           <DropdownMenu right>
-            {data.last_days.map(item => (
+            {data.last_days.map((item) => (
               <DropdownItem className="w-100" key={item}>
                 {item}
               </DropdownItem>
@@ -89,7 +94,13 @@ const SessionByDevice = props => {
         </UncontrolledDropdown>
       </CardHeader>
       <CardBody>
-        <Chart className="my-1" options={options} series={series} type="donut" height={300} />
+        <Chart
+          className="my-1"
+          options={options}
+          series={series}
+          type="donut"
+          height={300}
+        />
         {renderChartInfo()}
       </CardBody>
     </Card>

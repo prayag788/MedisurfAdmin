@@ -44,16 +44,18 @@ module.exports = function override(config, env) {
 
   // Configure sass-loader to use modern sass instead of node-sass
   const sassRule = config.module.rules.find(
-    rule =>
+    (rule) =>
       rule.oneOf &&
-      rule.oneOf.some(oneOf => oneOf.test && oneOf.test.toString().includes('scss|sass'))
+      rule.oneOf.some(
+        (oneOf) => oneOf.test && oneOf.test.toString().includes('scss|sass')
+      )
   )
 
   if (sassRule) {
-    sassRule.oneOf.forEach(oneOf => {
+    sassRule.oneOf.forEach((oneOf) => {
       if (oneOf.test && oneOf.test.toString().includes('scss|sass')) {
         const sassLoader = oneOf.use.find(
-          use => typeof use === 'string' && use.includes('sass-loader')
+          (use) => typeof use === 'string' && use.includes('sass-loader')
         )
         if (sassLoader) {
           oneOf.use[oneOf.use.indexOf(sassLoader)] = {
@@ -117,7 +119,7 @@ module.exports = function override(config, env) {
   // Disable CSS optimization to fix PostCSS plugin error
   if (config.optimization && config.optimization.minimizer) {
     config.optimization.minimizer = config.optimization.minimizer.filter(
-      minimizer => !minimizer.constructor.name.includes('CssMinimizerPlugin')
+      (minimizer) => !minimizer.constructor.name.includes('CssMinimizerPlugin')
     )
   }
 

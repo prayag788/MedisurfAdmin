@@ -28,18 +28,21 @@ const PasswordField = ({
       message: `Password must be at least ${minLength} characters long`,
     },
     validate: {
-      hasUppercase: value =>
-        /[A-Z]/.test(value) || 'Password must contain at least one uppercase letter',
-      hasLowercase: value =>
-        /[a-z]/.test(value) || 'Password must contain at least one lowercase letter',
-      hasNumber: value => /\d/.test(value) || 'Password must contain at least one number',
-      hasSpecialChar: value =>
+      hasUppercase: (value) =>
+        /[A-Z]/.test(value) ||
+        'Password must contain at least one uppercase letter',
+      hasLowercase: (value) =>
+        /[a-z]/.test(value) ||
+        'Password must contain at least one lowercase letter',
+      hasNumber: (value) =>
+        /\d/.test(value) || 'Password must contain at least one number',
+      hasSpecialChar: (value) =>
         /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
         'Password must contain at least one special character',
     },
   }
 
-  const renderPasswordInput = field => (
+  const renderPasswordInput = (field) => (
     <InputGroup>
       <Input
         {...field}

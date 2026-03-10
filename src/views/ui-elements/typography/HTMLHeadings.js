@@ -1,4 +1,11 @@
-import { Card, CardHeader, CardTitle, CardBody, CardText, Table } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  CardText,
+  Table,
+} from 'reactstrap'
 
 const HTMLHeadings = () => {
   return (
@@ -14,8 +21,9 @@ const HTMLHeadings = () => {
           All HTML headings,
           <code>&lt;h1&gt;</code>
           through
-          <code>&lt;h6&gt;</code>, are available. <code>.h1</code> through <code>.h6</code> classes
-          are also available, for when you want to match the font styling of a heading.
+          <code>&lt;h6&gt;</code>, are available. <code>.h1</code> through{' '}
+          <code>.h6</code> classes are also available, for when you want to
+          match the font styling of a heading.
         </CardText>
       </CardBody>
       <Table responsive borderless className="mb-0">

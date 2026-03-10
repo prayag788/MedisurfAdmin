@@ -48,10 +48,10 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
 
   const validateSelect = () => {
     if (!form_data?.access?.length) {
-      setIsValidSelect(prev => false)
+      setIsValidSelect((prev) => false)
       return false
     } else {
-      setIsValidSelect(prev => true)
+      setIsValidSelect((prev) => true)
       return true
     }
   }
@@ -64,25 +64,26 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
 
   useEffect(() => {
     if (!open) {
-      setIsValidSelect(prev => true)
+      setIsValidSelect((prev) => true)
     }
   }, [open])
 
-  const phoneRegExp = /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
+  const phoneRegExp =
+    /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
   // ** New user schema
   const NewCUSchema = yup.object().shape({
     fname: yup
       .string('First name should be a string')
       .max(25, 'First name cannot be longer than 25 characters.')
       .required('First Name is required!')
-      .test('First name cannot be only spaces.', value => {
+      .test('First name cannot be only spaces.', (value) => {
         return value.trim().length > 0
       }),
     lname: yup
       .string()
       .max(25, 'Last name cannot be longer than 25 characters.')
       .required('Last Name is required!')
-      .test('no-spaces', 'First name cannot be only spaces.', value => {
+      .test('no-spaces', 'First name cannot be only spaces.', (value) => {
         return value.trim().length > 0
       }),
     email: yup
@@ -95,12 +96,18 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
         yup
           .string()
           .email('Please provide valid email address')
-          .required('Please provide your email address. This field is required.')
+          .required(
+            'Please provide your email address. This field is required.'
+          )
       ),
     secondaryCno: yup
       .array()
-      .of(yup.string().matches(phoneRegExp, 'Please enter a valid contact number')),
-    cno: yup.string().matches(phoneRegExp, 'Please enter a valid contact number'),
+      .of(
+        yup.string().matches(phoneRegExp, 'Please enter a valid contact number')
+      ),
+    cno: yup
+      .string()
+      .matches(phoneRegExp, 'Please enter a valid contact number'),
     clinics: yup
       .array()
       .of(
@@ -123,7 +130,7 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
     reset,
   } = useForm({ mode: 'onChange', resolver: yupResolver(NewCUSchema) })
 
-  const addNewUser = async requestData => {
+  const addNewUser = async (requestData) => {
     requestData = {
       ...requestData,
       role: 'CU',
@@ -134,13 +141,13 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
     showLoadingAlert()
     axios
       .post(`${process.env.REACT_APP_API_URL}/user/register/admin`, requestData)
-      .then(async doc => {
+      .then(async (doc) => {
         addNewUserTodropdown(doc.data.user, doc)
         toggle()
         await hideLoadingAlert()
         showSuccessAlert('User Added Successfully!')
       })
-      .catch(err => {
+      .catch((err) => {
         const isValidationError = err?.response?.status === 422
         hideLoadingThenShowError(err)
         if (!isValidationError) {
@@ -148,10 +155,10 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
         }
       })
   }
-  const formSubmt = data => {
+  const formSubmt = (data) => {
     addNewUser(data)
     isInitialInput.current = true
-    setFormData(prev => {
+    setFormData((prev) => {
       return {
         ...prev,
         fname: '',
@@ -165,15 +172,15 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
     })
   }
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
 
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: e.target.value }
     })
   }
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     formSubmt(data)
     reset()
   }
@@ -185,8 +192,11 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
   // ** Custom close btn
   const CloseBtn = <X className="cursor-pointer" size={15} onClick={toggle} />
   const addMoreEmails = () => {
-    setFormData(prev => {
-      console.log(prev, 'prev', { ...prev, secondaryEmail: [...(prev?.secondaryEmail ?? []), ''] })
+    setFormData((prev) => {
+      console.log(prev, 'prev', {
+        ...prev,
+        secondaryEmail: [...(prev?.secondaryEmail ?? []), ''],
+      })
       return { ...prev, secondaryEmail: [...(prev?.secondaryEmail ?? []), ''] }
     })
   }
@@ -210,7 +220,7 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
               id="fname"
               {...register('fname', { required: true })}
               invalid={errors?.fname && true}
-              onChange={e => {
+              onChange={(e) => {
                 setValue('fname', e.target.value)
                 if (e.target.value && errors?.fname) {
                   clearErrors('fname')
@@ -218,7 +228,9 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
               }}
               placeholder="Bruce"
             />
-            {errors?.fname && <FormFeedback>{errors.fname.message}</FormFeedback>}
+            {errors?.fname && (
+              <FormFeedback>{errors.fname.message}</FormFeedback>
+            )}
           </FormGroup>
           <FormGroup>
             <Label for="lname">
@@ -229,7 +241,7 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
               id="lname"
               {...register('lname', { required: true })}
               invalid={errors?.lname && true}
-              onChange={e => {
+              onChange={(e) => {
                 setValue('lname', e.target.value)
                 if (e.target.value && errors?.lname) {
                   clearErrors('lname')
@@ -237,7 +249,9 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
               }}
               placeholder="Wayne"
             />
-            {errors?.lname && <FormFeedback>{errors.lname.message}</FormFeedback>}
+            {errors?.lname && (
+              <FormFeedback>{errors.lname.message}</FormFeedback>
+            )}
           </FormGroup>
           <FormGroup>
             <Label for="email">
@@ -249,7 +263,7 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
               id="email"
               {...register('email', { required: true })}
               invalid={errors?.email && true}
-              onChange={e => {
+              onChange={(e) => {
                 setValue('email', e.target.value)
                 if (e.target.value && errors?.email) {
                   clearErrors('email')
@@ -257,7 +271,9 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
               }}
               placeholder="bruce.wayne@email.com"
             />
-            {errors?.email && <FormFeedback>{errors.email.message}</FormFeedback>}
+            {errors?.email && (
+              <FormFeedback>{errors.email.message}</FormFeedback>
+            )}
           </FormGroup>
           <AdditionalDataComponent
             fieldName="secondaryEmail"
@@ -280,7 +296,7 @@ const NestedModal = ({ addNewUserTodropdown, open, toggle }) => {
               type="number"
               {...register('cno', { required: false })}
               invalid={errors?.cno && true}
-              onChange={e => {
+              onChange={(e) => {
                 inputHandler(e)
                 setValue('cno', e.target.value)
                 if (errors?.cno) {

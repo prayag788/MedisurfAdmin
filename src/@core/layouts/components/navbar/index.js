@@ -6,7 +6,7 @@ import NavbarUser from './NavbarUser'
 import NavbarBookmarks from './NavbarBookmarks'
 import NavbarToggler from './NavbarToggler'
 
-const ThemeNavbar = props => {
+const ThemeNavbar = (props) => {
   // ** Props
   const { skin, setSkin, setMenuVisibility, setMenuCollapsed } = props
 

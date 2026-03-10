@@ -45,7 +45,7 @@ const Clinic = () => {
       .get(
         `${process.env.REACT_APP_API_URL}/clinic?page=${page}&size=${rowsPerPage}&filter=${filter}&sortdirection=${sortDirection}&sortcolumn=${sortColumn}`
       )
-      .then(res => {
+      .then((res) => {
         setClinicList(res.data.data)
         setTotal(res.data.total)
       })
@@ -54,9 +54,17 @@ const Clinic = () => {
 
   useEffect(() => {
     getData()
-  }, [page, rowsPerPage, newData, filter, addDisplay, sortColumn, sortDirection])
+  }, [
+    page,
+    rowsPerPage,
+    newData,
+    filter,
+    addDisplay,
+    sortColumn,
+    sortDirection,
+  ])
 
-  const deleteHandler = async id => {
+  const deleteHandler = async (id) => {
     const res = await deleteUser(id)
     if (res) {
       setNewData(!newData)
@@ -71,9 +79,13 @@ const Clinic = () => {
       setSortDirection(d.sortOrder === -1 ? 'desc' : 'asc')
 
       if (sortOrder === -1) {
-        clinicList.sort((a, b) => String(b[d.sortField]).localeCompare(String(a[d.sortField])))
+        clinicList.sort((a, b) =>
+          String(b[d.sortField]).localeCompare(String(a[d.sortField]))
+        )
       } else {
-        clinicList.sort((a, b) => String(a[d.sortField]).localeCompare(String(b[d.sortField])))
+        clinicList.sort((a, b) =>
+          String(a[d.sortField]).localeCompare(String(b[d.sortField]))
+        )
       }
 
       setClinicList(clinicList)
@@ -86,49 +98,49 @@ const Clinic = () => {
       sortable: false,
       reorder: true,
       id: 'information.hospital',
-      cell: row => row.information.hospital,
+      cell: (row) => row.information.hospital,
     },
     {
       name: 'Email',
       sortable: false,
       reorder: true,
       id: 'information.email',
-      cell: row => row.information.email,
+      cell: (row) => row.information.email,
     },
     {
       name: 'Contact',
       sortable: false,
       reorder: true,
       id: 'information.contact',
-      cell: row => row.information.contact,
+      cell: (row) => row.information.contact,
     },
     {
       name: 'Template',
       sortable: false,
       reorder: true,
       id: 'template',
-      cell: row => row.license?.reportLimit ?? 0,
+      cell: (row) => row.license?.reportLimit ?? 0,
     },
     {
       name: 'Radiologist',
       sortable: false,
       reorder: true,
       id: 'license.radiologist',
-      cell: row => row.license.radiologist,
+      cell: (row) => row.license.radiologist,
     },
     {
       name: 'Technologist',
       sortable: false,
       reorder: true,
       id: 'license.technician',
-      cell: row => row.license.technician,
+      cell: (row) => row.license.technician,
     },
     {
       name: 'Report Module',
       sortable: false,
       reorder: true,
       id: 'license.report',
-      cell: row => (row.license.report ? 'Yes' : 'No'),
+      cell: (row) => (row.license.report ? 'Yes' : 'No'),
     },
     {
       name: 'Actions',
@@ -141,7 +153,7 @@ const Clinic = () => {
         right: '0',
         'border-left': '1px dotted #6e6b7b',
       },
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -181,12 +193,12 @@ const Clinic = () => {
     },
   ]
 
-  const AddNewModal = data => {
+  const AddNewModal = (data) => {
     setAddDisplay(data)
     setToEdit()
   }
 
-  const filterHandler = e => {
+  const filterHandler = (e) => {
     setSearchVal(e.target.value)
     clearTimeout(myTimeout)
     myTimeout = setTimeout(() => {
@@ -202,7 +214,11 @@ const Clinic = () => {
         <CardHeader className="flex-md-row flex-column align-md-items-center align-items-center border-bottom">
           <CardTitle tag="h4">Clinic list</CardTitle>
           <div className="d-flex mt-md-0 mt-1">
-            <Button className="ml-2" color="primary" onClick={() => setAddDisplay(!addDisplay)}>
+            <Button
+              className="ml-2"
+              color="primary"
+              onClick={() => setAddDisplay(!addDisplay)}
+            >
               <Plus size={15} />
               <span className="align-middle ml-50">Add New</span>
             </Button>
@@ -232,7 +248,7 @@ const Clinic = () => {
                         bsSize="sm"
                         id="search-input"
                         value={searchVal}
-                        onChange={e => filterHandler(e)}
+                        onChange={(e) => filterHandler(e)}
                       />
                     </Col>
                   </Row>
@@ -249,9 +265,9 @@ const Clinic = () => {
                           onSort: handleSort,
                           sortField,
                           sortOrder,
-                          onPage: e => {
+                          onPage: (e) => {
                             setPage(e.first++)
-                            setRowsPerPage(prev => e.rows)
+                            setRowsPerPage((prev) => e.rows)
                             localStorage.setItem('poweruserrow', e.rows)
                           },
                         }}

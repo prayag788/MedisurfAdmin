@@ -12,7 +12,7 @@ import {
   DropdownToggle,
 } from 'reactstrap'
 
-const Sales = props => {
+const Sales = (props) => {
   const options = {
       chart: {
         height: 300,
@@ -101,7 +101,10 @@ const Sales = props => {
         </div>
 
         <UncontrolledDropdown className="chart-dropdown">
-          <DropdownToggle color="" className="bg-transparent btn-sm border-0 p-50">
+          <DropdownToggle
+            color=""
+            className="bg-transparent btn-sm border-0 p-50"
+          >
             <MoreVertical size={18} className="cursor-pointer" />
           </DropdownToggle>
           <DropdownMenu right>

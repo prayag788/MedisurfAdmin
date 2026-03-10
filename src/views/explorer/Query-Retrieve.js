@@ -54,11 +54,11 @@ const QueryRetrieve = () => {
   const queryID = useRef('')
   const tableRef = useRef(null)
 
-  const recordPerPageChangeHandler = num => {
+  const recordPerPageChangeHandler = (num) => {
     setRecordsPerPage(num)
   }
 
-  const pageChangeHandler = num => {
+  const pageChangeHandler = (num) => {
     setPage(num)
   }
 
@@ -66,7 +66,7 @@ const QueryRetrieve = () => {
    * Perform C-ECHO on the modality
    */
   const performEcho = () => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!selectedServer) {
         showErrorAlert('Please select a DICOM server first')
         resolve()
@@ -81,7 +81,7 @@ const QueryRetrieve = () => {
           showSuccessAlert('C-Echo successful!')
           resolve()
         })
-        .catch(error => {
+        .catch((error) => {
           const errorMsg = extractErrorMessage(
             error?.response?.data ?? error,
             'C-Echo has Failed!'
@@ -95,9 +95,9 @@ const QueryRetrieve = () => {
   /**
    * Perform C-FIND on the modality
    */
-  const performFind = data => {
+  const performFind = (data) => {
     setTempData(data)
-    return new Promise(async resolve => {
+    return new Promise(async (resolve) => {
       try {
         if (!selectedServer) {
           showErrorAlert('Please select a DICOM server first')
@@ -168,7 +168,12 @@ const QueryRetrieve = () => {
   )
 }
 
-const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => {
+const QueryComponent = ({
+  onSelectedServerChange,
+  dicomServer,
+  echo,
+  find,
+}) => {
   const [picker, setPicker] = useState()
   const [showPicker, setShowPicker] = useState(false)
   const [dicomServerOptions, setDicomServerOptions] = useState([])
@@ -212,7 +217,7 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
     ChangeState()
   }, [Flatpicker])
 
-  const onKeyPressed = e => {
+  const onKeyPressed = (e) => {
     if (e.key === 'Backspace' || e.key === 'Delete') {
       setPicker('')
     }
@@ -244,7 +249,10 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
         setDicomServerOptions(modalityKeys)
         if (modalityKeys.length > 0) {
           onSelectedServerChange(modalityKeys[0])
-          console.log(`Found ${modalityKeys.length} DICOM servers:`, modalityKeys)
+          console.log(
+            `Found ${modalityKeys.length} DICOM servers:`,
+            modalityKeys
+          )
         } else {
           console.warn('No DICOM servers found in response')
           showErrorAlert(
@@ -276,38 +284,38 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
     }
   }, [studyDate])
 
-  const onStudyDateChangeHandler = e => {
+  const onStudyDateChangeHandler = (e) => {
     setStudyDate(() => e.target.value)
   }
 
-  const onDicomServerChangeHandler = e => {
+  const onDicomServerChangeHandler = (e) => {
     onSelectedServerChange(e.target.value)
   }
 
-  const handleField = e => {
+  const handleField = (e) => {
     setField(() => e.target.id)
   }
 
-  const handleFieldValue = e => {
+  const handleFieldValue = (e) => {
     setFieldValue(() => e.target.value)
   }
 
-  const modalityHandler = e => {
+  const modalityHandler = (e) => {
     const modalityIdx = modalities.indexOf(e.target.value)
     if (modalityIdx === -1) {
-      setModalities(prev => {
+      setModalities((prev) => {
         prev.push(e.target.value)
         return [...prev]
       })
     } else {
-      setModalities(prev => {
+      setModalities((prev) => {
         prev.splice(modalityIdx, 1)
         return [...prev]
       })
     }
   }
 
-  const calculateFinalDate = value => {
+  const calculateFinalDate = (value) => {
     if (value !== '*') {
       const [days, op] = value.split('-')
       return (Number(days) === 0 || Number(days) === 1) && op === 'days'
@@ -317,7 +325,7 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
     return value
   }
 
-  const submitHandler = async e => {
+  const submitHandler = async (e) => {
     e.preventDefault()
 
     if (!dicomServer || dicomServer === '') {
@@ -332,12 +340,17 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
       return
     }
 
-    console.log('Performing study search on server:', dicomServer, 'with filters:', {
-      field,
-      fieldValue,
-      studyDate,
-      modalities,
-    })
+    console.log(
+      'Performing study search on server:',
+      dicomServer,
+      'with filters:',
+      {
+        field,
+        fieldValue,
+        studyDate,
+        modalities,
+      }
+    )
     setSearchLoading(true)
 
     const finalData = {
@@ -373,7 +386,7 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
     }
   }
 
-  const performEcho = async e => {
+  const performEcho = async (e) => {
     e.preventDefault()
 
     if (!dicomServer || dicomServer === '') {
@@ -447,7 +460,12 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
               </Label>
               <Col sm="12" md="6">
                 <div className="d-flex align-items-center mb-25">
-                  <Input type="radio" id="PatientID" name="field" defaultChecked />
+                  <Input
+                    type="radio"
+                    id="PatientID"
+                    name="field"
+                    defaultChecked
+                  />
                   <Label for="PatientID" className="mb-0 ml-50">
                     Patient ID
                   </Label>
@@ -501,7 +519,7 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
                     id="select-basic"
                     onChange={onStudyDateChangeHandler}
                   >
-                    {studyDateOptions.current.map(obj => {
+                    {studyDateOptions.current.map((obj) => {
                       return <option value={obj.value}>{obj.label}</option>
                     })}
                   </Input>
@@ -526,7 +544,7 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
                         }
                       },
                     }}
-                    onChange={dateVal => {
+                    onChange={(dateVal) => {
                       setPicker(dateVal)
                       setAfterOnchange(true)
                       setcrossStudyDate(true)
@@ -639,7 +657,11 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
                   onClick={performEcho}
                   disabled={testEchoLoading}
                 >
-                  {testEchoLoading ? <Spinner color="light" size="sm" /> : 'Test Echo'}
+                  {testEchoLoading ? (
+                    <Spinner color="light" size="sm" />
+                  ) : (
+                    'Test Echo'
+                  )}
                 </Button.Ripple>
               </Col>
               <Col className="d-flex" lg={3} md={4} sm={6}>
@@ -651,7 +673,11 @@ const QueryComponent = ({ onSelectedServerChange, dicomServer, echo, find }) => 
                   onClick={submitHandler}
                   disabled={searchLoading}
                 >
-                  {searchLoading ? <Spinner color="light" size="sm" /> : 'Search study'}
+                  {searchLoading ? (
+                    <Spinner color="light" size="sm" />
+                  ) : (
+                    'Search study'
+                  )}
                 </Button.Ripple>
               </Col>
             </FormGroup>
@@ -681,7 +707,7 @@ const RetrieveComponent = ({
   const [sortOrder, setSortOrder] = useState(0)
   const userData = JSON.parse(isUserLoggedIn())
 
-  const performRetrieve = async index => {
+  const performRetrieve = async (index) => {
     showLoadingAlert()
 
     try {
@@ -745,7 +771,7 @@ const RetrieveComponent = ({
     },
     {
       name: 'Sex',
-      cell: row =>
+      cell: (row) =>
         row['PatientSex'] === 'M' ? (
           <img src={maleIcon} width={25} alt="Player" />
         ) : row['PatientSex'] === 'F' ? (
@@ -780,7 +806,10 @@ const RetrieveComponent = ({
                 onClick={() => performRetrieve(idx.rowIndex)}
               />
             </div>
-            <UncontrolledTooltip className="tooltip-react-strap" target="retrieve">
+            <UncontrolledTooltip
+              className="tooltip-react-strap"
+              target="retrieve"
+            >
               Retrieve
             </UncontrolledTooltip>
           </>
@@ -789,15 +818,19 @@ const RetrieveComponent = ({
     },
   ]
 
-  const handleSort = d => {
+  const handleSort = (d) => {
     if (d.sortField) {
       setSortOrder(d.sortOrder)
       setSortField(d.sortField)
 
       if (sortOrder === -1) {
-        data.sort((a, b) => String(b[d.sortField]).localeCompare(String(a[d.sortField])))
+        data.sort((a, b) =>
+          String(b[d.sortField]).localeCompare(String(a[d.sortField]))
+        )
       } else {
-        data.sort((a, b) => String(a[d.sortField]).localeCompare(String(b[d.sortField])))
+        data.sort((a, b) =>
+          String(a[d.sortField]).localeCompare(String(b[d.sortField]))
+        )
       }
     }
   }
@@ -809,7 +842,8 @@ const RetrieveComponent = ({
           <ListTable
             {...{
               tableData: data,
-              visibleColumns: visibleColumns.length > 0 ? visibleColumns : columns,
+              visibleColumns:
+                visibleColumns.length > 0 ? visibleColumns : columns,
               className: 'react-dataTable',
               rows: rowsPerPage,
               totalRecords: data.length,
@@ -817,10 +851,10 @@ const RetrieveComponent = ({
               onSort: handleSort,
               sortField,
               sortOrder,
-              onPage: e => {
+              onPage: (e) => {
                 pageChangeHandler(e.first++)
-                setRowsPerPage(prev => e.rows)
-                recordPerPageChangeHandler(prev => e.rows)
+                setRowsPerPage((prev) => e.rows)
+                recordPerPageChangeHandler((prev) => e.rows)
               },
             }}
           />

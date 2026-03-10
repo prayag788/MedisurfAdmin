@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import Proptypes from 'prop-types'
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap'
 
-const BreadCrumbs = props => {
+const BreadCrumbs = (props) => {
   // ** Props
   const {
     breadCrumbTitle,
@@ -21,7 +21,9 @@ const BreadCrumbs = props => {
         <div className="row breadcrumbs-top">
           <div className="col-12">
             {breadCrumbTitle ? (
-              <h2 className="content-header-title float-left mb-0">{breadCrumbTitle}</h2>
+              <h2 className="content-header-title float-left mb-0">
+                {breadCrumbTitle}
+              </h2>
             ) : (
               ''
             )}

@@ -7,7 +7,9 @@ const Newsletter = ({ warning }) => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    axios.get('/card/card-statistics/newsletter').then(res => setData(res.data))
+    axios
+      .get('/card/card-statistics/newsletter')
+      .then((res) => setData(res.data))
   }, [])
 
   const options = {

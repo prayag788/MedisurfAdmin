@@ -23,8 +23,8 @@ const CardTitles = () => {
           <CardBody>
             <CardTitle tag="h4">Card Title</CardTitle>
             <CardText>
-              Some quick example text to build on the card title and make up the bulk of the card's
-              content.
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
             </CardText>
             <Button.Ripple color="primary" outline>
               Go Somewhere
@@ -36,15 +36,17 @@ const CardTitles = () => {
         <Card>
           <CardBody>
             <CardTitle tag="h4">Card Title</CardTitle>
-            <CardSubtitle className="text-muted">Support card subtitle</CardSubtitle>
+            <CardSubtitle className="text-muted">
+              Support card subtitle
+            </CardSubtitle>
           </CardBody>
           <img className="img-fluid" src={img2} alt="Card cap" />
           <CardBody>
             <CardText>Bear claw sesame snaps gummies chocolate.</CardText>
-            <CardLink href="/" onClick={e => e.preventDefault()}>
+            <CardLink href="/" onClick={(e) => e.preventDefault()}>
               Card Link
             </CardLink>
-            <CardLink href="/" onClick={e => e.preventDefault()}>
+            <CardLink href="/" onClick={(e) => e.preventDefault()}>
               Another Link
             </CardLink>
           </CardBody>
@@ -54,13 +56,15 @@ const CardTitles = () => {
         <Card>
           <CardBody>
             <CardTitle tag="h4">Card Title</CardTitle>
-            <CardSubtitle className="text-muted">Support card subtitle</CardSubtitle>
+            <CardSubtitle className="text-muted">
+              Support card subtitle
+            </CardSubtitle>
             <img className="img-fluid my-2" src={img3} alt="Card cap" />
             <CardText>Bear claw sesame snaps gummies chocolate.</CardText>
-            <CardLink href="/" onClick={e => e.preventDefault()}>
+            <CardLink href="/" onClick={(e) => e.preventDefault()}>
               Card Link
             </CardLink>
-            <CardLink href="/" onClick={e => e.preventDefault()}>
+            <CardLink href="/" onClick={(e) => e.preventDefault()}>
               Another Link
             </CardLink>
           </CardBody>

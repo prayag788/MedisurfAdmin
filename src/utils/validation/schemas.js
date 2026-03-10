@@ -14,24 +14,32 @@ export const REGEX_PATTERNS = {
 
 // ** Common Validation Messages
 export const VALIDATION_MESSAGES = {
-  REQUIRED: field => `${field} is required!`,
+  REQUIRED: (field) => `${field} is required!`,
   EMAIL_INVALID: 'Please provide valid email address',
   EMAIL_REQUIRED: 'Please provide your email address. This field is required.',
   PHONE_INVALID: 'Please enter a valid contact number',
-  NAME_TOO_LONG: maxLength => `Name cannot be longer than ${maxLength} characters`,
-  NAME_REQUIRED: field => `${field} is required!`,
-  NO_SPACES_ONLY: field => `${field} cannot be only spaces`,
+  NAME_TOO_LONG: (maxLength) =>
+    `Name cannot be longer than ${maxLength} characters`,
+  NAME_REQUIRED: (field) => `${field} is required!`,
+  NO_SPACES_ONLY: (field) => `${field} cannot be only spaces`,
   STATUS_REQUIRED: 'Please select a valid status',
   CLINIC_REQUIRED: 'At least one clinic is required',
   MIN_LENGTH: (field, min) => `At least ${min} ${field} is required`,
 }
 
 // ** Common Field Validations
-export const createNameValidation = (fieldName, maxLength = 25, isRequired = true) => {
+export const createNameValidation = (
+  fieldName,
+  maxLength = 25,
+  isRequired = true
+) => {
   let validation = yup.string()
 
   if (maxLength) {
-    validation = validation.max(maxLength, VALIDATION_MESSAGES.NAME_TOO_LONG(maxLength))
+    validation = validation.max(
+      maxLength,
+      VALIDATION_MESSAGES.NAME_TOO_LONG(maxLength)
+    )
   }
 
   if (isRequired) {
@@ -40,7 +48,7 @@ export const createNameValidation = (fieldName, maxLength = 25, isRequired = tru
       .test(
         'no-space',
         VALIDATION_MESSAGES.NO_SPACES_ONLY(fieldName),
-        value => value.trim().length > 0
+        (value) => value.trim().length > 0
       )
   }
 
@@ -58,7 +66,9 @@ export const createEmailValidation = (isRequired = true) => {
 }
 
 export const createPhoneValidation = (isRequired = false) => {
-  let validation = yup.string().matches(REGEX_PATTERNS.PHONE, VALIDATION_MESSAGES.PHONE_INVALID)
+  let validation = yup
+    .string()
+    .matches(REGEX_PATTERNS.PHONE, VALIDATION_MESSAGES.PHONE_INVALID)
 
   if (isRequired) {
     validation = validation.required(VALIDATION_MESSAGES.PHONE_INVALID)
@@ -185,7 +195,11 @@ export const FILTER_SCHEMA = yup
     'Select Atleast One Of The Filtering Criteria(Modalities, Physicians, Clinic Names, Study Status)',
     function (value) {
       const { modality, clinicNames, studyStatus } = value
-      return modality?.length > 0 || clinicNames?.length > 0 || studyStatus?.length > 0
+      return (
+        modality?.length > 0 ||
+        clinicNames?.length > 0 ||
+        studyStatus?.length > 0
+      )
     }
   )
   .required()

@@ -246,7 +246,11 @@
         }
         &.active {
           > a {
-            background: linear-gradient(118deg, rgba($primary, 1), rgba($primary, 0.7));
+            background: linear-gradient(
+              118deg,
+              rgba($primary, 1),
+              rgba($primary, 0.7)
+            );
             box-shadow: 0px 0px 6px 1px rgba($primary, 0.6);
             color: $white;
             border-radius: 4px;
@@ -289,7 +293,9 @@
     &:not(.blank-page) {
       .app-content {
         // padding-top: 9.75rem;
-        padding: calc(#{$content-padding} + #{$navbar-height}* 2 + #{$floating-nav-margin})
+        padding: calc(
+            #{$content-padding} + #{$navbar-height}* 2 + #{$floating-nav-margin}
+          )
           #{$content-padding} 0 #{$content-padding}; // * 2  as we have 2 navbar (menu + navbar)  in horizontal layout.
       }
     }
@@ -360,8 +366,8 @@
   // navbar sticky
   &.navbar-sticky {
     .app-content {
-      padding: calc(#{$content-padding} + #{$navbar-height}* 2) #{$content-padding} 0
-        #{$content-padding};
+      padding: calc(#{$content-padding} + #{$navbar-height}* 2)
+        #{$content-padding} 0 #{$content-padding};
     }
     .header-navbar {
       background-color: $body-bg;
@@ -429,11 +435,15 @@
   // navbar static
   &.navbar-static {
     .app-content {
-      padding: calc(#{$content-padding} + #{$horizontal-menu-height}) #{$content-padding} 0
-        #{$content-padding};
+      padding: calc(#{$content-padding} + #{$horizontal-menu-height})
+        #{$content-padding} 0 #{$content-padding};
     }
     .content {
-      min-height: calc(100% - calc(#{$horizontal-menu-height} + calc(#{$footer-height} + 0.2rem)));
+      min-height: calc(
+        100% - calc(
+            #{$horizontal-menu-height} + calc(#{$footer-height} + 0.2rem)
+          )
+      );
     }
     .header-navbar {
       background-color: $body-bg;

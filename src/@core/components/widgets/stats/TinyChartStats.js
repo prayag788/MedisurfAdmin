@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Chart from 'react-apexcharts'
 import { Card, CardBody } from 'reactstrap'
 
-const TinyChartStats = props => {
+const TinyChartStats = (props) => {
   // ** Props
   const { title, stats, options, series, type, height = 100 } = props
 

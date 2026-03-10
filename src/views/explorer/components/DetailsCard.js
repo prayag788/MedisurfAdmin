@@ -5,14 +5,23 @@ import { flattenObj } from '../../../utility/Utils'
 import moment from 'moment'
 import { isUserLoggedIn } from '@utils'
 
-const DetailsCard = ({ data, idx, callback, showArrow, title, showKeys, className, level }) => {
+const DetailsCard = ({
+  data,
+  idx,
+  callback,
+  showArrow,
+  title,
+  showKeys,
+  className,
+  level,
+}) => {
   const [fieldData, setFieldData] = useState({})
   const [calculatedTitle, setCalculatedTitle] = useState('')
   const userData = JSON.parse(isUserLoggedIn())
 
   useEffect(() => {
     if (showKeys) {
-      setFieldData(prev => {
+      setFieldData((prev) => {
         const flatData = flattenObj(data)
         let tags
 
@@ -22,7 +31,7 @@ const DetailsCard = ({ data, idx, callback, showArrow, title, showKeys, classNam
           tags = showKeys
         }
 
-        tags.forEach(tag => {
+        tags.forEach((tag) => {
           if (flatData[tag] !== undefined) {
             prev[tag] = flatData[tag]
           }
@@ -32,7 +41,7 @@ const DetailsCard = ({ data, idx, callback, showArrow, title, showKeys, classNam
           setCalculatedTitle(() => {
             let ctitle = ''
             if (level === 'series') {
-              title.forEach(value => {
+              title.forEach((value) => {
                 ctitle += ctitle
                   ? `- ${prev[value] !== undefined ? prev[value] : ''}`
                   : `${prev[value] !== undefined ? prev[value] : ''} `
@@ -40,7 +49,7 @@ const DetailsCard = ({ data, idx, callback, showArrow, title, showKeys, classNam
               })
               ctitle = `Instance: ${ctitle}`
             } else {
-              title.forEach(value => {
+              title.forEach((value) => {
                 ctitle += ctitle
                   ? `- ${prev[value] ? prev[value] : ''}`
                   : `${prev[value] ? prev[value] : ''} `
@@ -60,7 +69,7 @@ const DetailsCard = ({ data, idx, callback, showArrow, title, showKeys, classNam
     }
   }, [data])
 
-  const handleCallback = idx => {
+  const handleCallback = (idx) => {
     if (callback) {
       callback(idx)
     }
@@ -73,19 +82,25 @@ const DetailsCard = ({ data, idx, callback, showArrow, title, showKeys, classNam
         handleCallback(idx)
       }}
     >
-      <CardHeader className={`pb-75 ${!className ? '' : className.head ? className.head : ''}`}>
+      <CardHeader
+        className={`pb-75 ${!className ? '' : className.head ? className.head : ''}`}
+      >
         <CardTitle>{calculatedTitle ? calculatedTitle : title}</CardTitle>
       </CardHeader>
-      <CardBody className={!className ? '' : className.body ? className.body : ''}>
+      <CardBody
+        className={!className ? '' : className.body ? className.body : ''}
+      >
         <Row>
           <Col md={11}>
-            {Object.keys(fieldData).map(key => {
+            {Object.keys(fieldData).map((key) => {
               if (key === 'PatientBirthDate' || key === 'StudyDate') {
                 return (
                   <p className="mb-0">
                     {key}:{' '}
                     <strong>
-                      {moment(fieldData[key]).format(userData?.dateFormats?.dateFormat)}
+                      {moment(fieldData[key]).format(
+                        userData?.dateFormats?.dateFormat
+                      )}
                     </strong>
                   </p>
                 )

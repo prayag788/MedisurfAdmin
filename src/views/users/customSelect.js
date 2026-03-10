@@ -2,7 +2,13 @@ import Select from 'react-select'
 import classnames from 'classnames'
 import { selectThemeColors } from '@utils'
 
-export default function CustomSelect({ options, isValid, selectHandler, name, defaultValue }) {
+export default function CustomSelect({
+  options,
+  isValid,
+  selectHandler,
+  name,
+  defaultValue,
+}) {
   const invalid = {
     control: (provided, state) => ({
       ...provided,

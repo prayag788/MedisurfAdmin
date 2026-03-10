@@ -1,8 +1,14 @@
 import { lazy } from 'react'
 
-const ClinicAdminToolsHome = lazy(() => import('../../views/clinic-admin-tools/ClinicAdminToolsHome'))
-const ClinicAdminLogs = lazy(() => import('../../views/clinic-admin-tools/ClinicAdminLogs'))
-const ClinicAdminApiTools = lazy(() => import('../../views/clinic-admin-tools/ClinicAdminApiTools'))
+const ClinicAdminToolsHome = lazy(
+  () => import('../../views/clinic-admin-tools/ClinicAdminToolsHome')
+)
+const ClinicAdminLogs = lazy(
+  () => import('../../views/clinic-admin-tools/ClinicAdminLogs')
+)
+const ClinicAdminApiTools = lazy(
+  () => import('../../views/clinic-admin-tools/ClinicAdminApiTools')
+)
 
 const ClinicAdminToolsRoutes = [
   {
@@ -20,4 +26,3 @@ const ClinicAdminToolsRoutes = [
 ]
 
 export default ClinicAdminToolsRoutes
-

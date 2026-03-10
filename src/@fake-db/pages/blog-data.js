@@ -6,7 +6,8 @@ const data = {
       img: require('@src/assets/images/slider/02.jpg').default,
       title: 'The Best Features Coming to iOS and Web design',
       id: 1,
-      avatar: require('@src/assets/images/portrait/small/avatar-s-7.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-7.jpg')
+        .default,
       userFullName: 'Ghani Pradita',
       blogPosted: 'Jan 10, 2020',
       tags: ['Quote', 'Fashion'],
@@ -18,7 +19,8 @@ const data = {
       img: require('@src/assets/images/slider/06.jpg').default,
       title: 'Latest Quirky Opening Sentence or Paragraph',
       id: 2,
-      avatar: require('@src/assets/images/portrait/small/avatar-s-9.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-9.jpg')
+        .default,
       userFullName: 'Jorge Griffin',
       blogPosted: 'Jan 10, 2020',
       tags: ['Gaming', 'Video'],
@@ -30,7 +32,8 @@ const data = {
       img: require('@src/assets/images/slider/04.jpg').default,
       title: 'Share an Amazing and Shocking Fact or Statistic',
       id: 3,
-      avatar: require('@src/assets/images/portrait/small/avatar-s-3.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-3.jpg')
+        .default,
       userFullName: 'Claudia Neal',
       blogPosted: 'Jan 10, 2020',
       tags: ['Gaming', 'Food'],
@@ -42,7 +45,8 @@ const data = {
       img: require('@src/assets/images/slider/03.jpg').default,
       title: 'Withhold a Compelling Piece of Information',
       id: 4,
-      avatar: require('@src/assets/images/portrait/small/avatar-s-14.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-14.jpg')
+        .default,
       userFullName: 'Fred Boone',
       blogPosted: 'Jan 10, 2020',
       tags: ['Video'],
@@ -54,7 +58,8 @@ const data = {
       img: require('@src/assets/images/slider/09.jpg').default,
       title: 'Unadvertised Bonus Opening: Share a Quote',
       id: 5,
-      avatar: require('@src/assets/images/portrait/small/avatar-s-13.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-13.jpg')
+        .default,
       userFullName: 'Billy French',
       blogPosted: 'Jan 10, 2020',
       tags: ['Quote', 'Fashion'],
@@ -66,7 +71,8 @@ const data = {
       img: require('@src/assets/images/slider/10.jpg').default,
       title: 'Ships at a distance have Every Man’s Wish on Board',
       id: 6,
-      avatar: require('@src/assets/images/portrait/small/avatar-s-13.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-13.jpg')
+        .default,
       userFullName: 'Helena Hunt',
       blogPosted: 'Jan 10, 2020',
       tags: ['Fashion', 'Video'],
@@ -116,7 +122,8 @@ const data = {
     blog: {
       img: require('@src/assets/images/banner/banner-12.jpg').default,
       title: 'The Best Features Coming to iOS and Web design',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-7.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-7.jpg')
+        .default,
       userFullName: 'Ghani Pradita',
       createdTime: 'Jan 10, 2020',
       tags: ['Gaming', 'Video'],
@@ -127,7 +134,8 @@ const data = {
     },
     comments: [
       {
-        avatar: require('@src/assets/images/portrait/small/avatar-s-9.jpg').default,
+        avatar: require('@src/assets/images/portrait/small/avatar-s-9.jpg')
+          .default,
         userFullName: 'Chad Alexander',
         commentedAt: 'May 24, 2020',
         commentText:

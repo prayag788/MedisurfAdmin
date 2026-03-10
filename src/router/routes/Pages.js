@@ -11,7 +11,9 @@ const PagesRoutes = [
   },
   {
     path: '/activation-key',
-    component: lazy(() => import('../../views/pages/authentication/ActivationKey')),
+    component: lazy(
+      () => import('../../views/pages/authentication/ActivationKey')
+    ),
     layout: 'BlankLayout',
     meta: {
       authRoute: true,
@@ -26,7 +28,9 @@ const PagesRoutes = [
   },
   {
     path: '/forgot-password',
-    component: lazy(() => import('../../views/pages/authentication/ForgotPassword')),
+    component: lazy(
+      () => import('../../views/pages/authentication/ForgotPassword')
+    ),
     layout: 'BlankLayout',
     meta: {
       authRoute: true,
@@ -34,7 +38,9 @@ const PagesRoutes = [
   },
   {
     path: '/forgotPassword/:token',
-    component: lazy(() => import('../../views/pages/authentication/ForgotPasswordV1')),
+    component: lazy(
+      () => import('../../views/pages/authentication/ForgotPasswordV1')
+    ),
     layout: 'BlankLayout',
     meta: {
       authRoute: true,

@@ -10,8 +10,8 @@ const ListIcons = () => {
 
       <CardBody>
         <CardText>
-          Use <code>.list-style-icons</code> class with <code>&ltul&gt</code> tag to create a list
-          with icons.
+          Use <code>.list-style-icons</code> class with <code>&ltul&gt</code>{' '}
+          tag to create a list with icons.
         </CardText>
         <ul className="list-style-icons">
           <li>

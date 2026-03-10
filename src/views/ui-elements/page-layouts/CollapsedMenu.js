@@ -15,7 +15,8 @@ const CollapsedMenu = () => {
         <div className="alert-body">
           <span className="font-weight-bold">Info: </span>
           <span>
-            Use this layout to set menu (navigation) default collapsed. Please check{' '}
+            Use this layout to set menu (navigation) default collapsed. Please
+            check{' '}
             <a
               href="https://pixinvent.com/demo/vuexy-react-admin-dashboard-template/documentation/development/page-layouts"
               target="_blank"

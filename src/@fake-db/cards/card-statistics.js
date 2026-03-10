@@ -90,20 +90,38 @@ const data = {
   },
 }
 
-mock.onGet('/card/card-statistics/orders-bar-chart').reply(() => [200, data.orders_bar_chart])
+mock
+  .onGet('/card/card-statistics/orders-bar-chart')
+  .reply(() => [200, data.orders_bar_chart])
 
-mock.onGet('/card/card-statistics/profit-line-chart').reply(() => [200, data.profit_line_chart])
+mock
+  .onGet('/card/card-statistics/profit-line-chart')
+  .reply(() => [200, data.profit_line_chart])
 
-mock.onGet('/card/card-statistics/subscribers').reply(() => [200, data.subscribers_gained])
+mock
+  .onGet('/card/card-statistics/subscribers')
+  .reply(() => [200, data.subscribers_gained])
 
-mock.onGet('/card/card-statistics/revenue').reply(() => [200, data.revenueGenerated])
+mock
+  .onGet('/card/card-statistics/revenue')
+  .reply(() => [200, data.revenueGenerated])
 
-mock.onGet('/card/card-statistics/sales').reply(() => [200, data.quarterlySales])
+mock
+  .onGet('/card/card-statistics/sales')
+  .reply(() => [200, data.quarterlySales])
 
-mock.onGet('/card/card-statistics/orders').reply(() => [200, data.ordersRecevied])
+mock
+  .onGet('/card/card-statistics/orders')
+  .reply(() => [200, data.ordersRecevied])
 
-mock.onGet('/card/card-statistics/site-traffic').reply(() => [200, data.siteTraffic])
+mock
+  .onGet('/card/card-statistics/site-traffic')
+  .reply(() => [200, data.siteTraffic])
 
-mock.onGet('/card/card-statistics/active-users').reply(() => [200, data.activeUsers])
+mock
+  .onGet('/card/card-statistics/active-users')
+  .reply(() => [200, data.activeUsers])
 
-mock.onGet('/card/card-statistics/newsletter').reply(() => [200, data.newsletter])
+mock
+  .onGet('/card/card-statistics/newsletter')
+  .reply(() => [200, data.newsletter])

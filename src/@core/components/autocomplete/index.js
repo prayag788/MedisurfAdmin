@@ -16,7 +16,7 @@ import { useOnClickOutside } from '@hooks/useOnClickOutside'
 import '@styles/base/bootstrap-extended/_include.scss'
 import './autocomplete.scss'
 
-const Autocomplete = props => {
+const Autocomplete = (props) => {
   // ** Refs
   const container = useRef(null)
   const inputElRef = useRef(null)
@@ -47,12 +47,12 @@ const Autocomplete = props => {
   }
 
   // ** Suggestion Hover Event
-  const onSuggestionItemHover = index => {
+  const onSuggestionItemHover = (index) => {
     setActiveSuggestion(index)
   }
 
   // ** Input On Change Event
-  const onChange = e => {
+  const onChange = (e) => {
     const userInput = e.currentTarget.value
     setActiveSuggestion(0)
     setShowSuggestions(true)
@@ -63,12 +63,12 @@ const Autocomplete = props => {
   }
 
   // ** Input Click Event
-  const onInputClick = e => {
+  const onInputClick = (e) => {
     e.stopPropagation()
   }
 
   // ** Input's Keydown Event
-  const onKeyDown = e => {
+  const onKeyDown = (e) => {
     const filterKey = props.filterKey
     const suggestionList = suggestionsListRef.current
 
@@ -114,19 +114,20 @@ const Autocomplete = props => {
   }
 
   // ** Function To Render Grouped Suggestions
-  const renderGroupedSuggestion = arr => {
+  const renderGroupedSuggestion = (arr) => {
     const { filterKey, customRender } = props
 
     const renderSuggestion = (item, i) => {
       if (!customRender) {
-        const suggestionURL = item.link !== undefined && item.link !== null ? item.link : null
+        const suggestionURL =
+          item.link !== undefined && item.link !== null ? item.link : null
         return (
           <li
             className={classnames('suggestion-item', {
               active: filteredData.indexOf(item) === activeSuggestion,
             })}
             key={item[filterKey]}
-            onClick={e => onSuggestionItemClick(suggestionURL, e)}
+            onClick={(e) => onSuggestionItemClick(suggestionURL, e)}
             onMouseEnter={() => {
               onSuggestionItemHover(filteredData.indexOf(item))
             }}
@@ -160,9 +161,13 @@ const Autocomplete = props => {
 
     filteredData = []
     const sortSingleData = suggestions
-      .filter(i => {
-        const startCondition = i[filterKey].toLowerCase().startsWith(userInput.toLowerCase()),
-          includeCondition = i[filterKey].toLowerCase().includes(userInput.toLowerCase())
+      .filter((i) => {
+        const startCondition = i[filterKey]
+            .toLowerCase()
+            .startsWith(userInput.toLowerCase()),
+          includeCondition = i[filterKey]
+            .toLowerCase()
+            .includes(userInput.toLowerCase())
         if (startCondition) {
           return startCondition
         } else if (!startCondition && includeCondition) {
@@ -176,7 +181,9 @@ const Autocomplete = props => {
     if (sortSingleData.length) {
       return sortSingleData.map((suggestion, index) => {
         const suggestionURL =
-          suggestion.link !== undefined && suggestion.link !== null ? suggestion.link : null
+          suggestion.link !== undefined && suggestion.link !== null
+            ? suggestion.link
+            : null
         if (!customRender) {
           return (
             <li
@@ -184,8 +191,10 @@ const Autocomplete = props => {
                 active: filteredData.indexOf(suggestion) === activeSuggestion,
               })}
               key={suggestion[filterKey]}
-              onClick={e => onSuggestionItemClick(suggestionURL, e)}
-              onMouseEnter={() => onSuggestionItemHover(filteredData.indexOf(suggestion))}
+              onClick={(e) => onSuggestionItemClick(suggestionURL, e)}
+              onMouseEnter={() =>
+                onSuggestionItemHover(filteredData.indexOf(suggestion))
+              }
             >
               {suggestion[filterKey]}
             </li>
@@ -207,7 +216,8 @@ const Autocomplete = props => {
     } else {
       return (
         <li className="suggestion-item no-result">
-          <AlertCircle size={15} /> <span className="align-middle ml-50">No Result</span>
+          <AlertCircle size={15} />{' '}
+          <span className="align-middle ml-50">No Result</span>
         </li>
       )
     }
@@ -222,11 +232,15 @@ const Autocomplete = props => {
       return renderUngroupedSuggestions()
     } else {
       filteredData = []
-      return suggestions.map(suggestion => {
+      return suggestions.map((suggestion) => {
         const sortData = suggestion.data
-          .filter(i => {
-            const startCondition = i[filterKey].toLowerCase().startsWith(userInput.toLowerCase()),
-              includeCondition = i[filterKey].toLowerCase().includes(userInput.toLowerCase())
+          .filter((i) => {
+            const startCondition = i[filterKey]
+                .toLowerCase()
+                .startsWith(userInput.toLowerCase()),
+              includeCondition = i[filterKey]
+                .toLowerCase()
+                .includes(userInput.toLowerCase())
             if (startCondition) {
               return startCondition
             } else if (!startCondition && includeCondition) {
@@ -241,13 +255,16 @@ const Autocomplete = props => {
         return (
           <Fragment key={suggestion[filterHeaderKey]}>
             <li className="suggestion-item suggestion-title-wrapper">
-              <h6 className="suggestion-title">{suggestion[filterHeaderKey]}</h6>
+              <h6 className="suggestion-title">
+                {suggestion[filterHeaderKey]}
+              </h6>
             </li>
             {sortData.length ? (
               renderGroupedSuggestion(sortData)
             ) : (
               <li className="suggestion-item no-result">
-                <AlertCircle size={15} /> <span className="align-middle ml-50">No Result</span>
+                <AlertCircle size={15} />{' '}
+                <span className="align-middle ml-50">No Result</span>
               </li>
             )}
           </Fragment>
@@ -315,21 +332,21 @@ const Autocomplete = props => {
     <div className="autocomplete-container" ref={container}>
       <input
         type="text"
-        onChange={e => {
+        onChange={(e) => {
           onChange(e)
           if (props.onChange) {
             props.onChange(e)
           }
         }}
-        onKeyDown={e => onKeyDown(e)}
+        onKeyDown={(e) => onKeyDown(e)}
         value={userInput}
         className={`autocomplete-search ${props.className ? props.className : ''}`}
         placeholder={props.placeholder}
         onClick={onInputClick}
         ref={inputElRef}
-        onFocus={e => setFocused(true)}
+        onFocus={(e) => setFocused(true)}
         autoFocus={props.autoFocus}
-        onBlur={e => {
+        onBlur={(e) => {
           if (props.onBlur) props.onBlur(e)
           setFocused(false)
         }}

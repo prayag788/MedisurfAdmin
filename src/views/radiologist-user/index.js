@@ -89,12 +89,15 @@ const RadiologistUser = () => {
       .get(`${process.env.REACT_APP_API_URL}/user`, {
         params,
       })
-      .then(doc => {
+      .then((doc) => {
         console.log('Radiologist users API response:', doc.data)
-        console.log('Number of radiologist users found:', doc.data.numberOfRecord)
+        console.log(
+          'Number of radiologist users found:',
+          doc.data.numberOfRecord
+        )
         console.log('Radiologist users list:', doc.data.list)
         setStartsrno(doc.data.startsrno ? doc.data.startsrno : 0)
-        setData(prev =>
+        setData((prev) =>
           doc.data.list.map((obj, index) => {
             obj.sl = startsrno + index + 1
             obj.full_name = `${obj.fname} ${obj.lname}`
@@ -109,7 +112,7 @@ const RadiologistUser = () => {
         SetNewUserId(doc.data.nextId)
         setTotal(doc.data.numberOfRecord)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error fetching radiologist users:', err)
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err))
@@ -135,7 +138,7 @@ const RadiologistUser = () => {
   const handleEditModal = () => SetEditModal(!editModal)
 
   // ** CRUD Handlers
-  const addNewUser = requestData => {
+  const addNewUser = (requestData) => {
     requestData = {
       ...requestData,
       role: 'RDU',
@@ -146,7 +149,7 @@ const RadiologistUser = () => {
     showLoadingAlert()
     axios
       .post(`${process.env.REACT_APP_API_URL}/user/register/admin`, requestData)
-      .then(doc => {
+      .then((doc) => {
         console.log('Radiologist user created successfully:', doc.data)
         handleModal()
         hideLoadingAlert()
@@ -156,10 +159,12 @@ const RadiologistUser = () => {
           getUpdatedData()
         }, 1000)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error creating radiologist user:', err)
         const isValidationError = err?.response?.status === 422
-        const message = err?.response ? undefined : 'Failed to create radiologist user'
+        const message = err?.response
+          ? undefined
+          : 'Failed to create radiologist user'
         hideLoadingThenShowError(err, message)
         if (!isValidationError) {
           handleModal()
@@ -178,40 +183,45 @@ const RadiologistUser = () => {
     showLoadingAlert()
     axios
       .patch(`${process.env.REACT_APP_API_URL}/user/${data._id}`, data)
-      .then(doc => {
+      .then((doc) => {
         hideLoadingAlert()
         showSuccessAlert(
           `Radiologist User ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
         )
         // Update frontend state immediately
-        setData(prev => prev.map(user => {
-          if (user._id === data._id) {
-            const updatedUser = { ...user, ...data }
-            updatedUser.full_name = `${updatedUser.fname || ''} ${updatedUser.lname || ''}`
-            return updatedUser
-          }
-          return user
-        }))
+        setData((prev) =>
+          prev.map((user) => {
+            if (user._id === data._id) {
+              const updatedUser = { ...user, ...data }
+              updatedUser.full_name = `${updatedUser.fname || ''} ${updatedUser.lname || ''}`
+              return updatedUser
+            }
+            return user
+          })
+        )
         // Refresh from API with delay
         setTimeout(() => getUpdatedData(), 500)
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingThenShowError(err)
       })
   }
 
   function deleteUser(id) {
     axios
-      .patch(`${process.env.REACT_APP_API_URL}/user/${id}`, { _id: id, status: -1 })
-      .then(doc => {
+      .patch(`${process.env.REACT_APP_API_URL}/user/${id}`, {
+        _id: id,
+        status: -1,
+      })
+      .then((doc) => {
         showSuccessAlert('Radiologist User Deleted Successfully!')
         // Immediately remove from frontend state
-        setData(prev => prev.filter(user => user._id !== id))
+        setData((prev) => prev.filter((user) => user._id !== id))
         // Refresh from API with longer delay
         setTimeout(() => getUpdatedData(), 500)
         setTimeout(() => getUpdatedData(), 1000)
       })
-      .catch(err => {
+      .catch((err) => {
         handleEditModal()
         showErrorAlert(err)
       })
@@ -219,16 +229,18 @@ const RadiologistUser = () => {
 
   // Confirmation Sweet Alert
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
       }
-    })
+    )
   }
 
   // ** Table item Button Handlers
-  const editHandler = Udata => {
-    setSelectedItem(prev => {
+  const editHandler = (Udata) => {
+    setSelectedItem((prev) => {
       return {
         ...prev,
         ...Udata,
@@ -237,11 +249,11 @@ const RadiologistUser = () => {
     handleEditModal()
   }
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     deleteUser(id)
   }
 
-  const DeactivationHandler = id => {
+  const DeactivationHandler = (id) => {
     const deactivationOptions = {
       _id: id,
       status: 0,
@@ -249,7 +261,7 @@ const RadiologistUser = () => {
     updateUserDetails(deactivationOptions, 'deactivate')
   }
 
-  const ActivationHandler = id => {
+  const ActivationHandler = (id) => {
     const activationOptions = {
       _id: id,
       status: 1,
@@ -266,7 +278,7 @@ const RadiologistUser = () => {
   const columns = [
     {
       name: 'ID',
-      cell: row => (row['referenceId'] || row['reference_id'] || '-'),
+      cell: (row) => row['referenceId'] || row['reference_id'] || '-',
       sortable: true,
       reorder: true,
       id: 'referenceId',
@@ -281,13 +293,13 @@ const RadiologistUser = () => {
       id: 'fname',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.full_name}</div>
       },
     },
     {
       name: 'Contact Number',
-      cell: row => (row['cno'] ? row['cno'] : '-'),
+      cell: (row) => (row['cno'] ? row['cno'] : '-'),
       sortable: true,
       reorder: true,
       id: 'cno',
@@ -295,25 +307,25 @@ const RadiologistUser = () => {
     },
     {
       name: 'Email',
-      selector: row => (row['email'] ? row['email'] : '-'),
+      selector: (row) => (row['email'] ? row['email'] : '-'),
       sortable: true,
       reorder: true,
       id: 'email',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.email}</div>
       },
     },
     {
       name: 'User Name',
-      selector: row => (row['username'] ? row['username'] : '-'),
+      selector: (row) => (row['username'] ? row['username'] : '-'),
       sortable: true,
       reorder: true,
       id: 'username',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.username}</div>
       },
     },
@@ -325,32 +337,42 @@ const RadiologistUser = () => {
       id: 'digitalSignature',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <img src={row.digitalSignature} className="" width={175} />
       },
     },
     {
       name: 'Medical Qualifications',
-      selector: row => (row['medicalQualifications'] ? row['medicalQualifications'] : '-'),
+      selector: (row) =>
+        row['medicalQualifications'] ? row['medicalQualifications'] : '-',
       sortable: true,
       reorder: true,
       id: 'medicalQualifications',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.medicalQualifications}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.medicalQualifications}
+          </div>
+        )
       },
     },
     {
       name: 'Board Qualifications',
-      selector: row => (row['boardCertifications'] ? row['boardCertifications'] : '-'),
+      selector: (row) =>
+        row['boardCertifications'] ? row['boardCertifications'] : '-',
       sortable: true,
       reorder: true,
       id: 'boardCertifications',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.boardCertifications}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.boardCertifications}
+          </div>
+        )
       },
     },
     {
@@ -359,7 +381,7 @@ const RadiologistUser = () => {
       sortable: true,
       reorder: true,
       id: 'status',
-      cell: row => {
+      cell: (row) => {
         return (
           <Badge color={status[row.status].color} pill>
             {status[row.status].title}
@@ -373,7 +395,7 @@ const RadiologistUser = () => {
       sortable: false,
       reorder: true,
       id: 'actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -477,7 +499,11 @@ const RadiologistUser = () => {
               </div>
             </CardHeader>
             <Row className="justify-content-end mx-0">
-              <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+              <Col
+                className="d-flex align-items-center justify-content-end mt-1"
+                md="6"
+                sm="12"
+              >
                 <Label className="mr-1" for="search-input">
                   Search
                 </Label>
@@ -487,7 +513,7 @@ const RadiologistUser = () => {
                   bsSize="sm"
                   id="search-input"
                   value={searchValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     setSearchValue(e.target.value)
                   }}
                 />
@@ -506,9 +532,9 @@ const RadiologistUser = () => {
                     onSort: handleSort,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setPage(e.first++)
-                      setRowsPerPage(prev => e.rows)
+                      setRowsPerPage((prev) => e.rows)
                       localStorage.setItem('radiologistuserrow', e.rows)
                     },
                   }}

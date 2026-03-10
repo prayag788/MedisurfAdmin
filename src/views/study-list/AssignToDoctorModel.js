@@ -45,10 +45,10 @@ const AssignToDoctorModel = ({ toggle, setToggle, study }) => {
       .get(`${process.env.REACT_APP_API_URL}/user`, {
         params: queryParams,
       })
-      .then(doc => {
+      .then((doc) => {
         let indexNumber = currentPage * 7
         setTotalDataLength(doc?.data?.numberOfRecord || 1)
-        setTableData(prev =>
+        setTableData((prev) =>
           doc.data.list.map((obj, index) => {
             obj.sl = ++indexNumber
             obj.fname = `${obj.fname} ${obj.lname}`
@@ -58,22 +58,27 @@ const AssignToDoctorModel = ({ toggle, setToggle, study }) => {
       })
   }, [currentPage, sortcolumn, sortdirection])
 
-  const handleAssignment = doc => {
+  const handleAssignment = (doc) => {
     showLoadingAlert()
 
     axios
-      .patch(`${process.env.REACT_APP_API_URL}/user/referring-doctor/assign-study`, {
-        docId: doc['_id'],
-        studyId: study._id,
-        email: doc.email,
-        study,
-        doc,
-      })
-      .then(response => {
+      .patch(
+        `${process.env.REACT_APP_API_URL}/user/referring-doctor/assign-study`,
+        {
+          docId: doc['_id'],
+          studyId: study._id,
+          email: doc.email,
+          study,
+          doc,
+        }
+      )
+      .then((response) => {
         hideLoadingAlert()
         toast.success(
           <ToastContent
-            message={"Email sent to respective referring doctor's email address"}
+            message={
+              "Email sent to respective referring doctor's email address"
+            }
             type={'success'}
           />,
           {
@@ -86,15 +91,15 @@ const AssignToDoctorModel = ({ toggle, setToggle, study }) => {
             progress: undefined,
           }
         )
-        setTableData(prev => {
-          return prev.map(obj => {
+        setTableData((prev) => {
+          return prev.map((obj) => {
             return obj['_id'] === response.data['_id']
               ? { ...obj, assignedStudies: response.data['assignedStudies'] }
               : obj
           })
         })
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingAlert()
         if (err && err.response) {
           showErrorAlert(getErrorMessage(err)).then(() => location.reload())
@@ -107,32 +112,35 @@ const AssignToDoctorModel = ({ toggle, setToggle, study }) => {
       className="cursor-pointer"
       size={15}
       onClick={() => {
-        setToggle(prev => !prev)
+        setToggle((prev) => !prev)
       }}
     />
   )
 
-  const handleUnassignment = doc => {
+  const handleUnassignment = (doc) => {
     axios
-      .patch(`${process.env.REACT_APP_API_URL}/user/referring-doctor/unassign-study`, {
-        docId: doc['_id'],
-        studyId: study._id,
-        email: doc.email,
-      })
-      .then(response => {
-        setTableData(prev => {
-          return prev.map(obj => {
+      .patch(
+        `${process.env.REACT_APP_API_URL}/user/referring-doctor/unassign-study`,
+        {
+          docId: doc['_id'],
+          studyId: study._id,
+          email: doc.email,
+        }
+      )
+      .then((response) => {
+        setTableData((prev) => {
+          return prev.map((obj) => {
             return obj['_id'] === response.data['_id']
               ? { ...obj, assignedStudies: response.data['assignedStudies'] }
               : obj
           })
         })
       })
-      .catch(err => console.log(err.response))
+      .catch((err) => console.log(err.response))
   }
 
   // ** Function to handle Pagination
-  const handlePagination = page => {
+  const handlePagination = (page) => {
     setCurrentPage(page.selected)
     setPage(page.selected + 1)
   }
@@ -143,7 +151,7 @@ const AssignToDoctorModel = ({ toggle, setToggle, study }) => {
       previousLabel={''}
       nextLabel={''}
       forcePage={currentPage}
-      onPageChange={page => handlePagination(page)}
+      onPageChange={(page) => handlePagination(page)}
       pageCount={totalDataLength / 7 || 1}
       breakLabel={'...'}
       pageRangeDisplayed={2}
@@ -167,19 +175,19 @@ const AssignToDoctorModel = ({ toggle, setToggle, study }) => {
   const column = [
     {
       name: 'S.No',
-      selector: row => row.sl,
+      selector: (row) => row.sl,
       sortable: false,
       minWidth: '50px',
     },
     {
       name: 'Name',
-      selector: row => row.fname,
+      selector: (row) => row.fname,
       sortable: true,
       minWidth: '200px',
     },
     {
       name: 'Email',
-      selector: row => row.email,
+      selector: (row) => row.email,
       sortable: true,
       minWidth: '350px',
     },
@@ -191,10 +199,12 @@ const AssignToDoctorModel = ({ toggle, setToggle, study }) => {
         if (!row || !row._id) {
           return <div>-</div>
         }
-        
-        const assignedStudies = Array.isArray(row.assignedStudies) ? row.assignedStudies : []
+
+        const assignedStudies = Array.isArray(row.assignedStudies)
+          ? row.assignedStudies
+          : []
         const isStudyAssigned = assignedStudies.includes(study._id)
-        
+
         return (
           <div className="d-flex">
             {!isStudyAssigned ? (
@@ -221,15 +231,20 @@ const AssignToDoctorModel = ({ toggle, setToggle, study }) => {
   ]
 
   return (
-    <Modal isOpen={toggle} toggle={() => setToggle(prev => !prev)} className="modal-lg" key={1}>
+    <Modal
+      isOpen={toggle}
+      toggle={() => setToggle((prev) => !prev)}
+      className="modal-lg"
+      key={1}
+    >
       <ModalHeader
-        toggle={() => setToggle(prev => !prev)}
+        toggle={() => setToggle((prev) => !prev)}
         close={
           <X
             className="cursor-pointer"
             size={15}
             onClick={() => {
-              setToggle(prev => !prev)
+              setToggle((prev) => !prev)
             }}
           />
         }

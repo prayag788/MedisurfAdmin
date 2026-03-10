@@ -9,7 +9,7 @@ const existingAccessAbility = userData ? userData.access : null
 
 const seen = new Set()
 const existingAbility = Array.isArray(existingAccessAbility)
-  ? existingAccessAbility.filter(item => {
+  ? existingAccessAbility.filter((item) => {
       const key = `${item.action}-${item.subject}`
       if (!seen.has(key)) {
         seen.add(key)

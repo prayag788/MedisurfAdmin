@@ -13,7 +13,7 @@ import {
   canViewMenuItem,
 } from '@layouts/utils'
 
-const HorizontalNavMenuItems = props => {
+const HorizontalNavMenuItems = (props) => {
   // ** Context
   const ability = useContext(AbilityContext)
 
@@ -28,10 +28,16 @@ const HorizontalNavMenuItems = props => {
     const TagName = Components[resolveNavItemComponent(item)]
     if (item.children) {
       return (
-        canViewMenuGroup(item) && <TagName item={item} index={index} key={item.id} {...props} />
+        canViewMenuGroup(item) && (
+          <TagName item={item} index={index} key={item.id} {...props} />
+        )
       )
     }
-    return canViewMenuItem(item) && <TagName item={item} index={index} key={item.id} {...props} />
+    return (
+      canViewMenuItem(item) && (
+        <TagName item={item} index={index} key={item.id} {...props} />
+      )
+    )
   })
 
   return RenderNavItems

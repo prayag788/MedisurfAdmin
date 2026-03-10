@@ -18,7 +18,7 @@ import {
  * Example form demonstrating the use of validation components
  */
 const ExampleForm = ({ onSubmit, defaultValues = {} }) => {
-  const handleSubmit = data => {
+  const handleSubmit = (data) => {
     console.log('Form data:', data)
     showSuccessAlert('Form submitted successfully!')
     if (onSubmit) onSubmit(data)

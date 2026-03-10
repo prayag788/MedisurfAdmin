@@ -29,18 +29,43 @@ import StaticDropdown from '../../@core/components/staticDropdown'
 // Build form values from editData (with fallbacks for full_name / first_name / last_name)
 function getValuesFromEditData(editData) {
   if (!editData || Object.keys(editData).length === 0) {
-    return { fname: '', lname: '', email: '', cno: '', status: 1, secondaryEmail: [], secondaryCno: [], clinics: [] }
+    return {
+      fname: '',
+      lname: '',
+      email: '',
+      cno: '',
+      status: 1,
+      secondaryEmail: [],
+      secondaryCno: [],
+      clinics: [],
+    }
   }
-  const fn = editData.fname ?? editData.first_name ?? (typeof editData.full_name === 'string' ? editData.full_name.split(' ')[0] : '') ?? ''
-  const ln = editData.lname ?? editData.last_name ?? (typeof editData.full_name === 'string' ? editData.full_name.split(' ').slice(1).join(' ') : '') ?? ''
+  const fn =
+    editData.fname ??
+    editData.first_name ??
+    (typeof editData.full_name === 'string'
+      ? editData.full_name.split(' ')[0]
+      : '') ??
+    ''
+  const ln =
+    editData.lname ??
+    editData.last_name ??
+    (typeof editData.full_name === 'string'
+      ? editData.full_name.split(' ').slice(1).join(' ')
+      : '') ??
+    ''
   return {
     fname: fn,
     lname: ln,
     email: editData.email ?? '',
     cno: editData.cno ?? '',
     status: editData.status ?? 1,
-    secondaryEmail: Array.isArray(editData.secondaryEmail) ? editData.secondaryEmail.filter(Boolean) : [],
-    secondaryCno: Array.isArray(editData.secondaryCno) ? editData.secondaryCno.filter(Boolean) : [],
+    secondaryEmail: Array.isArray(editData.secondaryEmail)
+      ? editData.secondaryEmail.filter(Boolean)
+      : [],
+    secondaryCno: Array.isArray(editData.secondaryCno)
+      ? editData.secondaryCno.filter(Boolean)
+      : [],
     clinics: Array.isArray(editData.clinics) ? editData.clinics : [],
   }
 }
@@ -50,7 +75,10 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   const [formData, setFormData] = useState(editData)
   const [clinics, setClinics] = useState([])
 
-  const defaultValues = useMemo(() => getValuesFromEditData(editData), [editData?._id])
+  const defaultValues = useMemo(
+    () => getValuesFromEditData(editData),
+    [editData?._id]
+  )
 
   const {
     formState: { errors },
@@ -86,7 +114,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
         { headers }
       )
       setClinics(
-        clinicsRes.data.data?.map(clinic => ({
+        clinicsRes.data.data?.map((clinic) => ({
           value: clinic._id,
           label: clinic.name,
           _id: clinic._id,
@@ -109,15 +137,31 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
     loadClinicData()
 
     const rawClinics = Array.isArray(editData.clinics) ? editData.clinics : []
-    const formattedClinics = rawClinics.map(clinic => {
-      const id = typeof clinic === 'string' ? clinic : (clinic?._id ?? clinic?.value ?? clinic?.id)
-      if (!id) return null
-      const idStr = String(id).trim()
-      const label =
-        (clinic && typeof clinic === 'object' && (clinic.clinicName || clinic.clinic_name || clinic.name || clinic.label)) ||
-        `Clinic ${idStr}`
-      return { value: idStr, _id: idStr, label, clinicName: label, name: label }
-    }).filter(Boolean)
+    const formattedClinics = rawClinics
+      .map((clinic) => {
+        const id =
+          typeof clinic === 'string'
+            ? clinic
+            : (clinic?._id ?? clinic?.value ?? clinic?.id)
+        if (!id) return null
+        const idStr = String(id).trim()
+        const label =
+          (clinic &&
+            typeof clinic === 'object' &&
+            (clinic.clinicName ||
+              clinic.clinic_name ||
+              clinic.name ||
+              clinic.label)) ||
+          `Clinic ${idStr}`
+        return {
+          value: idStr,
+          _id: idStr,
+          label,
+          clinicName: label,
+          name: label,
+        }
+      })
+      .filter(Boolean)
 
     const fromEdit = getValuesFromEditData(editData)
     const initialValues = { ...fromEdit, clinics: formattedClinics }
@@ -133,17 +177,35 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
     prevClinicsLengthRef.current = nowLen
     if (nowLen === 0 || prevLen > 0) return
     const rawClinics = Array.isArray(editData.clinics) ? editData.clinics : []
-    const formattedClinics = rawClinics.map(clinic => {
-      const id = typeof clinic === 'string' ? clinic : (clinic?._id ?? clinic?.value ?? clinic?.id)
-      if (!id) return null
-      const idStr = String(id).trim()
-      const exactOption = clinics.find(opt => String(opt.value || opt._id || '').trim() === idStr)
-      if (exactOption) return exactOption
-      const label =
-        (clinic && typeof clinic === 'object' && (clinic.clinicName || clinic.clinic_name || clinic.name || clinic.label)) ||
-        `Clinic ${idStr}`
-      return { value: idStr, _id: idStr, label, clinicName: label, name: label }
-    }).filter(Boolean)
+    const formattedClinics = rawClinics
+      .map((clinic) => {
+        const id =
+          typeof clinic === 'string'
+            ? clinic
+            : (clinic?._id ?? clinic?.value ?? clinic?.id)
+        if (!id) return null
+        const idStr = String(id).trim()
+        const exactOption = clinics.find(
+          (opt) => String(opt.value || opt._id || '').trim() === idStr
+        )
+        if (exactOption) return exactOption
+        const label =
+          (clinic &&
+            typeof clinic === 'object' &&
+            (clinic.clinicName ||
+              clinic.clinic_name ||
+              clinic.name ||
+              clinic.label)) ||
+          `Clinic ${idStr}`
+        return {
+          value: idStr,
+          _id: idStr,
+          label,
+          clinicName: label,
+          name: label,
+        }
+      })
+      .filter(Boolean)
     setValue('clinics', formattedClinics, { shouldValidate: false })
   }, [clinics, open, editData, setValue])
 
@@ -169,26 +231,40 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
 
   // ** Update click: build payload from form + editData fallback so update always runs (validation was clearing form state)
   const onUpdateClick = useCallback(
-    e => {
+    (e) => {
       e.preventDefault()
       const raw = getValues()
       const fromEdit = getValuesFromEditData(editData)
-      const fname = (raw.fname && String(raw.fname).trim()) || fromEdit.fname || ''
-      const lname = (raw.lname && String(raw.lname).trim()) || fromEdit.lname || ''
-      const email = (raw.email && String(raw.email).trim()) || fromEdit.email || ''
-      const cno = raw.cno != null ? String(raw.cno).trim() : (fromEdit.cno || '')
+      const fname =
+        (raw.fname && String(raw.fname).trim()) || fromEdit.fname || ''
+      const lname =
+        (raw.lname && String(raw.lname).trim()) || fromEdit.lname || ''
+      const email =
+        (raw.email && String(raw.email).trim()) || fromEdit.email || ''
+      const cno =
+        raw.cno !== null && raw.cno !== undefined
+          ? String(raw.cno).trim()
+          : fromEdit.cno || ''
       const status = parseInt(raw.status, 10) || fromEdit.status || 1
       const secondaryEmail = Array.isArray(raw.secondaryEmail)
-        ? raw.secondaryEmail.map(s => (typeof s === 'string' ? s.trim() : s)).filter(Boolean)
+        ? raw.secondaryEmail
+            .map((s) => (typeof s === 'string' ? s.trim() : s))
+            .filter(Boolean)
         : fromEdit.secondaryEmail || []
       const secondaryCno = Array.isArray(raw.secondaryCno)
-        ? raw.secondaryCno.map(s => (typeof s === 'string' ? String(s).trim() : s)).filter(Boolean)
+        ? raw.secondaryCno
+            .map((s) => (typeof s === 'string' ? String(s).trim() : s))
+            .filter(Boolean)
         : fromEdit.secondaryCno || []
       const clinicIds = Array.isArray(raw.clinics)
-        ? raw.clinics.map(c => (typeof c === 'string' ? c : (c?._id ?? c?.value))).filter(Boolean)
-        : (Array.isArray(editData.clinics)
-            ? editData.clinics.map(c => (typeof c === 'string' ? c : (c?._id ?? c?.value))).filter(Boolean)
-            : [])
+        ? raw.clinics
+            .map((c) => (typeof c === 'string' ? c : (c?._id ?? c?.value)))
+            .filter(Boolean)
+        : Array.isArray(editData.clinics)
+          ? editData.clinics
+              .map((c) => (typeof c === 'string' ? c : (c?._id ?? c?.value)))
+              .filter(Boolean)
+          : []
 
       const processedData = {
         _id: editData._id || editData.id,
@@ -213,16 +289,23 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
   )
 
   // ** Input handler for form data updates
-  const inputHandler = useCallback(e => {
+  const inputHandler = useCallback((e) => {
     const name = e.target.name
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, [name]: e.target.value }
     })
   }, [])
 
   // ** Reusable FormField component
   const FormField = useCallback(
-    ({ name, label, type = 'text', placeholder, required = false, ...props }) => (
+    ({
+      name,
+      label,
+      type = 'text',
+      placeholder,
+      required = false,
+      ...props
+    }) => (
       <FormGroup>
         <Label for={name}>
           {label}
@@ -244,9 +327,11 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             />
           )}
         />
+
         {errors?.[name] && <FormFeedback>{errors[name].message}</FormFeedback>}
       </FormGroup>
     ),
+
     [control, errors]
   )
 
@@ -258,7 +343,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-3" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-3"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Edit Clinic-user Details</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
@@ -275,8 +365,19 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             options={clinics}
             isMulti={true}
           />
-          <FormField name="fname" label="First Name" placeholder="Jhon" required />
-          <FormField name="lname" label="Last Name" placeholder="Doe" required />
+
+          <FormField
+            name="fname"
+            label="First Name"
+            placeholder="Jhon"
+            required
+          />
+          <FormField
+            name="lname"
+            label="Last Name"
+            placeholder="Doe"
+            required
+          />
           <FormGroup>
             <Label for="email">
               Email <span style={{ color: '#FF0000' }}>*</span>
@@ -295,8 +396,11 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                 />
               )}
             />
+
             {errors.email && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.email?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.email?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <AdditionalDataComponent
@@ -313,7 +417,12 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             placeholder="bruce.wayne@email.com"
           />
 
-          <FormField name="cno" label="Contact Number" type="text" placeholder="+1" />
+          <FormField
+            name="cno"
+            label="Contact Number"
+            type="text"
+            placeholder="+1"
+          />
           <AdditionalDataComponent
             fieldName="secondaryCno"
             title="Add More"
@@ -327,6 +436,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
             getValues={getValues}
             placeholder={'+1'}
           />
+
           <FormGroup>
             <Label for="status">
               Status <span style={{ color: '#FF0000' }}>*</span>
@@ -343,7 +453,7 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                   type="select"
                   invalid={errors.status && true}
                 >
-                  {STATUS_OPTIONS.map(option => (
+                  {STATUS_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -351,8 +461,11 @@ const EditModal = ({ updateUser, open, handleModal, editData }) => {
                 </Input>
               )}
             />
+
             {errors.status && (
-              <FormFeedback style={{ display: 'block' }}>{errors?.status?.message}</FormFeedback>
+              <FormFeedback style={{ display: 'block' }}>
+                {errors?.status?.message}
+              </FormFeedback>
             )}
           </FormGroup>
           <div className="d-flex justify-content-start mt-1">

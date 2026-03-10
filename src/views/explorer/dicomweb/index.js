@@ -50,7 +50,7 @@ const DICOMweb = () => {
     axios({
       method: 'get',
       url: `${process.env.REACT_APP_API_URL}/dicom-web/servers?expand`,
-    }).then(res => {
+    }).then((res) => {
       const servers = Object.keys(res.data)
       setDICOMservers(() => servers)
 
@@ -59,7 +59,7 @@ const DICOMweb = () => {
   }, [])
 
   // Fetch study list
-  const getStudyList = formData => {
+  const getStudyList = (formData) => {
     setLoadDicomWeb(true)
     axios({
       method: 'POST',
@@ -71,7 +71,7 @@ const DICOMweb = () => {
           ...formData,
         },
       },
-    }).then(response => {
+    }).then((response) => {
       setStudyList(() => response.data)
       setLoadDicomWeb(false)
       studyTableRef.current.scrollIntoView({
@@ -82,14 +82,14 @@ const DICOMweb = () => {
   }
 
   // Fetch study list
-  const getSeries = studyInstanceUID => {
+  const getSeries = (studyInstanceUID) => {
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_URL}/dicom-web/servers/${selectedServer}/qido`,
       data: {
         Uri: `/studies/${studyInstanceUID}/series`,
       },
-    }).then(response => {
+    }).then((response) => {
       setSelectedStudyUID(() => studyInstanceUID)
 
       setSeriesList(() => response.data)
@@ -106,7 +106,7 @@ const DICOMweb = () => {
     setModalContent(() => {
       return {
         title,
-        data: Object.keys(data).map(key => {
+        data: Object.keys(data).map((key) => {
           return {
             Tag: key,
             Description: data[key].Name,
@@ -125,10 +125,12 @@ const DICOMweb = () => {
       url: `${process.env.REACT_APP_API_URL}/dicom-web/servers/${selectedServer}/wado`,
       data: { Uri },
     })
-      .then(response => {
-        showSuccessAlert(`Job to Retrieve the ${title} has been created successfully!`)
+      .then((response) => {
+        showSuccessAlert(
+          `Job to Retrieve the ${title} has been created successfully!`
+        )
       })
-      .catch(err => {
+      .catch((err) => {
         // Only handle response errors, let global interceptor handle network errors
         if (err?.response) {
           showErrorAlert(
@@ -171,12 +173,22 @@ const DICOMweb = () => {
           />
         </div>
       ) : null}
-      <TagsModal showModal={showModal} modalData={modalContent} setShowModal={setShowModal} />
+      <TagsModal
+        showModal={showModal}
+        modalData={modalContent}
+        setShowModal={setShowModal}
+      />
     </>
   )
 }
 
-const QueryForm = ({ DICOMservers, onSubmit, loadDicomWeb, selectedServer, setSelectedServer }) => {
+const QueryForm = ({
+  DICOMservers,
+  onSubmit,
+  loadDicomWeb,
+  selectedServer,
+  setSelectedServer,
+}) => {
   const [formData, setFormData] = useState({})
 
   useEffect(() => {
@@ -185,14 +197,14 @@ const QueryForm = ({ DICOMservers, onSubmit, loadDicomWeb, selectedServer, setSe
 
   // Reset Form
   const resetForm = () => {
-    setFormData(prev => {
+    setFormData((prev) => {
       return {}
     })
   }
 
   // On Input
-  const onInputChange = e => {
-    setFormData(prev => {
+  const onInputChange = (e) => {
+    setFormData((prev) => {
       return { ...prev, [e.target.id]: e.target.value }
     })
   }
@@ -208,7 +220,7 @@ const QueryForm = ({ DICOMservers, onSubmit, loadDicomWeb, selectedServer, setSe
             type="select"
             name="dicom-server"
             id="select-basic"
-            onChange={e => setSelectedServer(() => e.target.value)}
+            onChange={(e) => setSelectedServer(() => e.target.value)}
             value={selectedServer}
           >
             {DICOMservers.map((value, idx) => {
@@ -284,10 +296,19 @@ const QueryForm = ({ DICOMservers, onSubmit, loadDicomWeb, selectedServer, setSe
 
       <FormGroup className="mb-0" row>
         <Col className="d-flex" md={{ size: 9, offset: 3 }}>
-          <Button.Ripple className="mr-1" color="primary" onClick={() => onSubmit(formData)}>
+          <Button.Ripple
+            className="mr-1"
+            color="primary"
+            onClick={() => onSubmit(formData)}
+          >
             {loadDicomWeb ? <Spinner color="light" size="sm" /> : 'Do lookup'}
           </Button.Ripple>
-          <Button.Ripple className="mr-1" color="danger" outline onClick={resetForm}>
+          <Button.Ripple
+            className="mr-1"
+            color="danger"
+            outline
+            onClick={resetForm}
+          >
             Reset
           </Button.Ripple>
         </Col>
@@ -298,7 +319,9 @@ const QueryForm = ({ DICOMservers, onSubmit, loadDicomWeb, selectedServer, setSe
 
 const StudyTable = ({ studyList, fetchSeries, openModal, performWADORS }) => {
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('dicomwebrow') ? JSON.parse(localStorage.getItem('dicomwebrow')) : 7
+    localStorage.getItem('dicomwebrow')
+      ? JSON.parse(localStorage.getItem('dicomwebrow'))
+      : 7
   )
 
   const [sortField, setSortField] = useState(null)
@@ -316,7 +339,12 @@ const StudyTable = ({ studyList, fetchSeries, openModal, performWADORS }) => {
   const studyTableColumns = [
     {
       name: 'Patient ID', //Patient ID
-      cell: row => (row['00100020'] ? (row['00100020'].Value ? row['00100020'].Value : '-') : '-'),
+      cell: (row) =>
+        row['00100020']
+          ? row['00100020'].Value
+            ? row['00100020'].Value
+            : '-'
+          : '-',
       reorder: true,
       sortable: false,
       minWidth: '150px',
@@ -324,7 +352,12 @@ const StudyTable = ({ studyList, fetchSeries, openModal, performWADORS }) => {
     },
     {
       name: 'Patient Name',
-      cell: row => (row['00100010'] ? (row['00100010'].Value ? row['00100010'].Value : '-') : '-'),
+      cell: (row) =>
+        row['00100010']
+          ? row['00100010'].Value
+            ? row['00100010'].Value
+            : '-'
+          : '-',
       reorder: true,
       sortable: false,
       minWidth: '200px',
@@ -332,7 +365,12 @@ const StudyTable = ({ studyList, fetchSeries, openModal, performWADORS }) => {
     },
     {
       name: 'Accession',
-      cell: row => (row['00080050'] ? (row['00080050'].Value ? row['00080050'].Value : '-') : '-'),
+      cell: (row) =>
+        row['00080050']
+          ? row['00080050'].Value
+            ? row['00080050'].Value
+            : '-'
+          : '-',
       reorder: true,
       sortable: false,
       minWidth: '205px',
@@ -340,9 +378,11 @@ const StudyTable = ({ studyList, fetchSeries, openModal, performWADORS }) => {
     },
     {
       name: 'Study Date',
-      cell: row =>
+      cell: (row) =>
         row['00080020'] && row['00080020'].Value
-          ? moment(row['00080020'].Value).format(userData?.dateFormats?.dateFormat)
+          ? moment(row['00080020'].Value).format(
+              userData?.dateFormats?.dateFormat
+            )
           : '-',
       reorder: true,
       sortable: false,
@@ -362,7 +402,10 @@ const StudyTable = ({ studyList, fetchSeries, openModal, performWADORS }) => {
               style={{ cursor: 'pointer' }}
               onClick={() => fetchSeries(row['0020000D'].Value)}
             />
-            <UncontrolledTooltip className="tooltip-react-strap" target="folder">
+            <UncontrolledTooltip
+              className="tooltip-react-strap"
+              target="folder"
+            >
               Open series
             </UncontrolledTooltip>
             <FileText
@@ -372,16 +415,24 @@ const StudyTable = ({ studyList, fetchSeries, openModal, performWADORS }) => {
               style={{ cursor: 'pointer' }}
               onClick={() => openModal('Details of Study', row)}
             />
-            <UncontrolledTooltip className="tooltip-react-strap" target="fileText">
+            <UncontrolledTooltip
+              className="tooltip-react-strap"
+              target="fileText"
+            >
               Open tags
             </UncontrolledTooltip>
             <DownloadCloud
               id="downloadCloud"
               size={15}
               style={{ cursor: 'pointer' }}
-              onClick={() => performWADORS(`studies/${row['0020000D'].Value}`, 'Study')}
+              onClick={() =>
+                performWADORS(`studies/${row['0020000D'].Value}`, 'Study')
+              }
             />
-            <UncontrolledTooltip className="tooltip-react-strap" target="downloadCloud">
+            <UncontrolledTooltip
+              className="tooltip-react-strap"
+              target="downloadCloud"
+            >
               Retrieve study
             </UncontrolledTooltip>
           </>
@@ -403,9 +454,9 @@ const StudyTable = ({ studyList, fetchSeries, openModal, performWADORS }) => {
           onSort: handleSort,
           sortField,
           sortOrder,
-          onPage: e => {
+          onPage: (e) => {
             setPage(e.first++)
-            setRowsPerPage(prev => e.rows)
+            setRowsPerPage((prev) => e.rows)
           },
         }}
       />
@@ -413,7 +464,12 @@ const StudyTable = ({ studyList, fetchSeries, openModal, performWADORS }) => {
   )
 }
 
-const SeriesTable = ({ seriesList, setSelectedStudyUID, openModal, performWADORS }) => {
+const SeriesTable = ({
+  seriesList,
+  setSelectedStudyUID,
+  openModal,
+  performWADORS,
+}) => {
   const userData = JSON.parse(isUserLoggedIn())
 
   const [rowsPerPage, setRowsPerPage] = useState(
@@ -428,18 +484,21 @@ const SeriesTable = ({ seriesList, setSelectedStudyUID, openModal, performWADORS
 
   //   }
 
-  const previewSeries = async uid => {
+  const previewSeries = async (uid) => {
     showLoadingAlert('<p>Loading...</p>')
     const get_study = await axios({
       method: 'get',
       url: `${process.env.REACT_APP_API_URL}/dicom-web/studyId/${uid}`,
-    }).then(res => {
+    }).then((res) => {
       return res.data
     })
     hideLoadingAlert()
     const viewer_url = `${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${uid}&accessToken=${localStorage.getItem('accessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${get_study.status ? get_study.Id : ''}&mode=${get_study.studyStatus === STUDYSTATUS.Unread ? 'create' : 'preview'}`
 
-    window.open(viewer_url, JSON.parse(localStorage.getItem('userData'))?.viewerPreference)
+    window.open(
+      viewer_url,
+      JSON.parse(localStorage.getItem('userData'))?.viewerPreference
+    )
   }
 
   const columns = [
@@ -450,7 +509,7 @@ const SeriesTable = ({ seriesList, setSelectedStudyUID, openModal, performWADORS
       reorder: true,
       minWidth: '150px',
       id: 'seriesDescription',
-      cell: row => {
+      cell: (row) => {
         return row['0008103E'] ? row['0008103E'].Value : '-'
       },
     },
@@ -461,7 +520,7 @@ const SeriesTable = ({ seriesList, setSelectedStudyUID, openModal, performWADORS
       reorder: true,
       minWidth: '200px',
       id: 'modality',
-      cell: row => {
+      cell: (row) => {
         return row['00080060'] ? row['00080060'].Value : '-'
       },
     },
@@ -490,7 +549,10 @@ const SeriesTable = ({ seriesList, setSelectedStudyUID, openModal, performWADORS
               style={{ cursor: 'pointer' }}
               onClick={() => openModal('Details of Series', row)}
             />
-            <UncontrolledTooltip className="tooltip-react-strap" target="fileText">
+            <UncontrolledTooltip
+              className="tooltip-react-strap"
+              target="fileText"
+            >
               Open tags
             </UncontrolledTooltip>
             <DownloadCloud
@@ -504,7 +566,10 @@ const SeriesTable = ({ seriesList, setSelectedStudyUID, openModal, performWADORS
                 )
               }
             />
-            <UncontrolledTooltip className="tooltip-react-strap" target="downloadCloud">
+            <UncontrolledTooltip
+              className="tooltip-react-strap"
+              target="downloadCloud"
+            >
               Retrieve study
             </UncontrolledTooltip>
           </>
@@ -520,7 +585,7 @@ const SeriesTable = ({ seriesList, setSelectedStudyUID, openModal, performWADORS
     }
   }
 
-  const handleClick = tmpdata => {
+  const handleClick = (tmpdata) => {
     const e = tmpdata?.data ? tmpdata?.data : tmpdata
     previewSeries(e['0020000D'].Value)
   }
@@ -539,9 +604,9 @@ const SeriesTable = ({ seriesList, setSelectedStudyUID, openModal, performWADORS
           sortField,
           sortOrder,
           onRowDoubleClick: handleClick,
-          onPage: e => {
+          onPage: (e) => {
             setPage(e.first++)
-            setRowsPerPage(prev => e.rows)
+            setRowsPerPage((prev) => e.rows)
           },
         }}
       />
@@ -578,8 +643,14 @@ const TagsModal = ({ showModal, modalData, setShowModal }) => {
         toggle={() => setShowModal(!showModal)}
         className="modal-dialog-centered modal-xl"
       >
-        <ModalHeader toggle={() => setShowModal(!showModal)}>{modalData.title}</ModalHeader>
-        <DataTable noHeader columns={columns} data={modalData ? modalData.data : []} />
+        <ModalHeader toggle={() => setShowModal(!showModal)}>
+          {modalData.title}
+        </ModalHeader>
+        <DataTable
+          noHeader
+          columns={columns}
+          data={modalData ? modalData.data : []}
+        />
       </Modal>
     </div>
   )

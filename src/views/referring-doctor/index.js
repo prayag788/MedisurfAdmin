@@ -60,7 +60,9 @@ const ReferringDoctor = () => {
   const [refreshLoading, setRefreshLoading] = useState(false)
   const [newUserId, SetNewUserId] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(
-    localStorage.getItem('doctorrow') ? JSON.parse(localStorage.getItem('doctorrow')) : 7
+    localStorage.getItem('doctorrow')
+      ? JSON.parse(localStorage.getItem('doctorrow'))
+      : 7
   )
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
@@ -74,17 +76,20 @@ const ReferringDoctor = () => {
   // ** Fetch data
   const getData = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`, {
-        params: {
-          role: ROLES.ReferringDoctor,
-          page,
-          size: rowsPerPage,
-          filter: searchValue,
-          sortdirection: sortDirection,
-          sortcolumn: sortColumn,
-        },
-      })
-      
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/user`,
+        {
+          params: {
+            role: ROLES.ReferringDoctor,
+            page,
+            size: rowsPerPage,
+            filter: searchValue,
+            sortdirection: sortDirection,
+            sortcolumn: sortColumn,
+          },
+        }
+      )
+
       if (response.data) {
         const currentStartsrno = response.data.startsrno || 0
         setStartsrno(currentStartsrno)
@@ -114,8 +119,6 @@ const ReferringDoctor = () => {
   useEffect(() => {
     getData()
   }, [page, rowsPerPage, searchValue, sortColumn, sortDirection])
-  
-
 
   function handleSort(d) {
     if (d.sortField) {
@@ -132,7 +135,7 @@ const ReferringDoctor = () => {
   const handleEditModal = () => SetEditModal(!editModal)
 
   // ** CRUD Handlers
-  const addNewUser = requestData => {
+  const addNewUser = (requestData) => {
     requestData = {
       ...requestData,
       role: ROLES.ReferringDoctor,
@@ -143,11 +146,11 @@ const ReferringDoctor = () => {
     showLoadingAlert()
     axios
       .post(`${process.env.REACT_APP_API_URL}/user/register/admin`, requestData)
-      .then(response => {
+      .then((response) => {
         handleModal()
         hideLoadingAlert()
         showSuccessAlert('Referring Doctor Added Successfully!')
-        setData(prev => {
+        setData((prev) => {
           const newData = [response.data.user].concat(prev)
 
           return newData.map((obj, index) => {
@@ -157,7 +160,7 @@ const ReferringDoctor = () => {
           })
         })
       })
-      .catch(err => {
+      .catch((err) => {
         const isValidationError = err?.response?.status === 422
         hideLoadingThenShowError(err)
         if (!isValidationError) {
@@ -173,24 +176,26 @@ const ReferringDoctor = () => {
     showLoadingAlert()
     axios
       .patch(`${process.env.REACT_APP_API_URL}/user/${data._id}`, data)
-      .then(response => {
+      .then((response) => {
         hideLoadingAlert()
         showSuccessAlert(
           `Doctor ${type === 'activate' ? 'Activated' : type === 'deactivate' ? 'Deactivated' : 'Updated'} Successfully!`
         )
         // Update frontend state immediately
-        setData(prev => prev.map(user => {
-          if (user._id === data._id) {
-            const updatedUser = { ...user, ...data }
-            updatedUser.full_name = `${updatedUser.fname || ''} ${updatedUser.lname || ''}`
-            return updatedUser
-          }
-          return user
-        }))
+        setData((prev) =>
+          prev.map((user) => {
+            if (user._id === data._id) {
+              const updatedUser = { ...user, ...data }
+              updatedUser.full_name = `${updatedUser.fname || ''} ${updatedUser.lname || ''}`
+              return updatedUser
+            }
+            return user
+          })
+        )
         // Refresh from API with delay
         setTimeout(() => getData(), 500)
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingThenShowError(err)
         setTip(!tip)
       })
@@ -202,15 +207,15 @@ const ReferringDoctor = () => {
         _id: id,
         status: -1,
       })
-      .then(response => {
+      .then((response) => {
         showSuccessAlert('Referring Doctor Deleted Successfully!')
         // Immediately remove from frontend state
-        setData(prev => prev.filter(user => user._id !== id))
+        setData((prev) => prev.filter((user) => user._id !== id))
         // Refresh from API with longer delay
         setTimeout(() => getData(), 500)
         setTimeout(() => getData(), 1000)
       })
-      .catch(err => {
+      .catch((err) => {
         handleEditModal()
         showErrorAlert(err)
       })
@@ -218,16 +223,18 @@ const ReferringDoctor = () => {
 
   // Confirmation Sweet Alert
   const handleConfirm = (id, callback, msg, btnMsg) => {
-    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(result => {
-      if (result && result.isConfirmed) {
-        callback(id)
+    return showConfirm({ text: msg, confirmButtonText: btnMsg }).then(
+      (result) => {
+        if (result && result.isConfirmed) {
+          callback(id)
+        }
       }
-    })
+    )
   }
 
   // ** Table item Button Handlers
-  const editHandler = Udata => {
-    SetUpdateData(prev => {
+  const editHandler = (Udata) => {
+    SetUpdateData((prev) => {
       return {
         ...prev,
         ...Udata,
@@ -236,11 +243,11 @@ const ReferringDoctor = () => {
     handleEditModal()
   }
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     deleteUser(id)
   }
 
-  const DeactivationHandler = id => {
+  const DeactivationHandler = (id) => {
     const deactivationOptions = {
       _id: id,
       status: 0,
@@ -248,7 +255,7 @@ const ReferringDoctor = () => {
     updateUserDetails(deactivationOptions, 'deactivate')
   }
 
-  const ActivationHandler = id => {
+  const ActivationHandler = (id) => {
     const activationOptions = {
       _id: id,
       status: 1,
@@ -271,20 +278,20 @@ const ReferringDoctor = () => {
 
       id: 'fname',
       minWidth: '120px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.full_name}</div>
       },
     },
     {
       name: 'User Name',
-      selector: row => (row['username'] ? row['username'] : '-'),
+      selector: (row) => (row['username'] ? row['username'] : '-'),
       sortable: true,
       reorder: true,
 
       id: 'username',
       minWidth: '190px',
       maxWidth: '250px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.username}</div>
       },
     },
@@ -296,7 +303,7 @@ const ReferringDoctor = () => {
 
       id: 'email',
       minWidth: '190px',
-      cell: row => {
+      cell: (row) => {
         return <div style={{ whiteSpace: 'break-spaces' }}>{row.email}</div>
       },
     },
@@ -308,7 +315,7 @@ const ReferringDoctor = () => {
 
       id: 'hospitalname',
       minWidth: '160px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row.hospitalname ? row.hospitalname : '-'}
@@ -323,7 +330,7 @@ const ReferringDoctor = () => {
       reorder: true,
 
       id: 'designation',
-      cell: row => {
+      cell: (row) => {
         return (
           <div style={{ whiteSpace: 'break-spaces' }}>
             {row.designation ? row.designation : '-'}
@@ -340,8 +347,12 @@ const ReferringDoctor = () => {
       id: 'cno',
       minWidth: '190px',
       maxWidth: 'fit-content',
-      cell: row => {
-        return <div style={{ whiteSpace: 'break-spaces' }}>{row.cno ? row.cno : '-'}</div>
+      cell: (row) => {
+        return (
+          <div style={{ whiteSpace: 'break-spaces' }}>
+            {row.cno ? row.cno : '-'}
+          </div>
+        )
       },
     },
     {
@@ -352,7 +363,7 @@ const ReferringDoctor = () => {
 
       id: 'status',
       maxWidth: '120px',
-      cell: row => {
+      cell: (row) => {
         return (
           <Badge color={status[row.status].color} pill>
             {status[row.status].title}
@@ -366,7 +377,7 @@ const ReferringDoctor = () => {
       sortable: false,
       id: 'actions',
       maxWidth: '130px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex">
             <Edit
@@ -472,7 +483,11 @@ const ReferringDoctor = () => {
               </div>
             </CardHeader>
             <Row className="justify-content-end mx-0">
-              <Col className="d-flex align-items-center justify-content-end mt-1" md="6" sm="12">
+              <Col
+                className="d-flex align-items-center justify-content-end mt-1"
+                md="6"
+                sm="12"
+              >
                 <Label className="mr-1" for="search-input">
                   Search
                 </Label>
@@ -482,7 +497,7 @@ const ReferringDoctor = () => {
                   bsSize="sm"
                   id="search-input"
                   value={searchValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     setSearchValue(e.target.value)
                   }}
                 />
@@ -501,9 +516,9 @@ const ReferringDoctor = () => {
                     onSort: handleSort,
                     sortField,
                     sortOrder,
-                    onPage: e => {
+                    onPage: (e) => {
                       setPage(e.first++)
-                      setRowsPerPage(prev => e.rows)
+                      setRowsPerPage((prev) => e.rows)
                       localStorage.setItem('doctorrow', e.rows)
                     },
                   }}
@@ -513,7 +528,11 @@ const ReferringDoctor = () => {
           </Card>
         </Col>
       </Row>
-      <AddNewModal addUser={addNewUser} open={modal} handleModal={handleModal} />
+      <AddNewModal
+        addUser={addNewUser}
+        open={modal}
+        handleModal={handleModal}
+      />
       <EditModal
         updateUser={updateUserDetails}
         open={editModal}

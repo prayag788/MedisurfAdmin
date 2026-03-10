@@ -1,4 +1,11 @@
-import { useState, useEffect, Fragment, useRef, useCallback, useMemo } from 'react'
+import {
+  useState,
+  useEffect,
+  Fragment,
+  useRef,
+  useCallback,
+  useMemo,
+} from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   Card,
@@ -25,7 +32,8 @@ import {
 import { ChevronDown, Eye, Trash, X } from 'react-feather'
 import { Editor } from '@tinymce/tinymce-react'
 import DataTable from 'react-data-table-component'
-import { Pagination } from 'swiper' // for using swiper this setting is only support with swiper@7.3.1
+import { Pagination } from 'swiper/modules'
+// for using swiper this setting is only support with swiper@7.3.1
 import { Swiper, SwiperSlide } from 'swiper/react'
 import axios from 'axios'
 import Flatpickr from 'react-flatpickr'
@@ -91,7 +99,7 @@ const ToastContentForError = ({ message, type }) => (
   </>
 )
 
-const normalizeImageId = value => {
+const normalizeImageId = (value) => {
   if (value === null || value === undefined) {
     return null
   }
@@ -100,12 +108,7 @@ const normalizeImageId = value => {
   if (typeof value === 'string') {
     raw = value
   } else if (typeof value === 'object') {
-    raw =
-      value.imageId ||
-      value.id ||
-      value.image ||
-      value.name ||
-      ''
+    raw = value.imageId || value.id || value.image || value.name || ''
   } else {
     raw = String(value)
   }
@@ -119,7 +122,7 @@ const normalizeImageId = value => {
   return raw.replace(/[^a-zA-Z0-9._-]/g, '_')
 }
 
-const PreviewReport = props => {
+const PreviewReport = (props) => {
   const { renderFrom } = props
   const queryParameters = new URLSearchParams(document.location.search)
 
@@ -173,8 +176,12 @@ const PreviewReport = props => {
   })()
 
   const [studyId, setStudyId] = useState({})
-  const [priorityValue, setPriorityValue] = useState(studyId?.priority || 'Normal')
-  const [statusValue, setStatusValue] = useState(studyId?.status || STUDYSTATUS.Unread)
+  const [priorityValue, setPriorityValue] = useState(
+    studyId?.priority || 'Normal'
+  )
+  const [statusValue, setStatusValue] = useState(
+    studyId?.status || STUDYSTATUS.Unread
+  )
   const [templateLayout, setTemplateLayout] = useState(null)
   const [worksheetFile, setWorksheetFile] = useState('')
   const [previewOpen, setPreviewOpen] = useState(false)
@@ -184,9 +191,10 @@ const PreviewReport = props => {
   const [previewWorksheet, setPreviousWorksheet] = useState('')
   const [allDiagnosis, setAllDiagnosis] = useState([])
   const [allTemplate, setAllTemplate] = useState([])
-  const [diagnosisModalityTemplateOptions, setDiagnosisModalityTemplateOptions] = useState([
-    { value: '', label: 'Select Template' },
-  ])
+  const [
+    diagnosisModalityTemplateOptions,
+    setDiagnosisModalityTemplateOptions,
+  ] = useState([{ value: '', label: 'Select Template' }])
   const [diagnosisTemplateOptions, setDiagnosisTemplateOptions] = useState([
     { value: '', label: 'Select Template' },
   ])
@@ -205,14 +213,18 @@ const PreviewReport = props => {
   const [dicomImages, setDicomImages] = useState([])
   const [allSeries, setAllSeries] = useState([])
   const [selected_series, setSelected_series] = useState(null)
-  const [createdReport, setCreatedReport] = useState(studyId?.reportString || '')
+  const [createdReport, setCreatedReport] = useState(
+    studyId?.reportString || ''
+  )
 
   // Debug logging for createdReport changes
   useEffect(() => {
     console.log('📝 createdReport state changed:', {
       hasContent: !!createdReport,
       contentLength: createdReport?.length || 0,
-      contentPreview: createdReport ? `${createdReport.substring(0, 100)}...` : 'No content',
+      contentPreview: createdReport
+        ? `${createdReport.substring(0, 100)}...`
+        : 'No content',
     })
   }, [createdReport])
   const [detectChange, setDetectChange] = useState(false)
@@ -220,7 +232,8 @@ const PreviewReport = props => {
   const [previewLoading, setPreviewLoading] = useState(false)
   const [pageLoader, setPageLoader] = useState(true)
   const [saveReportLoading, setSaveReportLoading] = useState(false)
-  const [saveReportandFinaliseLoading, setSaveReportandFinaliseLoading] = useState(false)
+  const [saveReportandFinaliseLoading, setSaveReportandFinaliseLoading] =
+    useState(false)
   const [createAddendumLoading, setCreateAddendumLoading] = useState(false)
   const [createAddendumstate, setCreateAddendumstate] = useState(false)
   const [worksheetModal, setWorksheetModal] = useState(false)
@@ -244,8 +257,8 @@ const PreviewReport = props => {
     const safeSelectedValues = Array.isArray(selectImage) ? selectImage : []
     return new Set(
       safeSelectedValues
-        .map(value => normalizeImageId(value))
-        .filter(value => value !== null && value !== undefined)
+        .map((value) => normalizeImageId(value))
+        .filter((value) => value !== null && value !== undefined)
     )
   }, [selectImage])
 
@@ -253,9 +266,11 @@ const PreviewReport = props => {
     const safeDicomImages = Array.isArray(dicomImages) ? dicomImages : []
     const isFinalStudy = studyId?.status === STUDYSTATUS.Final
 
-    let working = safeDicomImages.map(item => {
+    let working = safeDicomImages.map((item) => {
       const normalizedId = normalizeImageId(item?.imageId || item?.id || item)
-      const derivedSelection = normalizedId ? normalizedSelectedSet.has(normalizedId) : false
+      const derivedSelection = normalizedId
+        ? normalizedSelectedSet.has(normalizedId)
+        : false
 
       return {
         ...item,
@@ -267,24 +282,34 @@ const PreviewReport = props => {
 
     if (selected_series && !(isFinalStudy && !isFinalReportEditable)) {
       working = working.filter(
-        item =>
-          (item?.seriesId || item?.SeriesInstanceUID || item?.seriesID) === selected_series
+        (item) =>
+          (item?.seriesId || item?.SeriesInstanceUID || item?.seriesID) ===
+          selected_series
       )
     }
 
     if (isFinalStudy) {
       const sorted = [...working].sort(
         (a, b) =>
-          Number(Boolean(b?.isReportSelection)) - Number(Boolean(a?.isReportSelection))
+          Number(Boolean(b?.isReportSelection)) -
+          Number(Boolean(a?.isReportSelection))
       )
 
       return isFinalReportEditable
         ? sorted
-        : sorted.filter(item => item?.isReportSelection || item?.isSavedReportImage)
+        : sorted.filter(
+            (item) => item?.isReportSelection || item?.isSavedReportImage
+          )
     }
 
     return working
-  }, [dicomImages, normalizedSelectedSet, selected_series, studyId?.status, isFinalReportEditable])
+  }, [
+    dicomImages,
+    normalizedSelectedSet,
+    selected_series,
+    studyId?.status,
+    isFinalReportEditable,
+  ])
 
   const fileInput = useRef()
   const location = useLocation()
@@ -295,7 +320,7 @@ const PreviewReport = props => {
   }, [])
 
   const applyPublicBase = useCallback(
-    path => {
+    (path) => {
       const normalised = (path || '').replace(/^\/+/, '')
       if (!normalised) return ''
       if (publicAccessBaseUrl) {
@@ -307,7 +332,7 @@ const PreviewReport = props => {
   )
 
   const resolveImageUrl = useCallback(
-    rawPath => {
+    (rawPath) => {
       if (!rawPath || typeof rawPath !== 'string') {
         return ''
       }
@@ -337,7 +362,7 @@ const PreviewReport = props => {
   )
 
   const resolveImageSrc = useCallback(
-    imageItem => {
+    (imageItem) => {
       if (!imageItem) return ''
 
       if (typeof imageItem === 'object') {
@@ -345,7 +370,7 @@ const PreviewReport = props => {
         if (imageItem.base64Image) {
           return `data:image/png;base64,${imageItem.base64Image}`
         }
-        
+
         // Check for various path properties
         const raw =
           imageItem.imagePath ||
@@ -354,21 +379,24 @@ const PreviewReport = props => {
           imageItem.url ||
           imageItem.image ||
           imageItem.src
-          
+
         if (raw && typeof raw === 'string') {
           return resolveImageUrl(raw)
         }
-        
+
         // If imageId exists, try to construct image URL
         if (imageItem.imageId && typeof imageItem.imageId === 'string') {
           // Check if it's already a valid URL or base64
-          if (imageItem.imageId.startsWith('data:') || imageItem.imageId.startsWith('http')) {
+          if (
+            imageItem.imageId.startsWith('data:') ||
+            imageItem.imageId.startsWith('http')
+          ) {
             return imageItem.imageId
           }
           // Construct image URL from imageId
           return resolveImageUrl(`dicom/${imageItem.imageId}`)
         }
-        
+
         return ''
       }
 
@@ -399,7 +427,7 @@ const PreviewReport = props => {
 
   const handleWorksheetModal = () => setWorksheetModal(!worksheetModal)
   useEffect(() => {
-    socket.on('reloadRouteStudy', Data => {
+    socket.on('reloadRouteStudy', (Data) => {
       if (Data) {
         // setLockPatientIdsDm(Data)
       }
@@ -427,14 +455,18 @@ const PreviewReport = props => {
 
         // Additional safety checks for DOM state
         try {
-          const container = editorRef.current.getContainer && editorRef.current.getContainer()
+          const container =
+            editorRef.current.getContainer && editorRef.current.getContainer()
           if (container && !document.contains(container)) {
             console.warn('⚠️ Editor container already removed from DOM')
             editorRef.current = null
             return
           }
         } catch (containerError) {
-          console.warn('⚠️ Editor container check failed:', containerError.message)
+          console.warn(
+            '⚠️ Editor container check failed:',
+            containerError.message
+          )
         }
 
         // Safe destruction with multiple fallbacks
@@ -442,14 +474,20 @@ const PreviewReport = props => {
           try {
             editorRef.current.destroy()
           } catch (destroyError) {
-            console.warn('⚠️ Editor destroy method failed:', destroyError.message)
+            console.warn(
+              '⚠️ Editor destroy method failed:',
+              destroyError.message
+            )
             // Try alternative cleanup
             try {
               if (typeof editorRef.current.remove === 'function') {
                 editorRef.current.remove()
               }
             } catch (removeError) {
-              console.warn('⚠️ Editor remove method also failed:', removeError.message)
+              console.warn(
+                '⚠️ Editor remove method also failed:',
+                removeError.message
+              )
             }
           }
         }
@@ -467,7 +505,10 @@ const PreviewReport = props => {
     try {
       if (editorAddendumRef?.current) {
         // Check if already destroyed or removed
-        if (editorAddendumRef.current.destroyed || editorAddendumRef.current.removed) {
+        if (
+          editorAddendumRef.current.destroyed ||
+          editorAddendumRef.current.removed
+        ) {
           editorAddendumRef.current = null
           return
         }
@@ -475,14 +516,20 @@ const PreviewReport = props => {
         // Additional safety checks for DOM state
         try {
           const container =
-            editorAddendumRef.current.getContainer && editorAddendumRef.current.getContainer()
+            editorAddendumRef.current.getContainer &&
+            editorAddendumRef.current.getContainer()
           if (container && !document.contains(container)) {
-            console.warn('⚠️ Addendum editor container already removed from DOM')
+            console.warn(
+              '⚠️ Addendum editor container already removed from DOM'
+            )
             editorAddendumRef.current = null
             return
           }
         } catch (containerError) {
-          console.warn('⚠️ Addendum editor container check failed:', containerError.message)
+          console.warn(
+            '⚠️ Addendum editor container check failed:',
+            containerError.message
+          )
         }
 
         // Safe destruction with multiple fallbacks
@@ -490,14 +537,20 @@ const PreviewReport = props => {
           try {
             editorAddendumRef.current.destroy()
           } catch (destroyError) {
-            console.warn('⚠️ Addendum editor destroy method failed:', destroyError.message)
+            console.warn(
+              '⚠️ Addendum editor destroy method failed:',
+              destroyError.message
+            )
             // Try alternative cleanup
             try {
               if (typeof editorAddendumRef.current.remove === 'function') {
                 editorAddendumRef.current.remove()
               }
             } catch (removeError) {
-              console.warn('⚠️ Addendum editor remove method also failed:', removeError.message)
+              console.warn(
+                '⚠️ Addendum editor remove method also failed:',
+                removeError.message
+              )
             }
           }
         }
@@ -513,7 +566,7 @@ const PreviewReport = props => {
 
   // Global error handler for TinyMCE DOM errors
   useEffect(() => {
-    const handleTinyMCEError = event => {
+    const handleTinyMCEError = (event) => {
       if (event.error && event.error.message) {
         const errorMessage = event.error.message.toLowerCase()
         if (
@@ -551,18 +604,26 @@ const PreviewReport = props => {
     }
   }, [safelyDestroyEditor, safelyDestroyAddendumEditor])
 
-  const toCheckStudyStatusAllowed = async study_id => {
+  const toCheckStudyStatusAllowed = async (study_id) => {
     return new Promise(async (resolve, reject) => {
       try {
         // CRITICAL: Comprehensive validation before proceeding
         if (!userData || !userData._id) {
-          console.error(`[toCheckStudyStatusAllowed] User data is missing or invalid`)
+          console.error(
+            `[toCheckStudyStatusAllowed] User data is missing or invalid`
+          )
           reject(new Error('User authentication required'))
           return
         }
 
-        if (!accessToken || accessToken === 'undefined' || accessToken === 'null') {
-          console.error(`[toCheckStudyStatusAllowed] Access token is missing or invalid`)
+        if (
+          !accessToken ||
+          accessToken === 'undefined' ||
+          accessToken === 'null'
+        ) {
+          console.error(
+            `[toCheckStudyStatusAllowed] Access token is missing or invalid`
+          )
           reject(new Error('Authentication token missing'))
           return
         }
@@ -575,21 +636,28 @@ const PreviewReport = props => {
             study_id === 'null' ||
             study_id.toString().trim() === ''
           ) {
-            console.error(`[toCheckStudyStatusAllowed] Invalid study_id: ${study_id}`)
+            console.error(
+              `[toCheckStudyStatusAllowed] Invalid study_id: ${study_id}`
+            )
             reject(new Error('Invalid study ID provided'))
             return
           }
 
-          console.log(`[toCheckStudyStatusAllowed] Checking lock status for study: ${study_id}`)
+          console.log(
+            `[toCheckStudyStatusAllowed] Checking lock status for study: ${study_id}`
+          )
           await axios
-            .get(`${process.env.REACT_APP_API_URL}/report/check/${study_id}/lock`, {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-              },
-              timeout: 15000, // 15 second timeout
-            })
-            .then(res => {
+            .get(
+              `${process.env.REACT_APP_API_URL}/report/check/${study_id}/lock`,
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                  'Content-Type': 'application/json',
+                },
+                timeout: 15000, // 15 second timeout
+              }
+            )
+            .then((res) => {
               if (res && res.data) {
                 if (res.data.message && res.data.success === false) {
                   showInfoAlert(res.data.message).then(() => {
@@ -600,17 +668,20 @@ const PreviewReport = props => {
                   resolve(true)
                 }
               } else {
-                console.error('[toCheckStudyStatusAllowed] Invalid response from server')
+                console.error(
+                  '[toCheckStudyStatusAllowed] Invalid response from server'
+                )
                 reject(new Error('Invalid response from server'))
               }
             })
-            .catch(err => {
+            .catch((err) => {
               console.error('[toCheckStudyStatusAllowed] API call failed:', err)
 
               // If it's a 409 conflict (study locked by another user), show specific message
               if (err?.response?.status === 409) {
                 const message =
-                  err.response.data?.message || 'Study is currently locked by another radiologist'
+                  err.response.data?.message ||
+                  'Study is currently locked by another radiologist'
                 showInfoAlert(message).then(() => {
                   window.location.href = `/study-list`
                   reject(new Error(message))
@@ -656,7 +727,12 @@ const PreviewReport = props => {
         }
       } catch (error) {
         console.error('[toCheckStudyStatusAllowed] Unexpected error:', error)
-        reject(new Error(error?.message || 'Unexpected error occurred while checking study status'))
+        reject(
+          new Error(
+            error?.message ||
+              'Unexpected error occurred while checking study status'
+          )
+        )
       }
     })
   }
@@ -669,14 +745,21 @@ const PreviewReport = props => {
       setEditorsReady(false)
 
       const studyData = (
-        await axios.get(`${process.env.REACT_APP_API_URL}/explorer/studies/studyData/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
+        await axios.get(
+          `${process.env.REACT_APP_API_URL}/explorer/studies/studyData/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
       ).data
       setStudyId(() => {
-        return { ...studyData.data, ID: studyData.data.id, id: studyData.data.id }
+        return {
+          ...studyData.data,
+          ID: studyData.data.id,
+          id: studyData.data.id,
+        }
       })
 
       setPickerDOB(
@@ -685,11 +768,19 @@ const PreviewReport = props => {
         ) || ''
       )
       // Safe initialization of image arrays with comprehensive validation
-      const safeSelectedSeries = Array.isArray(studyData?.data?.selectedSeries) ? studyData.data.selectedSeries : []
-      const safeReportImages = Array.isArray(studyData?.data?.reportImages) ? studyData.data.reportImages : []
-      
-      setSelectImage(studyData?.data?.status === STUDYSTATUS.Unread ? [] : safeSelectedSeries)
-      setSelectedImageString(studyData?.data?.status === STUDYSTATUS.Unread ? [] : safeReportImages)
+      const safeSelectedSeries = Array.isArray(studyData?.data?.selectedSeries)
+        ? studyData.data.selectedSeries
+        : []
+      const safeReportImages = Array.isArray(studyData?.data?.reportImages)
+        ? studyData.data.reportImages
+        : []
+
+      setSelectImage(
+        studyData?.data?.status === STUDYSTATUS.Unread ? [] : safeSelectedSeries
+      )
+      setSelectedImageString(
+        studyData?.data?.status === STUDYSTATUS.Unread ? [] : safeReportImages
+      )
       setCreatedReport(studyData?.data?.reportString || '')
       setStatusValue(studyData?.data?.status || STUDYSTATUS.Unread)
       setPriorityValue(studyData?.data?.priority || 'Normal')
@@ -768,18 +859,27 @@ const PreviewReport = props => {
     // Set default template value
     if (allTemplate && allTemplate.length > 0) {
       const defaultTemplate =
-        studyId?.templateType || allTemplate.find(t => t.default)?._id || allTemplate[0]._id
+        studyId?.templateType ||
+        allTemplate.find((t) => t.default)?._id ||
+        allTemplate[0]._id
       if (defaultTemplate) {
         setValue('templateType', defaultTemplate)
         console.log('🎨 Set default template value:', defaultTemplate)
       }
     }
-  }, [studyId, setValue, picker, userData?.dateFormats?.dateFormat, allTemplate])
+  }, [
+    studyId,
+    setValue,
+    picker,
+    userData?.dateFormats?.dateFormat,
+    allTemplate,
+  ])
 
   // Track overall editor readiness with enhanced validation
   useEffect(() => {
     const needsMainEditor =
-      (userData?.role === 'RDU' || (userData?.role === 'TCU' && !studyId?.radiologist)) &&
+      (userData?.role === 'RDU' ||
+        (userData?.role === 'TCU' && !studyId?.radiologist)) &&
       (studyId?.status !== STUDYSTATUS.Final || isFinalReportEditable)
     const needsAddendumEditor =
       userData?.role === 'RDU' &&
@@ -844,7 +944,9 @@ const PreviewReport = props => {
 
         setEditorsReady(ready)
       } else {
-        console.log('📝 Setting editorsReady to false (page loading or no study ID)')
+        console.log(
+          '📝 Setting editorsReady to false (page loading or no study ID)'
+        )
         setEditorsReady(false)
       }
     }
@@ -887,7 +989,7 @@ const PreviewReport = props => {
       // Refresh worksheet list from API
       const refreshedData = await getAllWorkSheet(studyId)
       if (refreshedData) {
-        const notDeletedData = refreshedData.filter(item => !item.isDeleted)
+        const notDeletedData = refreshedData.filter((item) => !item.isDeleted)
         setWorksheetData(notDeletedData)
       }
 
@@ -895,14 +997,14 @@ const PreviewReport = props => {
     }
   }
 
-  const previewHandler = url => {
+  const previewHandler = (url) => {
     setPreviousWorksheet(url)
   }
 
   const column = [
     {
       name: 'Worksheet',
-      selector: row =>
+      selector: (row) =>
         row['name'] ? (
           <div className="d-flex align-items-center">
             <div
@@ -914,13 +1016,19 @@ const PreviewReport = props => {
                 )
               }
             >
-              <img className="rounded" src={pdficon} alt="Pdf worksheet" width="40%" />
+              <img
+                className="rounded"
+                src={pdficon}
+                alt="Pdf worksheet"
+                width="40%"
+              />
             </div>
             <p className="m-0">{row['name']}</p>
           </div>
         ) : (
           '-'
         ),
+
       sortable: true,
       minWidth: '80%',
     },
@@ -929,7 +1037,7 @@ const PreviewReport = props => {
       sortable: false,
       maxWidth: '20px',
       minWidth: '20%',
-      cell: row => {
+      cell: (row) => {
         return (
           <>
             <Eye
@@ -943,7 +1051,11 @@ const PreviewReport = props => {
                 )
               }
             />
-            <UncontrolledTooltip target="preview" className="tooltip-react-strap">
+
+            <UncontrolledTooltip
+              target="preview"
+              className="tooltip-react-strap"
+            >
               Preview
             </UncontrolledTooltip>
             {userData?.role === 'TCU' && (
@@ -957,7 +1069,11 @@ const PreviewReport = props => {
                     trashHandler(studyId?.ID, row._id, row.name)
                   }}
                 />
-                <UncontrolledTooltip target="trash" className="tooltip-react-strap">
+
+                <UncontrolledTooltip
+                  target="trash"
+                  className="tooltip-react-strap"
+                >
                   Remove
                 </UncontrolledTooltip>
               </>
@@ -976,7 +1092,7 @@ const PreviewReport = props => {
       }
       if (dataArr) {
         const notDeleteData = []
-        dataArr.forEach(item => {
+        dataArr.forEach((item) => {
           if (!item.isDeleted) {
             notDeleteData.push(item)
           }
@@ -990,15 +1106,26 @@ const PreviewReport = props => {
   useEffect(() => {
     const fetchSeriesData = async () => {
       if (studyId?.ID) {
-        console.log('🔄 [fetchSeriesData] Fetching series for studyId:', studyId?.ID)
+        console.log(
+          '🔄 [fetchSeriesData] Fetching series for studyId:',
+          studyId?.ID
+        )
         try {
           const sres = await getAllSeries(studyId?.ID)
           console.log('📊 [fetchSeriesData] API response:', sres)
-          const safeSeries = Array.isArray(sres.data?.all_series) ? sres.data.all_series : []
-          console.log('📋 [fetchSeriesData] Processed series:', { count: safeSeries.length, series: safeSeries })
+          const safeSeries = Array.isArray(sres.data?.all_series)
+            ? sres.data.all_series
+            : []
+          console.log('📋 [fetchSeriesData] Processed series:', {
+            count: safeSeries.length,
+            series: safeSeries,
+          })
           setAllSeries(safeSeries)
           if (Array.isArray(safeSeries) && safeSeries.length > 0) {
-            console.log('✅ [fetchSeriesData] Setting first series as selected:', safeSeries[0]?.value)
+            console.log(
+              '✅ [fetchSeriesData] Setting first series as selected:',
+              safeSeries[0]?.value
+            )
             setSelected_series(safeSeries[0]?.value)
           } else {
             console.warn('⚠️ [fetchSeriesData] No series data available')
@@ -1019,12 +1146,17 @@ const PreviewReport = props => {
         return
       }
 
-      console.log('🖼️ [fetchDicomImages] Starting fetch for studyId:', studyId.ID)
+      console.log(
+        '🖼️ [fetchDicomImages] Starting fetch for studyId:',
+        studyId.ID
+      )
       setLoadingDicomImages(true)
 
       try {
         const includeAll =
-          studyId?.status === STUDYSTATUS.Final ? Boolean(isFinalReportEditable) : true
+          studyId?.status === STUDYSTATUS.Final
+            ? Boolean(isFinalReportEditable)
+            : true
         const params = selected_series
           ? { page: 1, limit: 10, seriesId: selected_series, includeAll }
           : studyId?.status === STUDYSTATUS.Final
@@ -1044,9 +1176,12 @@ const PreviewReport = props => {
           if (Array.isArray(imagesRes?.data)) {
             return imagesRes.data
           }
-          console.warn('🖼️ [fetchDicomImages] Invalid images data format:', imagesRes?.data)
+          console.warn(
+            '🖼️ [fetchDicomImages] Invalid images data format:',
+            imagesRes?.data
+          )
           return []
-        })().map(img => ({
+        })().map((img) => ({
           ...img,
           imageId: img?.imageId || img?.id || img?.image || img,
         }))
@@ -1056,7 +1191,7 @@ const PreviewReport = props => {
             ? [...fetchedImages].sort(
                 (a, b) =>
                   Number(Boolean(b?.isReportSelection)) -
-                  Number(Boolean(a?.isReportSelection)),
+                  Number(Boolean(a?.isReportSelection))
               )
             : fetchedImages
 
@@ -1064,23 +1199,25 @@ const PreviewReport = props => {
           sortedImages.splice(
             0,
             sortedImages.length,
-            ...sortedImages.filter(img => img.isReportSelection),
+            ...sortedImages.filter((img) => img.isReportSelection)
           )
         }
 
         if (selected_series) {
           const hasMore = Boolean(
             imagesRes?.data?.pagination?.hasMore ||
-              (imagesRes?.data?.pagination?.totalCount &&
-                imagesRes.data.pagination.totalCount > sortedImages.length),
+            (imagesRes?.data?.pagination?.totalCount &&
+              imagesRes.data.pagination.totalCount > sortedImages.length)
           )
 
           setDicomImages(sortedImages)
-          setSeriesPages(prev => ({ ...(prev || {}), [selected_series]: 1 }))
-          setSeriesHasMore(prev => ({
+          setSeriesPages((prev) => ({ ...(prev || {}), [selected_series]: 1 }))
+          setSeriesHasMore((prev) => ({
             ...(prev || {}),
             [selected_series]:
-              studyId?.status === STUDYSTATUS.Final && !isFinalReportEditable ? false : hasMore,
+              studyId?.status === STUDYSTATUS.Final && !isFinalReportEditable
+                ? false
+                : hasMore,
           }))
         } else {
           setDicomImages(sortedImages)
@@ -1092,7 +1229,7 @@ const PreviewReport = props => {
         console.error('🖼️ [fetchDicomImages] Error fetching images:', error)
         setDicomImages([])
         if (selected_series) {
-          setSeriesHasMore(prev => ({ ...prev, [selected_series]: false }))
+          setSeriesHasMore((prev) => ({ ...prev, [selected_series]: false }))
         }
       } finally {
         setLoadingDicomImages(false)
@@ -1101,7 +1238,7 @@ const PreviewReport = props => {
 
     fetchDicomImages()
   }, [studyId?.ID, studyId?.status, selected_series, isFinalReportEditable])
-  
+
   useEffect(() => {
     if (swiperRef.current && swiperRef.current.swiper) {
       try {
@@ -1114,11 +1251,13 @@ const PreviewReport = props => {
       }
     }
   }, [dicomImages, selected_series])
-  
+
   // Load more images for current series
   const loadMoreImages = useCallback(async () => {
     const includeAll =
-      studyId?.status === STUDYSTATUS.Final ? Boolean(isFinalReportEditable) : true
+      studyId?.status === STUDYSTATUS.Final
+        ? Boolean(isFinalReportEditable)
+        : true
 
     console.log('🖼️ [loadMoreImages] Called with:', {
       selected_series,
@@ -1127,7 +1266,7 @@ const PreviewReport = props => {
       studyId: studyId?.ID,
       includeAll,
     })
-    
+
     if (
       !selected_series ||
       !seriesHasMore ||
@@ -1139,90 +1278,142 @@ const PreviewReport = props => {
       console.log('🖼️ [loadMoreImages] Skipping - conditions not met')
       return
     }
-    
+
     setIsLoadingMore(true)
     try {
       const currentPage = (seriesPages && seriesPages[selected_series]) || 1
       const nextPage = currentPage + 1
-      
-      console.log('🖼️ [loadMoreImages] Loading page', nextPage, 'for series', selected_series)
-      
+
+      console.log(
+        '🖼️ [loadMoreImages] Loading page',
+        nextPage,
+        'for series',
+        selected_series
+      )
+
       const imagesRes = await getAllDicomImage(studyId.ID, {
         page: nextPage,
         limit: 10,
         seriesId: selected_series,
         includeAll,
       })
-      
+
       console.log('🖼️ [loadMoreImages] API response:', imagesRes?.data)
-      
+
       // Handle paginated response with images array
-      if (imagesRes?.data?.images && Array.isArray(imagesRes.data.images) && imagesRes.data.images.length > 0) {
-        setDicomImages(prev => {
+      if (
+        imagesRes?.data?.images &&
+        Array.isArray(imagesRes.data.images) &&
+        imagesRes.data.images.length > 0
+      ) {
+        setDicomImages((prev) => {
           const safePrev = Array.isArray(prev) ? prev : []
           const merged = [...safePrev]
-          imagesRes.data.images.forEach(img => {
+          imagesRes.data.images.forEach((img) => {
             const imageId = img?.imageId || img?.id || img
-            const exists = merged.find(existing => (existing?.imageId || existing?.id || existing) === imageId)
+            const exists = merged.find(
+              (existing) =>
+                (existing?.imageId || existing?.id || existing) === imageId
+            )
             if (!exists) {
               merged.push({
                 ...img,
-                imageId
+                imageId,
               })
             }
           })
-          console.log('🖼️ [loadMoreImages] Updated images count:', merged.length)
+          console.log(
+            '🖼️ [loadMoreImages] Updated images count:',
+            merged.length
+          )
           return merged
         })
-        setSeriesPages(prev => ({ ...(prev || {}), [selected_series]: nextPage }))
-        setSeriesHasMore(prev => ({
+        setSeriesPages((prev) => ({
+          ...(prev || {}),
+          [selected_series]: nextPage,
+        }))
+        setSeriesHasMore((prev) => ({
           ...(prev || {}),
           [selected_series]: includeAll
             ? imagesRes.data.pagination?.hasMore || false
             : false,
         }))
-        
-        console.log('🖼️ [loadMoreImages] Success - Page:', nextPage, 'HasMore:', imagesRes.data.pagination?.hasMore)
-      } else if (imagesRes?.data?.data && Array.isArray(imagesRes.data.data) && imagesRes.data.data.length > 0) {
-        setDicomImages(prev => {
+
+        console.log(
+          '🖼️ [loadMoreImages] Success - Page:',
+          nextPage,
+          'HasMore:',
+          imagesRes.data.pagination?.hasMore
+        )
+      } else if (
+        imagesRes?.data?.data &&
+        Array.isArray(imagesRes.data.data) &&
+        imagesRes.data.data.length > 0
+      ) {
+        setDicomImages((prev) => {
           const safePrev = Array.isArray(prev) ? prev : []
           const merged = [...safePrev]
-          imagesRes.data.data.forEach(img => {
+          imagesRes.data.data.forEach((img) => {
             const imageId = img?.imageId || img?.id || img
-            const exists = merged.find(existing => (existing?.imageId || existing?.id || existing) === imageId)
+            const exists = merged.find(
+              (existing) =>
+                (existing?.imageId || existing?.id || existing) === imageId
+            )
             if (!exists) {
               merged.push({
                 ...img,
-                imageId
+                imageId,
               })
             }
           })
-          console.log('🖼️ [loadMoreImages] Updated images count:', merged.length)
+          console.log(
+            '🖼️ [loadMoreImages] Updated images count:',
+            merged.length
+          )
           return merged
         })
-        setSeriesPages(prev => ({ ...(prev || {}), [selected_series]: nextPage }))
-        setSeriesHasMore(prev => ({
+        setSeriesPages((prev) => ({
+          ...(prev || {}),
+          [selected_series]: nextPage,
+        }))
+        setSeriesHasMore((prev) => ({
           ...(prev || {}),
           [selected_series]: false,
         })) // No pagination info in this format
-        
+
         console.log('🖼️ [loadMoreImages] Success - Page:', nextPage)
       } else {
         console.log('🖼️ [loadMoreImages] No more images available')
-        setSeriesHasMore(prev => ({ ...(prev || {}), [selected_series]: false }))
+        setSeriesHasMore((prev) => ({
+          ...(prev || {}),
+          [selected_series]: false,
+        }))
       }
     } catch (error) {
       console.error('🖼️ [loadMoreImages] Error:', error)
-      setSeriesHasMore(prev => ({ ...(prev || {}), [selected_series]: false }))
+      setSeriesHasMore((prev) => ({
+        ...(prev || {}),
+        [selected_series]: false,
+      }))
     } finally {
       setIsLoadingMore(false)
     }
-  }, [selected_series, seriesHasMore, isLoadingMore, seriesPages, studyId?.ID, studyId?.status, isFinalReportEditable])
-  
+  }, [
+    selected_series,
+    seriesHasMore,
+    isLoadingMore,
+    seriesPages,
+    studyId?.ID,
+    studyId?.status,
+    isFinalReportEditable,
+  ])
+
   // Track when to load more images
   const checkAndLoadMore = useCallback(() => {
     const includeAll =
-      studyId?.status === STUDYSTATUS.Final ? Boolean(isFinalReportEditable) : true
+      studyId?.status === STUDYSTATUS.Final
+        ? Boolean(isFinalReportEditable)
+        : true
 
     if (
       !swiperRef.current ||
@@ -1234,21 +1425,33 @@ const PreviewReport = props => {
     ) {
       return
     }
-    
+
     const swiper = swiperRef.current
     const currentSlide = swiper.activeIndex
     const totalSlides = swiper.slides ? swiper.slides.length : 0
-    
-    console.log('🔍 Pagination check:', { currentSlide, totalSlides, selected_series, hasMore: seriesHasMore[selected_series] })
-    
+
+    console.log('🔍 Pagination check:', {
+      currentSlide,
+      totalSlides,
+      selected_series,
+      hasMore: seriesHasMore[selected_series],
+    })
+
     // Load more when reaching slide 7 (index 6) or when 3 slides remaining
-    if (currentSlide >= 6 || (totalSlides - currentSlide) <= 3) {
+    if (currentSlide >= 6 || totalSlides - currentSlide <= 3) {
       console.log('🚀 Loading more images - trigger point reached')
       loadMoreImages()
     }
-  }, [selected_series, seriesHasMore, isLoadingMore, loadMoreImages, studyId?.status, isFinalReportEditable])
+  }, [
+    selected_series,
+    seriesHasMore,
+    isLoadingMore,
+    loadMoreImages,
+    studyId?.status,
+    isFinalReportEditable,
+  ])
 
-  const worksheetUploadHandler = async id => {
+  const worksheetUploadHandler = async (id) => {
     if (!worksheetFile || worksheetFile.length === 0) {
       return
     }
@@ -1268,7 +1471,7 @@ const PreviewReport = props => {
           break
         }
       }
-      
+
       if (Iserror) {
         hideLoadingAlert()
         showErrorAlert(Iserror)
@@ -1278,58 +1481,73 @@ const PreviewReport = props => {
       // Upload files one by one since backend replaces instead of adding
       let successCount = 0
       let errorCount = 0
-      
+
       for (let i = 0; i < worksheetFile.length; i++) {
         try {
           // Create a FileList-like object with single file for the API
           const singleFileList = {
             0: worksheetFile[i],
             length: 1,
-            item(index) { return this[index] }
+            item(index) {
+              return this[index]
+            },
           }
-          
+
           const data = await uploadWorksheet(singleFileList, id)
           successCount++
         } catch (uploadError) {
-          console.error(`Error uploading file ${worksheetFile[i].name}:`, uploadError)
+          console.error(
+            `Error uploading file ${worksheetFile[i].name}:`,
+            uploadError
+          )
           errorCount++
         }
       }
-      
+
       hideLoadingAlert()
 
       // Show appropriate success/error message
       if (successCount > 0 && errorCount === 0) {
-        showSuccessAlert(`${successCount} worksheet${successCount > 1 ? 's' : ''} uploaded successfully!`)
+        showSuccessAlert(
+          `${successCount} worksheet${successCount > 1 ? 's' : ''} uploaded successfully!`
+        )
       } else if (successCount > 0 && errorCount > 0) {
-        showSuccessAlert(`${successCount} worksheet${successCount > 1 ? 's' : ''} uploaded successfully. ${errorCount} failed.`)
+        showSuccessAlert(
+          `${successCount} worksheet${successCount > 1 ? 's' : ''} uploaded successfully. ${errorCount} failed.`
+        )
       } else {
         showErrorAlert('Failed to upload worksheets. Please try again.')
       }
 
       // Refresh worksheet list by calling API again to get all worksheets including newly uploaded ones
       // Add a small delay to ensure database has been updated
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
       const refreshedData = await getAllWorkSheet(studyId?.ID)
       if (refreshedData) {
-        const notDeletedData = refreshedData.filter(item => !item.isDeleted)
+        const notDeletedData = refreshedData.filter((item) => !item.isDeleted)
         setWorksheetData(notDeletedData)
-        console.log(`[worksheetUploadHandler] ✅ Refreshed worksheet list: ${notDeletedData.length} worksheets`)
+        console.log(
+          `[worksheetUploadHandler] ✅ Refreshed worksheet list: ${notDeletedData.length} worksheets`
+        )
       } else {
-        console.warn(`[worksheetUploadHandler] ⚠️ No worksheet data returned from getAllWorkSheet`)
+        console.warn(
+          `[worksheetUploadHandler] ⚠️ No worksheet data returned from getAllWorkSheet`
+        )
         setWorksheetData([])
       }
 
       // Trigger changeState to force useEffect to re-run
-      setChangeState(prev => !prev)
-      
+      setChangeState((prev) => !prev)
+
       setWorksheetFile('')
     } catch (err) {
       hideLoadingAlert()
-      showErrorAlert('Something went wrong, please check your worksheet or check again sometime!')
+      showErrorAlert(
+        'Something went wrong, please check your worksheet or check again sometime!'
+      )
     }
-    
+
     // Clear the file input
     const fileInput = document.getElementById('studyWorksheet')
     if (fileInput) {
@@ -1354,7 +1572,10 @@ const PreviewReport = props => {
 
       // CRITICAL: Comprehensive validation of studyId and required data before proceeding
       if (!studyId || typeof studyId !== 'object') {
-        console.error(`[saveAndFinalizeReport] studyId is not a valid object:`, studyId)
+        console.error(
+          `[saveAndFinalizeReport] studyId is not a valid object:`,
+          studyId
+        )
         setSaveReportandFinaliseLoading(false)
         return alertDisplay(
           'Error',
@@ -1382,19 +1603,35 @@ const PreviewReport = props => {
       if (!userData || !userData._id) {
         console.error(`[saveAndFinalizeReport] User data is missing or invalid`)
         setSaveReportandFinaliseLoading(false)
-        return alertDisplay('Error', 'User authentication required - please login again', 'error')
+        return alertDisplay(
+          'Error',
+          'User authentication required - please login again',
+          'error'
+        )
       }
 
       // Validate access token
-      if (!accessToken || accessToken === 'undefined' || accessToken === 'null') {
-        console.error(`[saveAndFinalizeReport] Access token is missing or invalid`)
+      if (
+        !accessToken ||
+        accessToken === 'undefined' ||
+        accessToken === 'null'
+      ) {
+        console.error(
+          `[saveAndFinalizeReport] Access token is missing or invalid`
+        )
         setSaveReportandFinaliseLoading(false)
-        return alertDisplay('Error', 'Authentication token missing - please login again', 'error')
+        return alertDisplay(
+          'Error',
+          'Authentication token missing - please login again',
+          'error'
+        )
       }
 
       // Validate form functions are available
       if (typeof trigger !== 'function' || typeof getValues !== 'function') {
-        console.error(`[saveAndFinalizeReport] Form functions are not available`)
+        console.error(
+          `[saveAndFinalizeReport] Form functions are not available`
+        )
         setSaveReportandFinaliseLoading(false)
         return alertDisplay(
           'Error',
@@ -1423,12 +1660,18 @@ const PreviewReport = props => {
       await trigger(fieldsToValidate)
       console.log('✅ Form validation completed, errors:', Object.keys(errors))
       if (Object.keys(errors).length === 0) {
-        console.log('✅ No validation errors, proceeding with save and finalize')
+        console.log(
+          '✅ No validation errors, proceeding with save and finalize'
+        )
         setSaveReportandFinaliseLoading(true)
         console.log('🔄 Set loading state to true')
         if (studyId?.status === STUDYSTATUS.Final && !detectChange) {
           setSaveReportandFinaliseLoading(false)
-          return alertDisplay('Information!', 'No changes done, nothing to update.', 'info')
+          return alertDisplay(
+            'Information!',
+            'No changes done, nothing to update.',
+            'info'
+          )
         }
 
         // Enhanced editor validation with comprehensive null checks
@@ -1445,7 +1688,8 @@ const PreviewReport = props => {
         // Validate editor DOM container exists and is attached
         let editorContainer = null
         try {
-          editorContainer = editorRef.current.getContainer && editorRef.current.getContainer()
+          editorContainer =
+            editorRef.current.getContainer && editorRef.current.getContainer()
           if (!editorContainer || !editorContainer.parentNode) {
             console.log('❌ Editor container is not properly attached to DOM')
             setSaveReportandFinaliseLoading(false)
@@ -1456,7 +1700,10 @@ const PreviewReport = props => {
             )
           }
         } catch (containerError) {
-          console.error('❌ Editor container validation failed:', containerError)
+          console.error(
+            '❌ Editor container validation failed:',
+            containerError
+          )
           setSaveReportandFinaliseLoading(false)
           return alertDisplay(
             'Error',
@@ -1470,13 +1717,18 @@ const PreviewReport = props => {
         try {
           if (typeof editorRef.current.getContent === 'function') {
             // Check if editor is in a valid state before getting content
-            if (editorRef.current.initialized !== false && editorRef.current.removed !== true) {
+            if (
+              editorRef.current.initialized !== false &&
+              editorRef.current.removed !== true
+            ) {
               // Try to get content to test if editor is working
               const testContent = editorRef.current.getContent()
               editorValid = true
               console.log('✅ Editor validation passed')
             } else {
-              console.log('❌ Editor is not in a valid state (not initialized or removed)')
+              console.log(
+                '❌ Editor is not in a valid state (not initialized or removed)'
+              )
               setSaveReportandFinaliseLoading(false)
               return alertDisplay(
                 'Error',
@@ -1524,9 +1776,11 @@ const PreviewReport = props => {
         console.log('📋 Form data retrieved:', data)
 
         // Handle templateType - ensure it has a value
-        let templateTypeValue = userData?.role === 'RDU' ? data.templateType : studyId.templateType
+        let templateTypeValue =
+          userData?.role === 'RDU' ? data.templateType : studyId.templateType
         if (!templateTypeValue && allTemplate && allTemplate.length > 0) {
-          templateTypeValue = allTemplate.find(t => t.default)?._id || allTemplate[0]._id
+          templateTypeValue =
+            allTemplate.find((t) => t.default)?._id || allTemplate[0]._id
           console.log('🔧 Using default template:', templateTypeValue)
         }
 
@@ -1539,11 +1793,14 @@ const PreviewReport = props => {
             !editorRef.current.removed
           ) {
             // Verify DOM container is still valid
-            const container = editorRef.current.getContainer && editorRef.current.getContainer()
+            const container =
+              editorRef.current.getContainer && editorRef.current.getContainer()
             if (container && document.contains(container)) {
               reportDiagnosis = editorRef.current.getContent() || ''
             } else {
-              console.warn('⚠️ Editor container not in DOM, using empty content')
+              console.warn(
+                '⚠️ Editor container not in DOM, using empty content'
+              )
               reportDiagnosis = ''
             }
           }
@@ -1557,15 +1814,21 @@ const PreviewReport = props => {
         const toData = {
           patientName: data.patientName || studyId?.patient?.PatientName || '',
           patientID: data.patientID || studyId?.patient?.PatientID || '',
-          examDescription: data.examDescription || studyId?.details?.StudyDescription || '',
-          reportDescription: data.reportDescription || studyId?.ReportDescription || '',
+          examDescription:
+            data.examDescription || studyId?.details?.StudyDescription || '',
+          reportDescription:
+            data.reportDescription || studyId?.ReportDescription || '',
           patientSex: data.patientSex || studyId?.patient?.PatientSex || '',
           patientBirthDate: pickerDOB
-            ? moment(pickerDOB).format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD')
+            ? moment(pickerDOB).format(
+                userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'
+              )
             : null,
-          hospitalName: data.hospitalName || studyId?.details?.InstitutionName || '',
+          hospitalName:
+            data.hospitalName || studyId?.details?.InstitutionName || '',
           activityState:
-            studyId?.status === STUDYSTATUS.Unread || studyId?.status === STUDYSTATUS.Preliminary
+            studyId?.status === STUDYSTATUS.Unread ||
+            studyId?.status === STUDYSTATUS.Preliminary
               ? 'create'
               : 'update',
           reportDiagnosis,
@@ -1594,7 +1857,8 @@ const PreviewReport = props => {
         console.log('🔍 Final templateType value:', templateTypeValue)
 
         const swalMessage =
-          studyId.status === STUDYSTATUS.Unread || studyId.status === STUDYSTATUS.Preliminary
+          studyId.status === STUDYSTATUS.Unread ||
+          studyId.status === STUDYSTATUS.Preliminary
             ? 'Report created and finalized successfully!'
             : 'Report updated and finalized successfully!'
         console.log('🔒 Checking study status lock')
@@ -1614,7 +1878,11 @@ const PreviewReport = props => {
               'error'
             )
           } else if (statusError?.message?.includes('Authentication')) {
-            return alertDisplay('Error', 'Authentication failed. Please login again.', 'error')
+            return alertDisplay(
+              'Error',
+              'Authentication failed. Please login again.',
+              'error'
+            )
           } else {
             return alertDisplay(
               'Error',
@@ -1624,7 +1892,10 @@ const PreviewReport = props => {
           }
         }
 
-        console.log('🌐 Making API call to saveReportAndFinalize with data:', toData)
+        console.log(
+          '🌐 Making API call to saveReportAndFinalize with data:',
+          toData
+        )
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/report/saveReportAndFinalize`,
           toData,
@@ -1643,7 +1914,9 @@ const PreviewReport = props => {
         }
 
         if (response.data.status === false) {
-          throw new Error(response.data.message || 'Server returned error status')
+          throw new Error(
+            response.data.message || 'Server returned error status'
+          )
         }
 
         console.log('✅ API call successful')
@@ -1654,7 +1927,7 @@ const PreviewReport = props => {
         setIsRerendering(true)
         setTimeout(() => {
           if (isMountedRef.current) {
-            setRefreshTrigger(prev => prev + 1)
+            setRefreshTrigger((prev) => prev + 1)
             setTimeout(() => setIsRerendering(false), 1000)
           }
         }, 500)
@@ -1671,16 +1944,21 @@ const PreviewReport = props => {
       if (error?.response?.status === 401) {
         errorMessage = 'Authentication failed. Please login again.'
       } else if (error?.response?.status === 403) {
-        errorMessage = 'Access denied - insufficient permissions to finalize report'
+        errorMessage =
+          'Access denied - insufficient permissions to finalize report'
       } else if (error?.response?.status === 404) {
         errorMessage = 'Study not found or has been deleted'
       } else if (error?.response?.status === 422) {
-        errorMessage = 'Invalid data provided - please check all required fields'
+        errorMessage =
+          'Invalid data provided - please check all required fields'
       } else if (error?.response?.data) {
         if (typeof error.response.data === 'string') {
           errorMessage = 'Authentication failed. Please login again.'
         } else {
-          errorMessage = error.response.data?.error || error.response.data?.message || errorMessage
+          errorMessage =
+            error.response.data?.error ||
+            error.response.data?.message ||
+            errorMessage
         }
       } else if (error?.message) {
         errorMessage = error.message
@@ -1710,9 +1988,12 @@ const PreviewReport = props => {
       let addendumContainer = null
       try {
         addendumContainer =
-          editorAddendumRef.current.getContainer && editorAddendumRef.current.getContainer()
+          editorAddendumRef.current.getContainer &&
+          editorAddendumRef.current.getContainer()
         if (!addendumContainer || !addendumContainer.parentNode) {
-          console.log('❌ Addendum editor container is not properly attached to DOM')
+          console.log(
+            '❌ Addendum editor container is not properly attached to DOM'
+          )
           setCreateAddendumLoading(false)
           return alertDisplay(
             'Error',
@@ -1721,7 +2002,10 @@ const PreviewReport = props => {
           )
         }
       } catch (containerError) {
-        console.error('❌ Addendum editor container validation failed:', containerError)
+        console.error(
+          '❌ Addendum editor container validation failed:',
+          containerError
+        )
         setCreateAddendumLoading(false)
         return alertDisplay(
           'Error',
@@ -1784,7 +2068,8 @@ const PreviewReport = props => {
           ) {
             // Verify DOM container is still valid before getting content
             const container =
-              editorAddendumRef.current.getContainer && editorAddendumRef.current.getContainer()
+              editorAddendumRef.current.getContainer &&
+              editorAddendumRef.current.getContainer()
             if (container && container.parentNode) {
               addendumContent = editorAddendumRef.current.getContent() || ''
             } else {
@@ -1809,12 +2094,20 @@ const PreviewReport = props => {
       } catch (editorError) {
         console.error('Error getting addendum content:', editorError)
         setCreateAddendumLoading(false)
-        return alertDisplay('Error', 'Failed to get addendum content. Please try again.', 'error')
+        return alertDisplay(
+          'Error',
+          'Failed to get addendum content. Please try again.',
+          'error'
+        )
       }
 
       if (!addendumContent || addendumContent.trim() === '') {
         setCreateAddendumLoading(false)
-        return alertDisplay('Error', 'Please enter addendum text before submitting.', 'error')
+        return alertDisplay(
+          'Error',
+          'Please enter addendum text before submitting.',
+          'error'
+        )
       }
 
       const toData = {
@@ -1825,11 +2118,15 @@ const PreviewReport = props => {
 
       const swalMessage = 'Addendum added successfully!'
 
-      await axios.post(`${process.env.REACT_APP_API_URL}/report/createAddendum`, toData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/report/createAddendum`,
+        toData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
 
       setCreateAddendumLoading(false)
       alertDisplay('Success!', swalMessage, 'success')
@@ -1838,37 +2135,51 @@ const PreviewReport = props => {
       setIsRerendering(true)
       setTimeout(() => {
         if (isMountedRef.current) {
-          setRefreshTrigger(prev => prev + 1)
+          setRefreshTrigger((prev) => prev + 1)
           setTimeout(() => setIsRerendering(false), 1000)
         }
       }, 500)
-  } catch (error) {
-    console.log('err', error)
-    setCreateAddendumLoading(false)
-    alertDisplay('Error', extractErrorMessage(error?.response?.data ?? error), 'error')
+    } catch (error) {
+      console.log('err', error)
+      setCreateAddendumLoading(false)
+      alertDisplay(
+        'Error',
+        extractErrorMessage(error?.response?.data ?? error),
+        'error'
+      )
     }
   }
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       console.log('🚀 onSubmit function called with data:', data)
       console.log('Form validation errors:', errors)
       console.log('Study ID:', studyId?.ID)
       console.log('User data:', userData)
       console.log('Access token exists:', !!accessToken)
-      console.log('🔍 FRONTEND DEBUG - Current URL params:', window.location.search)
+      console.log(
+        '🔍 FRONTEND DEBUG - Current URL params:',
+        window.location.search
+      )
       console.log(
         '🔍 FRONTEND DEBUG - ID from URL:',
         new URLSearchParams(window.location.search).get('id')
       )
-      console.log('🔍 FRONTEND DEBUG - studyId object:', JSON.stringify(studyId, null, 2))
+      console.log(
+        '🔍 FRONTEND DEBUG - studyId object:',
+        JSON.stringify(studyId, null, 2)
+      )
       console.log('🔍 FRONTEND DEBUG - accessToken value:', accessToken)
 
       // CRITICAL: Comprehensive validation of studyId and required data before proceeding
       if (!studyId || typeof studyId !== 'object') {
         console.error(`[onSubmit] studyId is not a valid object:`, studyId)
         setSaveReportLoading(false)
-        return alertDisplay('Error', 'Invalid study data - cannot proceed with save', 'error')
+        return alertDisplay(
+          'Error',
+          'Invalid study data - cannot proceed with save',
+          'error'
+        )
       }
 
       if (
@@ -1879,28 +2190,48 @@ const PreviewReport = props => {
       ) {
         console.error(`[onSubmit] Invalid studyId: ${studyId?.ID}`)
         setSaveReportLoading(false)
-        return alertDisplay('Error', 'Invalid study ID - cannot proceed with save', 'error')
+        return alertDisplay(
+          'Error',
+          'Invalid study ID - cannot proceed with save',
+          'error'
+        )
       }
 
       // Validate user authentication
       if (!userData || !userData._id) {
         console.error(`[onSubmit] User data is missing or invalid`)
         setSaveReportLoading(false)
-        return alertDisplay('Error', 'User authentication required - please login again', 'error')
+        return alertDisplay(
+          'Error',
+          'User authentication required - please login again',
+          'error'
+        )
       }
 
       // Validate access token
-      if (!accessToken || accessToken === 'undefined' || accessToken === 'null') {
+      if (
+        !accessToken ||
+        accessToken === 'undefined' ||
+        accessToken === 'null'
+      ) {
         console.error(`[onSubmit] Access token is missing or invalid`)
         setSaveReportLoading(false)
-        return alertDisplay('Error', 'Authentication token missing - please login again', 'error')
+        return alertDisplay(
+          'Error',
+          'Authentication token missing - please login again',
+          'error'
+        )
       }
 
       // Validate form data parameter
       if (!data || typeof data !== 'object') {
         console.error(`[onSubmit] Form data is invalid:`, data)
         setSaveReportLoading(false)
-        return alertDisplay('Error', 'Invalid form data - please check all fields', 'error')
+        return alertDisplay(
+          'Error',
+          'Invalid form data - please check all fields',
+          'error'
+        )
       }
 
       console.log('🔄 Setting saveReportLoading to true')
@@ -1909,21 +2240,32 @@ const PreviewReport = props => {
       if (studyId?.status === STUDYSTATUS.Final && !detectChange) {
         console.log('⚠️ No changes detected for Final status study')
         setSaveReportLoading(false)
-        return alertDisplay('Information!', 'No changes done, nothing to update.', 'info')
+        return alertDisplay(
+          'Information!',
+          'No changes done, nothing to update.',
+          'info'
+        )
       }
 
       // Enhanced editor validation for onSubmit with DOM checks
       if (!editorRef || !editorRef.current) {
         setSaveReportLoading(false)
-        return alertDisplay('Error', 'Editor is not ready. Please wait and try again.', 'error')
+        return alertDisplay(
+          'Error',
+          'Editor is not ready. Please wait and try again.',
+          'error'
+        )
       }
 
       // Validate editor DOM container exists and is attached
       let editorContainer = null
       try {
-        editorContainer = editorRef.current.getContainer && editorRef.current.getContainer()
+        editorContainer =
+          editorRef.current.getContainer && editorRef.current.getContainer()
         if (!editorContainer || !editorContainer.parentNode) {
-          console.log('❌ Editor container is not properly attached to DOM in onSubmit')
+          console.log(
+            '❌ Editor container is not properly attached to DOM in onSubmit'
+          )
           setSaveReportLoading(false)
           return alertDisplay(
             'Error',
@@ -1932,7 +2274,10 @@ const PreviewReport = props => {
           )
         }
       } catch (containerError) {
-        console.error('❌ Editor container validation failed in onSubmit:', containerError)
+        console.error(
+          '❌ Editor container validation failed in onSubmit:',
+          containerError
+        )
         setSaveReportLoading(false)
         return alertDisplay(
           'Error',
@@ -1946,7 +2291,10 @@ const PreviewReport = props => {
       try {
         if (typeof editorRef.current.getContent === 'function') {
           // Check if editor is in a valid state
-          if (editorRef.current.initialized !== false && editorRef.current.removed !== true) {
+          if (
+            editorRef.current.initialized !== false &&
+            editorRef.current.removed !== true
+          ) {
             const testContent = editorRef.current.getContent()
             editorWorking = true
           } else {
@@ -1987,7 +2335,8 @@ const PreviewReport = props => {
           !editorRef.current.removed
         ) {
           // Verify DOM container is still valid
-          const container = editorRef.current.getContainer && editorRef.current.getContainer()
+          const container =
+            editorRef.current.getContainer && editorRef.current.getContainer()
           if (container && document.contains(container)) {
             reportDiagnosis = editorRef.current.getContent() || ''
           } else {
@@ -2009,18 +2358,25 @@ const PreviewReport = props => {
         reportDescription: data.reportDescription || '',
         patientSex: data.patientSex || '',
         patientBirthDate: pickerDOB
-          ? moment(pickerDOB).format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD')
+          ? moment(pickerDOB).format(
+              userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'
+            )
           : null,
         hospitalName: data.hospitalName || '',
         activityState: 'create', // Always use 'create' for saveReport endpoint
         reportDate: picker
-          ? moment(picker).format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD')
+          ? moment(picker).format(
+              userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'
+            )
           : moment().format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'),
         reportDiagnosis,
         radiologist:
-          userData?.role === 'RDU' ? userData?._id : studyId?.radiologist || userData?._id,
+          userData?.role === 'RDU'
+            ? userData?._id
+            : studyId?.radiologist || userData?._id,
         studyId: studyId?.id || studyId?.ID || '',
-        templateType: userData?.role === 'RDU' ? data.templateType : studyId?.templateType,
+        templateType:
+          userData?.role === 'RDU' ? data.templateType : studyId?.templateType,
         imageArray: Array.isArray(selectImage) ? selectImage : [],
         status: STUDYSTATUS.Preliminary, // Always set to Draft when creating/saving
         priority: priorityValue || 'Normal',
@@ -2033,7 +2389,11 @@ const PreviewReport = props => {
           radiologist: !!toData.radiologist,
         })
         setSaveReportLoading(false)
-        return alertDisplay('Error', 'Required data missing - cannot proceed with save', 'error')
+        return alertDisplay(
+          'Error',
+          'Required data missing - cannot proceed with save',
+          'error'
+        )
       }
 
       if (!Array.isArray(allTemplate) || allTemplate.length === 0) {
@@ -2045,12 +2405,18 @@ const PreviewReport = props => {
         )
       }
 
-      if (userData?.role !== 'RDU' && !toData?.templateType && Array.isArray(allTemplate) && allTemplate.length > 0) {
+      if (
+        userData?.role !== 'RDU' &&
+        !toData?.templateType &&
+        Array.isArray(allTemplate) &&
+        allTemplate.length > 0
+      ) {
         toData.templateType = allTemplate[0]._id
       }
 
       const swalMessage =
-        studyId?.status === STUDYSTATUS.Unread || studyId?.status === STUDYSTATUS.Preliminary
+        studyId?.status === STUDYSTATUS.Unread ||
+        studyId?.status === STUDYSTATUS.Preliminary
           ? 'Report created successfully!'
           : 'Report updated successfully!'
 
@@ -2070,7 +2436,11 @@ const PreviewReport = props => {
               'error'
             )
           } else if (statusError?.message?.includes('Authentication')) {
-            return alertDisplay('Error', 'Authentication failed. Please login again.', 'error')
+            return alertDisplay(
+              'Error',
+              'Authentication failed. Please login again.',
+              'error'
+            )
           } else {
             return alertDisplay(
               'Error',
@@ -2087,7 +2457,10 @@ const PreviewReport = props => {
         templateType: toData.templateType,
         activityState: toData.activityState,
       })
-      console.log('🔍 FRONTEND DEBUG - Full API request data:', JSON.stringify(toData, null, 2))
+      console.log(
+        '🔍 FRONTEND DEBUG - Full API request data:',
+        JSON.stringify(toData, null, 2)
+      )
       console.log(
         '🔍 FRONTEND DEBUG - API URL:',
         `${process.env.REACT_APP_API_URL}/report/saveReport`
@@ -2124,7 +2497,7 @@ const PreviewReport = props => {
       setIsRerendering(true)
       setTimeout(() => {
         if (isMountedRef.current) {
-          setRefreshTrigger(prev => prev + 1)
+          setRefreshTrigger((prev) => prev + 1)
           setTimeout(() => setIsRerendering(false), 1000)
         }
       }, 500)
@@ -2141,12 +2514,16 @@ const PreviewReport = props => {
       } else if (err?.response?.status === 404) {
         errorMessage = 'Study not found or has been deleted'
       } else if (err?.response?.status === 422) {
-        errorMessage = 'Invalid data provided - please check all required fields'
+        errorMessage =
+          'Invalid data provided - please check all required fields'
       } else if (err?.response?.data) {
         if (typeof err.response.data === 'string') {
           errorMessage = 'Authentication failed. Please login again.'
         } else {
-          errorMessage = err.response.data?.error || err.response.data?.message || errorMessage
+          errorMessage =
+            err.response.data?.error ||
+            err.response.data?.message ||
+            errorMessage
         }
       } else if (err?.message) {
         errorMessage = err.message
@@ -2158,20 +2535,20 @@ const PreviewReport = props => {
     }
   }
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     setDetectChange(true)
   }
 
-  const selectImageHandler = e => {
+  const selectImageHandler = (e) => {
     const imageName = e.target.name
     const currentSelectImage = Array.isArray(selectImage) ? selectImage : []
-    
+
     if (e.target.checked) {
       if (!currentSelectImage.includes(imageName)) {
         setSelectImage([...currentSelectImage, imageName])
       }
     } else {
-      setSelectImage(currentSelectImage.filter(img => img !== imageName))
+      setSelectImage(currentSelectImage.filter((img) => img !== imageName))
     }
     setDetectChange(true)
   }
@@ -2182,9 +2559,16 @@ const PreviewReport = props => {
 
       // CRITICAL: Comprehensive validation of studyId and required data
       if (!studyId || typeof studyId !== 'object') {
-        console.error(`[finalisedPreviewReportHandler] studyId is not a valid object:`, studyId)
+        console.error(
+          `[finalisedPreviewReportHandler] studyId is not a valid object:`,
+          studyId
+        )
         setPreviewLoading(false)
-        return alertDisplay('Error', 'Invalid study data - cannot load finalized report', 'error')
+        return alertDisplay(
+          'Error',
+          'Invalid study data - cannot load finalized report',
+          'error'
+        )
       }
 
       if (
@@ -2193,23 +2577,45 @@ const PreviewReport = props => {
         studyId.ID === 'null' ||
         studyId.ID.toString().trim() === ''
       ) {
-        console.error(`[finalisedPreviewReportHandler] Invalid study ID: ${studyId.ID}`)
+        console.error(
+          `[finalisedPreviewReportHandler] Invalid study ID: ${studyId.ID}`
+        )
         setPreviewLoading(false)
-        return alertDisplay('Error', 'Invalid study ID - cannot load finalized report', 'error')
+        return alertDisplay(
+          'Error',
+          'Invalid study ID - cannot load finalized report',
+          'error'
+        )
       }
 
       // Validate user authentication
       if (!userData || !userData._id) {
-        console.error(`[finalisedPreviewReportHandler] User data is missing or invalid`)
+        console.error(
+          `[finalisedPreviewReportHandler] User data is missing or invalid`
+        )
         setPreviewLoading(false)
-        return alertDisplay('Error', 'User authentication required - please login again', 'error')
+        return alertDisplay(
+          'Error',
+          'User authentication required - please login again',
+          'error'
+        )
       }
 
       // Validate access token
-      if (!accessToken || accessToken === 'undefined' || accessToken === 'null') {
-        console.error(`[finalisedPreviewReportHandler] Access token is missing or invalid`)
+      if (
+        !accessToken ||
+        accessToken === 'undefined' ||
+        accessToken === 'null'
+      ) {
+        console.error(
+          `[finalisedPreviewReportHandler] Access token is missing or invalid`
+        )
         setPreviewLoading(false)
-        return alertDisplay('Error', 'Authentication token missing - please login again', 'error')
+        return alertDisplay(
+          'Error',
+          'Authentication token missing - please login again',
+          'error'
+        )
       }
 
       console.log(
@@ -2249,13 +2655,16 @@ const PreviewReport = props => {
         ) {
           const reportContent = res.data.result
 
-          console.log('📝 [finalisedPreviewReportHandler] Report content received:', {
-            contentLength: reportContent.length,
-            contentPreview: `${reportContent.substring(0, 200)}...`,
-            hasHtmlTags: reportContent.includes('<'),
-            hasPatientInfo: reportContent.includes('Patient'),
-            hasMedicalReport: reportContent.includes('Medical Report'),
-          })
+          console.log(
+            '📝 [finalisedPreviewReportHandler] Report content received:',
+            {
+              contentLength: reportContent.length,
+              contentPreview: `${reportContent.substring(0, 200)}...`,
+              hasHtmlTags: reportContent.includes('<'),
+              hasPatientInfo: reportContent.includes('Patient'),
+              hasMedicalReport: reportContent.includes('Medical Report'),
+            }
+          )
 
           // Always show the content regardless of format - let user see what's available
           setCreatedReport(reportContent)
@@ -2275,7 +2684,10 @@ const PreviewReport = props => {
           )
         }
       } catch (apiError) {
-        console.error('[finalisedPreviewReportHandler] API call failed:', apiError)
+        console.error(
+          '[finalisedPreviewReportHandler] API call failed:',
+          apiError
+        )
         let errorMessage = extractErrorMessage(
           apiError?.response?.data ?? apiError,
           'Failed to load finalized report'
@@ -2290,15 +2702,18 @@ const PreviewReport = props => {
           errorMessage = 'Request timeout - please try again'
         }
 
-        toast.error(<ToastContentForError message={errorMessage} type={'error'} />, {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        toast.error(
+          <ToastContentForError message={errorMessage} type={'error'} />,
+          {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        )
       }
 
       setPreviewLoading(false)
@@ -2307,7 +2722,8 @@ const PreviewReport = props => {
       setPreviewLoading(false)
 
       const errorMessage =
-        err?.message || 'An unexpected error occurred while loading the finalized report'
+        err?.message ||
+        'An unexpected error occurred while loading the finalized report'
       alertDisplay('Error', errorMessage, 'error')
     }
   }
@@ -2318,9 +2734,16 @@ const PreviewReport = props => {
 
       // CRITICAL: Comprehensive validation of studyId and required data
       if (!studyId || typeof studyId !== 'object') {
-        console.error(`[finalPreviewHandler] studyId is not a valid object:`, studyId)
+        console.error(
+          `[finalPreviewHandler] studyId is not a valid object:`,
+          studyId
+        )
         setPreviewLoading(false)
-        return alertDisplay('Error', 'Invalid study data - cannot generate preview', 'error')
+        return alertDisplay(
+          'Error',
+          'Invalid study data - cannot generate preview',
+          'error'
+        )
       }
 
       if (
@@ -2331,20 +2754,38 @@ const PreviewReport = props => {
       ) {
         console.error(`[finalPreviewHandler] Invalid studyId: ${studyId?.ID}`)
         setPreviewLoading(false)
-        return alertDisplay('Error', 'Invalid study ID - cannot generate preview', 'error')
+        return alertDisplay(
+          'Error',
+          'Invalid study ID - cannot generate preview',
+          'error'
+        )
       }
 
       // Validate user authentication and form functions
       if (!userData || !userData._id) {
         console.error(`[finalPreviewHandler] User data is missing or invalid`)
         setPreviewLoading(false)
-        return alertDisplay('Error', 'User authentication required - please login again', 'error')
+        return alertDisplay(
+          'Error',
+          'User authentication required - please login again',
+          'error'
+        )
       }
 
-      if (!accessToken || accessToken === 'undefined' || accessToken === 'null') {
-        console.error(`[finalPreviewHandler] Access token is missing or invalid`)
+      if (
+        !accessToken ||
+        accessToken === 'undefined' ||
+        accessToken === 'null'
+      ) {
+        console.error(
+          `[finalPreviewHandler] Access token is missing or invalid`
+        )
         setPreviewLoading(false)
-        return alertDisplay('Error', 'Authentication token missing - please login again', 'error')
+        return alertDisplay(
+          'Error',
+          'Authentication token missing - please login again',
+          'error'
+        )
       }
 
       // Validate form functions are available
@@ -2387,9 +2828,11 @@ const PreviewReport = props => {
               editorAddendumRef.current.removed !== true
             ) {
               const container =
-                editorAddendumRef.current.getContainer && editorAddendumRef.current.getContainer()
+                editorAddendumRef.current.getContainer &&
+                editorAddendumRef.current.getContainer()
               if (container && container.parentNode) {
-                reportDiagnosisText = editorAddendumRef.current.getContent() || ''
+                reportDiagnosisText =
+                  editorAddendumRef.current.getContent() || ''
               }
             }
           } else if (
@@ -2398,41 +2841,64 @@ const PreviewReport = props => {
             typeof editorRef.current.getContent === 'function'
           ) {
             // Check main editor state and DOM container
-            if (editorRef.current.initialized !== false && editorRef.current.removed !== true) {
-              const container = editorRef.current.getContainer && editorRef.current.getContainer()
+            if (
+              editorRef.current.initialized !== false &&
+              editorRef.current.removed !== true
+            ) {
+              const container =
+                editorRef.current.getContainer &&
+                editorRef.current.getContainer()
               if (container && container.parentNode) {
                 reportDiagnosisText = editorRef.current.getContent() || ''
               }
             }
           }
         } catch (editorError) {
-          console.warn('[finalPreviewHandler] Error getting editor content:', editorError.message)
+          console.warn(
+            '[finalPreviewHandler] Error getting editor content:',
+            editorError.message
+          )
           reportDiagnosisText = ''
         }
 
         // CRITICAL: Validate all data before creating request object with comprehensive null checks
         const patientBirthDate =
-          getValues('patientBirthDate') || studyId?.patient?.PatientBirthDate || ''
+          getValues('patientBirthDate') ||
+          studyId?.patient?.PatientBirthDate ||
+          ''
         const reportDate = getValues('reportDate') || studyId?.reportDate || ''
 
         const data = {
           studyId: studyId?.id || studyId?.ID || '',
-          patientName: getValues('patientName') || studyId?.patient?.PatientName || '',
-          patientID: getValues('patientID') || studyId?.patient?.PatientID || '',
+          patientName:
+            getValues('patientName') || studyId?.patient?.PatientName || '',
+          patientID:
+            getValues('patientID') || studyId?.patient?.PatientID || '',
           patientBirthDate: patientBirthDate
-            ? moment(patientBirthDate).format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD')
+            ? moment(patientBirthDate).format(
+                userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'
+              )
             : '',
-          patientSex: getValues('patientSex') || studyId?.patient?.PatientSex || '',
-          hospitalName: getValues('hospitalName') || studyId?.details?.InstitutionName || '',
+          patientSex:
+            getValues('patientSex') || studyId?.patient?.PatientSex || '',
+          hospitalName:
+            getValues('hospitalName') ||
+            studyId?.details?.InstitutionName ||
+            '',
           reportDate: reportDate
-            ? moment(reportDate).format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD')
-            : moment().format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'),
+            ? moment(reportDate).format(
+                userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'
+              )
+            : moment().format(
+                userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'
+              ),
           examDescription:
             getValues('examDescription') ||
             studyId?.details?.examDescription ||
             studyId?.details?.StudyDescription ||
             '',
-          reportDescription: getValues('reportDescription') || studyId?.ReportDescription || '',
+          reportDescription:
+            getValues('reportDescription') || studyId?.ReportDescription || '',
           reportDiagnosis: reportDiagnosisText || '',
           templateType: getValues('templateType') || templateTypeGet || '',
           imageArray: Array.isArray(selectImage) ? selectImage : [],
@@ -2450,7 +2916,10 @@ const PreviewReport = props => {
         try {
           await toCheckStudyStatusAllowed(studyId.id || studyId.ID)
         } catch (statusError) {
-          console.error('[finalPreviewHandler] Study status check failed:', statusError)
+          console.error(
+            '[finalPreviewHandler] Study status check failed:',
+            statusError
+          )
           setPreviewLoading(false)
 
           // Handle specific error cases
@@ -2461,7 +2930,11 @@ const PreviewReport = props => {
               'error'
             )
           } else if (statusError?.message?.includes('Authentication')) {
-            return alertDisplay('Error', 'Authentication failed. Please login again.', 'error')
+            return alertDisplay(
+              'Error',
+              'Authentication failed. Please login again.',
+              'error'
+            )
           } else {
             return alertDisplay(
               'Error',
@@ -2494,13 +2967,18 @@ const PreviewReport = props => {
               reportResult.length
             )
           } else {
-            throw new Error('Invalid report content format received from server')
+            throw new Error(
+              'Invalid report content format received from server'
+            )
           }
         } else {
           throw new Error('Invalid response format from server')
         }
       } else {
-        console.log('[finalPreviewHandler] Form validation failed, errors:', errors)
+        console.log(
+          '[finalPreviewHandler] Form validation failed, errors:',
+          errors
+        )
         setPreviewLoading(false)
         return alertDisplay(
           'Error',
@@ -2527,7 +3005,9 @@ const PreviewReport = props => {
           errorMessage = 'Authentication failed. Please login again.'
         } else {
           errorMessage =
-            err.response.data?.error?.message || err.response.data?.message || errorMessage
+            err.response.data?.error?.message ||
+            err.response.data?.message ||
+            errorMessage
         }
       } else if (err?.message) {
         errorMessage = err.message
@@ -2535,15 +3015,18 @@ const PreviewReport = props => {
         errorMessage = 'Request timeout - please try again'
       }
 
-      toast.error(<ToastContentForError message={errorMessage} type={'error'} />, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.error(
+        <ToastContentForError message={errorMessage} type={'error'} />,
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      )
     }
   }
 
@@ -2569,12 +3052,12 @@ const PreviewReport = props => {
               },
             }
           )
-          .then(res => {
+          .then((res) => {
             hideLoadingAlert()
             alertDisplay('Finalize', res.data.message, 'success')
-            setCreateAddendumstate(prev => !prev)
+            setCreateAddendumstate((prev) => !prev)
           })
-          .catch(err => {
+          .catch((err) => {
             hideLoadingAlert()
             console.log('err', err)
           })
@@ -2591,23 +3074,23 @@ const PreviewReport = props => {
             },
           }
         )
-        .then(res => {
+        .then((res) => {
           hideLoadingAlert()
           alertDisplay('Finalize', res.data.message, 'success')
           setTimeout(() => {
             if (isMountedRef.current) {
-              setCreateAddendumstate(prev => !prev)
+              setCreateAddendumstate((prev) => !prev)
             }
           }, 100)
         })
-        .catch(err => {
+        .catch((err) => {
           hideLoadingAlert()
           console.log('err', err)
         })
     }
   }
 
-  const changeStatus = async status => {
+  const changeStatus = async (status) => {
     await trigger([
       'patientName',
       'patientID',
@@ -2640,24 +3123,37 @@ const PreviewReport = props => {
           patientSex: data.patientSex,
           patientBirthDate: pickerDOB
             ? Array.isArray(pickerDOB)
-              ? moment(pickerDOB[0]).format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD')
-              : moment(pickerDOB).format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD')
+              ? moment(pickerDOB[0]).format(
+                  userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'
+                )
+              : moment(pickerDOB).format(
+                  userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'
+                )
             : null,
           hospitalName: data.hospitalName,
           activityState: STUDYSTATUS.Preliminary,
-          reportDate: moment(picker).format(userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'),
+          reportDate: moment(picker).format(
+            userData?.dateFormats?.dateFormat || 'YYYY-MM-DD'
+          ),
           reportDiagnosis: editorRef.current?.getContent() || '',
           radiologist:
-            userData?.role === 'RDU' ? userData?._id : studyId.radiologist || userData?._id,
+            userData?.role === 'RDU'
+              ? userData?._id
+              : studyId.radiologist || userData?._id,
           studyId: studyId?.id || studyId?.ID || '',
-          templateType: userData?.role === 'RDU' ? data.templateType : studyId.templateType,
+          templateType:
+            userData?.role === 'RDU' ? data.templateType : studyId.templateType,
           status: statusValue,
           priority: priorityValue,
         }
 
         if (!Array.isArray(allTemplate) || allTemplate.length === 0) {
           setSaveReportLoading(false)
-          alertDisplay('Error', 'Report template is not available, contact clinic admin!', 'error')
+          alertDisplay(
+            'Error',
+            'Report template is not available, contact clinic admin!',
+            'error'
+          )
         } else {
           await axios
             .post(
@@ -2669,12 +3165,12 @@ const PreviewReport = props => {
                 },
               }
             )
-            .then(res => {
+            .then((res) => {
               setSaveReportLoading(false)
               alertDisplay('Success', res.data.message, 'success')
-              setCreateAddendumstate(prev => !prev)
+              setCreateAddendumstate((prev) => !prev)
             })
-            .catch(err => {
+            .catch((err) => {
               setSaveReportLoading(false)
               alertDisplay(
                 'Error',
@@ -2687,7 +3183,7 @@ const PreviewReport = props => {
     }
   }
 
-  const unlockStudy = async status => {
+  const unlockStudy = async (status) => {
     await trigger([
       'patientName',
       'patientID',
@@ -2715,12 +3211,12 @@ const PreviewReport = props => {
               Authorization: `Bearer ${accessToken}`,
             },
           })
-          .then(res => {
+          .then((res) => {
             setSaveReportLoading(false)
             alertDisplay('Success', res.data.message, 'success')
-            setCreateAddendumstate(prev => !prev)
+            setCreateAddendumstate((prev) => !prev)
           })
-          .catch(err => {
+          .catch((err) => {
             setSaveReportLoading(false)
             alertDisplay(
               'Error',
@@ -2735,15 +3231,18 @@ const PreviewReport = props => {
   const [pdfViewerOpen, setPdfViewerOpen] = useState(false)
   const [pdfUrl, setPdfUrl] = useState('')
 
-  const downloadHandler = async id => {
+  const downloadHandler = async (id) => {
     setDownloadLoading(true)
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/report/download/${id}`, {
-        responseType: 'blob',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/report/download/${id}`,
+        {
+          responseType: 'blob',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
 
       // Create blob URL directly from response data
       const blob = new Blob([res.data], {
@@ -2755,7 +3254,11 @@ const PreviewReport = props => {
       setDownloadLoading(false)
     } catch (err) {
       console.log('Download error:', err)
-      alertDisplay('Error', 'Failed to download PDF. Please try again.', 'error')
+      alertDisplay(
+        'Error',
+        'Failed to download PDF. Please try again.',
+        'error'
+      )
       setDownloadLoading(false)
     }
   }
@@ -2763,17 +3266,20 @@ const PreviewReport = props => {
   useEffect(() => {
     const fetchDiagnosisAndTemplates = async () => {
       try {
-        if (userData?.role !== ROLES.ClinicAdmin && userData?.role !== ROLES.SharedDoctor) {
+        if (
+          userData?.role !== ROLES.ClinicAdmin &&
+          userData?.role !== ROLES.SharedDoctor
+        ) {
           try {
             const res = await getDiagnosis()
             if (res?.data?.list) {
               setAllDiagnosis(res.data.list)
             }
             const templateOption = res?.data?.list
-              .filter(modality => {
+              .filter((modality) => {
                 return modality?.templates?.length
               })
-              .map(modality => {
+              .map((modality) => {
                 //   }
                 // })
 
@@ -2782,7 +3288,10 @@ const PreviewReport = props => {
                   value: modality.name,
                 }
               })
-            setDiagnosisModalityTemplateOptions(prev => [...prev, ...templateOption])
+            setDiagnosisModalityTemplateOptions((prev) => [
+              ...prev,
+              ...templateOption,
+            ])
           } catch (err) {
             console.log(err)
           }
@@ -2807,19 +3316,31 @@ const PreviewReport = props => {
 
     const handleRouteChange = () => {
       // CRITICAL: Only call cancel lock API if studyId.ID is properly defined
-      if (mounted && studyId?.ID && studyId.ID !== 'undefined' && studyId.ID.trim() !== '') {
-        console.log(`[PreviewReport] Calling cancel lock API for studyId: ${studyId.ID}`)
+      if (
+        mounted &&
+        studyId?.ID &&
+        studyId.ID !== 'undefined' &&
+        studyId.ID.trim() !== ''
+      ) {
+        console.log(
+          `[PreviewReport] Calling cancel lock API for studyId: ${studyId.ID}`
+        )
         axios
-          .get(`${process.env.REACT_APP_API_URL}/report/cancel/${studyId.ID}/lock`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then(res => {
-            console.log(`[PreviewReport] Cancel lock API successful for studyId: ${studyId.ID}`)
+          .get(
+            `${process.env.REACT_APP_API_URL}/report/cancel/${studyId.ID}/lock`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(
+              `[PreviewReport] Cancel lock API successful for studyId: ${studyId.ID}`
+            )
             mounted = false
           })
-          .catch(err => {
+          .catch((err) => {
             console.error(
               `[PreviewReport] Cancel lock API error for studyId: ${studyId.ID}:`,
               err.response?.data?.message || err.message
@@ -2841,14 +3362,16 @@ const PreviewReport = props => {
     }
   }, [location, studyId?.ID, userData?.accessToken])
 
-  const setOptionsForDiagnosisTemplates = value => {
-    const diagnosisTemplates = allDiagnosis.find(o => o.name === value)
-    const diagnosisTemplatesOptions = diagnosisTemplates?.templates?.map(modality => {
-      return {
-        label: modality.name,
-        value: modality.text,
+  const setOptionsForDiagnosisTemplates = (value) => {
+    const diagnosisTemplates = allDiagnosis.find((o) => o.name === value)
+    const diagnosisTemplatesOptions = diagnosisTemplates?.templates?.map(
+      (modality) => {
+        return {
+          label: modality.name,
+          value: modality.text,
+        }
       }
-    })
+    )
     setDiagnosisTemplateOptions([
       { value: '', label: 'Select Template' },
       ...diagnosisTemplatesOptions,
@@ -2856,11 +3379,13 @@ const PreviewReport = props => {
   }
 
   // Added by JCasp developer (Mehul) at 06-02-2024 to check if the study image is selected or not. If it is selected and the image ID does not match the selected study image ID, then verify with the base64 content. If a match is found, then set the selected image.
-  const getSelectedImage = image => {
+  const getSelectedImage = (image) => {
     let res = false
     const currentSelectImage = Array.isArray(selectImage) ? selectImage : []
-    const currentSelectedImageString = Array.isArray(selectedImageString) ? selectedImageString : []
-    
+    const currentSelectedImageString = Array.isArray(selectedImageString)
+      ? selectedImageString
+      : []
+
     if (currentSelectImage.includes(image?.imageId)) {
       res = true
     } else if (currentSelectedImageString.includes(image?.base64Image)) {
@@ -2878,7 +3403,7 @@ const PreviewReport = props => {
     return res
   }
 
-  const findDefault = allTemplate.find(element => element.default)
+  const findDefault = allTemplate.find((element) => element.default)
 
   return (
     <Fragment>
@@ -2895,7 +3420,9 @@ const PreviewReport = props => {
                 setActiveTab={setActiveTab}
                 userData={userData}
                 studyId={studyId}
-                worksheetDataLength={Array.isArray(worksheetData) ? worksheetData.length : 0}
+                worksheetDataLength={
+                  Array.isArray(worksheetData) ? worksheetData.length : 0
+                }
                 isFinalReportEditable={isFinalReportEditable}
               />
             </Row>
@@ -2907,17 +3434,27 @@ const PreviewReport = props => {
                   <Row className="mt-1 mb-50 w-100">
                     <Col lg="3" md="6" sm="12" xs="12">
                       <CardTitle tag="h4" className="text-nowrap">
-                        {mode === 'preview' ? 'Preview Report' : 'Create Report'}
-                        {studyId?.status === STUDYSTATUS.Final && !isFinalReportEditable ? (
+                        {mode === 'preview'
+                          ? 'Preview Report'
+                          : 'Create Report'}
+                        {studyId?.status === STUDYSTATUS.Final &&
+                        !isFinalReportEditable ? (
                           <h6>(The report was submitted for the Addendum)</h6>
                         ) : (
                           ''
                         )}
                       </CardTitle>
                     </Col>
-                    <Col lg="9" md="6" sm="12" xs="12" className="align-self-end">
+                    <Col
+                      lg="9"
+                      md="6"
+                      sm="12"
+                      xs="12"
+                      className="align-self-end"
+                    >
                       <Row className="justify-content-end">
-                        {(userData?.role === 'RDU' || userData?.role === 'TCU') && (
+                        {(userData?.role === 'RDU' ||
+                          userData?.role === 'TCU') && (
                           <>
                             <Button
                               className={
@@ -2927,28 +3464,39 @@ const PreviewReport = props => {
                                   : 'cursor-pointer text-nowrap ml-1 mt-1  mt-ml-0'
                               }
                               color="primary"
-                              onClick={e => {
+                              onClick={(e) => {
                                 if (checkForOtherOperationDm(studyId, 1)) {
                                   return e.preventDefault()
                                 }
 
-                                console.log('🔄 Preview Report button clicked:', {
-                                  studyId: studyId?.ID,
-                                  studyStatus: studyId?.status,
-                                  studyStatusFinal: STUDYSTATUS.Final,
-                                  isStatusFinal: studyId?.status === STUDYSTATUS.Final,
-                                  willCallFinalisedHandler:
-                                    studyId && studyId.status === STUDYSTATUS.Final,
-                                })
+                                console.log(
+                                  '🔄 Preview Report button clicked:',
+                                  {
+                                    studyId: studyId?.ID,
+                                    studyStatus: studyId?.status,
+                                    studyStatusFinal: STUDYSTATUS.Final,
+                                    isStatusFinal:
+                                      studyId?.status === STUDYSTATUS.Final,
+                                    willCallFinalisedHandler:
+                                      studyId &&
+                                      studyId.status === STUDYSTATUS.Final,
+                                  }
+                                )
 
                                 // Always use finalisedPreviewReportHandler for Final status studies with validation
-                                if (studyId && studyId.status === STUDYSTATUS.Final && !isFinalReportEditable) {
+                                if (
+                                  studyId &&
+                                  studyId.status === STUDYSTATUS.Final &&
+                                  !isFinalReportEditable
+                                ) {
                                   console.log(
                                     '✅ Calling finalisedPreviewReportHandler for Final status'
                                   )
                                   finalisedPreviewReportHandler()
                                 } else if (studyId && studyId.status) {
-                                  console.log('✅ Calling finalPreviewHandler for non-Final status')
+                                  console.log(
+                                    '✅ Calling finalPreviewHandler for non-Final status'
+                                  )
                                   finalPreviewHandler()
                                 } else {
                                   console.log('❌ No valid status found')
@@ -2978,44 +3526,53 @@ const PreviewReport = props => {
                                   : 'white-space ml-1 mt-1  mt-ml-0'
                               }
                               color="primary"
-                              disabled={studyId.status !== STUDYSTATUS.Final ?? false}
-                              onClick={e => {
+                              disabled={
+                                studyId.status !== STUDYSTATUS.Final ?? false
+                              }
+                              onClick={(e) => {
                                 if (checkForOtherOperationDm(studyId, 1)) {
                                   return e.preventDefault()
                                 }
                                 downloadHandler(studyId.ID)
                               }}
                             >
-                              {downloadLoading ? <Spinner color="light" size="sm" /> : 'Download'}
+                              {downloadLoading ? (
+                                <Spinner color="light" size="sm" />
+                              ) : (
+                                'Download'
+                              )}
                             </Button>
                           )}
 
-                        {userData?.role === 'RDU' && studyId.status === STUDYSTATUS.Ready && (
-                          <Button
-                            className={
-                              studyId.status === STUDYSTATUS.Ready
-                                ? 'cursor-pointer white-space ml-1 mt-1  mt-ml-0'
-                                : 'white-space ml-1 mt-1  mt-ml-0'
-                            }
-                            color="primary"
-                            disabled={studyId.status !== STUDYSTATUS.Ready ?? false}
-                            onClick={e => {
-                              if (checkForOtherOperationDm(studyId, 1)) {
-                                return e.preventDefault()
+                        {userData?.role === 'RDU' &&
+                          studyId.status === STUDYSTATUS.Ready && (
+                            <Button
+                              className={
+                                studyId.status === STUDYSTATUS.Ready
+                                  ? 'cursor-pointer white-space ml-1 mt-1  mt-ml-0'
+                                  : 'white-space ml-1 mt-1  mt-ml-0'
                               }
-                              finalizedHandler()
-                            }}
-                          >
-                            Finalize
-                          </Button>
-                        )}
+                              color="primary"
+                              disabled={
+                                studyId.status !== STUDYSTATUS.Ready ?? false
+                              }
+                              onClick={(e) => {
+                                if (checkForOtherOperationDm(studyId, 1)) {
+                                  return e.preventDefault()
+                                }
+                                finalizedHandler()
+                              }}
+                            >
+                              Finalize
+                            </Button>
+                          )}
                         {userData?.role === 'RDU' &&
                           (studyId.status === STUDYSTATUS.Unread ||
                             studyId.status === STUDYSTATUS.Preliminary) && (
                             <Button
                               className="white-space ml-1 mt-1  mt-ml-0"
                               color="primary"
-                              onClick={e => {
+                              onClick={(e) => {
                                 changeStatus(studyId.status)
                               }}
                             >
@@ -3027,14 +3584,15 @@ const PreviewReport = props => {
                       </Row>
                     </Col>
                   </Row>
-                  {(studyId.status !== STUDYSTATUS.Final || isFinalReportEditable) && (
+                  {(studyId.status !== STUDYSTATUS.Final ||
+                    isFinalReportEditable) && (
                     <Row className="w-100 justify-content-start">
                       <Col lg="3" md="6">
                         <Label htmlFor="priority">Priority</Label>
                         <Input
                           name="priority"
                           id="priority"
-                          onChange={e => setPriorityValue(e.target.value)}
+                          onChange={(e) => setPriorityValue(e.target.value)}
                           value={priorityValue}
                           disabled
                         >
@@ -3047,14 +3605,20 @@ const PreviewReport = props => {
                         <Input
                           name="status"
                           id="status"
-                          onChange={e => setStatusValue(e.target.value)}
+                          onChange={(e) => setStatusValue(e.target.value)}
                           value={statusValue}
                           disabled
                         >
-                          <option value={STUDYSTATUS.Ready}>{STUDYSTATUS.Ready}</option>
+                          <option value={STUDYSTATUS.Ready}>
+                            {STUDYSTATUS.Ready}
+                          </option>
                           <option value="Dictated">Dictated</option>
-                          <option value={STUDYSTATUS.Preliminary}>{STUDYSTATUS.Preliminary}</option>
-                          <option value={STUDYSTATUS.Final}>{STUDYSTATUS.Final}</option>
+                          <option value={STUDYSTATUS.Preliminary}>
+                            {STUDYSTATUS.Preliminary}
+                          </option>
+                          <option value={STUDYSTATUS.Final}>
+                            {STUDYSTATUS.Final}
+                          </option>
                         </Input>
                       </Col>
 
@@ -3065,27 +3629,40 @@ const PreviewReport = props => {
                             type="select"
                             name="templateType"
                             id="templateType"
-                            {...register('templateType', { required: userData?.role === 'RDU' || userData?.role === 'TCU' })}
+                            {...register('templateType', {
+                              required:
+                                userData?.role === 'RDU' ||
+                                userData?.role === 'TCU',
+                            })}
                             value={
                               watchTemplateType ||
                               studyId?.templateType ||
                               findDefault?._id ||
-                              allTemplate?.find(t => t.default)?._id ||
+                              allTemplate?.find((t) => t.default)?._id ||
                               allTemplate?.[0]?._id ||
                               ''
                             }
-                            disabled={(userData?.role !== 'RDU' && userData?.role !== 'TCU') ?? false}
-                            onChange={e => {
+                            disabled={
+                              (userData?.role !== 'RDU' &&
+                                userData?.role !== 'TCU') ??
+                              false
+                            }
+                            onChange={(e) => {
                               setValue('templateType', e.target.value)
                               setDetectChange(true)
                             }}
                           >
                             <option value="">Select Template</option>
                             {(() => {
-                              const safeTemplates = Array.isArray(allTemplate) ? allTemplate : []
+                              const safeTemplates = Array.isArray(allTemplate)
+                                ? allTemplate
+                                : []
                               return safeTemplates.map((template, index) => {
                                 return (
-                                  <option key={template?._id || `template-${index}`} value={template?._id || ''}>
+                                  <option
+                                    key={template?._id || `template-${index}`}
+                                    value={template?._id || ''}
+                                  >
                                     {template?.name || `Template ${index + 1}`}
                                   </option>
                                 )
@@ -3093,7 +3670,9 @@ const PreviewReport = props => {
                             })()}
                           </Input>
                           {errors && errors.templateType && (
-                            <FormFeedback>{errors.templateType.message}</FormFeedback>
+                            <FormFeedback>
+                              {errors.templateType.message}
+                            </FormFeedback>
                           )}
                         </FormGroup>
                       </Col>
@@ -3102,7 +3681,8 @@ const PreviewReport = props => {
                 </CardHeader>
                 <CardBody className="px-4 py-1 card-body-report-element">
                   <Form onSubmit={handleSubmit(onSubmit)}>
-                    {(studyId.status !== STUDYSTATUS.Final || isFinalReportEditable) && (
+                    {(studyId.status !== STUDYSTATUS.Final ||
+                      isFinalReportEditable) && (
                       <>
                         <Row form className="mt-1 mb-50">
                           <Col lg="3" md="6" className="px-1">
@@ -3112,32 +3692,43 @@ const PreviewReport = props => {
                                 id="patientName"
                                 name="patientName"
                                 placeholder="Enter patient name"
-                                defaultValue={studyId?.patient?.PatientName || '-'}
+                                defaultValue={
+                                  studyId?.patient?.PatientName || '-'
+                                }
                                 {...register('patientName', { required: true })}
                                 invalid={errors?.patientName && true}
                                 onChange={inputHandler}
                                 readOnly={true}
                               />
+
                               {errors && errors.patientName && (
-                                <FormFeedback>{errors.patientName.message}</FormFeedback>
+                                <FormFeedback>
+                                  {errors.patientName.message}
+                                </FormFeedback>
                               )}
                             </FormGroup>
                           </Col>
                           <Col lg="3" md="6" className="px-1">
                             <FormGroup>
-                              <Label htmlFor="patientBirthDate">Date-of-Birth:</Label>
+                              <Label htmlFor="patientBirthDate">
+                                Date-of-Birth:
+                              </Label>
                               <Input
                                 name="patientBirthDate"
                                 value={pickerDOB}
                                 id="patientBirthDate"
-                                {...register('patientBirthDate', { required: true })}
+                                {...register('patientBirthDate', {
+                                  required: true,
+                                })}
                                 invalid={errors?.patientBirthDate && true}
                                 onChange={inputHandler}
                                 readOnly={true}
                               />
 
                               {errors && errors.patientBirthDate && (
-                                <FormFeedback>{errors.patientBirthDate.message}</FormFeedback>
+                                <FormFeedback>
+                                  {errors.patientBirthDate.message}
+                                </FormFeedback>
                               )}
                             </FormGroup>
                           </Col>
@@ -3160,7 +3751,9 @@ const PreviewReport = props => {
                                 <option value="M">Male</option>
                               </Input>
                               {errors && errors.patientSex && (
-                                <FormFeedback>{errors.patientSex.message}</FormFeedback>
+                                <FormFeedback>
+                                  {errors.patientSex.message}
+                                </FormFeedback>
                               )}
                             </FormGroup>
                           </Col>
@@ -3171,14 +3764,21 @@ const PreviewReport = props => {
                                 id="hospitalName"
                                 name="hospitalName"
                                 placeholder="Enter hospital name"
-                                defaultValue={studyId?.details?.InstitutionName || '-'}
-                                {...register('hospitalName', { required: true })}
+                                defaultValue={
+                                  studyId?.details?.InstitutionName || '-'
+                                }
+                                {...register('hospitalName', {
+                                  required: true,
+                                })}
                                 invalid={errors?.hospitalName && true}
                                 onChange={inputHandler}
                                 readOnly={true}
                               />
+
                               {errors && errors.hospitalName && (
-                                <FormFeedback>{errors.hospitalName.message}</FormFeedback>
+                                <FormFeedback>
+                                  {errors.hospitalName.message}
+                                </FormFeedback>
                               )}
                             </FormGroup>
                           </Col>
@@ -3191,14 +3791,19 @@ const PreviewReport = props => {
                                 id="patientID"
                                 name="patientID"
                                 placeholder="Enter patient id"
-                                defaultValue={studyId?.patient?.PatientID || '-'}
+                                defaultValue={
+                                  studyId?.patient?.PatientID || '-'
+                                }
                                 {...register('patientID', { required: true })}
                                 invalid={errors?.patientID && true}
                                 onChange={inputHandler}
                                 readOnly={true}
                               />
+
                               {errors && errors.patientID && (
-                                <FormFeedback>{errors.patientID.message}</FormFeedback>
+                                <FormFeedback>
+                                  {errors.patientID.message}
+                                </FormFeedback>
                               )}
                             </FormGroup>
                           </Col>
@@ -3214,6 +3819,7 @@ const PreviewReport = props => {
                                 invalid={errors?.reportDate && true}
                                 onChange={inputHandler}
                               />
+
                               <Flatpickr
                                 className={'form-control disabled-ficker'}
                                 value={picker}
@@ -3229,7 +3835,9 @@ const PreviewReport = props => {
                           </Col>
                           <Col lg="3" md="6" className="px-1">
                             <FormGroup>
-                              <Label htmlFor="examDescription">Exam Description:</Label>
+                              <Label htmlFor="examDescription">
+                                Exam Description:
+                              </Label>
                               <Input
                                 id="examDescription"
                                 name="examDescription"
@@ -3240,23 +3848,31 @@ const PreviewReport = props => {
                                     ? (studyId?.details?.StudyDescription ?? '')
                                     : studyId?.details?.StudyDescription
                                 }
-                                {...register('examDescription', { required: true })}
+                                {...register('examDescription', {
+                                  required: true,
+                                })}
                                 invalid={errors?.examDescription && true}
                                 onChange={inputHandler}
                                 readOnly={
                                   (userData?.role !== 'TCU' ||
-                                    studyId.status === STUDYSTATUS.Preliminary) ??
+                                    studyId.status ===
+                                      STUDYSTATUS.Preliminary) ??
                                   false
                                 }
                               />
+
                               {errors && errors.examDescription && (
-                                <FormFeedback>{errors.examDescription.message}</FormFeedback>
+                                <FormFeedback>
+                                  {errors.examDescription.message}
+                                </FormFeedback>
                               )}
                             </FormGroup>
                           </Col>
                           <Col lg="3" md="6" className="px-1">
                             <FormGroup>
-                              <Label htmlFor="reportDescription">Reason for Exam:</Label>
+                              <Label htmlFor="reportDescription">
+                                Reason for Exam:
+                              </Label>
                               <Input
                                 id="reportDescription"
                                 name="reportDescription"
@@ -3266,25 +3882,33 @@ const PreviewReport = props => {
                                     ? ''
                                     : studyId?.ReportDescription
                                 }
-                                {...register('reportDescription', { required: true })}
+                                {...register('reportDescription', {
+                                  required: true,
+                                })}
                                 invalid={errors?.reportDescription && true}
                                 onChange={inputHandler}
                                 readOnly={
                                   !(
                                     userData?.role === 'RDU' ||
-                                    (userData?.role === 'TCU' && !studyId.radiologist)
+                                    (userData?.role === 'TCU' &&
+                                      !studyId.radiologist)
                                   ) ?? true
                                 }
                               />
+
                               {errors && errors.reportDescription && (
-                                <FormFeedback>{errors.reportDescription.message}</FormFeedback>
+                                <FormFeedback>
+                                  {errors.reportDescription.message}
+                                </FormFeedback>
                               )}
                             </FormGroup>
                           </Col>
                           {userData?.role === 'RDU' && (
                             <Col>
                               <Row>
-                                <Label className="px-1 my-1">Diagnosis template:</Label>
+                                <Label className="px-1 my-1">
+                                  Diagnosis template:
+                                </Label>
                               </Row>
                               <Row>
                                 <Col lg="3" md="6" className="px-1">
@@ -3293,21 +3917,27 @@ const PreviewReport = props => {
                                     <Select
                                       isClearable={false}
                                       theme={selectThemeColors}
-                                      defaultValue={diagnosisModalityTemplateOptions[0]}
+                                      defaultValue={
+                                        diagnosisModalityTemplateOptions[0]
+                                      }
                                       name="layout"
                                       id="layout"
                                       options={diagnosisModalityTemplateOptions}
                                       className="react-select"
                                       classNamePrefix="select"
-                                      onChange={e => {
+                                      onChange={(e) => {
                                         if (e.value !== '') {
-                                          setOptionsForDiagnosisTemplates(e.value)
+                                          setOptionsForDiagnosisTemplates(
+                                            e.value
+                                          )
                                         }
                                       }}
                                     />
 
                                     {errors && errors.layout && (
-                                      <FormFeedback>{errors.layout.message}</FormFeedback>
+                                      <FormFeedback>
+                                        {errors.layout.message}
+                                      </FormFeedback>
                                     )}
                                   </FormGroup>
                                 </Col>
@@ -3323,13 +3953,17 @@ const PreviewReport = props => {
                                       options={diagnosisTemplateOptions}
                                       className="react-select"
                                       classNamePrefix="select"
-                                      value={{ value: '', label: 'Select Template' }}
-                                      onChange={e => {
+                                      value={{
+                                        value: '',
+                                        label: 'Select Template',
+                                      }}
+                                      onChange={(e) => {
                                         if (
                                           e.value !== '' &&
                                           !isRerendering &&
                                           editorRef.current &&
-                                          editorRef.current.initialized !== false &&
+                                          editorRef.current.initialized !==
+                                            false &&
                                           !editorRef.current.removed
                                         ) {
                                           try {
@@ -3339,14 +3973,19 @@ const PreviewReport = props => {
                                               e.value
                                             )
                                           } catch (err) {
-                                            console.warn('Template insert failed:', err.message)
+                                            console.warn(
+                                              'Template insert failed:',
+                                              err.message
+                                            )
                                           }
                                         }
                                       }}
                                     />
 
                                     {errors && errors.layout && (
-                                      <FormFeedback>{errors.layout.message}</FormFeedback>
+                                      <FormFeedback>
+                                        {errors.layout.message}
+                                      </FormFeedback>
                                     )}
                                   </FormGroup>
                                 </Col>
@@ -3370,7 +4009,8 @@ const PreviewReport = props => {
                       <Col lg="12" md="12" className="mb-2">
                         {userData?.role === 'RDU' ||
                         (userData?.role === 'TCU' && !studyId.radiologist) ? (
-                          studyId.status !== STUDYSTATUS.Final || isFinalReportEditable ? (
+                          studyId.status !== STUDYSTATUS.Final ||
+                          isFinalReportEditable ? (
                             !pageLoader &&
                             studyId.ID &&
                             !isRerendering && (
@@ -3391,13 +4031,19 @@ const PreviewReport = props => {
                                         }
 
                                         // Enhanced readiness check with timeout protection
-                                        if (editor.initialized === false || !editor.getBody()) {
+                                        if (
+                                          editor.initialized === false ||
+                                          !editor.getBody()
+                                        ) {
                                           let retryCount = 0
                                           const maxRetries = 10
 
                                           const onEditorReady = () => {
                                             retryCount++
-                                            if (retryCount > maxRetries || !isMountedRef.current) {
+                                            if (
+                                              retryCount > maxRetries ||
+                                              !isMountedRef.current
+                                            ) {
                                               console.warn(
                                                 '📝 Main editor initialization timeout or unmounted'
                                               )
@@ -3429,9 +4075,12 @@ const PreviewReport = props => {
 
                                         // Validate essential methods with enhanced checks
                                         if (
-                                          typeof editor.getContent !== 'function' ||
-                                          typeof editor.getContainer !== 'function' ||
-                                          typeof editor.setContent !== 'function'
+                                          typeof editor.getContent !==
+                                            'function' ||
+                                          typeof editor.getContainer !==
+                                            'function' ||
+                                          typeof editor.setContent !==
+                                            'function'
                                         ) {
                                           console.warn(
                                             '📝 Main editor essential methods not available'
@@ -3446,32 +4095,45 @@ const PreviewReport = props => {
                                           container = editor.getContainer()
 
                                           if (!container) {
-                                            console.warn('📝 Main editor container is null')
+                                            console.warn(
+                                              '📝 Main editor container is null'
+                                            )
                                             setMainEditorReady(false)
                                             return
                                           }
 
                                           // Multiple DOM validation checks
                                           if (!container.parentNode) {
-                                            console.warn('📝 Main editor container has no parent')
+                                            console.warn(
+                                              '📝 Main editor container has no parent'
+                                            )
                                             setMainEditorReady(false)
                                             return
                                           }
 
                                           if (!document.contains(container)) {
-                                            console.warn('📝 Main editor container not in document')
+                                            console.warn(
+                                              '📝 Main editor container not in document'
+                                            )
                                             setMainEditorReady(false)
                                             return
                                           }
 
                                           // Check if container is properly styled and visible
-                                          const computedStyle = window.getComputedStyle(container)
-                                          if (computedStyle.display === 'none') {
-                                            console.warn('📝 Main editor container is hidden')
+                                          const computedStyle =
+                                            window.getComputedStyle(container)
+                                          if (
+                                            computedStyle.display === 'none'
+                                          ) {
+                                            console.warn(
+                                              '📝 Main editor container is hidden'
+                                            )
                                             // Don't fail here, just warn
                                           }
 
-                                          console.log('✅ Main editor container validation passed')
+                                          console.log(
+                                            '✅ Main editor container validation passed'
+                                          )
                                         } catch (e) {
                                           console.warn(
                                             '📝 Main editor container validation failed:',
@@ -3483,11 +4145,14 @@ const PreviewReport = props => {
 
                                         // Enhanced functionality test with error recovery
                                         try {
-                                          const testContent = editor.getContent()
+                                          const testContent =
+                                            editor.getContent()
                                           // Test setting content as well
                                           const originalContent = testContent
                                           editor.setContent(originalContent)
-                                          console.log('✅ Main editor functionality test passed')
+                                          console.log(
+                                            '✅ Main editor functionality test passed'
+                                          )
                                         } catch (contentError) {
                                           console.warn(
                                             '📝 Main editor functionality test failed:',
@@ -3509,7 +4174,9 @@ const PreviewReport = props => {
                                         try {
                                           editorRef.current = editor
                                           setMainEditorReady(true)
-                                          console.log('✅ Main editor initialized successfully')
+                                          console.log(
+                                            '✅ Main editor initialized successfully'
+                                          )
                                         } catch (refError) {
                                           console.error(
                                             '📝 Failed to set editor reference:',
@@ -3532,7 +4199,7 @@ const PreviewReport = props => {
                                       setTimeout(initializeEditor, 300)
                                     }
                                   }}
-                                  onEditorChange={text => {
+                                  onEditorChange={(text) => {
                                     if (
                                       isStateTransitioning ||
                                       !isMountedRef.current ||
@@ -3543,7 +4210,8 @@ const PreviewReport = props => {
                                     try {
                                       if (
                                         editorRef.current &&
-                                        editorRef.current.initialized !== false &&
+                                        editorRef.current.initialized !==
+                                          false &&
                                         !editorRef.current.removed
                                       ) {
                                         handleAutoLogout()
@@ -3551,10 +4219,15 @@ const PreviewReport = props => {
                                         setValue('reportDiagnosis', text)
                                       }
                                     } catch (error) {
-                                      console.warn('📝 Editor change handler error:', error.message)
+                                      console.warn(
+                                        '📝 Editor change handler error:',
+                                        error.message
+                                      )
                                     }
                                   }}
-                                  initialValue={studyId.finalisedReportDiagnosisString || ''}
+                                  initialValue={
+                                    studyId.finalisedReportDiagnosisString || ''
+                                  }
                                   init={{
                                     height: 500,
                                     menubar: true,
@@ -3576,6 +4249,7 @@ const PreviewReport = props => {
                                       'help',
                                       'wordcount',
                                     ],
+
                                     toolbar:
                                       'undo redo | formatselect | code' +
                                       'bold italic backcolor | alignleft aligncenter ' +
@@ -3584,7 +4258,7 @@ const PreviewReport = props => {
                                     content_style:
                                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before { white-space: pre-line;} .mce-content-body p { margin: 0; padding: 0; margin-block: 0; margin-inline: 0; line-height: normal; }',
                                     placeholder: `Anything entered here will be added to the report layout chosen from the diagnosis template,\n To see the exact report, click on the preview.\n Preview will only works once you created the report.\n Download will only works after finalization of the report\n Press Shift+Enter to continue below this line.`,
-                                    setup: editor => {
+                                    setup: (editor) => {
                                       // Enhanced safety measures and error handling
                                       editor.on('PreInit', () => {
                                         console.log('📝 Main editor PreInit')
@@ -3595,22 +4269,32 @@ const PreviewReport = props => {
                                       })
 
                                       // Add error handling for editor operations
-                                      editor.on('NodeChange', e => {
+                                      editor.on('NodeChange', (e) => {
                                         try {
                                           // Safely handle node changes
-                                          if (!e.element || !document.contains(e.element)) {
-                                            console.warn('📝 NodeChange event with invalid element')
+                                          if (
+                                            !e.element ||
+                                            !document.contains(e.element)
+                                          ) {
+                                            console.warn(
+                                              '📝 NodeChange event with invalid element'
+                                            )
                                             return false
                                           }
                                         } catch (error) {
-                                          console.warn('📝 NodeChange error:', error.message)
+                                          console.warn(
+                                            '📝 NodeChange error:',
+                                            error.message
+                                          )
                                           return false
                                         }
                                       })
 
                                       // Handle editor removal safely
                                       editor.on('remove', () => {
-                                        console.log('📝 Main editor remove event')
+                                        console.log(
+                                          '📝 Main editor remove event'
+                                        )
                                         if (editorRef.current === editor) {
                                           editorRef.current = null
                                           setMainEditorReady(false)
@@ -3628,17 +4312,29 @@ const PreviewReport = props => {
                           )
                         ) : studyId.status === STUDYSTATUS.Unread ||
                           studyId.status === STUDYSTATUS.Preliminary ? (
-                          userData?.role === 'TCU' && studyId.status !== STUDYSTATUS.Unread ? (
-                            <h3 className="text-center m-3">Report is locked by a radiologist</h3>
+                          userData?.role === 'TCU' &&
+                          studyId.status !== STUDYSTATUS.Unread ? (
+                            <h3 className="text-center m-3">
+                              Report is locked by a radiologist
+                            </h3>
                           ) : (
-                            <h3 className="text-center m-3">Report not created</h3>
+                            <h3 className="text-center m-3">
+                              Report not created
+                            </h3>
                           )
-                        ) : studyId?.reportString || studyId?.finalisedReportDiagnosisString ? (
-                          parse(studyId.reportString || studyId.finalisedReportDiagnosisString)
+                        ) : studyId?.reportString ||
+                          studyId?.finalisedReportDiagnosisString ? (
+                          parse(
+                            studyId.reportString ||
+                              studyId.finalisedReportDiagnosisString
+                          )
                         ) : (
                           <div className="text-center m-3">
                             <h5>No report content available</h5>
-                            <p>This finalized study does not have report content to display.</p>
+                            <p>
+                              This finalized study does not have report content
+                              to display.
+                            </p>
                           </div>
                         )}
                       </Col>
@@ -3652,194 +4348,262 @@ const PreviewReport = props => {
                           <Col lg="2" md="6" sm="12">
                             <Input
                               type="select"
-                              onChange={e => {
+                              onChange={(e) => {
                                 setSelected_series(e.target.value)
                               }}
                               value={selected_series || ''}
                             >
                               <option value="">Select Series</option>
                               {(() => {
-                              const safeSeries = Array.isArray(allSeries) ? allSeries : []
-                              console.log('🔍 Series dropdown rendering:', { seriesCount: safeSeries.length, series: safeSeries })
-                              return safeSeries.map((s, index) => {
-                                const optionValue = s?.value || s?.seriesId || ''
-                                const optionLabel = s?.name || `${s?.modality || 'Unknown'} - ${s?.instanceCount || 0} images`
-                                console.log(`📋 Series option ${index}:`, { value: optionValue, label: optionLabel })
-                                return (
-                                  <option key={optionValue || `series-${index}`} value={optionValue}>
-                                    {optionLabel}
-                                  </option>
-                                )
-                              })
-                            })()}
+                                const safeSeries = Array.isArray(allSeries)
+                                  ? allSeries
+                                  : []
+                                console.log('🔍 Series dropdown rendering:', {
+                                  seriesCount: safeSeries.length,
+                                  series: safeSeries,
+                                })
+                                return safeSeries.map((s, index) => {
+                                  const optionValue =
+                                    s?.value || s?.seriesId || ''
+                                  const optionLabel =
+                                    s?.name ||
+                                    `${s?.modality || 'Unknown'} - ${s?.instanceCount || 0} images`
+                                  console.log(`📋 Series option ${index}:`, {
+                                    value: optionValue,
+                                    label: optionLabel,
+                                  })
+                                  return (
+                                    <option
+                                      key={optionValue || `series-${index}`}
+                                      value={optionValue}
+                                    >
+                                      {optionLabel}
+                                    </option>
+                                  )
+                                })
+                              })()}
                             </Input>
                           </Col>
-                          <Col>{loadingDicomImages && <CircularProgress color="info" />}</Col>
+                          <Col>
+                            {loadingDicomImages && (
+                              <CircularProgress color="info" />
+                            )}
+                          </Col>
                         </Row>
                         <Row className="mb-2 mt-2 pb-2 px-1">
                           <Swiper
-  key={
-    studyId?.status === STUDYSTATUS.Final
-      ? `final-${selected_series || 'all'}`
-      : selected_series || 'all'
-  }
-  ref={swiperRef}
-  slidesPerView={4}
-  spaceBetween={20}
-  pagination={{
-    clickable: true,
-  }}
-  modules={[Pagination]}
-  className="mySwiper"
-  onSlideChange={() => {
-    // Use timeout to ensure swiper state is updated
-    setTimeout(() => {
-      checkAndLoadMore()
-    }, 100)
-  }}
-  onReachEnd={() => {
-    console.log('🚀 Reached end - loading more')
-    if (selected_series && seriesHasMore && seriesHasMore[selected_series] && !isLoadingMore) {
-      loadMoreImages()
-    }
-  }}
->
-      {(() => {
-        const safeSelectedValues = Array.isArray(selectImage) ? selectImage : []
-        const safeImagesToRender = Array.isArray(imagesForRender) ? imagesForRender : []
+                            key={
+                              studyId?.status === STUDYSTATUS.Final
+                                ? `final-${selected_series || 'all'}`
+                                : selected_series || 'all'
+                            }
+                            ref={swiperRef}
+                            slidesPerView={4}
+                            spaceBetween={20}
+                            pagination={{
+                              clickable: true,
+                            }}
+                            modules={[Pagination]}
+                            className="mySwiper"
+                            onSlideChange={() => {
+                              // Use timeout to ensure swiper state is updated
+                              setTimeout(() => {
+                                checkAndLoadMore()
+                              }, 100)
+                            }}
+                            onReachEnd={() => {
+                              console.log('🚀 Reached end - loading more')
+                              if (
+                                selected_series &&
+                                seriesHasMore &&
+                                seriesHasMore[selected_series] &&
+                                !isLoadingMore
+                              ) {
+                                loadMoreImages()
+                              }
+                            }}
+                          >
+                            {(() => {
+                              const safeSelectedValues = Array.isArray(
+                                selectImage
+                              )
+                                ? selectImage
+                                : []
+                              const safeImagesToRender = Array.isArray(
+                                imagesForRender
+                              )
+                                ? imagesForRender
+                                : []
 
-        console.log('🖼️ [Image Rendering] Debug info:', {
-          studyStatus: studyId?.status,
-          isFinalStatus: studyId?.status === STUDYSTATUS.Final,
-          selectedSeries: selected_series,
-          originalDicomImagesLength: Array.isArray(dicomImages) ? dicomImages.length : 0,
-          filteredImagesLength: safeImagesToRender.length,
-          selectedImageIdsLength: safeSelectedValues.length,
-          imagesToRender: safeImagesToRender.slice(0, 2) // Show first 2 for debugging
-        })
+                              console.log('🖼️ [Image Rendering] Debug info:', {
+                                studyStatus: studyId?.status,
+                                isFinalStatus:
+                                  studyId?.status === STUDYSTATUS.Final,
+                                selectedSeries: selected_series,
+                                originalDicomImagesLength: Array.isArray(
+                                  dicomImages
+                                )
+                                  ? dicomImages.length
+                                  : 0,
+                                filteredImagesLength: safeImagesToRender.length,
+                                selectedImageIdsLength:
+                                  safeSelectedValues.length,
+                                imagesToRender: safeImagesToRender.slice(0, 2), // Show first 2 for debugging
+                              })
 
-        return safeImagesToRender.map((item, index) => {
-          const normalizedItemId = normalizeImageId(item?.imageId || item?.id || item)
-          const isChecked =
-            Boolean(item?.isReportSelection) ||
-            (normalizedItemId ? normalizedSelectedSet.has(normalizedItemId) : false) ||
-            (Array.isArray(selectImage)
-              ? selectImage.includes(item?.imageId || item?.id || item)
-              : false)
+                              return safeImagesToRender.map((item, index) => {
+                                const normalizedItemId = normalizeImageId(
+                                  item?.imageId || item?.id || item
+                                )
+                                const isChecked =
+                                  Boolean(item?.isReportSelection) ||
+                                  (normalizedItemId
+                                    ? normalizedSelectedSet.has(
+                                        normalizedItemId
+                                      )
+                                    : false) ||
+                                  (Array.isArray(selectImage)
+                                    ? selectImage.includes(
+                                        item?.imageId || item?.id || item
+                                      )
+                                    : false)
 
-          return (
-            <SwiperSlide
-              key={item?.imageId || item?.id || index}
-              className="mh-25"
-              style={{
-                width: "180px",
-                // height: "180px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  height: "100%",
-                  overflow: "hidden",
-                  borderRadius: "8px",
-                  background: "#000", // looks better behind CT images
-                }}
-              >
-                {!(studyId?.status === STUDYSTATUS.Final && !isFinalReportEditable) && (
-                  <Input
-                    type="checkbox"
-                    id={`image-${index + 1}`}
-                    name={item?.imageId || item?.id || `image-${index}`}
-                    onChange={selectImageHandler}
-                    checked={isChecked}
-                    style={{
-                      position: "absolute",
-                      top: "8px",
-                      right: "8px",
-                      zIndex: 10,
-                      width: "18px",
-                      height: "18px",
-                      cursor: "pointer",
-                    }}
-                  />
-                )}
-                <label
-                  htmlFor={`image-${index + 1}`}
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    height: "100%",
-                    cursor: "pointer",
-                  }}
-                >
-                  {item?.isReportSelection || item?.isSavedReportImage ? (
-                    <span
-                      style={{
-                        position: 'absolute',
-                        top: '8px',
-                        left: '8px',
-                        zIndex: 10,
-                        background: 'rgba(40,167,69,0.9)',
-                        color: '#fff',
-                        padding: '2px 8px',
-                        borderRadius: '12px',
-                        fontSize: '0.7rem',
-                        fontWeight: 600,
-                      }}
-                    >
-                      Saved
-                    </span>
-                  ) : null}
-                  <img
-                    src={resolveImageSrc(item)}
-                    alt={
-                      studyId?.status === STUDYSTATUS.Final
-                        ? `finalized-${item?.imageId || index}`
-                        : item?.imageId || item?.id || `image-${index}`
-                    }
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "contain",
-                      display: "block",
-                      margin: studyId?.status === STUDYSTATUS.Final ? "auto" : undefined,
-                    }}
-                  />
-                </label>
-              </div>
-            </SwiperSlide>
-          )
-        })
-      })()}
-</Swiper>
-                          
+                                return (
+                                  <SwiperSlide
+                                    key={item?.imageId || item?.id || index}
+                                    className="mh-25"
+                                    style={{
+                                      width: '180px',
+                                      // height: "180px",
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        position: 'relative',
+                                        width: '100%',
+                                        height: '100%',
+                                        overflow: 'hidden',
+                                        borderRadius: '8px',
+                                        background: '#000', // looks better behind CT images
+                                      }}
+                                    >
+                                      {!(
+                                        studyId?.status === STUDYSTATUS.Final &&
+                                        !isFinalReportEditable
+                                      ) && (
+                                        <Input
+                                          type="checkbox"
+                                          id={`image-${index + 1}`}
+                                          name={
+                                            item?.imageId ||
+                                            item?.id ||
+                                            `image-${index}`
+                                          }
+                                          onChange={selectImageHandler}
+                                          checked={isChecked}
+                                          style={{
+                                            position: 'absolute',
+                                            top: '8px',
+                                            right: '8px',
+                                            zIndex: 10,
+                                            width: '18px',
+                                            height: '18px',
+                                            cursor: 'pointer',
+                                          }}
+                                        />
+                                      )}
+                                      <label
+                                        htmlFor={`image-${index + 1}`}
+                                        style={{
+                                          display: 'block',
+                                          width: '100%',
+                                          height: '100%',
+                                          cursor: 'pointer',
+                                        }}
+                                      >
+                                        {item?.isReportSelection ||
+                                        item?.isSavedReportImage ? (
+                                          <span
+                                            style={{
+                                              position: 'absolute',
+                                              top: '8px',
+                                              left: '8px',
+                                              zIndex: 10,
+                                              background: 'rgba(40,167,69,0.9)',
+                                              color: '#fff',
+                                              padding: '2px 8px',
+                                              borderRadius: '12px',
+                                              fontSize: '0.7rem',
+                                              fontWeight: 600,
+                                            }}
+                                          >
+                                            Saved
+                                          </span>
+                                        ) : null}
+                                        <img
+                                          src={resolveImageSrc(item)}
+                                          alt={
+                                            studyId?.status ===
+                                            STUDYSTATUS.Final
+                                              ? `finalized-${item?.imageId || index}`
+                                              : item?.imageId ||
+                                                item?.id ||
+                                                `image-${index}`
+                                          }
+                                          style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'contain',
+                                            display: 'block',
+                                            margin:
+                                              studyId?.status ===
+                                              STUDYSTATUS.Final
+                                                ? 'auto'
+                                                : undefined,
+                                          }}
+                                        />
+                                      </label>
+                                    </div>
+                                  </SwiperSlide>
+                                )
+                              })
+                            })()}
+                          </Swiper>
+
                           {selected_series &&
-                            (studyId?.status !== STUDYSTATUS.Final || isFinalReportEditable) &&
+                            (studyId?.status !== STUDYSTATUS.Final ||
+                              isFinalReportEditable) &&
                             seriesHasMore &&
                             seriesHasMore[selected_series] && (
-                            <Col xs="12" className="text-center mt-2">
-                              <Button 
-                                color="primary" 
-                                size="sm" 
-                                onClick={loadMoreImages}
-                                disabled={isLoadingMore}
-                              >
-                                {isLoadingMore ? (
-                                  <><Spinner size="sm" /> Loading...</>
-                                ) : (
-                                  'Load More Images'
-                                )}
-                              </Button>
-                            </Col>
-                          )}
+                              <Col xs="12" className="text-center mt-2">
+                                <Button
+                                  color="primary"
+                                  size="sm"
+                                  onClick={loadMoreImages}
+                                  disabled={isLoadingMore}
+                                >
+                                  {isLoadingMore ? (
+                                    <>
+                                      <Spinner size="sm" /> Loading...
+                                    </>
+                                  ) : (
+                                    'Load More Images'
+                                  )}
+                                </Button>
+                              </Col>
+                            )}
 
-                          {!(studyId?.status === STUDYSTATUS.Final && !isFinalReportEditable) &&
+                          {!(
+                            studyId?.status === STUDYSTATUS.Final &&
+                            !isFinalReportEditable
+                          ) &&
                             (() => {
-                              const safeTooltipImages = Array.isArray(imagesForRender)
+                              const safeTooltipImages = Array.isArray(
+                                imagesForRender
+                              )
                                 ? imagesForRender
                                 : []
 
@@ -3887,13 +4651,19 @@ const PreviewReport = props => {
                                         }
 
                                         // Enhanced readiness check with timeout protection
-                                        if (editor.initialized === false || !editor.getBody()) {
+                                        if (
+                                          editor.initialized === false ||
+                                          !editor.getBody()
+                                        ) {
                                           let retryCount = 0
                                           const maxRetries = 10
 
                                           const onAddendumEditorReady = () => {
                                             retryCount++
-                                            if (retryCount > maxRetries || !isMountedRef.current) {
+                                            if (
+                                              retryCount > maxRetries ||
+                                              !isMountedRef.current
+                                            ) {
                                               console.warn(
                                                 '📝 Addendum editor initialization timeout or unmounted'
                                               )
@@ -3916,7 +4686,10 @@ const PreviewReport = props => {
                                           }
 
                                           if (editor.initialized === false) {
-                                            editor.on('init', onAddendumEditorReady)
+                                            editor.on(
+                                              'init',
+                                              onAddendumEditorReady
+                                            )
                                           } else {
                                             onAddendumEditorReady()
                                           }
@@ -3925,9 +4698,12 @@ const PreviewReport = props => {
 
                                         // Enhanced method validation
                                         if (
-                                          typeof editor.getContent !== 'function' ||
-                                          typeof editor.getContainer !== 'function' ||
-                                          typeof editor.setContent !== 'function'
+                                          typeof editor.getContent !==
+                                            'function' ||
+                                          typeof editor.getContainer !==
+                                            'function' ||
+                                          typeof editor.setContent !==
+                                            'function'
                                         ) {
                                           console.warn(
                                             '📝 Addendum editor essential methods not available'
@@ -3942,7 +4718,9 @@ const PreviewReport = props => {
                                           container = editor.getContainer()
 
                                           if (!container) {
-                                            console.warn('📝 Addendum editor container is null')
+                                            console.warn(
+                                              '📝 Addendum editor container is null'
+                                            )
                                             setAddendumEditorReady(false)
                                             return
                                           }
@@ -3977,7 +4755,8 @@ const PreviewReport = props => {
 
                                         // Enhanced functionality test
                                         try {
-                                          const testContent = editor.getContent()
+                                          const testContent =
+                                            editor.getContent()
                                           editor.setContent('')
                                           console.log(
                                             '✅ Addendum editor functionality test passed'
@@ -4003,7 +4782,9 @@ const PreviewReport = props => {
                                         try {
                                           editorAddendumRef.current = editor
                                           setAddendumEditorReady(true)
-                                          console.log('✅ Addendum editor initialized successfully')
+                                          console.log(
+                                            '✅ Addendum editor initialized successfully'
+                                          )
                                         } catch (refError) {
                                           console.error(
                                             '📝 Failed to set addendum editor reference:',
@@ -4026,7 +4807,7 @@ const PreviewReport = props => {
                                       setTimeout(initializeAddendumEditor, 300)
                                     }
                                   }}
-                                  onEditorChange={text => {
+                                  onEditorChange={(text) => {
                                     if (
                                       isStateTransitioning ||
                                       !isMountedRef.current ||
@@ -4037,7 +4818,8 @@ const PreviewReport = props => {
                                     try {
                                       if (
                                         editorAddendumRef.current &&
-                                        editorAddendumRef.current.initialized !== false &&
+                                        editorAddendumRef.current
+                                          .initialized !== false &&
                                         !editorAddendumRef.current.removed
                                       ) {
                                         setDetectChange(true)
@@ -4072,6 +4854,7 @@ const PreviewReport = props => {
                                       'help',
                                       'wordcount',
                                     ],
+
                                     toolbar:
                                       'undo redo | formatselect | code' +
                                       'bold italic backcolor | alignleft aligncenter ' +
@@ -4080,20 +4863,27 @@ const PreviewReport = props => {
                                     content_style:
                                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px } .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before { white-space: pre-line;} .mce-content-body p { margin: 0; padding: 0; margin-block: 0; margin-inline: 0; line-height: normal; }',
                                     placeholder: `Anything entered here will be added to the report layout chosen from the diagnosis template,\n To see the exact report, click on the preview.\n Preview will only works once you created the report.\n Download will only works after finalization of the report\n Press Shift+Enter to continue below this line.`,
-                                    setup: editor => {
+                                    setup: (editor) => {
                                       // Enhanced safety measures for addendum editor
                                       editor.on('PreInit', () => {
-                                        console.log('📝 Addendum editor PreInit')
+                                        console.log(
+                                          '📝 Addendum editor PreInit'
+                                        )
                                       })
 
                                       editor.on('PostRender', () => {
-                                        console.log('📝 Addendum editor PostRender')
+                                        console.log(
+                                          '📝 Addendum editor PostRender'
+                                        )
                                       })
 
                                       // Add error handling for addendum editor operations
-                                      editor.on('NodeChange', e => {
+                                      editor.on('NodeChange', (e) => {
                                         try {
-                                          if (!e.element || !document.contains(e.element)) {
+                                          if (
+                                            !e.element ||
+                                            !document.contains(e.element)
+                                          ) {
                                             console.warn(
                                               '📝 Addendum NodeChange event with invalid element'
                                             )
@@ -4110,8 +4900,12 @@ const PreviewReport = props => {
 
                                       // Handle addendum editor removal safely
                                       editor.on('remove', () => {
-                                        console.log('📝 Addendum editor remove event')
-                                        if (editorAddendumRef.current === editor) {
+                                        console.log(
+                                          '📝 Addendum editor remove event'
+                                        )
+                                        if (
+                                          editorAddendumRef.current === editor
+                                        ) {
                                           editorAddendumRef.current = null
                                           setAddendumEditorReady(false)
                                         }
@@ -4141,13 +4935,19 @@ const PreviewReport = props => {
                             color="primary"
                             type="button"
                             disabled={!editorsReady || saveReportLoading}
-                            onClick={e => {
+                            onClick={(e) => {
                               console.log('🔘 Create button clicked')
                               console.log('editorsReady:', editorsReady)
-                              console.log('saveReportLoading:', saveReportLoading)
+                              console.log(
+                                'saveReportLoading:',
+                                saveReportLoading
+                              )
                               console.log('studyId:', studyId)
 
-                              if (!editorsReady || checkForOtherOperationDm(studyId, 1)) {
+                              if (
+                                !editorsReady ||
+                                checkForOtherOperationDm(studyId, 1)
+                              ) {
                                 console.log(
                                   '❌ Button click prevented - editors not ready or operation blocked'
                                 )
@@ -4169,111 +4969,130 @@ const PreviewReport = props => {
                               'Update'
                             )}
                           </Button>
-                          {studyId.status !== STUDYSTATUS.Final && userData?.role === 'RDU' && (
-                            <Button
-                              className="ml-2 cursor-pointer"
-                              color="success"
-                              disabled={!editorsReady || saveReportandFinaliseLoading}
-                              onClick={e => {
-                                console.log('🔘 Create and Finalize button clicked')
-                                console.log('editorsReady:', editorsReady)
-                                console.log(
-                                  'saveReportandFinaliseLoading:',
-                                  saveReportandFinaliseLoading
-                                )
-                                console.log('studyId:', studyId)
-
-                                // Enhanced validation before proceeding
-                                if (!editorsReady) {
-                                  console.log('❌ Button click prevented - editors not ready')
-                                  alertDisplay(
-                                    'Warning',
-                                    'Please wait for the editor to finish loading before proceeding.',
-                                    'info'
+                          {studyId.status !== STUDYSTATUS.Final &&
+                            userData?.role === 'RDU' && (
+                              <Button
+                                className="ml-2 cursor-pointer"
+                                color="success"
+                                disabled={
+                                  !editorsReady || saveReportandFinaliseLoading
+                                }
+                                onClick={(e) => {
+                                  console.log(
+                                    '🔘 Create and Finalize button clicked'
                                   )
-                                  return e.preventDefault()
-                                }
+                                  console.log('editorsReady:', editorsReady)
+                                  console.log(
+                                    'saveReportandFinaliseLoading:',
+                                    saveReportandFinaliseLoading
+                                  )
+                                  console.log('studyId:', studyId)
 
-                                if (checkForOtherOperationDm(studyId, 1)) {
-                                  console.log('❌ Button click prevented - operation blocked')
-                                  return e.preventDefault()
-                                }
+                                  // Enhanced validation before proceeding
+                                  if (!editorsReady) {
+                                    console.log(
+                                      '❌ Button click prevented - editors not ready'
+                                    )
+                                    alertDisplay(
+                                      'Warning',
+                                      'Please wait for the editor to finish loading before proceeding.',
+                                      'info'
+                                    )
+                                    return e.preventDefault()
+                                  }
 
-                                // Additional comprehensive editor validation before calling function
-                                try {
-                                  if (
-                                    !editorRef.current ||
-                                    typeof editorRef.current.getContent !== 'function'
-                                  ) {
-                                    console.log('❌ Editor not functional at button click')
+                                  if (checkForOtherOperationDm(studyId, 1)) {
+                                    console.log(
+                                      '❌ Button click prevented - operation blocked'
+                                    )
+                                    return e.preventDefault()
+                                  }
+
+                                  // Additional comprehensive editor validation before calling function
+                                  try {
+                                    if (
+                                      !editorRef.current ||
+                                      typeof editorRef.current.getContent !==
+                                        'function'
+                                    ) {
+                                      console.log(
+                                        '❌ Editor not functional at button click'
+                                      )
+                                      alertDisplay(
+                                        'Error',
+                                        'Editor is not ready. Please refresh the page and try again.',
+                                        'error'
+                                      )
+                                      return e.preventDefault()
+                                    }
+
+                                    // Check editor state and DOM container
+                                    if (
+                                      editorRef.current.initialized === false ||
+                                      editorRef.current.removed === true
+                                    ) {
+                                      console.log(
+                                        '❌ Editor is not in valid state at button click'
+                                      )
+                                      alertDisplay(
+                                        'Error',
+                                        'Editor is not in a valid state. Please refresh the page and try again.',
+                                        'error'
+                                      )
+                                      return e.preventDefault()
+                                    }
+
+                                    // Validate DOM container
+                                    const container =
+                                      editorRef.current.getContainer &&
+                                      editorRef.current.getContainer()
+                                    if (!container || !container.parentNode) {
+                                      console.log(
+                                        '❌ Editor container is not valid at button click'
+                                      )
+                                      alertDisplay(
+                                        'Error',
+                                        'Editor container is not properly connected. Please refresh the page and try again.',
+                                        'error'
+                                      )
+                                      return e.preventDefault()
+                                    }
+
+                                    // Test getting content to ensure editor is fully functional
+                                    const testContent =
+                                      editorRef.current.getContent()
+                                    console.log(
+                                      '✅ Editor validation passed at button click'
+                                    )
+                                  } catch (editorCheckError) {
+                                    console.error(
+                                      '❌ Editor check failed at button click:',
+                                      editorCheckError
+                                    )
                                     alertDisplay(
                                       'Error',
-                                      'Editor is not ready. Please refresh the page and try again.',
+                                      'Editor validation failed. Please refresh the page and try again.',
                                       'error'
                                     )
                                     return e.preventDefault()
                                   }
 
-                                  // Check editor state and DOM container
-                                  if (
-                                    editorRef.current.initialized === false ||
-                                    editorRef.current.removed === true
-                                  ) {
-                                    console.log('❌ Editor is not in valid state at button click')
-                                    alertDisplay(
-                                      'Error',
-                                      'Editor is not in a valid state. Please refresh the page and try again.',
-                                      'error'
-                                    )
-                                    return e.preventDefault()
-                                  }
-
-                                  // Validate DOM container
-                                  const container =
-                                    editorRef.current.getContainer &&
-                                    editorRef.current.getContainer()
-                                  if (!container || !container.parentNode) {
-                                    console.log('❌ Editor container is not valid at button click')
-                                    alertDisplay(
-                                      'Error',
-                                      'Editor container is not properly connected. Please refresh the page and try again.',
-                                      'error'
-                                    )
-                                    return e.preventDefault()
-                                  }
-
-                                  // Test getting content to ensure editor is fully functional
-                                  const testContent = editorRef.current.getContent()
-                                  console.log('✅ Editor validation passed at button click')
-                                } catch (editorCheckError) {
-                                  console.error(
-                                    '❌ Editor check failed at button click:',
-                                    editorCheckError
+                                  console.log(
+                                    '✅ All validations passed - calling saveAndFinalizeReport function'
                                   )
-                                  alertDisplay(
-                                    'Error',
-                                    'Editor validation failed. Please refresh the page and try again.',
-                                    'error'
-                                  )
-                                  return e.preventDefault()
-                                }
-
-                                console.log(
-                                  '✅ All validations passed - calling saveAndFinalizeReport function'
-                                )
-                                saveAndFinalizeReport()
-                              }}
-                            >
-                              {saveReportandFinaliseLoading ? (
-                                <Spinner color="light" size="sm" />
-                              ) : studyId.status === STUDYSTATUS.Unread ||
-                                studyId.status === STUDYSTATUS.Preliminary ? (
-                                'Create and Finalize'
-                              ) : (
-                                'Update and Finalize'
-                              )}
-                            </Button>
-                          )}
+                                  saveAndFinalizeReport()
+                                }}
+                              >
+                                {saveReportandFinaliseLoading ? (
+                                  <Spinner color="light" size="sm" />
+                                ) : studyId.status === STUDYSTATUS.Unread ||
+                                  studyId.status === STUDYSTATUS.Preliminary ? (
+                                  'Create and Finalize'
+                                ) : (
+                                  'Update and Finalize'
+                                )}
+                              </Button>
+                            )}
                         </div>
                       </Row>
                     ) : (
@@ -4298,9 +5117,14 @@ const PreviewReport = props => {
                                   className="ml-2 cursor-pointer"
                                   color="primary"
                                   type="button"
-                                  disabled={!editorsReady || createAddendumLoading}
-                                  onClick={e => {
-                                    if (!editorsReady || checkForOtherOperationDm(studyId, 1)) {
+                                  disabled={
+                                    !editorsReady || createAddendumLoading
+                                  }
+                                  onClick={(e) => {
+                                    if (
+                                      !editorsReady ||
+                                      checkForOtherOperationDm(studyId, 1)
+                                    ) {
                                       return e.preventDefault()
                                     }
                                     createAddendum()
@@ -4323,16 +5147,24 @@ const PreviewReport = props => {
                                   className="ml-2 cursor-pointer"
                                   color="primary"
                                   type="button"
-                                  disabled={!editorsReady || saveReportandFinaliseLoading}
-                                  onClick={e => {
-                                    console.log('🔄 Update (Final Report Edit) button clicked')
+                                  disabled={
+                                    !editorsReady ||
+                                    saveReportandFinaliseLoading
+                                  }
+                                  onClick={(e) => {
+                                    console.log(
+                                      '🔄 Update (Final Report Edit) button clicked'
+                                    )
                                     console.log('editorsReady:', editorsReady)
                                     console.log(
                                       'saveReportandFinaliseLoading:',
                                       saveReportandFinaliseLoading
                                     )
 
-                                    if (!editorsReady || checkForOtherOperationDm(studyId, 1)) {
+                                    if (
+                                      !editorsReady ||
+                                      checkForOtherOperationDm(studyId, 1)
+                                    ) {
                                       console.log(
                                         '❌ Button click prevented - editors not ready or operation blocked'
                                       )
@@ -4391,7 +5223,13 @@ const PreviewReport = props => {
         <ModalHeader
           className="mb-2"
           toggle={handleWorksheetModal}
-          close={<X className="cursor-pointer" size={15} onClick={handleWorksheetModal} />}
+          close={
+            <X
+              className="cursor-pointer"
+              size={15}
+              onClick={handleWorksheetModal}
+            />
+          }
           tag="div"
         >
           <h5 className="modal-title">Worksheet</h5>
@@ -4409,7 +5247,7 @@ const PreviewReport = props => {
                       multiple
                       id="studyWorksheet"
                       name="studyWorksheet"
-                      onChange={e => setWorksheetFile(e.target.files)}
+                      onChange={(e) => setWorksheetFile(e.target.files)}
                     />
                   </FormGroup>
                   <FormGroup className="w-100">
@@ -4418,7 +5256,9 @@ const PreviewReport = props => {
                       type="button"
                       onClick={() => worksheetUploadHandler(studyId?.ID)}
                     >
-                      <span className="align-middle ml-50">Upload worksheet</span>
+                      <span className="align-middle ml-50">
+                        Upload worksheet
+                      </span>
                     </Button>
                   </FormGroup>
                 </Col>
@@ -4478,7 +5318,9 @@ const PreviewReport = props => {
           tag="div"
         ></ModalHeader>
         <Card className="p-2 overflowx-scroll">
-          <CardBody>{templateLayout ? parse(`${templateLayout}`) : ''}</CardBody>
+          <CardBody>
+            {templateLayout ? parse(`${templateLayout}`) : ''}
+          </CardBody>
           <CardFooter>
             <Button
               className="cursor-pointer"

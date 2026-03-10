@@ -22,7 +22,11 @@ import { v1 as uuidv1 } from 'uuid'
 import axios from 'axios'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { isUserLoggedIn } from '@utils'
-import { showSuccessAlert, showErrorAlert, getErrorMessage } from '../../utils/alerts'
+import {
+  showSuccessAlert,
+  showErrorAlert,
+  getErrorMessage,
+} from '../../utils/alerts'
 
 import { onlyNumberRegExp } from './utils/regex'
 import { STATUS_OPTIONS } from '../../utils/constants'
@@ -31,7 +35,9 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
   const [formatExpiryDate, setFormatExpiryDate] = useState(
-    toEdit && toEdit.expiryDate ? new Date(toEdit.expiryDate) : new Date().fp_incr(1)
+    toEdit && toEdit.expiryDate
+      ? new Date(toEdit.expiryDate)
+      : new Date().fp_incr(1)
   )
   const [dateChange, setDateChange] = useState(false)
   const [isPermanent, setIsPermanent] = useState(
@@ -44,19 +50,30 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
     toEdit && toEdit.activationStatus ? toEdit.activationStatus : 'Idle'
   )
   const [status, setStatus] = useState(
-    toEdit && toEdit.status ? (toEdit.status === 1 ? 'Active' : 'Inactive') : 'Active'
+    toEdit && toEdit.status
+      ? toEdit.status === 1
+        ? 'Active'
+        : 'Inactive'
+      : 'Active'
   )
-  const [checkReport, setCheckReport] = useState(toEdit && toEdit.report ? toEdit.report : false)
+  const [checkReport, setCheckReport] = useState(
+    toEdit && toEdit.report ? toEdit.report : false
+  )
   const [refresh, setRefresh] = useState(false)
   const [copyKey, setCopykey] = useState(false)
-  const [licenseId, setLicenseId] = useState(toEdit && toEdit.licenseId ? toEdit.licenseId : null)
+  const [licenseId, setLicenseId] = useState(
+    toEdit && toEdit.licenseId ? toEdit.licenseId : null
+  )
   const [systemInfo, setSystemInfo] = useState({})
 
   useEffect(() => {
     let systemInfoData = {}
     try {
       if (toEdit && toEdit.getSystemInfo) {
-        const decodedJsonString = Buffer.from(toEdit.getSystemInfo, 'base64').toString('utf8')
+        const decodedJsonString = Buffer.from(
+          toEdit.getSystemInfo,
+          'base64'
+        ).toString('utf8')
         systemInfoData = JSON.parse(decodedJsonString)
         setSystemInfo(systemInfoData)
       }
@@ -78,11 +95,15 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
   const NewUserSchema = yup.object().shape({
     radiologist: yup
       .string()
-      .required('Please specify the limit for radiologists. This field is required.')
+      .required(
+        'Please specify the limit for radiologists. This field is required.'
+      )
       .matches(onlyNumberRegExp, 'Please enter a numeric value only.!'),
     technician: yup
       .string()
-      .required('Please specify the limit for technologists. This field is required.')
+      .required(
+        'Please specify the limit for technologists. This field is required.'
+      )
       .matches(onlyNumberRegExp, 'Please enter a numeric value only.!'),
     report: yup.boolean(),
     reportLimit: yup
@@ -113,14 +134,14 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
     if (toEdit && toEdit.expiryDate === '2099-12-31') setIsPermanent(true)
   }, [])
 
-  const dateHandler = e => {
+  const dateHandler = (e) => {
     console.log(e[0])
     if (e.length <= 0) return setFormatExpiryDate(null)
     setFormatExpiryDate(e[0])
     setDateChange(true)
   }
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     // Handle expiry date properly
     if (isPermanent) {
       data.expiryDate = '2099-12-31'
@@ -147,14 +168,18 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
 
     if (toEdit && toEditId) {
       await axios
-        .patch(`${process.env.REACT_APP_API_URL}/clinic/edit/${toEditId}`, payData, {
-          headers: { 'content-type': 'application/json' },
-        })
-        .then(res => {
+        .patch(
+          `${process.env.REACT_APP_API_URL}/clinic/edit/${toEditId}`,
+          payData,
+          {
+            headers: { 'content-type': 'application/json' },
+          }
+        )
+        .then((res) => {
           showSuccessAlert(res.data.message)
           redirectList(false)
         })
-        .catch(err => {
+        .catch((err) => {
           showErrorAlert(getErrorMessage(err))
         })
     } else {
@@ -162,11 +187,11 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
         .post(`${process.env.REACT_APP_API_URL}/clinic/add`, payData, {
           headers: { 'content-type': 'application/json' },
         })
-        .then(res => {
+        .then((res) => {
           showSuccessAlert(res.data.message)
           redirectList(false)
         })
-        .catch(err => {
+        .catch((err) => {
           showErrorAlert(getErrorMessage(err))
         })
     }
@@ -184,13 +209,21 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
     <Card>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row className="justify-content-start mx-0 p-1">
-          <Col className="d-flex align-items-start justify-content-end" md="4" sm="12">
+          <Col
+            className="d-flex align-items-start justify-content-end"
+            md="4"
+            sm="12"
+          >
             <FormGroup className="w-100">
               <Label for="activationKey">Activation key</Label>
               <Input
                 name="activationKey"
                 id="activationKey"
-                defaultValue={toEdit && toEdit.activationKey ? toEdit.activationKey : activationKey}
+                defaultValue={
+                  toEdit && toEdit.activationKey
+                    ? toEdit.activationKey
+                    : activationKey
+                }
                 {...register('activationKey', { required: true })}
                 autoComplete="off"
                 disabled
@@ -204,47 +237,72 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Copy size={18} />
                 </div>
               </CopyToClipboard>
-              <UncontrolledTooltip className="tooltip-react-strap" target="copy">
+              <UncontrolledTooltip
+                className="tooltip-react-strap"
+                target="copy"
+              >
                 {copyKey ? 'Copied' : 'copy'}
               </UncontrolledTooltip>
               {errors && errors.activationKey && (
-                <FormFeedback className="d-block">{errors.activationKey.message}</FormFeedback>
+                <FormFeedback className="d-block">
+                  {errors.activationKey.message}
+                </FormFeedback>
               )}
             </FormGroup>
           </Col>
-          <Col className="d-flex align-items-start justify-content-end" md="4" sm="12">
+          <Col
+            className="d-flex align-items-start justify-content-end"
+            md="4"
+            sm="12"
+          >
             <FormGroup className="w-100">
               <Label for="radiologist">Radiologist limit</Label>
               <Input
                 name="radiologist"
                 id="radiologist"
-                defaultValue={toEdit && toEdit.radiologist ? toEdit.radiologist : ''}
+                defaultValue={
+                  toEdit && toEdit.radiologist ? toEdit.radiologist : ''
+                }
                 {...register('radiologist', { required: true })}
                 autoComplete="off"
               />
               {errors && errors.radiologist && (
-                <FormFeedback className="d-block">{errors.radiologist.message}</FormFeedback>
+                <FormFeedback className="d-block">
+                  {errors.radiologist.message}
+                </FormFeedback>
               )}
             </FormGroup>
           </Col>
-          <Col className="d-flex align-items-start justify-content-end" md="4" sm="12">
+          <Col
+            className="d-flex align-items-start justify-content-end"
+            md="4"
+            sm="12"
+          >
             <FormGroup className="w-100">
               <Label for="technician">Technologist limit </Label>
               <Input
                 name="technician"
                 id="technician"
-                defaultValue={toEdit && toEdit.technician ? toEdit.technician : ''}
+                defaultValue={
+                  toEdit && toEdit.technician ? toEdit.technician : ''
+                }
                 {...register('technician', { required: true })}
                 autoComplete="off"
               />
               {errors && errors.technician && (
-                <FormFeedback className="d-block">{errors.technician.message}</FormFeedback>
+                <FormFeedback className="d-block">
+                  {errors.technician.message}
+                </FormFeedback>
               )}
             </FormGroup>
           </Col>
         </Row>
         <Row className="justify-content-start mx-0 pl-1 pr-1">
-          <Col className="d-flex align-items-start justify-content-end" md="4" sm="12">
+          <Col
+            className="d-flex align-items-start justify-content-end"
+            md="4"
+            sm="12"
+          >
             <FormGroup className="w-100">
               <Label for="expiryDate">Expiry date </Label>
               {!isPermanent && (
@@ -253,7 +311,10 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   id="expiryDate"
                   name="expiryDate"
                   value={formatExpiryDate}
-                  options={{ minDate: new Date().fp_incr(1), dateFormat: flatPickerDateFormat }}
+                  options={{
+                    minDate: new Date().fp_incr(1),
+                    dateFormat: flatPickerDateFormat,
+                  }}
                   {...register('expiryDate', { required: true })}
                   onChange={dateHandler}
                   autoComplete="off"
@@ -270,7 +331,9 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   checked={isPermanent}
                   onChange={() => {
                     setIsPermanent(!isPermanent)
-                    setFormatExpiryDate(moment('2099-12-31', 'YYYY-MM-DD').format('YYYY-MM-DD'))
+                    setFormatExpiryDate(
+                      moment('2099-12-31', 'YYYY-MM-DD').format('YYYY-MM-DD')
+                    )
                     setDateChange(!dateChange)
                   }}
                 />
@@ -278,11 +341,17 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
               </Label>
 
               {!formatExpiryDate && (
-                <FormFeedback className="d-block">Expiray date if required!</FormFeedback>
+                <FormFeedback className="d-block">
+                  Expiray date if required!
+                </FormFeedback>
               )}
             </FormGroup>
           </Col>
-          <Col className="d-flex align-items-start justify-content-end" md="4" sm="12">
+          <Col
+            className="d-flex align-items-start justify-content-end"
+            md="4"
+            sm="12"
+          >
             <FormGroup className="w-100">
               <Label for="pin">Activation status </Label>
               <Input
@@ -290,12 +359,14 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                 name="activationStatus"
                 id="activationStatus"
                 defaultValue={
-                  toEdit && toEdit.activationStatus ? toEdit.activationStatus : activationStatus
+                  toEdit && toEdit.activationStatus
+                    ? toEdit.activationStatus
+                    : activationStatus
                 }
                 {...register('activationStatus', { required: true })}
                 autoComplete="off"
                 disabled={!toEdit ?? false}
-                onChange={e => {
+                onChange={(e) => {
                   setActivationStatus(e.target.value)
                 }}
               >
@@ -304,11 +375,17 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                 <option value="Expired">Expired</option>
               </Input>
               {errors && errors.activationStatus && (
-                <FormFeedback className="d-block">{errors.activationStatus.message}</FormFeedback>
+                <FormFeedback className="d-block">
+                  {errors.activationStatus.message}
+                </FormFeedback>
               )}
             </FormGroup>
           </Col>
-          <Col className="d-flex align-items-start justify-content-end" md="4" sm="12">
+          <Col
+            className="d-flex align-items-start justify-content-end"
+            md="4"
+            sm="12"
+          >
             <FormGroup className="w-100">
               <Label for="website">Status </Label>
               <Input
@@ -316,29 +393,39 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                 name="status"
                 id="status"
                 defaultValue={
-                  toEdit && toEdit.status ? (toEdit.status === 1 ? 'Active' : 'Inactive') : status
+                  toEdit && toEdit.status
+                    ? toEdit.status === 1
+                      ? 'Active'
+                      : 'Inactive'
+                    : status
                 }
                 {...register('status', { required: true })}
                 autoComplete="off"
                 disabled={!toEdit ?? false}
-                onChange={e => {
+                onChange={(e) => {
                   setStatus(e.target.value)
                 }}
               >
-                {STATUS_OPTIONS.map(option => (
+                {STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.label}>
                     {option.label}
                   </option>
                 ))}
               </Input>
               {errors && errors.status && (
-                <FormFeedback className="d-block">{errors.status.message}</FormFeedback>
+                <FormFeedback className="d-block">
+                  {errors.status.message}
+                </FormFeedback>
               )}
             </FormGroup>
           </Col>
         </Row>
         <Row className="justify-content-start mx-0 pl-1 pr-1 row">
-          <Col className="d-flex align-items-center justify-content-start" md="4" sm="12">
+          <Col
+            className="d-flex align-items-center justify-content-start"
+            md="4"
+            sm="12"
+          >
             <FormGroup className="w-100">
               <Label className="d-flex align-items-center gap-5">
                 <Input
@@ -360,14 +447,18 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                 type="number"
                 name="reportLimit"
                 id="reportLimit"
-                defaultValue={toEdit && toEdit.reportLimit ? toEdit.reportLimit : ''}
+                defaultValue={
+                  toEdit && toEdit.reportLimit ? toEdit.reportLimit : ''
+                }
                 {...register('reportLimit', { required: true })}
                 autoComplete="off"
                 placeholder="Number of report template?"
                 disabled={!checkReport}
               />
               {errors && errors.reportLimit && (
-                <FormFeedback className="d-block">{errors.reportLimit.message}</FormFeedback>
+                <FormFeedback className="d-block">
+                  {errors.reportLimit.message}
+                </FormFeedback>
               )}
             </FormGroup>
           </Col>
@@ -375,7 +466,11 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
         {toEditId ? (
           <div className="justify-content-start">
             <Row className="justify-content-start mx-0 pt-1 pl-1 pr-1">
-              <Col className="d-flex align-items-start justify-content-start" md="12" sm="12">
+              <Col
+                className="d-flex align-items-start justify-content-start"
+                md="12"
+                sm="12"
+              >
                 <h4 className="mr-1 font-weight-bold" htmlFor="search-input">
                   Clinic Server Information:
                 </h4>
@@ -384,7 +479,11 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
             <hr />
             {}
             <Row className="justify-content-start mx-0 pl-1 pr-1">
-              <Col className="d-flex align-items-start justify-content-start" md="4" sm="12">
+              <Col
+                className="d-flex align-items-start justify-content-start"
+                md="4"
+                sm="12"
+              >
                 <h5 className="font-weight-bold">System Information:</h5>
               </Col>
             </Row>
@@ -394,7 +493,10 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="manufacturer" className="pr-1">
                     Manufacturer
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.system?.manufacturer || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.system?.manufacturer || ''}
+                  </span>
                 </FormGroup>
               </Col>
               <Col md="4" sm="12">
@@ -402,14 +504,21 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="model" className="pr-1">
                     Model
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.system?.model || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.system?.model || ''}
+                  </span>
                 </FormGroup>
               </Col>
             </Row>
             <hr />
             {}
             <Row className="justify-content-start mx-0 pl-1 pr-1">
-              <Col className="d-flex align-items-start justify-content-start" md="4" sm="12">
+              <Col
+                className="d-flex align-items-start justify-content-start"
+                md="4"
+                sm="12"
+              >
                 <h5 className="font-weight-bold">BIOS Information:</h5>
               </Col>
             </Row>
@@ -419,7 +528,8 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="bios_vendor" className="pr-1">
                     BIOS Vendor
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.bios?.vendor || ''}</span>
+                  :
+                  <span className="pl-1">{systemInfo?.bios?.vendor || ''}</span>
                 </FormGroup>
               </Col>
               <Col md="4" sm="12">
@@ -427,7 +537,10 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="bios_version" className="pr-1">
                     BIOS Version
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.bios?.version || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.bios?.version || ''}
+                  </span>
                 </FormGroup>
               </Col>
               <Col md="4" sm="12">
@@ -435,14 +548,21 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="bios_releaseDate" className="pr-1">
                     BIOS Release Date
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.bios?.releaseDate || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.bios?.releaseDate || ''}
+                  </span>
                 </FormGroup>
               </Col>
             </Row>
             <hr />
             {}
             <Row className="justify-content-start mx-0 pl-1 pr-1">
-              <Col className="d-flex align-items-start justify-content-start" md="4" sm="12">
+              <Col
+                className="d-flex align-items-start justify-content-start"
+                md="4"
+                sm="12"
+              >
                 <h5 className="font-weight-bold">Baseboard Information:</h5>
               </Col>
             </Row>
@@ -452,7 +572,10 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="baseboard_manufacturer" className="pr-1">
                     Baseboard Manufacturer
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.baseboard?.manufacturer || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.baseboard?.manufacturer || ''}
+                  </span>
                 </FormGroup>
               </Col>
               <Col md="4" sm="12">
@@ -460,7 +583,10 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="baseboard_model" className="pr-1">
                     Baseboard Model
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.baseboard?.model || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.baseboard?.model || ''}
+                  </span>
                 </FormGroup>
               </Col>
               <Col md="4" sm="12">
@@ -468,7 +594,10 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="baseboard_version" className="pr-1">
                     Baseboard Version
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.baseboard?.version || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.baseboard?.version || ''}
+                  </span>
                 </FormGroup>
               </Col>
               <Col md="4" sm="12">
@@ -476,14 +605,21 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="baseboard_assetTag" className="pr-1">
                     Baseboard Asset Tag
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.baseboard?.assetTag || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.baseboard?.assetTag || ''}
+                  </span>
                 </FormGroup>
               </Col>
             </Row>
             <hr />
             {}
             <Row className="justify-content-start mx-0 pl-1 pr-1">
-              <Col className="d-flex align-items-start justify-content-start" md="4" sm="12">
+              <Col
+                className="d-flex align-items-start justify-content-start"
+                md="4"
+                sm="12"
+              >
                 <h5 className="font-weight-bold">Disk Information:</h5>
               </Col>
             </Row>
@@ -509,14 +645,21 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="disk_serialNum" className="pr-1">
                     Disk Serial Number
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.disks?.serialNum || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.disks?.serialNum || ''}
+                  </span>
                 </FormGroup>
               </Col>
             </Row>
             <hr />
             {}
             <Row className="justify-content-start mx-0 pl-1 pr-1">
-              <Col className="d-flex align-items-start justify-content-start" md="4" sm="12">
+              <Col
+                className="d-flex align-items-start justify-content-start"
+                md="4"
+                sm="12"
+              >
                 <h5 className="font-weight-bold">Network Information:</h5>
               </Col>
             </Row>
@@ -526,7 +669,10 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
                   <Label for="IP_ADDRESS" className="pr-1">
                     IP Address
                   </Label>{' '}
-                  :<span className="pl-1">{systemInfo?.network?.IP_ADDRESS || ''}</span>
+                  :
+                  <span className="pl-1">
+                    {systemInfo?.network?.IP_ADDRESS || ''}
+                  </span>
                 </FormGroup>
               </Col>
               {}
@@ -552,9 +698,17 @@ const License = ({ toggleTab, infoData, redirectList, toEdit, toEditId }) => {
             >
               <span className="align-middle">Back</span>
             </Button>
-            <Button className="ml-2 cursor-pointer" color="primary" type="submit">
+            <Button
+              className="ml-2 cursor-pointer"
+              color="primary"
+              type="submit"
+            >
               <span className="align-middle">
-                {checkReport ? 'Next' : toEdit && toEditId ? 'Save Changes' : 'Add clinic'}
+                {checkReport
+                  ? 'Next'
+                  : toEdit && toEditId
+                    ? 'Save Changes'
+                    : 'Add clinic'}
               </span>
             </Button>
           </div>

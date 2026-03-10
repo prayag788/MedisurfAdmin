@@ -44,14 +44,16 @@ class Viewer extends Component {
   }
 
   async getUrlStr() {
-    const query = Object.fromEntries(new URLSearchParams(window.location.search).entries())
+    const query = Object.fromEntries(
+      new URLSearchParams(window.location.search).entries()
+    )
 
     for (const level in query) {
       if (level === 'series') {
         const Instances = await axios({
           method: 'GET',
           url: `${process.env.REACT_APP_API_URL}/explorer/series/${query[level]}/instances`,
-        }).then(doc => {
+        }).then((doc) => {
           doc = doc.data.sort((a, b) => {
             if (a['IndexInSeries'] && b['IndexInSeries']) {
               return a['IndexInSeries'] - b['IndexInSeries']
@@ -60,7 +62,7 @@ class Viewer extends Component {
             }
           })
 
-          return doc.map(instance => {
+          return doc.map((instance) => {
             return `dicomweb:${process.env.REACT_APP_API_URL}/orthanc/instances/${instance.ID}/file`
           })
         })

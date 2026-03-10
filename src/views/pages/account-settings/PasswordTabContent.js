@@ -6,7 +6,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, FormGroup, Row, Col, Button, FormFeedback } from 'reactstrap'
 import InputPasswordToggle from '@components/input-password-toggle'
 import axios from 'axios'
-import { showErrorAlert, showSuccessAlert, getErrorMessage } from '../../../utils/alerts'
+import {
+  showErrorAlert,
+  showSuccessAlert,
+  getErrorMessage,
+} from '../../../utils/alerts'
 import { getHomeRouteForLoggedInUser } from '@utils'
 import { useEffect, useState } from 'react'
 
@@ -29,7 +33,10 @@ const PasswordTabContent = () => {
     'retype-new-password': yup
       .string()
       .required('Please enter confirm password.')
-      .oneOf([yup.ref(`new-password`), null], 'Please ensure the new passwords match'),
+      .oneOf(
+        [yup.ref(`new-password`), null],
+        'Please ensure the new passwords match'
+      ),
   })
 
   const {
@@ -68,9 +75,14 @@ const PasswordTabContent = () => {
         clearErrors('new-password')
       }
     }
-    if (watchedValues['retype-new-password'] && watchedValues['retype-new-password'].trim()) {
+    if (
+      watchedValues['retype-new-password'] &&
+      watchedValues['retype-new-password'].trim()
+    ) {
       // Only clear if passwords match
-      if (watchedValues['new-password'] === watchedValues['retype-new-password']) {
+      if (
+        watchedValues['new-password'] === watchedValues['retype-new-password']
+      ) {
         clearErrors('retype-new-password')
       }
     }
@@ -84,7 +96,7 @@ const PasswordTabContent = () => {
     try {
       const requestData = {
         newPwd: data['new-password'],
-        oldPwd: data['old-password']
+        oldPwd: data['old-password'],
       }
 
       console.log('Password change request:', {
@@ -134,12 +146,17 @@ const PasswordTabContent = () => {
       let errorMessage = 'Failed to update password. Please try again.'
 
       if (err.code === 'ECONNREFUSED') {
-        errorMessage = 'Cannot connect to server. Please check if the server is running.'
+        errorMessage =
+          'Cannot connect to server. Please check if the server is running.'
       } else if (err.code === 'ECONNABORTED') {
         errorMessage = 'Request timeout. Please try again.'
       } else if (err.response) {
         // Server responded with error status
-        console.error('Server error response:', err.response.status, err.response.data)
+        console.error(
+          'Server error response:',
+          err.response.status,
+          err.response.data
+        )
         errorMessage = getErrorMessage(err)
       } else if (err.request) {
         // Request was made but no response received
@@ -183,7 +200,9 @@ const PasswordTabContent = () => {
                 htmlFor="old-password"
                 name="old-password"
                 {...register('old-password')}
-                onChange={e => handleInputChange('old-password', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange('old-password', e.target.value)
+                }
                 className={classnames('input-group-merge', {
                   'is-invalid': errors['old-password'],
                 })}
@@ -202,7 +221,9 @@ const PasswordTabContent = () => {
                 htmlFor="new-password"
                 name="new-password"
                 {...register('new-password')}
-                onChange={e => handleInputChange('new-password', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange('new-password', e.target.value)
+                }
                 className={classnames('input-group-merge', {
                   'is-invalid': errors['new-password'],
                 })}
@@ -219,13 +240,17 @@ const PasswordTabContent = () => {
                 htmlFor="retype-new-password"
                 name="retype-new-password"
                 {...register('retype-new-password')}
-                onChange={e => handleInputChange('retype-new-password', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange('retype-new-password', e.target.value)
+                }
                 className={classnames('input-group-merge', {
                   'is-invalid': errors['retype-new-password'],
                 })}
               />
               {errors && errors['retype-new-password'] && (
-                <FormFeedback>{errors['retype-new-password'].message}</FormFeedback>
+                <FormFeedback>
+                  {errors['retype-new-password'].message}
+                </FormFeedback>
               )}
             </FormGroup>
           </Col>
@@ -238,7 +263,12 @@ const PasswordTabContent = () => {
             >
               {isSubmitting ? 'Updating...' : 'Save changes'}
             </Button.Ripple>
-            <Button.Ripple color="secondary" outline onClick={CancelForm} disabled={isSubmitting}>
+            <Button.Ripple
+              color="secondary"
+              outline
+              onClick={CancelForm}
+              disabled={isSubmitting}
+            >
               Cancel
             </Button.Ripple>
           </Col>

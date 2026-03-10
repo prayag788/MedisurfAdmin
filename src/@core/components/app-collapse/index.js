@@ -7,7 +7,7 @@ import classnames from 'classnames'
 import { ChevronUp } from 'react-feather'
 import { Collapse, Card, CardHeader, CardBody, CardTitle } from 'reactstrap'
 
-const AppCollapse = props => {
+const AppCollapse = (props) => {
   // ** Props
   const {
     data,
@@ -35,7 +35,7 @@ const AppCollapse = props => {
   const [openCollapse, setOpenCollapse] = useState(defaultActive())
 
   // ** Function to handle Collapse Toggle
-  const handleCollapseToggle = id => {
+  const handleCollapseToggle = (id) => {
     if (accordion) {
       if (id === openCollapse) {
         setOpenCollapse(null)
@@ -73,7 +73,9 @@ const AppCollapse = props => {
         >
           <CardHeader
             className={classnames('align-items-center', {
-              collapsed: accordion ? openCollapse !== index : !openCollapse.includes(index),
+              collapsed: accordion
+                ? openCollapse !== index
+                : !openCollapse.includes(index),
             })}
             {...(toggle === 'hover'
               ? {
@@ -86,7 +88,11 @@ const AppCollapse = props => {
             <CardTitle className="collapse-title">{title}</CardTitle>
             <ChevronUp size={14} />
           </CardHeader>
-          <Collapse isOpen={accordion ? openCollapse === index : openCollapse.includes(index)}>
+          <Collapse
+            isOpen={
+              accordion ? openCollapse === index : openCollapse.includes(index)
+            }
+          >
             <CardBody>{content}</CardBody>
           </Collapse>
         </Card>

@@ -17,7 +17,11 @@ import {
   FormGroup,
 } from 'reactstrap'
 import { Link, useNavigate } from 'react-router-dom'
-import { MySwalError, MySwalLoading, MySwalSuccess } from '../../components/MySwalAlert'
+import {
+  MySwalError,
+  MySwalLoading,
+  MySwalSuccess,
+} from '../../components/MySwalAlert'
 import { isObjEmpty } from '@utils'
 import { updateEvent } from '../store/actions'
 import {
@@ -30,9 +34,11 @@ import {
 
 import axios from 'axios'
 
-export default props => {
+export default (props) => {
   const locationState = props.location?.state || {}
-  const propsIP = locationState.Host ? locationState.Host.split('.') : ['', '', '', '']
+  const propsIP = locationState.Host
+    ? locationState.Host.split('.')
+    : ['', '', '', '']
   const [formData, setFormData] = useState({
     dicomServer: locationState.Name || '',
     aet: locationState.AET || '',
@@ -46,13 +52,13 @@ export default props => {
   })
   const [error, setError] = useState({})
 
-  const editDetails = useSelector(state => state.Modality.editable)
+  const editDetails = useSelector((state) => state.Modality.editable)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
     if (!isObjEmpty(editDetails)) {
-      setFormData(prev => {
+      setFormData((prev) => {
         return {
           ...prev,
           dicomServer: editDetails.Name || '',
@@ -73,42 +79,42 @@ export default props => {
     }
   }, [editDetails])
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
     if (value === '') {
-      setError(prev => {
+      setError((prev) => {
         prev = { ...prev, [name]: 'This field cannot be empty!' }
         return prev
       })
     } else {
-      setError(prev => {
+      setError((prev) => {
         delete prev[name]
         return prev
       })
     }
-    setFormData(prev => {
+    setFormData((prev) => {
       prev = { ...prev, [name]: value }
       return prev
     })
   }
 
-  const ipHandler = e => {
+  const ipHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
     if (value === '') {
-      setError(prev => {
+      setError((prev) => {
         prev = { ...prev, [name]: 'This field cannot be empty!' }
         return prev
       })
     } else {
-      setError(prev => {
+      setError((prev) => {
         delete prev[name]
         return prev
       })
     }
     if (value.length <= 3) {
-      setIpData(prev => {
+      setIpData((prev) => {
         prev = { ...prev, [name]: value }
         return prev
       })
@@ -118,22 +124,22 @@ export default props => {
   }
 
   const onReset = () => {
-    setFormData(prev => {
+    setFormData((prev) => {
       return { ...prev, aet: '', port: '' }
     })
-    setIpData(prev => {
+    setIpData((prev) => {
       return { ip1: '', ip2: '', ip3: '', ip4: '' }
     })
   }
 
-  const isValidPort = port => {
+  const isValidPort = (port) => {
     const regex = new RegExp(
       '^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$'
     )
     return regex.test(port)
   }
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault()
     const finalIP = Object.values(ipData).reduce((acc, curr) => {
       return `${acc}.${curr}`
@@ -141,22 +147,25 @@ export default props => {
     let doAllow = true
     for (const item in formData) {
       if (formData[item] === '') {
-        setError(prev => {
+        setError((prev) => {
           prev = { ...prev, [item]: 'This field cannot be empty!' }
           return prev
         })
         doAllow = false
       } else if (item === 'port') {
         if (!isValidPort(formData[item])) {
-          setError(prev => {
-            prev = { ...prev, port: 'Invalid port! Please enter a valid port Address' }
+          setError((prev) => {
+            prev = {
+              ...prev,
+              port: 'Invalid port! Please enter a valid port Address',
+            }
             return prev
           })
           doAllow = false
         }
       } else if (item === 'aet') {
         if (formData[item].length > 25) {
-          setError(prev => {
+          setError((prev) => {
             prev = { ...prev, aet: 'AET cannot be longer than 25 characters.' }
             return prev
           })
@@ -166,14 +175,17 @@ export default props => {
     }
     for (const item in ipData) {
       if (ipData[item] === '') {
-        setError(prev => {
+        setError((prev) => {
           prev = { ...prev, [item]: 'This field cannot be empty!' }
           return prev
         })
         doAllow = false
       } else if (Number(ipData[item]) > 255 || Number(ipData[item]) < 0) {
-        setError(prev => {
-          prev = { ...prev, [item]: 'Invalid IP! Please enter a valid IP Address' }
+        setError((prev) => {
+          prev = {
+            ...prev,
+            [item]: 'Invalid IP! Please enter a valid IP Address',
+          }
           return prev
         })
         doAllow = false
@@ -192,13 +204,13 @@ export default props => {
           `${process.env.REACT_APP_API_URL}/explorer/modalities/${formData.dicomServer}`,
           finalData
         )
-        .then(doc => {
+        .then((doc) => {
           onReset()
           showSuccessAlert('Modality Edited Successfully!').then(function () {
             window.location.href = '/settings/modality_listing'
           })
         })
-        .catch(err => {
+        .catch((err) => {
           // Only handle response errors, let global interceptor handle network errors
           if (err?.response) {
             showErrorAlert(getErrorMessage(err))
@@ -207,7 +219,7 @@ export default props => {
     }
   }
 
-  const performEcho = e => {
+  const performEcho = (e) => {
     e.preventDefault()
     const finalIP = Object.values(ipData).reduce((acc, curr) => {
       return `${acc}.${curr}`
@@ -215,22 +227,25 @@ export default props => {
     let doAllow = true
     for (const item in formData) {
       if (formData[item] === '') {
-        setError(prev => {
+        setError((prev) => {
           prev = { ...prev, [item]: 'This field cannot be empty!' }
           return prev
         })
         doAllow = false
       } else if (item === 'port') {
         if (!isValidPort(formData[item])) {
-          setError(prev => {
-            prev = { ...prev, port: 'Invalid port! Please enter a valid port Address' }
+          setError((prev) => {
+            prev = {
+              ...prev,
+              port: 'Invalid port! Please enter a valid port Address',
+            }
             return prev
           })
           doAllow = false
         }
       } else if (item === 'aet') {
         if (formData[item].length > 25) {
-          setError(prev => {
+          setError((prev) => {
             prev = { ...prev, aet: 'AET cannot be longer than 25 characters.' }
             return prev
           })
@@ -240,14 +255,17 @@ export default props => {
     }
     for (const item in ipData) {
       if (ipData[item] === '') {
-        setError(prev => {
+        setError((prev) => {
           prev = { ...prev, [item]: 'This field cannot be empty!' }
           return prev
         })
         doAllow = false
       } else if (Number(ipData[item]) > 255 || Number(ipData[item]) < 0) {
-        setError(prev => {
-          prev = { ...prev, [item]: 'Invalid IP! Please enter a valid IP Address' }
+        setError((prev) => {
+          prev = {
+            ...prev,
+            [item]: 'Invalid IP! Please enter a valid IP Address',
+          }
           return prev
         })
         doAllow = false
@@ -262,8 +280,11 @@ export default props => {
       }
       const accessToken = (Math.random() + 1).toString(36).substring(2)
       axios
-        .put(`${process.env.REACT_APP_API_URL}/explorer/modalities/${accessToken}`, finalData)
-        .then(doc => {
+        .put(
+          `${process.env.REACT_APP_API_URL}/explorer/modalities/${accessToken}`,
+          finalData
+        )
+        .then((doc) => {
           hideLoadingAlert()
           MySwalLoading('Performing C-ECHO...')
           axios({
@@ -272,20 +293,24 @@ export default props => {
           })
             .then(() => {
               axios
-                .delete(`${process.env.REACT_APP_API_URL}/explorer/modalities/${accessToken}`)
-                .then(doc => {
+                .delete(
+                  `${process.env.REACT_APP_API_URL}/explorer/modalities/${accessToken}`
+                )
+                .then((doc) => {
                   MySwalSuccess('C-Echo successful!')
                 })
             })
-            .catch(err => {
+            .catch((err) => {
               axios
-                .delete(`${process.env.REACT_APP_API_URL}/explorer/modalities/${accessToken}`)
-                .then(doc => {
+                .delete(
+                  `${process.env.REACT_APP_API_URL}/explorer/modalities/${accessToken}`
+                )
+                .then((doc) => {
                   MySwalError('C-Echo has Failed!')
                 })
             })
         })
-        .catch(err => {
+        .catch((err) => {
           // Only handle response errors, let global interceptor handle network errors
           if (err?.response) {
             showErrorAlert(getErrorMessage(err))
@@ -332,7 +357,11 @@ export default props => {
                 <Form onSubmit={onSubmit} onReset={onReset}>
                   <FormGroup>
                     <Label for="dicomServer">Dicom Server</Label>
-                    <Input name="dicomServer" value={formData.dicomServer} disabled />
+                    <Input
+                      name="dicomServer"
+                      value={formData.dicomServer}
+                      disabled
+                    />
                   </FormGroup>
                   <FormGroup>
                     <Label for="aet">AET</Label>
@@ -388,13 +417,19 @@ export default props => {
                       </FormGroup>
                     </FormGroup>
                     <Input
-                      invalid={error && (error.ip1 || error.ip2 || error.ip3 || error.ip4) && true}
+                      invalid={
+                        error &&
+                        (error.ip1 || error.ip2 || error.ip3 || error.ip4) &&
+                        true
+                      }
                       name="port"
                       type="hidden"
                       value={formData.port}
                       onChange={inputHandler}
                     />
-                    <FormFeedback>{error.ip1 || error.ip2 || error.ip3 || error.ip4}</FormFeedback>
+                    <FormFeedback>
+                      {error.ip1 || error.ip2 || error.ip3 || error.ip4}
+                    </FormFeedback>
                   </FormGroup>
                   <FormGroup>
                     <Label for="port">Port</Label>
@@ -418,10 +453,19 @@ export default props => {
                     </Button.Ripple>
                   </FormGroup>
                   <FormGroup className="d-flex mt-3">
-                    <Button.Ripple className="mr-1" color="primary" type="submit">
+                    <Button.Ripple
+                      className="mr-1"
+                      color="primary"
+                      type="submit"
+                    >
                       Save
                     </Button.Ripple>
-                    <Button.Ripple className="mr-1" outline color="secondary" type="reset">
+                    <Button.Ripple
+                      className="mr-1"
+                      outline
+                      color="secondary"
+                      type="reset"
+                    >
                       Reset
                     </Button.Ripple>
                     <Button.Ripple

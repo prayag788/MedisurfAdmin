@@ -16,7 +16,11 @@ import {
 import axios from 'axios'
 
 // ** Sweet Alert Setup
-import { MySwalError, MySwalLoading, MySwalSuccess } from '../../components/MySwalAlert'
+import {
+  MySwalError,
+  MySwalLoading,
+  MySwalSuccess,
+} from '../../components/MySwalAlert'
 
 export default () => {
   const [formData, setFormData] = useState({
@@ -53,39 +57,41 @@ export default () => {
           }
         })
       } catch (error) {
-        MySwalError('There is some error fetching server data!<br/>Please try again later!')
+        MySwalError(
+          'There is some error fetching server data!<br/>Please try again later!'
+        )
       }
     }
     fetchServerData()
   }, [recallGetSystemConfigAPI])
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     const value = e.target.value
     if (value === '') {
-      setError(prev => {
+      setError((prev) => {
         prev = { ...prev, [name]: 'This field cannot be empty!' }
         return prev
       })
     } else {
-      setError(prev => {
+      setError((prev) => {
         delete prev[name]
         return prev
       })
     }
-    setFormData(prev => {
+    setFormData((prev) => {
       prev = { ...prev, [name]: value }
       return prev
     })
   }
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     let isError = false
     for (const item in formData) {
       if (formData[item] === '') {
         isError = true
-        setError(prev => {
+        setError((prev) => {
           prev = { ...prev, [item]: 'This field cannot be empty!' }
           return prev
         })
@@ -104,13 +110,15 @@ export default () => {
 
         MySwalSuccess('Orthanc configurations updated successfully!')
       } catch (error) {
-        MySwalError('Error occurred while updating configurations!<br/>Please try again later!')
+        MySwalError(
+          'Error occurred while updating configurations!<br/>Please try again later!'
+        )
       }
     }
   }
 
   const onReset = () => {
-    setFormData(prev => {
+    setFormData((prev) => {
       return { dicomServer: '', DicomAet: '', DicomPort: '' }
     })
   }
@@ -124,11 +132,11 @@ export default () => {
         url: `${process.env.REACT_APP_API_URL}/explorer/tools/reset`,
       })
       setTimeout(() => {
-        setRecallGetSystemConfigAPI(prev => !prev)
+        setRecallGetSystemConfigAPI((prev) => !prev)
       }, 2000)
       MySwalSuccess('Orthanc restarted successfully!')
     } catch (error) {
-      setRecallGetSystemConfigAPI(prev => !prev)
+      setRecallGetSystemConfigAPI((prev) => !prev)
       MySwalError('There was some error restarting orthanc!')
     }
   }
@@ -140,7 +148,11 @@ export default () => {
           <Card>
             <CardHeader className="flex-md-row flex-column align-md-items-center align-items-center border-bottom">
               <CardTitle tag="h4">Edit Server Configurations</CardTitle>
-              <Button.Ripple color="primary" type="reset" onClick={restartOrthanc}>
+              <Button.Ripple
+                color="primary"
+                type="reset"
+                onClick={restartOrthanc}
+              >
                 Restart Server
               </Button.Ripple>
             </CardHeader>
@@ -183,14 +195,20 @@ export default () => {
                       type="checkbox"
                       checked={formData.DicomCheckCalledAet}
                       id="DicomCheckCalledAet"
-                      onChange={e => {
-                        setFormData(prev => {
-                          prev = { ...prev, ['DicomCheckCalledAet']: e.target.checked }
+                      onChange={(e) => {
+                        setFormData((prev) => {
+                          prev = {
+                            ...prev,
+                            ['DicomCheckCalledAet']: e.target.checked,
+                          }
                           return prev
                         })
                       }}
                     />
-                    <Label for="DicomCheckCalledAet" className="dicom-check-label">
+                    <Label
+                      for="DicomCheckCalledAet"
+                      className="dicom-check-label"
+                    >
                       DICOM Check Called Aet
                     </Label>
                   </FormGroup>
@@ -221,7 +239,11 @@ export default () => {
                   )}
 
                   <FormGroup className="d-flex mt-3">
-                    <Button.Ripple className="mr-1" color="primary" type="submit">
+                    <Button.Ripple
+                      className="mr-1"
+                      color="primary"
+                      type="submit"
+                    >
                       Submit
                     </Button.Ripple>
                     <Button.Ripple outline color="secondary" type="reset">

@@ -8,9 +8,15 @@ import { Disc, Circle } from 'react-feather'
 // ** Config
 import themeConfig from '@configs/themeConfig'
 
-const VerticalMenuHeader = props => {
+const VerticalMenuHeader = (props) => {
   // ** Props
-  const { menuCollapsed, setMenuCollapsed, setMenuVisibility, setGroupOpen, menuHover } = props
+  const {
+    menuCollapsed,
+    setMenuCollapsed,
+    setMenuVisibility,
+    setGroupOpen,
+    menuHover,
+  } = props
 
   // ** Reset open group
   useEffect(() => {
@@ -46,8 +52,16 @@ const VerticalMenuHeader = props => {
         <li className="nav-item mr-auto">
           <NavLink to="/" className="navbar-brand">
             <span className="brand-logo">
-              <img className="full-logo" src={themeConfig.app.appLogoImage} alt="logo" />
-              <img className="icon-logo" src={themeConfig.app.appLogoIcon} alt="logo" />
+              <img
+                className="full-logo"
+                src={themeConfig.app.appLogoImage}
+                alt="logo"
+              />
+              <img
+                className="icon-logo"
+                src={themeConfig.app.appLogoIcon}
+                alt="logo"
+              />
             </span>
           </NavLink>
         </li>

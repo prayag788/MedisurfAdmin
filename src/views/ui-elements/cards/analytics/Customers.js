@@ -14,11 +14,11 @@ import {
 import * as Icon from 'react-feather'
 import Chart from 'react-apexcharts'
 
-const Customers = props => {
+const Customers = (props) => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    axios.get('/card/card-analytics/customers').then(res => setData(res.data))
+    axios.get('/card/card-analytics/customers').then((res) => setData(res.data))
   }, [])
 
   const options = {
@@ -70,11 +70,14 @@ const Customers = props => {
       <CardHeader className="align-items-end">
         <CardTitle tag="h4">Customers</CardTitle>
         <UncontrolledDropdown className="chart-dropdown">
-          <DropdownToggle color="" className="bg-transparent btn-sm border-0 p-50">
+          <DropdownToggle
+            color=""
+            className="bg-transparent btn-sm border-0 p-50"
+          >
             Last 7 days
           </DropdownToggle>
           <DropdownMenu right>
-            {data.last_days.map(item => (
+            {data.last_days.map((item) => (
               <DropdownItem className="w-100" key={item}>
                 {item}
               </DropdownItem>

@@ -26,7 +26,8 @@ const data = {
     {
       id: 4,
       category: 'personalization',
-      img: require('@src/assets/images/illustration/personalization.svg').default,
+      img: require('@src/assets/images/illustration/personalization.svg')
+        .default,
       title: 'Personalization',
       desc: 'It has been said that astronomy is a humbling and character experience.',
     },

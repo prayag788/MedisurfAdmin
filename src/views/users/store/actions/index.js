@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // ** Fetch Events
-export const fetchEvent = payload => {
+export const fetchEvent = (payload) => {
   return {
     type: 'FETCH_DOCTORS_EVENT',
     payload: [
@@ -112,7 +112,7 @@ export const fetchEvent = payload => {
 }
 
 // ** Add Event
-export const addEvent = payload => {
+export const addEvent = (payload) => {
   return {
     type: 'ADD_DOCTOR_EVENT',
     payload,
@@ -125,7 +125,7 @@ export const addEvent = payload => {
 }
 
 // ** Update Event
-export const updateEvent = payload => {
+export const updateEvent = (payload) => {
   return {
     type: 'UPDATE_DOCTOR_EVENT',
     payload,
@@ -136,7 +136,7 @@ export const updateEvent = payload => {
 }
 
 // ** Filter Events
-export const deleteEvent = payload => {
+export const deleteEvent = (payload) => {
   return {
     type: 'DELETE_DOCTOR_EVENT',
     payload,
@@ -148,7 +148,7 @@ export const deleteEvent = payload => {
 }
 
 // ** Add/Remove All Filters
-export const updateAllFilters = value => {
+export const updateAllFilters = (value) => {
   return (dispatch, getState) => {
     dispatch({
       type: 'UPDATE_ALL_FILTERS',
@@ -159,8 +159,8 @@ export const updateAllFilters = value => {
 }
 
 // ** remove Event
-export const removeEvent = id => {
-  return dispatch => {
+export const removeEvent = (id) => {
+  return (dispatch) => {
     axios.delete('/apps/calendar/remove-event', { id }).then(() => {
       dispatch({
         type: 'REMOVE_EVENT',
@@ -170,8 +170,8 @@ export const removeEvent = id => {
 }
 
 // ** Select Event (get event data on click)
-export const selectEvent = event => {
-  return dispatch => {
+export const selectEvent = (event) => {
+  return (dispatch) => {
     dispatch({
       type: 'SELECT_EVENT',
       event,

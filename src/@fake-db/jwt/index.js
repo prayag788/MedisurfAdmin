@@ -8,7 +8,8 @@ const data = {
       fullName: 'John Doe',
       username: 'johndoe',
       password: 'admin',
-      avatar: require('@src/assets/images/portrait/small/avatar-s-11.jpg').default,
+      avatar: require('@src/assets/images/portrait/small/avatar-s-11.jpg')
+        .default,
       email: 'admin@demo.com',
       role: 'admin',
       ability: [
@@ -53,23 +54,29 @@ const jwtConfig = {
   refreshTokenExpireTime: '10m',
 }
 
-mock.onPost('/jwt/login').reply(request => {
+mock.onPost('/jwt/login').reply((request) => {
   const { email, password } = JSON.parse(request.data)
 
   let error = {
     email: ['Something went wrong'],
   }
 
-  const user = data.users.find(u => u.email === email && u.password === password)
+  const user = data.users.find(
+    (u) => u.email === email && u.password === password
+  )
 
   if (user) {
     try {
       const accessToken = jwt.sign({ id: user.id }, jwtConfig.secret, {
         expiresIn: jwtConfig.expireTime,
       })
-      const refreshToken = jwt.sign({ id: user.id }, jwtConfig.refreshTokenSecret, {
-        expiresIn: jwtConfig.refreshTokenExpireTime,
-      })
+      const refreshToken = jwt.sign(
+        { id: user.id },
+        jwtConfig.refreshTokenSecret,
+        {
+          expiresIn: jwtConfig.refreshTokenExpireTime,
+        }
+      )
 
       const userData = { ...user }
 
@@ -94,14 +101,18 @@ mock.onPost('/jwt/login').reply(request => {
   return [400, { error }]
 })
 
-mock.onPost('/jwt/register').reply(request => {
+mock.onPost('/jwt/register').reply((request) => {
   if (request.data.length > 0) {
     const { email, password, username } = JSON.parse(request.data)
-    const isEmailAlreadyInUse = data.users.find(user => user.email === email)
-    const isUsernameAlreadyInUse = data.users.find(user => user.username === username)
+    const isEmailAlreadyInUse = data.users.find((user) => user.email === email)
+    const isUsernameAlreadyInUse = data.users.find(
+      (user) => user.username === username
+    )
     const error = {
       email: isEmailAlreadyInUse ? 'This email is already in use.' : null,
-      username: isUsernameAlreadyInUse ? 'This username is already in use.' : null,
+      username: isUsernameAlreadyInUse
+        ? 'This username is already in use.'
+        : null,
     }
 
     if (!error.username && !error.email) {
@@ -145,20 +156,24 @@ mock.onPost('/jwt/register').reply(request => {
   }
 })
 
-mock.onPost('/jwt/refresh-token').reply(request => {
+mock.onPost('/jwt/refresh-token').reply((request) => {
   const { refreshToken } = JSON.parse(request.data)
 
   try {
     const { id } = jwt.verify(refreshToken, jwtConfig.refreshTokenSecret)
 
-    const userData = { ...data.users.find(user => user.id === id) }
+    const userData = { ...data.users.find((user) => user.id === id) }
 
     const newAccessToken = jwt.sign({ id: userData.id }, jwtConfig.secret, {
       expiresIn: jwtConfig.expiresIn,
     })
-    const newRefreshToken = jwt.sign({ id: userData.id }, jwtConfig.refreshTokenSecret, {
-      expiresIn: jwtConfig.refreshTokenExpireTime,
-    })
+    const newRefreshToken = jwt.sign(
+      { id: userData.id },
+      jwtConfig.refreshTokenSecret,
+      {
+        expiresIn: jwtConfig.refreshTokenExpireTime,
+      }
+    )
 
     delete userData.password
     const response = {

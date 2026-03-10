@@ -9,8 +9,8 @@ const GradientColors = () => {
       </CardHeader>
       <CardBody>
         <p>
-          We have created gradient colors based on our default colors, use below mentioned classes
-          for gradient colors.
+          We have created gradient colors based on our default colors, use below
+          mentioned classes for gradient colors.
         </p>
         <ul className="colors-list list-unstyled mb-0">
           <li>
@@ -33,9 +33,10 @@ const GradientColors = () => {
           </li>
         </ul>
         <p>
-          For each color, we think has its functionality in the application as alerts of errors{' '}
-          <b>(danger)</b>, warnings to the user <b>(warning)</b>, communications of approval{' '}
-          <b>(success)</b>, or main color of the application <b>(primary)</b>.
+          For each color, we think has its functionality in the application as
+          alerts of errors <b>(danger)</b>, warnings to the user{' '}
+          <b>(warning)</b>, communications of approval <b>(success)</b>, or main
+          color of the application <b>(primary)</b>.
         </p>
         <div className="d-flex justify-content-start flex-wrap">
           <div className="text-center colors-container bg-gradient-primary rounded text-white width-100 height-100 d-flex align-items-center justify-content-center mr-1 ml-50 my-1 shadow">

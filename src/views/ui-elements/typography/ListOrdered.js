@@ -10,8 +10,8 @@ const ListOrdered = () => {
       <CardBody>
         <CardText>
           List of items in which the order does explicitly matter. Use{' '}
-          <code>&ltol type="1|a|A|i|I"&gt</code>, The type attribute specifies the kind of marker to
-          use in the list.
+          <code>&ltol type="1|a|A|i|I"&gt</code>, The type attribute specifies
+          the kind of marker to use in the list.
         </CardText>
         <ol>
           <li>Lorem ipsum dolor sit amet</li>

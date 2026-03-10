@@ -3,7 +3,10 @@
   z-index: 1;
 }
 
-html[data-textdirection='rtl'] .leaflet-map .leaflet-control-container .leaflet-left {
+html[data-textdirection='rtl']
+  .leaflet-map
+  .leaflet-control-container
+  .leaflet-left {
   left: 0;
   right: unset;
 }
@@ -20,7 +23,10 @@ html[data-textdirection='rtl']
   margin-right: 0;
   margin-left: 10px;
 }
-html[data-textdirection='rtl'] .leaflet-map .leaflet-control-container .leaflet-right {
+html[data-textdirection='rtl']
+  .leaflet-map
+  .leaflet-control-container
+  .leaflet-right {
   right: 0;
   left: unset;
 }

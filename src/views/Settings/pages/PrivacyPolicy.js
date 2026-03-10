@@ -1,11 +1,23 @@
 import { Fragment, useState, useEffect, useRef } from 'react'
-import { Row, Col, Card, CardBody, CardTitle, CardHeader, Button } from 'reactstrap'
+import {
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardTitle,
+  CardHeader,
+  Button,
+} from 'reactstrap'
 import { Editor } from '@tinymce/tinymce-react'
 
 import '@styles/react/libs/editor/editor.scss'
 import axios from 'axios'
 import { handleAutoLogout } from '@utils'
-import { showErrorAlert, showSuccessAlert, getErrorMessage } from '../../../utils/alerts'
+import {
+  showErrorAlert,
+  showSuccessAlert,
+  getErrorMessage,
+} from '../../../utils/alerts'
 export default () => {
   const [value, setValue] = useState('<p>Enter your privacy policy here...</p>')
   const [isLoaded, setIsLoaded] = useState(false)
@@ -18,7 +30,7 @@ export default () => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(doc => {
+      .then((doc) => {
         // Handle both response formats: {policy: {...}} or direct policy object
         const policyData = doc?.data?.policy || doc?.data
         if (policyData && policyData.markup) {
@@ -26,7 +38,7 @@ export default () => {
         }
         setIsLoaded(true)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error loading privacy policy:', err)
         setIsLoaded(true)
       })
@@ -49,10 +61,10 @@ export default () => {
           },
         }
       )
-      .then(doc => {
+      .then((doc) => {
         showSuccessAlert('Privacy Policy Updated Successfully!')
       })
-      .catch(err => {
+      .catch((err) => {
         if (err?.response) {
           showErrorAlert(getErrorMessage(err))
         }
@@ -111,8 +123,8 @@ export default () => {
                     content_style:
                       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                     placeholder: `Enter your privacy policy here...`,
-                    setup: editor => {
-                      editor.on('keydown', e => {
+                    setup: (editor) => {
+                      editor.on('keydown', (e) => {
                         handleAutoLogout()
                       })
                     },

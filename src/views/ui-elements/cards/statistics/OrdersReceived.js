@@ -56,7 +56,7 @@ const OrdersReceived = ({ kFormatter, warning }) => {
   }
 
   useEffect(() => {
-    axios.get('/card/card-statistics/orders').then(res => setData(res.data))
+    axios.get('/card/card-statistics/orders').then((res) => setData(res.data))
   }, [])
 
   return data !== null ? (

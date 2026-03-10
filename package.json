@@ -11,7 +11,10 @@
     "react-router": "^6.30.1"
   },
   "dependencies": {
+    "@babel/generator": "^7.29.1",
+    "@babel/parser": "^7.29.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/traverse": "^7.29.0",
     "@casl/ability": "^6.7.0",
     "@casl/react": "^5.0.0",
     "@emotion/styled": "^11.10.6",
@@ -30,12 +33,12 @@
     "@fullcalendar/timeline": "^6.1.19",
     "@hookform/resolvers": "^5.2.1",
     "@mui/material": "^5.12.1",
-    "@tinymce/tinymce-react": "^4.3.0",
+    "@tinymce/tinymce-react": "^6.3.0",
     "@uppy/react": "1.10.8",
     "animate.css": "4.1.1",
     "apexcharts": "^3.54.1",
     "availity-reactstrap-validation-safe": "2.6.1",
-    "axios": "^1.7.0",
+    "axios": "^1.13.6",
     "axios-mock-adapter": "^1.22.0",
     "babel-plugin-react-intl": "5.1.18",
     "bootstrap": "^4.6.2",
@@ -124,7 +127,7 @@
     "styled-components": "^6.1.19",
     "sweetalert2": "^11.12.0",
     "sweetalert2-react-content": "^5.1.0",
-    "swiper": "^7.3.1",
+    "swiper": "^12.1.2",
     "uppy": "1.21.2",
     "uuid": "^10.0.0",
     "wnumb": "1.2.0",
@@ -149,9 +152,10 @@
     "@babel/preset-react": "^7.26.3",
     "@types/sortablejs": "^1.10.6",
     "assert": "^2.1.0",
+    "babel-jest": "^29.7.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.1",
-    "eslint": "^10.0.3",
+    "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -162,6 +166,7 @@
     "globals": "^17.4.0",
     "https-browserify": "^1.0.0",
     "husky": "^9.1.6",
+    "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^15.2.10",
     "os-browserify": "^0.3.0",
     "prettier": "^3.3.3",
@@ -187,5 +192,35 @@
     "not dead",
     "not op_mini all"
   ],
-  "homepage": ""
+  "homepage": "",
+  "jest": {
+    "moduleNameMapper": {
+      "^.+\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/fileMock.js",
+      "^.+\\.(css|scss|sass)$": "identity-obj-proxy",
+      "^@src/(.*)$": "<rootDir>/src/$1",
+      "^@assets/(.*)$": "<rootDir>/src/@core/assets/$1",
+      "^@components/(.*)$": "<rootDir>/src/@core/components/$1",
+      "^@layouts/(.*)$": "<rootDir>/src/@core/layouts/$1",
+      "^@store/(.*)$": "<rootDir>/src/redux/$1",
+      "^@styles/(.*)$": "<rootDir>/src/@core/scss/$1",
+      "^@configs/(.*)$": "<rootDir>/src/configs/$1",
+      "^@utils/(.*)$": "<rootDir>/src/utils/$1",
+      "^@utils$": "<rootDir>/src/utils/index.js",
+      "^@hooks/(.*)$": "<rootDir>/src/utility/hooks/$1",
+      "^@fake-db/(.*)$": "<rootDir>/src/@fake-db/$1",
+      "^sweetalert2$": "<rootDir>/__mocks__/sweetalert2.js",
+      "^sweetalert2-react-content$": "<rootDir>/__mocks__/sweetalert2-react-content.js",
+      "^axios$": "<rootDir>/__mocks__/axios.js",
+      "^react-redux$": "<rootDir>/__mocks__/react-redux.js"
+    },
+    "transform": {
+      "^.+\\.(js|mjs|jsx|ts|tsx)$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios)/)"
+    ],
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ]
+  }
 }

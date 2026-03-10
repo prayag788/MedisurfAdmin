@@ -7,7 +7,12 @@ import { checkForOtherOperationDm } from '@utils'
 import { ChevronDown, Eye, Download, X } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import { UncontrolledTooltip, Modal, ModalHeader, ModalBody } from 'reactstrap'
-import { showLoadingAlert, hideLoadingAlert, showErrorAlert, getErrorMessage } from '../../utils/alerts'
+import {
+  showLoadingAlert,
+  hideLoadingAlert,
+  showErrorAlert,
+  getErrorMessage,
+} from '../../utils/alerts'
 import { showToastSuccess } from '../../utils/toast'
 import { useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -22,7 +27,9 @@ import axios from 'axios'
 // alerts handled via utils/alerts
 
 const SharedStudyTable = ({ toggleAuth }) => {
-  const { showBackgroundLoader, hideBackgroundLoader } = useContext(BackgroundProcessContext)
+  const { showBackgroundLoader, hideBackgroundLoader } = useContext(
+    BackgroundProcessContext
+  )
   // ** States
   const [Picker, setPicker] = useState('')
   const [data, setTableData] = useState([])
@@ -60,9 +67,19 @@ const SharedStudyTable = ({ toggleAuth }) => {
           }
         )
         const list = studylist?.data
-        const rows = Array.isArray(list) ? list : list != null ? [list] : []
+        const rows = Array.isArray(list)
+          ? list
+          : list !== null && list !== undefined
+            ? [list]
+            : []
         setTableData(rows)
-        setTotalStudies(Array.isArray(list) ? list.length : list != null ? 1 : 0)
+        setTotalStudies(
+          Array.isArray(list)
+            ? list.length
+            : list !== null && list !== undefined
+              ? 1
+              : 0
+        )
       } catch (err) {
         setTableData([])
         setTotalStudies(0)
@@ -88,7 +105,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle name filter
-  const handleNameFilter = e => {
+  const handleNameFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
@@ -107,10 +124,14 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchName(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
-        const startsWith = item.PatientName.toLowerCase().startsWith(value.toLowerCase())
+      updatedData = dataToFilter().filter((item) => {
+        const startsWith = item.PatientName.toLowerCase().startsWith(
+          value.toLowerCase()
+        )
 
-        const includes = item.PatientName.toLowerCase().includes(value.toLowerCase())
+        const includes = item.PatientName.toLowerCase().includes(
+          value.toLowerCase()
+        )
 
         if (startsWith) {
           return startsWith
@@ -124,7 +145,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle email filter
-  const handleAccesstionFilter = e => {
+  const handleAccesstionFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
@@ -143,10 +164,14 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchAccesstion(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
-        const startsWith = item.AccessionNumber.toLowerCase().startsWith(value.toLowerCase())
+      updatedData = dataToFilter().filter((item) => {
+        const startsWith = item.AccessionNumber.toLowerCase().startsWith(
+          value.toLowerCase()
+        )
 
-        const includes = item.AccessionNumber.toLowerCase().includes(value.toLowerCase())
+        const includes = item.AccessionNumber.toLowerCase().includes(
+          value.toLowerCase()
+        )
 
         if (startsWith) {
           return startsWith
@@ -160,7 +185,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle post filter
-  const handleIDFilter = e => {
+  const handleIDFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
@@ -179,10 +204,14 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchID(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
-        const startsWith = item.PatientID.toLowerCase().startsWith(value.toLowerCase())
+      updatedData = dataToFilter().filter((item) => {
+        const startsWith = item.PatientID.toLowerCase().startsWith(
+          value.toLowerCase()
+        )
 
-        const includes = item.PatientID.toLowerCase().includes(value.toLowerCase())
+        const includes = item.PatientID.toLowerCase().includes(
+          value.toLowerCase()
+        )
 
         if (startsWith) {
           return startsWith
@@ -195,15 +224,15 @@ const SharedStudyTable = ({ toggleAuth }) => {
     }
   }
 
-  const previewReportHandler = id => {
+  const previewReportHandler = (id) => {
     window.open(`${location.pathname}?id=${id._id}&mode=preview`, '_blank')
   }
 
-  const handlePrintReport = async id => {
+  const handlePrintReport = async (id) => {
     showLoadingAlert()
     await axios
       .get(`${process.env.REACT_APP_API_URL}/report/download/${id}`)
-      .then(res => {
+      .then((res) => {
         const blob = new Blob([new Uint8Array(res.data.pdf.data).buffer], {
           type: 'application/pdf',
         })
@@ -212,14 +241,14 @@ const SharedStudyTable = ({ toggleAuth }) => {
         hideLoadingAlert()
         setOpenPrintStudy(true)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err)
         hideLoadingAlert()
       })
   }
 
   // ** Function to handle city filter
-  const handleModalityFilter = e => {
+  const handleModalityFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
@@ -238,10 +267,14 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchModality(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
-        const startsWith = item.Modality[0].toLowerCase().startsWith(value.toLowerCase())
+      updatedData = dataToFilter().filter((item) => {
+        const startsWith = item.Modality[0]
+          .toLowerCase()
+          .startsWith(value.toLowerCase())
 
-        const includes = item.Modality[0].toLowerCase().includes(value.toLowerCase())
+        const includes = item.Modality[0]
+          .toLowerCase()
+          .includes(value.toLowerCase())
 
         if (startsWith) {
           return startsWith
@@ -255,7 +288,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle salary filter
-  const handleDescriptionFilter = e => {
+  const handleDescriptionFilter = (e) => {
     const value = e.target.value
     let updatedData = []
     const dataToFilter = () => {
@@ -274,10 +307,14 @@ const SharedStudyTable = ({ toggleAuth }) => {
 
     setSearchDescription(value)
     if (value.length) {
-      updatedData = dataToFilter().filter(item => {
-        const startsWith = item.Description.toLowerCase().startsWith(value.toLowerCase())
+      updatedData = dataToFilter().filter((item) => {
+        const startsWith = item.Description.toLowerCase().startsWith(
+          value.toLowerCase()
+        )
 
-        const includes = item.Description.toLowerCase().includes(value.toLowerCase())
+        const includes = item.Description.toLowerCase().includes(
+          value.toLowerCase()
+        )
 
         if (startsWith) {
           return startsWith
@@ -291,7 +328,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
   }
 
   // ** Function to handle date filter
-  const handleDateFilter = range => {
+  const handleDateFilter = (range) => {
     const arr = []
     let updatedData = []
     const dataToFilter = () => {
@@ -308,7 +345,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
       }
     }
 
-    range.map(i => {
+    range.map((i) => {
       const date = new Date(i)
 
       const year = date.getFullYear()
@@ -326,7 +363,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
     setPicker(range)
 
     if (range.length) {
-      updatedData = dataToFilter().filter(item => {
+      updatedData = dataToFilter().filter((item) => {
         return (
           new Date(item.start_date).getTime() >= new Date(arr[0]).getTime() &&
           new Date(item.start_date).getTime() <= new Date(arr[1]).getTime()
@@ -337,18 +374,22 @@ const SharedStudyTable = ({ toggleAuth }) => {
     }
   }
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const viewer_url = `${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${e.StudyInstanceUID}&accessToken=${localStorage.getItem('sharedaccessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${e._id}&mode=create&renderFrom=sharedStudy`
-    window.open(viewer_url, JSON.parse(localStorage.getItem('sharedUserData'))?.viewerPreference)
+    window.open(
+      viewer_url,
+      JSON.parse(localStorage.getItem('sharedUserData'))?.viewerPreference
+    )
   }
 
-  const studyDownloadHanlder = async studyId => {
+  const studyDownloadHanlder = async (studyId) => {
     const userId = userData?._id
     if (!userId) {
       showErrorAlert('Session expired. Please log in again.')
       return
     }
-    const orthancStudyId = studyId != null ? String(studyId).trim() : ''
+    const orthancStudyId =
+      studyId !== null && studyId !== undefined ? String(studyId).trim() : ''
     if (!orthancStudyId) {
       showErrorAlert('Study is not available for download.')
       return
@@ -371,12 +412,18 @@ const SharedStudyTable = ({ toggleAuth }) => {
       if (timeoutId) clearTimeout(timeoutId)
     }
 
-    const showDownloadError = (errOrMessage, fallback = 'Study download failed. Please try again.') => {
-      const msg = typeof errOrMessage === 'string' ? errOrMessage : getErrorMessage(errOrMessage, fallback)
+    const showDownloadError = (
+      errOrMessage,
+      fallback = 'Study download failed. Please try again.'
+    ) => {
+      const msg =
+        typeof errOrMessage === 'string'
+          ? errOrMessage
+          : getErrorMessage(errOrMessage, fallback)
       showErrorAlert(msg)
     }
 
-    const serializeErrForLog = err => {
+    const serializeErrForLog = (err) => {
       if (!err) return null
       try {
         return {
@@ -392,15 +439,23 @@ const SharedStudyTable = ({ toggleAuth }) => {
     }
 
     const LOG = '[StudyDownload-Shared]'
-    const onReady = async payloadStr => {
+    const onReady = async (payloadStr) => {
       try {
-        const payload = typeof payloadStr === 'string' ? JSON.parse(payloadStr) : payloadStr
-        console.log(LOG, 'Socket event', { jobId: payload?.jobId, success: payload?.success })
+        const payload =
+          typeof payloadStr === 'string' ? JSON.parse(payloadStr) : payloadStr
+        console.log(LOG, 'Socket event', {
+          jobId: payload?.jobId,
+          success: payload?.success,
+        })
         if (payload.jobId !== jobId) return
         finish()
         if (!payload.success) {
-          console.warn(LOG, 'Prepare failed (socket)', { message: payload?.message })
-          showDownloadError(payload.message || 'Failed to prepare study download.')
+          console.warn(LOG, 'Prepare failed (socket)', {
+            message: payload?.message,
+          })
+          showDownloadError(
+            payload.message || 'Failed to prepare study download.'
+          )
           return
         }
         if (!payload.downloadToken) {
@@ -409,20 +464,33 @@ const SharedStudyTable = ({ toggleAuth }) => {
           return
         }
         const downloadUrl = `${process.env.REACT_APP_API_URL}/orthanc/study/download-by-token/${payload.jobId}?token=${encodeURIComponent(payload.downloadToken)}`
-        console.log(LOG, 'Opening download URL (browser handles file)', { jobId: payload.jobId })
+        console.log(LOG, 'Opening download URL (browser handles file)', {
+          jobId: payload.jobId,
+        })
         const link = document.createElement('a')
         link.setAttribute('href', downloadUrl)
-        link.setAttribute('download', payload.filename || `study_${orthancStudyId}.zip`)
+        link.setAttribute(
+          'download',
+          payload.filename || `study_${orthancStudyId}.zip`
+        )
         link.setAttribute('target', '_blank')
         link.setAttribute('rel', 'noopener noreferrer')
         link.style.visibility = 'hidden'
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
-        showToastSuccess('Study download started. If the file does not open, check your browser downloads.')
+        showToastSuccess(
+          'Study download started. If the file does not open, check your browser downloads.'
+        )
       } catch (err) {
-        console.error(LOG, 'GET download error (in-depth)', serializeErrForLog(err), err)
-        if (err?.stack) console.error(LOG, 'GET download error stack', err.stack)
+        console.error(
+          LOG,
+          'GET download error (in-depth)',
+          serializeErrForLog(err),
+          err
+        )
+        if (err?.stack)
+          console.error(LOG, 'GET download error stack', err.stack)
         showDownloadError(err)
       }
     }
@@ -442,16 +510,27 @@ const SharedStudyTable = ({ toggleAuth }) => {
         showDownloadError('Server did not start download. Please try again.')
         return
       }
-      timeoutId = setTimeout(() => {
-        finish()
-        console.warn(LOG, 'Timeout waiting for socket', { jobId })
-        showDownloadError('Study download is taking too long. Please try again.')
-      }, 10 * 60 * 1000)
+      timeoutId = setTimeout(
+        () => {
+          finish()
+          console.warn(LOG, 'Timeout waiting for socket', { jobId })
+          showDownloadError(
+            'Study download is taking too long. Please try again.'
+          )
+        },
+        10 * 60 * 1000
+      )
       socket.once(eventName, onReady)
     } catch (error) {
       finish()
-      console.error(LOG, 'POST prepare error (in-depth)', serializeErrForLog(error), error)
-      if (error?.stack) console.error(LOG, 'POST prepare error stack', error.stack)
+      console.error(
+        LOG,
+        'POST prepare error (in-depth)',
+        serializeErrForLog(error),
+        error
+      )
+      if (error?.stack)
+        console.error(LOG, 'POST prepare error stack', error.stack)
       showDownloadError(error)
     }
   }
@@ -460,7 +539,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
   const column = [
     {
       name: 'Patient Name',
-      selector: row => (row['PatientName'] ? row['PatientName'] : '-'),
+      selector: (row) => (row['PatientName'] ? row['PatientName'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -469,7 +548,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
     },
     {
       name: 'Patient Id',
-      selector: row => (row['PatientID'] ? row['PatientID'] : '-'),
+      selector: (row) => (row['PatientID'] ? row['PatientID'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -478,7 +557,8 @@ const SharedStudyTable = ({ toggleAuth }) => {
     },
     {
       name: 'Accession',
-      selector: row => (row['AccessionNumber'] ? row['AccessionNumber'] : '-'),
+      selector: (row) =>
+        row['AccessionNumber'] ? row['AccessionNumber'] : '-',
       sortable: true,
       reorder: true,
 
@@ -487,7 +567,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
     },
     {
       name: 'Study Date',
-      selector: row => (row['startTimeStamp'] ? row['startTimeStamp'] : '-'),
+      selector: (row) => (row['startTimeStamp'] ? row['startTimeStamp'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -496,7 +576,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
     },
     {
       name: 'Modality',
-      selector: row => (row['Modality'] ? row['Modality'] : '-'),
+      selector: (row) => (row['Modality'] ? row['Modality'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -505,7 +585,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
     },
     {
       name: 'Description',
-      selector: row => (row['Description'] ? row['Description'] : '-'),
+      selector: (row) => (row['Description'] ? row['Description'] : '-'),
       sortable: true,
       reorder: true,
 
@@ -514,7 +594,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
     },
     {
       name: '#Series',
-      selector: row => (row['SeriesNumber'] ? row['SeriesNumber'] : '-'),
+      selector: (row) => (row['SeriesNumber'] ? row['SeriesNumber'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -523,7 +603,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
     },
     {
       name: '#Images',
-      selector: row => (row['ImagesNumber'] ? row['ImagesNumber'] : '-'),
+      selector: (row) => (row['ImagesNumber'] ? row['ImagesNumber'] : '-'),
       sortable: false,
       reorder: true,
 
@@ -542,15 +622,23 @@ const SharedStudyTable = ({ toggleAuth }) => {
         'border-left': '1px dotted #6e6b7b',
       },
       minWidth: '80px',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className="d-flex align-items-center">
             <a
               href={`${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${row.StudyInstanceUID}&accessToken=${localStorage.getItem('sharedaccessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${row._id}&mode=create&renderFrom=sharedStudy`}
               style={{ color: '#000' }}
-              target={JSON.parse(localStorage.getItem('sharedUserData'))?.viewerPreference}
+              target={
+                JSON.parse(localStorage.getItem('sharedUserData'))
+                  ?.viewerPreference
+              }
             >
-              <Eye size={15} id="view" className="mr-50" style={{ cursor: 'pointer' }} />
+              <Eye
+                size={15}
+                id="view"
+                className="mr-50"
+                style={{ cursor: 'pointer' }}
+              />
             </a>
             <UncontrolledTooltip className="tooltip-react-strap" target="view">
               Click to view study
@@ -564,14 +652,19 @@ const SharedStudyTable = ({ toggleAuth }) => {
                   style={{ cursor: 'pointer' }}
                   onClick={() => studyDownloadHanlder(row.ID)}
                 />
-                <UncontrolledTooltip target="download" className="tooltip-react-strap">
+
+                <UncontrolledTooltip
+                  target="download"
+                  className="tooltip-react-strap"
+                >
                   Click to download study
                 </UncontrolledTooltip>
               </>
             )}
             {}
             {row.Status === STUDYSTATUS.Final &&
-              (userData?.role === ROLES.SharedDoctor || userData?.role === ROLES.SharedPatient) && (
+              (userData?.role === ROLES.SharedDoctor ||
+                userData?.role === ROLES.SharedPatient) && (
                 <>
                   <FontAwesomeIcon
                     icon="fa fa-print"
@@ -614,8 +707,13 @@ const SharedStudyTable = ({ toggleAuth }) => {
         data={dataToRender()}
         onRowDoubleClicked={handleClick}
       />
+
       {}
-      <Modal isOpen={openPrintStudy} toggle={() => setOpenPrintStudy(!openPrintStudy)} size="lg">
+      <Modal
+        isOpen={openPrintStudy}
+        toggle={() => setOpenPrintStudy(!openPrintStudy)}
+        size="lg"
+      >
         <ModalHeader
           className="mb-2"
           close={

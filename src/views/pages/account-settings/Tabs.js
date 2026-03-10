@@ -33,7 +33,8 @@ const Tabs = ({ activeTab, toggleTab }) => {
       )}
 
       {userData.pwdCng === true &&
-        (userData.role === ROLES.ClinicAdmin || userData.role === ROLES.SuperAdmin) &&
+        (userData.role === ROLES.ClinicAdmin ||
+          userData.role === ROLES.SuperAdmin) &&
         (userData.role !== ROLES.ClinicAdmin || userData.dateCng === true) && (
           <NavItem>
             <NavLink active={activeTab === '4'} onClick={() => toggleTab('4')}>

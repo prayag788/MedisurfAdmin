@@ -8,7 +8,12 @@ const CardJob = () => {
       <CardBody>
         <div className="d-flex justify-content-between align-items-center mb-1">
           <Media>
-            <Avatar className="mr-1" img={profileImg} imgHeight="42" imgWidth="42" />
+            <Avatar
+              className="mr-1"
+              img={profileImg}
+              imgHeight="42"
+              imgWidth="42"
+            />
             <Media body>
               <h6 className="mb-0">Mittie Evans</h6>
               <small className="text-muted">Updated 12m ago</small>
@@ -22,8 +27,8 @@ const CardJob = () => {
           Need a designer to form branding essentials for my business.
         </h5>
         <CardText className="mb-2">
-          Design high-quality designs, graphics, mock-ups and layouts for both new and existing web
-          sites/ web applications / mobile applications.
+          Design high-quality designs, graphics, mock-ups and layouts for both
+          new and existing web sites/ web applications / mobile applications.
         </CardText>
         <div className="apply-job-package bg-light-primary rounded">
           <div>

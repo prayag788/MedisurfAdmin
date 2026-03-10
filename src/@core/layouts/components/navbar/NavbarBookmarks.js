@@ -16,9 +16,13 @@ import {
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
-import { getBookmarks, updateBookmarked, handleSearchQuery } from '@store/actions/navbar'
+import {
+  getBookmarks,
+  updateBookmarked,
+  handleSearchQuery,
+} from '@store/actions/navbar'
 
-const NavbarBookmarks = props => {
+const NavbarBookmarks = (props) => {
   // ** Props
   const { setMenuVisibility } = props
 
@@ -28,7 +32,7 @@ const NavbarBookmarks = props => {
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const store = useSelector(state => state.navbar)
+  const store = useSelector((state) => state.navbar)
 
   // ** ComponentDidMount
   useEffect(() => {
@@ -39,13 +43,16 @@ const NavbarBookmarks = props => {
   const renderBookmarks = () => {
     if (store.bookmarks.length) {
       return store.bookmarks
-        .map(item => {
+        .map((item) => {
           const IconTag = Icon[item.icon]
           return (
             <NavItem key={item.target} className="d-none d-lg-block">
               <NavLink tag={Link} to={item.link} id={item.target}>
                 <IconTag className="ficon" />
-                <UncontrolledTooltip className="tooltip-react-strap" target={item.target}>
+                <UncontrolledTooltip
+                  className="tooltip-react-strap"
+                  target={item.target}
+                >
                   {item.title}
                 </UncontrolledTooltip>
               </NavLink>
@@ -70,7 +77,7 @@ const NavbarBookmarks = props => {
               </DropdownToggle>
               <DropdownMenu right>
                 {store.bookmarks
-                  .map(item => {
+                  .map((item) => {
                     const IconTag = Icon[item.icon]
                     return (
                       <DropdownItem tag={Link} to={item.link} key={item.id}>
@@ -94,7 +101,7 @@ const NavbarBookmarks = props => {
   const handleClearQueryInStore = () => dispatch(handleSearchQuery(''))
 
   // ** Loops through Bookmarks Array to return Bookmarks
-  const onKeyDown = e => {
+  const onKeyDown = (e) => {
     if (e.keyCode === 27 || e.keyCode === 13) {
       setTimeout(() => {
         setOpenSearch(false)
@@ -104,7 +111,7 @@ const NavbarBookmarks = props => {
   }
 
   // ** Function to toggle Bookmarks
-  const handleBookmarkUpdate = id => dispatch(updateBookmarked(id))
+  const handleBookmarkUpdate = (id) => dispatch(updateBookmarked(id))
 
   // ** Function to handle Bookmarks visibility
   const handleBookmarkVisibility = () => {
@@ -114,7 +121,7 @@ const NavbarBookmarks = props => {
   }
 
   // ** Function to handle Input change
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setValue(e.target.value)
     dispatch(handleSearchQuery(e.target.value))
   }
@@ -128,7 +135,7 @@ const NavbarBookmarks = props => {
   }
 
   // ** Function to clear input value
-  const handleClearInput = setUserInput => {
+  const handleClearInput = (setUserInput) => {
     if (!openSearch) {
       setUserInput('')
       handleClearQueryInStore()

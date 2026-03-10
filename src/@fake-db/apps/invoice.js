@@ -908,13 +908,13 @@ const data = {
 
 // GET: Return Invoice List
 
-mock.onGet('/apps/invoice/invoices').reply(config => {
+mock.onGet('/apps/invoice/invoices').reply((config) => {
   const { q = '', perPage = 10, page = 1, status = null } = config
 
   const queryLowered = q.toLowerCase()
   const filteredData = data.invoices
     .filter(
-      invoice =>
+      (invoice) =>
         (invoice.client.companyEmail.toLowerCase().includes(queryLowered) ||
           invoice.client.name.toLowerCase().includes(queryLowered)) &&
         invoice.invoiceStatus.toLowerCase() ===
@@ -935,10 +935,12 @@ mock.onGet('/apps/invoice/invoices').reply(config => {
 
 // GET: Return Single Invoice
 
-mock.onGet(/\/api\/invoice\/invoices\/\d+/).reply(config => {
-  const invoiceId = Number(config.url.substring(config.url.lastIndexOf('/') + 1))
+mock.onGet(/\/api\/invoice\/invoices\/\d+/).reply((config) => {
+  const invoiceId = Number(
+    config.url.substring(config.url.lastIndexOf('/') + 1)
+  )
 
-  const invoiceIndex = data.invoices.findIndex(e => e.id === invoiceId)
+  const invoiceIndex = data.invoices.findIndex((e) => e.id === invoiceId)
   const responseData = {
     invoice: data.invoices[invoiceIndex],
     paymentDetails: {
@@ -954,14 +956,14 @@ mock.onGet(/\/api\/invoice\/invoices\/\d+/).reply(config => {
 
 // DELETE: Deletes Invoice
 
-mock.onDelete('/apps/invoice/delete').reply(config => {
+mock.onDelete('/apps/invoice/delete').reply((config) => {
   // Get invoice id from URL
   let invoiceId = config.id
 
   // Convert Id to number
   invoiceId = Number(invoiceId)
 
-  const invoiceIndex = data.invoices.findIndex(t => t.id === invoiceId)
+  const invoiceIndex = data.invoices.findIndex((t) => t.id === invoiceId)
   data.invoices.splice(invoiceIndex, 1)
 
   return [200]
@@ -970,6 +972,6 @@ mock.onDelete('/apps/invoice/delete').reply(config => {
 // GET: Return Clients
 
 mock.onGet('/api/invoice/clients').reply(() => {
-  const clients = data.invoices.map(invoice => invoice.client)
+  const clients = data.invoices.map((invoice) => invoice.client)
   return [200, clients.slice(0, 5)]
 })

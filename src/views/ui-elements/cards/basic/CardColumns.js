@@ -1,4 +1,11 @@
-import { CardColumns, Card, CardImg, CardBody, CardTitle, CardText } from 'reactstrap'
+import {
+  CardColumns,
+  Card,
+  CardImg,
+  CardBody,
+  CardTitle,
+  CardText,
+} from 'reactstrap'
 import img1 from '@src/assets/images/slider/06.jpg'
 import img2 from '@src/assets/images/slider/01.jpg'
 import img3 from '@src/assets/images/slider/02.jpg'
@@ -10,15 +17,16 @@ const CardColumnsComponent = () => {
         <CardBody>
           <CardTitle tag="h4">Card title that wraps to a new line</CardTitle>
           <CardText>
-            This is a longer card with supporting text below as a natural lead-in to additional
-            content. This content is a little bit longer.
+            This is a longer card with supporting text below as a natural
+            lead-in to additional content. This content is a little bit longer.
           </CardText>
         </CardBody>
       </Card>
       <Card className="position-static">
         <blockquote className="blockquote card-body mb-0">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+            posuere erat a ante.
           </p>
           <footer className="blockquote-footer">
             <small className="text-muted">
@@ -33,7 +41,8 @@ const CardColumnsComponent = () => {
         <CardBody>
           <CardTitle tag="h4">Card title</CardTitle>
           <CardText>
-            This card has supporting text below as a natural lead-in to additional content.
+            This card has supporting text below as a natural lead-in to
+            additional content.
           </CardText>
           <CardText>
             <small className="text-muted">Last updated 3 mins ago</small>
@@ -43,7 +52,8 @@ const CardColumnsComponent = () => {
       <Card className="text-center" color="primary" inverse>
         <blockquote className="blockquote card-body mb-0">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+            posuere erat a ante.
           </p>
           <footer className="blockquote-footer">
             <small className="text-white">
@@ -57,7 +67,8 @@ const CardColumnsComponent = () => {
         <CardBody>
           <CardTitle tag="h4">Card title</CardTitle>
           <CardText>
-            This card has supporting text below as a natural lead-in to additional content.
+            This card has supporting text below as a natural lead-in to
+            additional content.
           </CardText>
           <CardText>
             <small className="text-muted">Last updated 3 mins ago</small>
@@ -70,7 +81,8 @@ const CardColumnsComponent = () => {
       <Card className="text-right">
         <blockquote className="blockquote card-body mb-0">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+            posuere erat a ante.
           </p>
           <footer className="blockquote-footer">
             <small className="text-muted">
@@ -84,9 +96,9 @@ const CardColumnsComponent = () => {
         <CardBody>
           <CardTitle tag="h4">Card title</CardTitle>
           <CardText>
-            This is a wider card with supporting text below as a natural lead-in to additional
-            content. This card has even longer content than the first to show that equal height
-            action.
+            This is a wider card with supporting text below as a natural lead-in
+            to additional content. This card has even longer content than the
+            first to show that equal height action.
           </CardText>
           <CardText>
             <small className="text-muted">Last updated 3 mins ago</small>

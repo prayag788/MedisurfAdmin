@@ -35,9 +35,11 @@ import { STUDY_STATUS_OPTIONS } from '../../../configs/const'
 
 const FilterModal = ({ open, toggle, style }) => {
   const dispatch = useDispatch()
-  const modalityOptions = useSelector(state => state?.ModalityReducer) || []
-  const dropdownData = useSelector(state => state.dropdownDataReducer)
-  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('userData')))
+  const modalityOptions = useSelector((state) => state?.ModalityReducer) || []
+  const dropdownData = useSelector((state) => state.dropdownDataReducer)
+  const [userData, setUserData] = useState(
+    JSON.parse(localStorage.getItem('userData'))
+  )
   const [searchValue, setSearchValue] = useState(ROLES.ClinicUser)
   const [referringPhysicians, setReferringPhysicians] = useState([])
   const [physicianNamesList, setPhysicianNamesList] = useState([])
@@ -51,11 +53,12 @@ const FilterModal = ({ open, toggle, style }) => {
         .string()
         .max(25, 'Filter name cannot be longer than 25 characters.')
         .required('Filter name is required!'),
-      clinicNames: yup
-        .array()
-        .of(
-          yup.object().shape({ _id: yup.string().required(), clinicName: yup.string().required() })
-        ),
+      clinicNames: yup.array().of(
+        yup.object().shape({
+          _id: yup.string().required(),
+          clinicName: yup.string().required(),
+        })
+      ),
       status: yup.object().required('Status is required!'),
       modality: yup.array().of(
         yup.object().shape({
@@ -112,24 +115,30 @@ const FilterModal = ({ open, toggle, style }) => {
     try {
       // Refetch modalities
       try {
-        const modRes = await axios.get(`${process.env.REACT_APP_API_URL}/orthanc/modalities`, {
-          headers,
-        })
+        const modRes = await axios.get(
+          `${process.env.REACT_APP_API_URL}/orthanc/modalities`,
+          {
+            headers,
+          }
+        )
         const data = modRes?.data
         let raw = []
         if (Array.isArray(data)) raw = data
         else if (data && typeof data === 'object') {
           const names = new Set()
-          Object.keys(data).forEach(key => {
+          Object.keys(data).forEach((key) => {
             const config = data[key]
-            const aet = config && (config.AET ?? config.AeTitle ?? config.aeTitle)
+            const aet =
+              config && (config.AET ?? config.AeTitle ?? config.aeTitle)
             if (aet && typeof aet === 'string') names.add(String(aet).trim())
             else names.add(String(key).trim())
           })
           raw = Array.from(names).sort()
         }
         if (raw.length > 0) {
-          const options = raw.filter(Boolean).map(name => ({ value: name, label: name }))
+          const options = raw
+            .filter(Boolean)
+            .map((name) => ({ value: name, label: name }))
           dispatch(handleModalityUpdate(options))
         }
       } catch (e) {
@@ -144,9 +153,13 @@ const FilterModal = ({ open, toggle, style }) => {
           { headers }
         )
         const dData = fallbackRes.data?.dropdownData || []
-        allPhysiciansList = dData.map(p => ({
+        allPhysiciansList = dData.map((p) => ({
           value: p._id,
-          label: p.physicianname || p.name || `${p.fname || ''} ${p.lname || ''}`.trim() || p.username,
+          label:
+            p.physicianname ||
+            p.name ||
+            `${p.fname || ''} ${p.lname || ''}`.trim() ||
+            p.username,
           _id: p._id,
           name: p.physicianname || p.name,
         }))
@@ -160,9 +173,10 @@ const FilterModal = ({ open, toggle, style }) => {
             { headers }
           )
           allPhysiciansList =
-            physiciansRes.data?.data?.map(physician => ({
+            physiciansRes.data?.data?.map((physician) => ({
               value: physician._id,
-              label: physician.name || physician.physicianname || physician.username,
+              label:
+                physician.name || physician.physicianname || physician.username,
               _id: physician._id,
               name: physician.name || physician.physicianname,
             })) || []
@@ -180,9 +194,10 @@ const FilterModal = ({ open, toggle, style }) => {
           { headers }
         )
         institutionalPhysicianList =
-          institutionalRes.data?.data?.map(physician => ({
+          institutionalRes.data?.data?.map((physician) => ({
             value: physician._id,
-            label: physician.username || physician.physicianname || physician.name,
+            label:
+              physician.username || physician.physicianname || physician.name,
             _id: physician._id,
             name: physician.name || physician.physicianname,
           })) || []
@@ -190,7 +205,6 @@ const FilterModal = ({ open, toggle, style }) => {
         institutionalPhysicianList = []
       }
       setPhysicianNamesList(institutionalPhysicianList)
-
     } catch (error) {
       console.error('Error loading filter data:', error)
     }
@@ -225,33 +239,36 @@ const FilterModal = ({ open, toggle, style }) => {
   const openNestedModal = useCallback(() => {
     setNestedModal(true)
   }, [])
-  const addNewFilter = async requestData => {
+  const addNewFilter = async (requestData) => {
     showLoadingAlert()
-    if (requestData?.modality && requestData?.modality?.find(data => data?.value === 'selectAll')) {
+    if (
+      requestData?.modality &&
+      requestData?.modality?.find((data) => data?.value === 'selectAll')
+    ) {
       requestData.modality = modalityOptions
     }
     axios
       .post(`${process.env.REACT_APP_API_URL}/filter-module/add`, requestData)
-      .then(async doc => {
+      .then(async (doc) => {
         await hideLoadingAlert()
         showSuccessAlert('Filter Added Successfully!')
         reset()
         toggle()
       })
-      .catch(err => {
+      .catch((err) => {
         hideLoadingThenShowError(err)
       })
   }
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     addNewFilter(data)
   }
 
-  const addNewUserTodropdown = a => {
+  const addNewUserTodropdown = (a) => {
     setValue('Users', getValues()?.Users ? [...getValues()?.Users, a] : [a])
   }
 
-  const onChange = filterfor => {
+  const onChange = (filterfor) => {
     setValue('filterfor', filterfor)
     setSearchValue(filterfor)
     setIsMultiPhysicians(filterfor === ROLES.ClinicAdmin)
@@ -301,7 +318,7 @@ const FilterModal = ({ open, toggle, style }) => {
                       placeholder="Filter"
                       {...register('name', { required: true })}
                       invalid={errors?.name && true}
-                      onChange={e => {
+                      onChange={(e) => {
                         setValue('name', e.target.value)
                         if (e.target.value && errors?.name) {
                           clearErrors('name')
@@ -316,7 +333,11 @@ const FilterModal = ({ open, toggle, style }) => {
                     {errors?.name && (
                       <label
                         className="error"
-                        style={{ color: 'red', fontSize: '12px', fontWeight: '200' }}
+                        style={{
+                          color: 'red',
+                          fontSize: '12px',
+                          fontWeight: '200',
+                        }}
                       >{`${errors.name?.message ?? ''}`}</label>
                     )}
                   </FormGroup>
@@ -333,7 +354,7 @@ const FilterModal = ({ open, toggle, style }) => {
                           id="filterfor"
                           type="select"
                           {...register('filterfor', { required: true })}
-                          onChange={e => {
+                          onChange={(e) => {
                             const val = e.target.value
                             setValue('filterfor', val)
                             onChange(val)
@@ -351,7 +372,9 @@ const FilterModal = ({ open, toggle, style }) => {
                           <option value={ROLES.ClinicUser}>Clinic User</option>
                           <option value={ROLES.Physician}>Physician</option>
                         </Input>
-                        {errors?.status && <FormFeedback>{errors.status.message}</FormFeedback>}
+                        {errors?.status && (
+                          <FormFeedback>{errors.status.message}</FormFeedback>
+                        )}
                       </FormGroup>
                     )}
                     {userData?.role !== ROLES.ClinicAdmin && (
@@ -402,32 +425,34 @@ const FilterModal = ({ open, toggle, style }) => {
                 </Row>
               </Col>
 
-              {userData?.role === ROLES.ClinicAdmin && watch('filterfor') === ROLES.ClinicUser && (
-                <Col md={4}>
-                  {' '}
-                  <Row>
-                    <FormGroup className="mx-1 w-100">
-                      <DynamicDropdown
-                        className=""
-                        required={true}
-                        fieldName="Users"
-                        labelName="Clinic Users"
-                        setValue={setValue}
-                        register={register}
-                        errors={errors}
-                        roleName="CU"
-                        isMulti={true}
-                        openNestedModal={openNestedModal}
-                        value={watch('Users')}
-                      />
-                    </FormGroup>
-                  </Row>{' '}
-                </Col>
-              )}
+              {userData?.role === ROLES.ClinicAdmin &&
+                watch('filterfor') === ROLES.ClinicUser && (
+                  <Col md={4}>
+                    {' '}
+                    <Row>
+                      <FormGroup className="mx-1 w-100">
+                        <DynamicDropdown
+                          className=""
+                          required={true}
+                          fieldName="Users"
+                          labelName="Clinic Users"
+                          setValue={setValue}
+                          register={register}
+                          errors={errors}
+                          roleName="CU"
+                          isMulti={true}
+                          openNestedModal={openNestedModal}
+                          value={watch('Users')}
+                        />
+                      </FormGroup>
+                    </Row>{' '}
+                  </Col>
+                )}
               <Col md={4}>
                 <Row>
                   <FormGroup className="mx-1 w-100">
-                    {dropdownData?.clinicNames && dropdownData?.clinicNames.length > 0 ? (
+                    {dropdownData?.clinicNames &&
+                    dropdownData?.clinicNames.length > 0 ? (
                       <StaticDropdown
                         errors={errors}
                         className=""
@@ -437,7 +462,7 @@ const FilterModal = ({ open, toggle, style }) => {
                         fieldName="clinicNames"
                         labelName="Clinic Names"
                         options={[
-                          ...dropdownData?.clinicNames.map(data => {
+                          ...dropdownData?.clinicNames.map((data) => {
                             const clinicName =
                               data.clinicName ||
                               data.clinic_name ||
@@ -482,7 +507,10 @@ const FilterModal = ({ open, toggle, style }) => {
                       required={false}
                       fieldName="modality"
                       labelName="Modality"
-                      options={[{ value: 'selectAll', label: 'SELECT ALL' }, ...modalityOptions]}
+                      options={[
+                        { value: 'selectAll', label: 'SELECT ALL' },
+                        ...modalityOptions,
+                      ]}
                       isMulti={true}
                       value={watch('modality')}
                     />

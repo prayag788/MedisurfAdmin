@@ -3,7 +3,16 @@ import { useEffect, useState } from 'react'
 
 // ** Third Party Components
 import { X } from 'react-feather'
-import { Button, Row, Col, Modal, ModalHeader, ModalBody, FormGroup, Label } from 'reactstrap'
+import {
+  Button,
+  Row,
+  Col,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  FormGroup,
+  Label,
+} from 'reactstrap'
 import Flatpickr from 'react-flatpickr'
 
 // ** Styles
@@ -45,7 +54,7 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   }
 
   // ** Form submission handler using utility
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     console.log('Form submitted with data:', data)
 
     // Use admin registration endpoint for creating new physicians
@@ -66,7 +75,9 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
   }
 
   // ** Custom close btn
-  const CloseBtn = <X className="cursor-pointer" size={15} onClick={handleModal} />
+  const CloseBtn = (
+    <X className="cursor-pointer" size={15} onClick={handleModal} />
+  )
 
   return (
     <Modal
@@ -76,7 +87,12 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
       modalClassName="modal-slide-in"
       contentClassName="pt-0"
     >
-      <ModalHeader className="mb-2" toggle={handleModal} close={CloseBtn} tag="div">
+      <ModalHeader
+        className="mb-2"
+        toggle={handleModal}
+        close={CloseBtn}
+        tag="div"
+      >
         <h5 className="modal-title">Add New Physician</h5>
       </ModalHeader>
       <ModalBody className="flex-grow-1">
@@ -85,7 +101,14 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
           defaultValues={defaultValues}
           onSubmit={onSubmit}
         >
-          {({ control, errors, handleSubmit, setValue, getValues, isSubmitting }) => (
+          {({
+            control,
+            errors,
+            handleSubmit,
+            setValue,
+            getValues,
+            isSubmitting,
+          }) => (
             <>
               <FormErrorSummary errors={errors} />
 
@@ -196,7 +219,7 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
                         allowInput: false,
                         closeOnSelect: true, // Close after selecting date for single date picker
                       }}
-                      onChange={date => {
+                      onChange={(date) => {
                         if (date && date.length > 0) {
                           setPicker(date[0])
                         }
@@ -222,7 +245,12 @@ const AddNewModal = ({ addUser, open, handleModal }) => {
               </Row>
 
               <div className="d-flex justify-content-end mt-2">
-                <Button type="submit" className="me-1" color="primary" disabled={isSubmitting}>
+                <Button
+                  type="submit"
+                  className="me-1"
+                  color="primary"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? 'Submitting...' : 'Submit'}
                 </Button>
                 <Button

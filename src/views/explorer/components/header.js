@@ -12,12 +12,23 @@ const Header = ({ children }) => {
         <Row>
           <Col md={4} sm={12} className="d-flex justify-content-start">
             <Row className="ml-1">
-              <Link className="brand-logo d-flex align-items-center" to="/explorer">
-                <img id="medisurf-logo" src={themeConfig.app.appLogoImage} alt="logo" />
+              <Link
+                className="brand-logo d-flex align-items-center"
+                to="/explorer"
+              >
+                <img
+                  id="medisurf-logo"
+                  src={themeConfig.app.appLogoImage}
+                  alt="logo"
+                />
               </Link>
             </Row>
           </Col>
-          <Col md={4} sm={12} className="d-flex align-items-center justify-content-center">
+          <Col
+            md={4}
+            sm={12}
+            className="d-flex align-items-center justify-content-center"
+          >
             {children}
           </Col>
           <Col md={4} sm={12} className="d-flex justify-content-end">

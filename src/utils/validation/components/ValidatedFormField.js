@@ -56,14 +56,26 @@ const ValidatedFormField = ({
     ...validation,
     ...(required && { required: `${label || name} is required` }),
     ...(maxLength && {
-      maxLength: { value: maxLength, message: `Maximum ${maxLength} characters allowed` },
+      maxLength: {
+        value: maxLength,
+        message: `Maximum ${maxLength} characters allowed`,
+      },
     }),
     ...(minLength && {
-      minLength: { value: minLength, message: `Minimum ${minLength} characters required` },
+      minLength: {
+        value: minLength,
+        message: `Minimum ${minLength} characters required`,
+      },
     }),
-    ...(pattern && { pattern: { value: new RegExp(pattern), message: 'Invalid format' } }),
-    ...(min !== undefined && { min: { value: min, message: `Minimum value is ${min}` } }),
-    ...(max !== undefined && { max: { value: max, message: `Maximum value is ${max}` } }),
+    ...(pattern && {
+      pattern: { value: new RegExp(pattern), message: 'Invalid format' },
+    }),
+    ...(min !== undefined && {
+      min: { value: min, message: `Minimum value is ${min}` },
+    }),
+    ...(max !== undefined && {
+      max: { value: max, message: `Maximum value is ${max}` },
+    }),
   }
 
   // ** Get input attributes based on type
@@ -89,7 +101,7 @@ const ValidatedFormField = ({
   }
 
   // ** Render input based on type
-  const renderInput = field => {
+  const renderInput = (field) => {
     const inputAttrs = getInputAttributes()
 
     switch (type) {
@@ -97,7 +109,7 @@ const ValidatedFormField = ({
         return (
           <Input {...field} type="select" {...inputAttrs}>
             <option value="">Select {label}</option>
-            {options.map(option => (
+            {options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -106,15 +118,29 @@ const ValidatedFormField = ({
         )
 
       case 'textarea':
-        return <Input {...field} type="textarea" placeholder={placeholder} {...inputAttrs} />
+        return (
+          <Input
+            {...field}
+            type="textarea"
+            placeholder={placeholder}
+            {...inputAttrs}
+          />
+        )
 
       case 'checkbox':
-        return <Input {...field} type="checkbox" checked={field.value || false} {...inputAttrs} />
+        return (
+          <Input
+            {...field}
+            type="checkbox"
+            checked={field.value || false}
+            {...inputAttrs}
+          />
+        )
 
       case 'radio':
         return (
           <div>
-            {options.map(option => (
+            {options.map((option) => (
               <div key={option.value} className="form-check form-check-inline">
                 <Input
                   {...field}
@@ -124,7 +150,10 @@ const ValidatedFormField = ({
                   className="form-check-input"
                   {...inputAttrs}
                 />
-                <Label className="form-check-label" for={`${name}-${option.value}`}>
+                <Label
+                  className="form-check-label"
+                  for={`${name}-${option.value}`}
+                >
                   {option.label}
                 </Label>
               </div>
@@ -133,7 +162,14 @@ const ValidatedFormField = ({
         )
 
       default:
-        return <Input {...field} type={type} placeholder={placeholder} {...inputAttrs} />
+        return (
+          <Input
+            {...field}
+            type={type}
+            placeholder={placeholder}
+            {...inputAttrs}
+          />
+        )
     }
   }
 
@@ -157,9 +193,13 @@ const ValidatedFormField = ({
         render={({ field }) => renderInput(field)}
       />
 
-      {hasError && <FormFeedback className="d-block">{errorMessage}</FormFeedback>}
+      {hasError && (
+        <FormFeedback className="d-block">{errorMessage}</FormFeedback>
+      )}
 
-      {helpText && !hasError && <small className="form-text text-muted">{helpText}</small>}
+      {helpText && !hasError && (
+        <small className="form-text text-muted">{helpText}</small>
+      )}
     </FormGroup>
   )
 }

@@ -31,7 +31,9 @@ const DiagnosisRoute = [
   {
     path: '/diagnosis-modality/add',
     exact: true,
-    component: lazy(() => import('../../views/Diagnosis/diagnosis-modality/addNew')),
+    component: lazy(
+      () => import('../../views/Diagnosis/diagnosis-modality/addNew')
+    ),
     meta: {
       action: 'manage',
       resource: 'diagnosis',
@@ -40,7 +42,9 @@ const DiagnosisRoute = [
   {
     path: '/diagnosis-modality/:id/edit',
     exact: true,
-    component: lazy(() => import('../../views/Diagnosis/diagnosis-modality/edit')),
+    component: lazy(
+      () => import('../../views/Diagnosis/diagnosis-modality/edit')
+    ),
     meta: {
       action: 'manage',
       resource: 'diagnosis',

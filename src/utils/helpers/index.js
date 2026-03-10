@@ -14,12 +14,12 @@ export const dateUtils = {
   },
 
   // Get relative time
-  getRelativeTime: date => {
+  getRelativeTime: (date) => {
     return moment(date).fromNow()
   },
 
   // Check if date is valid
-  isValidDate: date => {
+  isValidDate: (date) => {
     return moment(date).isValid()
   },
 
@@ -45,13 +45,16 @@ export const dateUtils = {
 // ** String Utilities
 export const stringUtils = {
   // Capitalize first letter
-  capitalize: str => {
+  capitalize: (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1)
   },
 
   // Capitalize all words
-  capitalizeWords: str => {
-    return str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
+  capitalizeWords: (str) => {
+    return str.replace(
+      /\w\S*/g,
+      (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    )
   },
 
   // Truncate string
@@ -61,12 +64,12 @@ export const stringUtils = {
   },
 
   // Remove special characters
-  removeSpecialChars: str => {
+  removeSpecialChars: (str) => {
     return str.replace(/[^a-zA-Z0-9\s]/g, '')
   },
 
   // Generate slug
-  generateSlug: str => {
+  generateSlug: (str) => {
     return str
       .toLowerCase()
       .replace(/[^\w\s-]/g, '')
@@ -75,14 +78,15 @@ export const stringUtils = {
   },
 
   // Check if string is email
-  isEmail: str => {
+  isEmail: (str) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(str)
   },
 
   // Check if string is phone
-  isPhone: str => {
-    const phoneRegex = /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
+  isPhone: (str) => {
+    const phoneRegex =
+      /^[\+]?[(]?[0-9]{0,3}[)]?[-\s\.]?[0-9]{0,3}[-\s\.]?[0-9]{0,6}$/im
     return phoneRegex.test(str)
   },
 }
@@ -90,7 +94,7 @@ export const stringUtils = {
 // ** Array Utilities
 export const arrayUtils = {
   // Remove duplicates
-  removeDuplicates: arr => {
+  removeDuplicates: (arr) => {
     return [...new Set(arr)]
   },
 
@@ -122,7 +126,7 @@ export const arrayUtils = {
 
   // Find item by key
   findByKey: (arr, key, value) => {
-    return arr.find(item => item[key] === value)
+    return arr.find((item) => item[key] === value)
   },
 
   // Chunk array
@@ -138,7 +142,7 @@ export const arrayUtils = {
 // ** Object Utilities
 export const objectUtils = {
   // Deep clone object
-  deepClone: obj => {
+  deepClone: (obj) => {
     return JSON.parse(JSON.stringify(obj))
   },
 
@@ -150,7 +154,7 @@ export const objectUtils = {
   // Pick specific keys
   pick: (obj, keys) => {
     const result = {}
-    keys.forEach(key => {
+    keys.forEach((key) => {
       if (obj.hasOwnProperty(key)) {
         result[key] = obj[key]
       }
@@ -161,14 +165,14 @@ export const objectUtils = {
   // Omit specific keys
   omit: (obj, keys) => {
     const result = { ...obj }
-    keys.forEach(key => {
+    keys.forEach((key) => {
       delete result[key]
     })
     return result
   },
 
   // Check if object is empty
-  isEmpty: obj => {
+  isEmpty: (obj) => {
     return Object.keys(obj).length === 0
   },
 
@@ -177,7 +181,11 @@ export const objectUtils = {
     const keys = path.split('.')
     let result = obj
     for (const key of keys) {
-      if (result === null || result === undefined || !result.hasOwnProperty(key)) {
+      if (
+        result === null ||
+        result === undefined ||
+        !result.hasOwnProperty(key)
+      ) {
         return defaultValue
       }
       result = result[key]
@@ -189,7 +197,7 @@ export const objectUtils = {
 // ** Number Utilities
 export const numberUtils = {
   // Format number with commas
-  formatWithCommas: num => {
+  formatWithCommas: (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   },
 
@@ -204,7 +212,7 @@ export const numberUtils = {
   },
 
   // Check if number is valid
-  isValidNumber: num => {
+  isValidNumber: (num) => {
     return !isNaN(num) && isFinite(num)
   },
 
@@ -240,7 +248,7 @@ export const storageUtils = {
   },
 
   // Remove item
-  remove: key => {
+  remove: (key) => {
     try {
       localStorage.removeItem(key)
     } catch (error) {
@@ -271,7 +279,7 @@ export const urlUtils = {
   },
 
   // Set query parameters
-  setQueryParams: params => {
+  setQueryParams: (params) => {
     const url = new URL(window.location)
     Object.entries(params).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== '') {
@@ -284,7 +292,7 @@ export const urlUtils = {
   },
 
   // Build query string
-  buildQueryString: params => {
+  buildQueryString: (params) => {
     const searchParams = new URLSearchParams()
     Object.entries(params).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== '') {
@@ -334,13 +342,14 @@ export const generateUUID = () => {
 // ** Legacy Utility Functions (from old Utils.js)
 
 // ** Checks if an object is empty (returns boolean)
-export const isObjEmpty = obj => Object.keys(obj).length === 0
+export const isObjEmpty = (obj) => Object.keys(obj).length === 0
 
 // ** Returns K format from a number
-export const kFormatter = num => (num > 999 ? `${(num / 1000).toFixed(1)}k` : num)
+export const kFormatter = (num) =>
+  num > 999 ? `${(num / 1000).toFixed(1)}k` : num
 
 // ** Converts HTML to string
-export const htmlToString = html => html.replace(/<\/?[^>]+(>|$)/g, '')
+export const htmlToString = (html) => html.replace(/<\/?[^>]+(>|$)/g, '')
 
 // ** Check if user is logged in
 export const isUserLoggedIn = () => localStorage.getItem('userData')
@@ -349,7 +358,7 @@ export const isUserLoggedIn = () => localStorage.getItem('userData')
 export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
 
 // ** Get home route for logged in user
-export const getHomeRouteForLoggedInUser = user => {
+export const getHomeRouteForLoggedInUser = (user) => {
   const userRole = user?.role
 
   if (userRole === 'SuperAdmin') return '/'
@@ -370,7 +379,7 @@ export const getHomeRouteForLoggedInUser = user => {
 }
 
 // ** Ordinal suffix function
-export const ordinalSuffixOf = i => {
+export const ordinalSuffixOf = (i) => {
   const j = i % 10
   const k = i % 100
   if (j === 1 && k !== 11) {
@@ -396,7 +405,10 @@ export const handleSetTimeOut = (myTimeoutSec, miliseconds) => {
     myTimeout = setTimeout(async () => {
       const lastActivity = localStorage.getItem('lastActivity')
       const currentTime = moment().unix()
-      const diff = lastActivity && !isNaN(lastActivity) ? parseInt(lastActivity) - currentTime : 0
+      const diff =
+        lastActivity && !isNaN(lastActivity)
+          ? parseInt(lastActivity) - currentTime
+          : 0
       if (diff < 0) {
         document.body.removeEventListener('click', handleAutoLogout)
         document.body.removeEventListener('mouseover', handleAutoLogout)
@@ -426,7 +438,7 @@ export const handleSetTimeOut = (myTimeoutSec, miliseconds) => {
   }
 }
 
-export const handleAutoLogout = () => {
+export function handleAutoLogout() {
   const userDetails = JSON.parse(localStorage.getItem('userData'))
   const miliseconds = isNaN(parseInt(userDetails?.logoutMinutes))
     ? 100000
@@ -435,7 +447,10 @@ export const handleAutoLogout = () => {
   if (isUserLoggedIn() !== null) {
     const lastActivity = localStorage.getItem('lastActivity')
     const currentTime = moment().unix()
-    const diff = lastActivity && !isNaN(lastActivity) ? parseInt(lastActivity) - currentTime : 0
+    const diff =
+      lastActivity && !isNaN(lastActivity)
+        ? parseInt(lastActivity) - currentTime
+        : 0
     if (diff < 0) {
       handleSetTimeOut(1000, miliseconds)
     } else {
@@ -447,12 +462,12 @@ export const handleAutoLogout = () => {
 }
 
 // ** Object utilities
-export const isObject = obj => {
+export const isObject = (obj) => {
   return Object.prototype.toString.call(obj) === '[object Object]'
 }
 
 // ** Lock patient data functions
-export const setLockPatientIdsDm = Data => {
+export const setLockPatientIdsDm = (Data) => {
   try {
     let data = {}
     if (isObject(Data)) {
@@ -510,7 +525,7 @@ export const checkForOtherOperationDm = (data, msg) => {
     if (!data || !data.orthancPatientId) {
       return false
     }
-    
+
     const LockPatientIdsDmData = getLockPatientIdsDm()
     if (LockPatientIdsDmData) {
       if (LockPatientIdsDmData && LockPatientIdsDmData[data.orthancPatientId]) {

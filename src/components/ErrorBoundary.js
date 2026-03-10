@@ -43,8 +43,8 @@ class ErrorBoundary extends React.Component {
             </CardHeader>
             <CardBody>
               <p className="text-muted mb-3">
-                We're sorry, but something unexpected happened. Please try refreshing the page or
-                contact support if the problem persists.
+                We're sorry, but something unexpected happened. Please try
+                refreshing the page or contact support if the problem persists.
               </p>
 
               {process.env.NODE_ENV === 'development' && this.state.error && (
@@ -52,7 +52,11 @@ class ErrorBoundary extends React.Component {
                   <h6>Error Details (Development Only):</h6>
                   <pre
                     className="bg-light p-2 rounded"
-                    style={{ fontSize: '12px', maxHeight: '200px', overflow: 'auto' }}
+                    style={{
+                      fontSize: '12px',
+                      maxHeight: '200px',
+                      overflow: 'auto',
+                    }}
                   >
                     {this.state.error && this.state.error.toString()}
                     <br />
@@ -70,7 +74,11 @@ class ErrorBoundary extends React.Component {
                   <RefreshCw size={16} className="me-1" />
                   Try Again
                 </Button>
-                <Button color="secondary" outline onClick={() => window.location.reload()}>
+                <Button
+                  color="secondary"
+                  outline
+                  onClick={() => window.location.reload()}
+                >
                   Refresh Page
                 </Button>
               </div>

@@ -12,7 +12,7 @@ import './number-input.scss'
 const KEYCODE_UP = 38
 const KEYCODE_DOWN = 40
 
-const NumberInput = props => {
+const NumberInput = (props) => {
   // ** Props
   const {
     min = 1,
@@ -97,12 +97,12 @@ const NumberInput = props => {
   }
 
   // ** Handle input change
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     setCount(Number(e.target.value))
   }
 
   // ** Handle Arrow Up & Down
-  const handleKeyDown = e => {
+  const handleKeyDown = (e) => {
     e.preventDefault()
     if (!readonly) {
       if (e.keyCode === KEYCODE_UP) {

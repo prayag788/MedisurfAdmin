@@ -2,8 +2,8 @@ import axios from 'axios'
 
 // ** Get Bookmarks Array from @fakeDB
 export const getBookmarks = () => {
-  return dispatch => {
-    return axios.get('/api/bookmarks/data').then(response => {
+  return (dispatch) => {
+    return axios.get('/api/bookmarks/data').then((response) => {
       dispatch({
         type: 'GET_BOOKMARKS',
         data: response.data.suggestions,
@@ -14,8 +14,8 @@ export const getBookmarks = () => {
 }
 
 // ** Update & Get Updated Bookmarks Array
-export const updateBookmarked = id => {
-  return dispatch => {
+export const updateBookmarked = (id) => {
+  return (dispatch) => {
     return axios.post('/api/bookmarks/update', { id }).then(() => {
       dispatch({ type: 'UPDATE_BOOKMARKED', id })
     })
@@ -23,6 +23,8 @@ export const updateBookmarked = id => {
 }
 
 // ** Handle Bookmarks & Main Search Queries
-export const handleSearchQuery = val => dispatch => dispatch({ type: 'HANDLE_SEARCH_QUERY', val })
+export const handleSearchQuery = (val) => (dispatch) =>
+  dispatch({ type: 'HANDLE_SEARCH_QUERY', val })
 
-export const handleUserAvatar = value => dispatch => dispatch({ type: 'HANDLE_USER_AVATAR', value })
+export const handleUserAvatar = (value) => (dispatch) =>
+  dispatch({ type: 'HANDLE_USER_AVATAR', value })

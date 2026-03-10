@@ -13,7 +13,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { handleLogout } from '@store/actions/auth'
 
 // ** Third Party Components
-import { UncontrolledDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap'
+import {
+  UncontrolledDropdown,
+  DropdownMenu,
+  DropdownToggle,
+  DropdownItem,
+} from 'reactstrap'
 import { Settings, Power } from 'react-feather'
 
 import ROLES from '@configs/roles'
@@ -28,7 +33,11 @@ import ROLES_NAME from '@configs/roles_name'
 function resolveAvatarSrc(avatar) {
   if (!avatar || typeof avatar !== 'string') return null
   const trimmed = avatar.trim()
-  if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
+  if (
+    trimmed.startsWith('http://') ||
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('data:')
+  ) {
     return trimmed
   }
   // App-bundled avatars (webpack) are at same origin, e.g. /static/media/...
@@ -79,7 +88,7 @@ const UserDropdown = () => {
   }, [userDetails])
 
   //** Vars
-  const navbar = useSelector(state => state.navbar)
+  const navbar = useSelector((state) => state.navbar)
   const rawAvatar = (navbar && navbar.avatar) || userDetails?.avatar || null
   const userAvatar = resolveAvatarSrc(rawAvatar) || defaultAvatar
 
@@ -89,13 +98,14 @@ const UserDropdown = () => {
         href="/"
         tag="a"
         className="nav-link dropdown-user-link"
-        onClick={e => e.preventDefault()}
+        onClick={(e) => e.preventDefault()}
       >
         <div className="user-nav d-sm-flex d-none">
           <span className="user-name font-weight-bold">
             {userData && userData.role === ROLES.ClinicAdmin
               ? (userData && userData['hospital']) || 'Medisruf Clinic Admin'
-              : (userData && `${userData.fname || 'Physician'} ${userData.lname || ''}`) ||
+              : (userData &&
+                  `${userData.fname || 'Physician'} ${userData.lname || ''}`) ||
                 'John Doe'}
           </span>
           <span className="user-status">{userRole}</span>
@@ -109,12 +119,18 @@ const UserDropdown = () => {
         </DropdownItem>
         <DropdownItem
           tag={Link}
-          to={localStorage.getItem('sharedUrl') ? localStorage.getItem('sharedUrl') : '/login'}
+          to={
+            localStorage.getItem('sharedUrl')
+              ? localStorage.getItem('sharedUrl')
+              : '/login'
+          }
           onClick={async () => {
-            await axios.get(`${process.env.REACT_APP_API_URL}/user/logout`).then(data => {
-              dispatch(handleLogout())
-              navigate('/login')
-            })
+            await axios
+              .get(`${process.env.REACT_APP_API_URL}/user/logout`)
+              .then((data) => {
+                dispatch(handleLogout())
+                navigate('/login')
+              })
           }}
         >
           <Power size={14} className="mr-75" />

@@ -3,10 +3,18 @@ import { ChevronDown } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import moment from 'moment'
 
-const EmailIdOfSharedStudyModel = ({ toggle, setToggle, emailIdOfSharedStudy }) => {
+const EmailIdOfSharedStudyModel = ({
+  toggle,
+  setToggle,
+  emailIdOfSharedStudy,
+}) => {
   const studyDateSortValidity = (rowA, rowB) => {
-    const a = moment(rowA['validity'].emailValidity).format('YYYY-MM-DD hh:mm A')
-    const b = moment(rowB['validity'].emailValidity).format('YYYY-MM-DD hh:mm A')
+    const a = moment(rowA['validity'].emailValidity).format(
+      'YYYY-MM-DD hh:mm A'
+    )
+    const b = moment(rowB['validity'].emailValidity).format(
+      'YYYY-MM-DD hh:mm A'
+    )
     if (a > b) {
       return 1
     }
@@ -26,25 +34,26 @@ const EmailIdOfSharedStudyModel = ({ toggle, setToggle, emailIdOfSharedStudy }) 
     },
     {
       name: 'type',
-      selector: row => (row['type'] ? row['type'] : '-'),
+      selector: (row) => (row['type'] ? row['type'] : '-'),
       sortable: true,
       minWidth: '80px',
     },
     {
       name: 'name',
-      selector: row => (row['name'] ? row['name'] : '-'),
+      selector: (row) => (row['name'] ? row['name'] : '-'),
       sortable: true,
       minWidth: '150px',
     },
     {
       name: 'email',
-      selector: row => (row['email'] ? row['email'] : '-'),
+      selector: (row) => (row['email'] ? row['email'] : '-'),
       sortable: true,
       minWidth: '200px',
     },
     {
       name: 'validity',
-      selector: row => (row['validity'] ? `${row['validity'].emailValidity}(UTC)` : '-'),
+      selector: (row) =>
+        row['validity'] ? `${row['validity'].emailValidity}(UTC)` : '-',
       sortable: true,
       minWidth: '250px',
       sortType: 'datetime',
@@ -56,12 +65,12 @@ const EmailIdOfSharedStudyModel = ({ toggle, setToggle, emailIdOfSharedStudy }) 
     <>
       <Modal
         isOpen={toggle}
-        toggle={() => setToggle(prev => !prev)}
+        toggle={() => setToggle((prev) => !prev)}
         className="modal-lg modal-dialog-centered"
         key={1}
       >
         <ModalHeader
-          toggle={() => setToggle(prev => !prev)}
+          toggle={() => setToggle((prev) => !prev)}
           cssModule={{ 'modal-title': 'w-100 text-center' }}
         >
           LIST OF EMAILS

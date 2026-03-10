@@ -75,10 +75,10 @@ const fetchDicomData = (level, uuid, children) => {
       method: 'GET',
       url: `${process.env.REACT_APP_API_URL}/explorer/${level}/${uuid}/${children ? children : ''}`,
     })
-      .then(response => {
+      .then((response) => {
         resolve(response.data)
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error.response ? error.response : error)
       })
   })
@@ -114,13 +114,17 @@ const Explorer = () => {
     try {
       if (
         (data[currentLevelObj['regular']] &&
-          data[currentLevelObj['regular']].ID !== sessionStorage.getItem('explore_uuid')) ||
+          data[currentLevelObj['regular']].ID !==
+            sessionStorage.getItem('explore_uuid')) ||
         !data[currentLevelObj['regular']] ||
         Array.isArray(data[currentLevelObj['regular']])
       ) {
-        const response = await fetchDicomData(currentLevelObj['regular'], startLevelUUID)
+        const response = await fetchDicomData(
+          currentLevelObj['regular'],
+          startLevelUUID
+        )
 
-        setData(prev => {
+        setData((prev) => {
           return { ...prev, [currentLevelObj['regular']]: response }
         })
 
@@ -140,11 +144,15 @@ const Explorer = () => {
           currentLevelObj['child']
         )
 
-        setData(prev => {
+        setData((prev) => {
           return { ...prev, [currentLevelObj['child']]: response }
         })
       } else if (currentLevelObj['regular'] === 'instances') {
-        const response = await fetchDicomData(currentLevelObj['regular'], startLevelUUID, 'tags')
+        const response = await fetchDicomData(
+          currentLevelObj['regular'],
+          startLevelUUID,
+          'tags'
+        )
         setInstanceLevelTags(() => response)
       }
     } catch (error) {
@@ -155,7 +163,10 @@ const Explorer = () => {
   useEffect(() => {
     if (currentLevelData.level) {
       setBreadCrumbLevel(() => {
-        return new Array(...DicomOrder).splice(0, DicomOrder.indexOf(currentLevelData.level) + 1)
+        return new Array(...DicomOrder).splice(
+          0,
+          DicomOrder.indexOf(currentLevelData.level) + 1
+        )
       })
     }
   }, [])
@@ -163,17 +174,22 @@ const Explorer = () => {
   useEffect(() => {
     const fetchLevelData = async () => {
       if (!currentLevelData.level || !currentLevelData.uuid) return
-      await fetchLevelViseData(currentLevelData.level, currentLevelData.uuid, true)
+      await fetchLevelViseData(
+        currentLevelData.level,
+        currentLevelData.uuid,
+        true
+      )
 
       setShowTagsView(() => false)
 
-      setData(prev => {
-        const currentLevelChild = OrthancLevels[currentLevelData.level]?.['child']
+      setData((prev) => {
+        const currentLevelChild =
+          OrthancLevels[currentLevelData.level]?.['child']
 
         if (currentLevelChild) {
           Object.keys(prev)
             .slice(Object.keys(prev).indexOf(currentLevelChild) + 1)
-            .forEach(value => {
+            .forEach((value) => {
               prev[value] = null
             })
         }
@@ -203,7 +219,7 @@ const Explorer = () => {
   useEffect(() => {
     const sortInstances = async () => {
       if (data.instances && Array.isArray(data.instances)) {
-        setData(prev => {
+        setData((prev) => {
           prev.instances = prev.instances.sort((a, b) => {
             if (a['IndexInSeries'] && b['IndexInSeries']) {
               return a['IndexInSeries'] - b['IndexInSeries']
@@ -220,17 +236,20 @@ const Explorer = () => {
 
   // Force table re-render when data changes
   useEffect(() => {
-    setTableKey(prev => prev + 1)
+    setTableKey((prev) => prev + 1)
   }, [data, currentLevelData.level])
 
-  const changeLevel = tmpchangeTo => {
+  const changeLevel = (tmpchangeTo) => {
     const changeTo = tmpchangeTo?.data ? tmpchangeTo?.data : tmpchangeTo
     if (changeTo.level && changeTo.uuid) {
       sessionStorage.setItem('explore_level', changeTo.level)
       sessionStorage.setItem('explore_uuid', changeTo.uuid)
       setCurrentLevelData(() => changeTo)
       setBreadCrumbLevel(() => {
-        return new Array(...DicomOrder).splice(0, DicomOrder.indexOf(changeTo.level) + 1)
+        return new Array(...DicomOrder).splice(
+          0,
+          DicomOrder.indexOf(changeTo.level) + 1
+        )
       })
     } else {
       sessionStorage.setItem(
@@ -245,7 +264,10 @@ const Explorer = () => {
         }
       })
       setBreadCrumbLevel(() => {
-        return new Array(...DicomOrder).splice(0, DicomOrder.indexOf(currentLevelData.level) + 2)
+        return new Array(...DicomOrder).splice(
+          0,
+          DicomOrder.indexOf(currentLevelData.level) + 2
+        )
       })
     }
   }
@@ -312,7 +334,7 @@ const Explorer = () => {
     }
 
     const options = {}
-    modalityList.forEach(mod => {
+    modalityList.forEach((mod) => {
       options[mod] = mod
     })
     MySwal.fire({
@@ -324,7 +346,7 @@ const Explorer = () => {
       },
       confirmButtonText: 'Send',
       showLoaderOnConfirm: true,
-      preConfirm: modality => {
+      preConfirm: (modality) => {
         if (!modality) {
           return MySwal.showValidationMessage('Please select a modality')
         }
@@ -333,15 +355,15 @@ const Explorer = () => {
             `${process.env.REACT_APP_API_URL}/explorer/modalities/${modality}/store`,
             currentLevelData.uuid
           )
-          .then(response => {
+          .then((response) => {
             return response.data
           })
-          .catch(error => {
+          .catch((error) => {
             MySwal.showValidationMessage('Unable to Create the Job!')
           })
       },
       allowOutsideClick: () => !MySwal.isLoading(),
-    }).then(result => {
+    }).then((result) => {
       if (result.isConfirmed) {
         showSuccessAlert('Job created Successfully!')
       }
@@ -366,7 +388,7 @@ const Explorer = () => {
     }
 
     const options = {}
-    serverList.forEach(mod => {
+    serverList.forEach((mod) => {
       options[mod] = mod
     })
     MySwal.fire({
@@ -378,25 +400,28 @@ const Explorer = () => {
       },
       confirmButtonText: 'Send',
       showLoaderOnConfirm: true,
-      preConfirm: server => {
+      preConfirm: (server) => {
         if (!server) {
           return MySwal.showValidationMessage('Please select a server')
         }
         return axios
-          .post(`${process.env.REACT_APP_API_URL}/dicom-web/servers/${server}/stow`, {
-            Resources: [currentLevelData.uuid],
-            Synchronous: false,
-            Priority: 10,
-          })
-          .then(response => {
+          .post(
+            `${process.env.REACT_APP_API_URL}/dicom-web/servers/${server}/stow`,
+            {
+              Resources: [currentLevelData.uuid],
+              Synchronous: false,
+              Priority: 10,
+            }
+          )
+          .then((response) => {
             return response.data
           })
-          .catch(error => {
+          .catch((error) => {
             MySwal.showValidationMessage(error.response.data.message)
           })
       },
       allowOutsideClick: () => !MySwal.isLoading(),
-    }).then(result => {
+    }).then((result) => {
       if (result.isConfirmed) {
         showSuccessAlert('Job created Successfully!')
       }
@@ -515,7 +540,7 @@ const Explorer = () => {
         data: { code: isProtected ? 0 : 1 },
       })
 
-      setIsProtected(prev => !prev)
+      setIsProtected((prev) => !prev)
     } catch (error) {
       console.log(error)
     }
@@ -525,11 +550,16 @@ const Explorer = () => {
     try {
       MySwal.showLoading()
       const studyData = (
-        await axios({ url: `${process.env.REACT_APP_API_URL}/explorer/studies/studyId/${id}` })
+        await axios({
+          url: `${process.env.REACT_APP_API_URL}/explorer/studies/studyId/${id}`,
+        })
       ).data
       hideLoadingAlert()
       const viewer_url = `${process.env.REACT_APP_VIEWER_URL}/viewer?StudyInstanceUIDs=${instanceId}&accessToken=${localStorage.getItem('accessToken')?.replace(/"/g, '')}&dateFormat=${userData?.dateFormats?.dateFormat || 'MM/DD/YYYY'}&id=${studyData?.status ? studyData?.Id : ''}&mode=${studyData.studyStatus === STUDYSTATUS.Unread ? 'create' : 'preview'}`
-      window.open(viewer_url, JSON.parse(localStorage.getItem('userData'))?.viewerPreference)
+      window.open(
+        viewer_url,
+        JSON.parse(localStorage.getItem('userData'))?.viewerPreference
+      )
     } catch (error) {
       console.log(error)
     }
@@ -537,8 +567,11 @@ const Explorer = () => {
 
   const tagDataMapper = (data, showTagDescription) => {
     if (isObject(data)) {
-      return Object.keys(data).map(value => {
-        if (data[value]['Type'] === 'String' || data[value]['Type'] === 'Null') {
+      return Object.keys(data).map((value) => {
+        if (
+          data[value]['Type'] === 'String' ||
+          data[value]['Type'] === 'Null'
+        ) {
           return (
             <p className="mb-0 ml-1">
               {value}
@@ -552,7 +585,10 @@ const Explorer = () => {
               data={[
                 {
                   title: `${value} ${showTagDescription ? `(${data[value]['Name']})` : ''}:`,
-                  content: tagDataMapper(data[value]['Value'], showTagDescription),
+                  content: tagDataMapper(
+                    data[value]['Value'],
+                    showTagDescription
+                  ),
                 },
               ]}
             />
@@ -569,19 +605,29 @@ const Explorer = () => {
                 content:
                   value['Type'] !== 'String'
                     ? tagDataMapper(value, showTagDescription)
-                    : Object.keys(value).map(val => {
+                    : Object.keys(value).map((val) => {
                         if (value[val]['Type'] === 'String') {
                           return (
                             <p className="mb-0 ml-1">
-                              {val} {showTagDescription ? `(${value[val]['Name']})` : ''} :{' '}
-                              <strong>{value[val]['Value']}</strong>
+                              {val}{' '}
+                              {showTagDescription
+                                ? `(${value[val]['Name']})`
+                                : ''}{' '}
+                              : <strong>{value[val]['Value']}</strong>
                             </p>
                           )
                         } else {
                           return (
                             <p className="mb-0 ml-1">
-                              {val} {showTagDescription ? `(${value[val]['Name']})` : ''} :{' '}
-                              {tagDataMapper(value[val]['Value'], showTagDescription)}
+                              {val}{' '}
+                              {showTagDescription
+                                ? `(${value[val]['Name']})`
+                                : ''}{' '}
+                              :{' '}
+                              {tagDataMapper(
+                                value[val]['Value'],
+                                showTagDescription
+                              )}
                             </p>
                           )
                         }
@@ -642,7 +688,7 @@ const Explorer = () => {
     }
 
     const options = {}
-    Object.keys(orthancPeers).forEach(mod => {
+    Object.keys(orthancPeers).forEach((mod) => {
       options[mod] = mod
     })
 
@@ -655,7 +701,7 @@ const Explorer = () => {
       },
       confirmButtonText: 'Send',
       showLoaderOnConfirm: true,
-      preConfirm: peer => {
+      preConfirm: (peer) => {
         if (!peer) {
           return MySwal.showValidationMessage('Please select a peer')
         }
@@ -665,7 +711,9 @@ const Explorer = () => {
           data: {
             Resources: [
               {
-                Level: OrthancLevels[currentLevelData.level]?.capital || currentLevelData.level,
+                Level:
+                  OrthancLevels[currentLevelData.level]?.capital ||
+                  currentLevelData.level,
                 ID: currentLevelData.uuid,
               },
             ],
@@ -673,15 +721,15 @@ const Explorer = () => {
             Peer: peer,
           },
         })
-          .then(response => {
+          .then((response) => {
             return response.data
           })
-          .catch(error => {
+          .catch((error) => {
             MySwal.showValidationMessage(error.response.data.message)
           })
       },
       allowOutsideClick: () => !MySwal.isLoading(),
-    }).then(result => {
+    }).then((result) => {
       if (result.isConfirmed) {
         showSuccessAlert('Job created Successfully!')
       }
@@ -719,7 +767,9 @@ const Explorer = () => {
               return (
                 <Card key={idx}>
                   <CardHeader className="pb-0 pt-1">
-                    <CardTitle>{OrthancLevels[value]?.['capital'] || value}</CardTitle>
+                    <CardTitle>
+                      {OrthancLevels[value]?.['capital'] || value}
+                    </CardTitle>
                   </CardHeader>
                   <DetailsCard
                     className={{
@@ -731,7 +781,9 @@ const Explorer = () => {
                     showArrow={false}
                     title={fieldSet[value]['title']}
                     showKeys={fieldSet[value]['body']}
-                    callback={value === currentLevelData.level ? null : changeLevel}
+                    callback={
+                      value === currentLevelData.level ? null : changeLevel
+                    }
                   />
                 </Card>
               )
@@ -739,7 +791,11 @@ const Explorer = () => {
           })}
           <Card>
             <CardBody>
-              <Button.Ripple block onClick={sendToDICOMwebServerHandler} color="primary">
+              <Button.Ripple
+                block
+                onClick={sendToDICOMwebServerHandler}
+                color="primary"
+              >
                 Send to DICOMweb server
               </Button.Ripple>
             </CardBody>
@@ -758,18 +814,28 @@ const Explorer = () => {
             <ListGroup flush>
               {currentLevelData.level !== 'instances' && (
                 <ListGroupItem>
-                  <Button.Ripple block onClick={anonymizeHandler} color="primary">
+                  <Button.Ripple
+                    block
+                    onClick={anonymizeHandler}
+                    color="primary"
+                  >
                     Anonymize
                   </Button.Ripple>
                 </ListGroupItem>
               )}
               <ListGroupItem>
                 <Button.Ripple block onClick={deleteHandler} color="primary">
-                  Delete this {OrthancLevels[currentLevelData.level]?.['nonPlural'] || 'item'}
+                  Delete this{' '}
+                  {OrthancLevels[currentLevelData.level]?.['nonPlural'] ||
+                    'item'}
                 </Button.Ripple>
               </ListGroupItem>
               <ListGroupItem>
-                <Button.Ripple block onClick={sendToRemoteModalityHandler} color="primary">
+                <Button.Ripple
+                  block
+                  onClick={sendToRemoteModalityHandler}
+                  color="primary"
+                >
                   Send to remote modality
                 </Button.Ripple>
               </ListGroupItem>
@@ -794,12 +860,20 @@ const Explorer = () => {
               {currentLevelData.level !== OrthancLevels.instances.regular && (
                 <>
                   <ListGroupItem>
-                    <Button.Ripple block onClick={downloadZIPHanlder} color="primary">
+                    <Button.Ripple
+                      block
+                      onClick={downloadZIPHanlder}
+                      color="primary"
+                    >
                       Download ZIP
                     </Button.Ripple>
                   </ListGroupItem>
                   <ListGroupItem>
-                    <Button.Ripple block onClick={downloadDICOMDIRHanlder} color="primary">
+                    <Button.Ripple
+                      block
+                      onClick={downloadDICOMDIRHanlder}
+                      color="primary"
+                    >
                       Download DICOMDIR
                     </Button.Ripple>
                   </ListGroupItem>
@@ -808,12 +882,20 @@ const Explorer = () => {
               {currentLevelData.level === OrthancLevels.instances.regular && (
                 <>
                   <ListGroupItem>
-                    <Button.Ripple block onClick={downloadZIPHanlder} color="primary">
+                    <Button.Ripple
+                      block
+                      onClick={downloadZIPHanlder}
+                      color="primary"
+                    >
                       Download the DICOM file
                     </Button.Ripple>
                   </ListGroupItem>
                   <ListGroupItem>
-                    <Button.Ripple block onClick={downloadJSONHanlder} color="primary">
+                    <Button.Ripple
+                      block
+                      onClick={downloadJSONHanlder}
+                      color="primary"
+                    >
                       Download the JSON file
                     </Button.Ripple>
                   </ListGroupItem>
@@ -833,7 +915,8 @@ const Explorer = () => {
                     onClick={() =>
                       getStudyId(
                         data[OrthancLevels.studies.regular]?.ID,
-                        data[OrthancLevels.studies.regular]?.MainDicomTags?.StudyInstanceUID
+                        data[OrthancLevels.studies.regular]?.MainDicomTags
+                          ?.StudyInstanceUID
                       )
                     }
                     rel="noopener noreferrer"
@@ -864,15 +947,27 @@ const Explorer = () => {
                 <CustomTable
                   key={`table-${tableKey}-${currentLevelData.level}`}
                   data={
-                    data[DicomOrder[DicomOrder.indexOf(currentLevelData.level) + 1]] &&
-                    !isObject(data[DicomOrder[DicomOrder.indexOf(currentLevelData.level) + 1]])
-                      ? data[DicomOrder[DicomOrder.indexOf(currentLevelData.level) + 1]].map(
-                          flattenObj
-                        )
+                    data[
+                      DicomOrder[DicomOrder.indexOf(currentLevelData.level) + 1]
+                    ] &&
+                    !isObject(
+                      data[
+                        DicomOrder[
+                          DicomOrder.indexOf(currentLevelData.level) + 1
+                        ]
+                      ]
+                    )
+                      ? data[
+                          DicomOrder[
+                            DicomOrder.indexOf(currentLevelData.level) + 1
+                          ]
+                        ].map(flattenObj)
                       : []
                   }
                   columns={
-                    columns[DicomOrder[DicomOrder.indexOf(currentLevelData.level) + 1]] || []
+                    columns[
+                      DicomOrder[DicomOrder.indexOf(currentLevelData.level) + 1]
+                    ] || []
                   }
                   tableName={`explorer-${DicomOrder[DicomOrder.indexOf(currentLevelData.level) + 1]}`}
                   handleRowClick={changeLevel}
@@ -881,7 +976,9 @@ const Explorer = () => {
             </Col>
           ) : (
             <Card>
-              <CardBody>{tagDataMapper(instanceLevelTags, showTagDescription)}</CardBody>
+              <CardBody>
+                {tagDataMapper(instanceLevelTags, showTagDescription)}
+              </CardBody>
             </Card>
           )}
         </Col>

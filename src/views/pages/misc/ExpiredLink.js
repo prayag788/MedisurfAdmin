@@ -15,7 +15,11 @@ const Error = () => {
     <div className="misc-wrapper">
       <a className="brand-logo" href="/">
         <span className="brand-logo-span">
-          <img id="medisurf-logo" src={themeConfig.app.appLogoImage} alt="logo" />
+          <img
+            id="medisurf-logo"
+            src={themeConfig.app.appLogoImage}
+            alt="logo"
+          />
         </span>
       </a>
       <div className="misc-inner p-2 p-sm-3">
@@ -23,7 +27,11 @@ const Error = () => {
           <h2 className="mb-1">404: Page Not Found 🕵🏻‍♀️</h2>
           <p className="mb-2">Oops! 😖 Your link is expired OR Incorrect URL</p>
           {query === 'shared' ? (
-            <Button onClick={() => navigate(-1)} color="primary" className="btn-sm-block mb-2">
+            <Button
+              onClick={() => navigate(-1)}
+              color="primary"
+              className="btn-sm-block mb-2"
+            >
               Go to previous page
             </Button>
           ) : (

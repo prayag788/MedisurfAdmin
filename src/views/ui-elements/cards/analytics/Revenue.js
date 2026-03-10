@@ -4,11 +4,11 @@ import Chart from 'react-apexcharts'
 import { Settings } from 'react-feather'
 import { Card, CardHeader, CardTitle, CardBody, CardText } from 'reactstrap'
 
-const Revenue = props => {
+const Revenue = (props) => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    axios.get('/card/card-analytics/revenue').then(res => setData(res.data))
+    axios.get('/card/card-analytics/revenue').then((res) => setData(res.data))
   }, [])
 
   const options = {
