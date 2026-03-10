@@ -1,0 +1,79 @@
+[config]
+model = "llama3.1-70b"
+
+[pr_reviewer]
+# Enable automatic review on every PR
+auto_review = true
+# Post detailed review comments
+require_all_thresholds_for_review = false
+# Number of code suggestions per file
+num_code_suggestions = 5
+# Enable inline comments on code lines
+inline_code_comments = true
+# Review entire PR context, not just diff
+require_focused_review = false
+# Enable security vulnerability detection
+require_security_review = true
+# Check for potential bugs and workflow impact
+require_score = true
+# Add effort estimation
+require_estimate_effort_to_review = true
+# Enable review labels
+enable_review_labels_effort = true
+enable_review_labels_security = true
+# Custom review instructions
+extra_instructions = """
+Focus on:
+1. Breaking changes that affect existing workflow
+2. New developer mistakes that could introduce bugs
+3. Impact on MERN stack components (React, Node.js, MongoDB)
+4. Medical/healthcare data handling security
+5. Performance implications for large datasets
+6. Integration issues with TinyMCE, DICOM, or other medical imaging components
+7. Authentication and authorization changes
+8. Database schema or API changes that could break existing functionality
+
+Always provide:
+- Clear explanation of potential issues
+- Specific suggestions for improvement
+- Risk assessment (Low/Medium/High)
+- Whether changes could break existing features
+"""
+
+[pr_code_suggestions]
+# Auto-suggest improvements
+auto_improve = true
+# Number of suggestions per file
+num_code_suggestions = 4
+# Provide detailed explanations
+summarize = true
+# Focus on bug prevention
+extra_instructions = """
+Prioritize suggestions for:
+1. Preventing runtime errors
+2. Improving error handling
+3. Fixing security vulnerabilities
+4. Optimizing performance
+5. Following React/Node.js best practices
+"""
+
+[pr_description]
+# Auto-enhance PR descriptions
+enable_semantic_files_types = true
+use_bullet_points = true
+enable_pr_type = true
+# Add impact analysis
+extra_instructions = """
+Include:
+- What components are affected
+- Potential breaking changes
+- Testing recommendations
+- Deployment considerations
+"""
+
+[github]
+# Post all results as PR comments
+publish_output = true
+publish_review = true
+# Don't use incremental review - review everything
+incremental_review = false

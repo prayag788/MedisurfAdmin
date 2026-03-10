@@ -10,9 +10,6 @@ import { showLoadingAlert, hideLoadingAlert } from '../../utils/alerts'
 import { showToastSuccess, showToastError } from '../../utils/toast'
 import axios from 'axios'
 import { Button as MButton, FormGroup as FormGroupMui } from '@mui/material'
-try {
-  require('tinymce/plugins/image')
-} catch (e) {}
 
 // ** Third Party Components
 import {
