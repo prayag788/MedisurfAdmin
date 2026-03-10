@@ -18,6 +18,8 @@ jobs:
       pull-requests: write
       contents: read
     steps:
+      - uses: actions/checkout@v4
+      
       - name: PR Agent Review
         uses: qodo-ai/pr-agent@main
         env:
@@ -25,6 +27,12 @@ jobs:
           OPENAI_API_BASE: https://api.cerebras.ai/v1
           OPENAI_MODEL: llama3.1-70b
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Debug PR Agent
+        if: always()
+        run: |
+          echo "PR Agent completed"
+          echo "Check PR comments for review results"
 
   format:
     runs-on: ubuntu-latest
