@@ -45,7 +45,7 @@ const StaticDropdown = ({
     if (isMulti && value && Array.isArray(value)) {
       const formattedValues = value
         .map(item => {
-          const norm = (v) => (v == null ? '' : String(v))
+          const norm = (v) => (v === null || v === undefined ? '' : String(v))
           if (typeof item === 'string') {
             const idStr = norm(item)
             const foundOption = options.find(opt => norm(opt.value) === idStr || norm(opt._id) === idStr)

@@ -77,7 +77,7 @@ export const getErrorMessage = (err, fallback = 'Please Try Again Later!') => {
         const maxMb = errorData?.maxAllowedBytes
           ? Math.round(errorData.maxAllowedBytes / (1024 * 1024))
           : null
-        return maxMb != null
+        return (maxMb !== null && maxMb !== undefined)
           ? `File is too large. Maximum allowed size is ${maxMb} MB.`
           : 'File is too large. Please choose a smaller file or contact support for the size limit.'
       }
@@ -92,7 +92,7 @@ export const getErrorMessage = (err, fallback = 'Please Try Again Later!') => {
         const e = errorData.error
         if (e && typeof e === 'object') {
           const text = e.message ?? e.msg
-          if (text != null && String(text).trim() !== '') {
+          if (text !== null && text !== undefined && String(text).trim() !== '') {
             return String(text)
           }
         }
@@ -206,7 +206,7 @@ export const hideLoadingAlert = () => {
 export const hideLoadingThenShowError = (err, messageOverride) => {
   MySwal.close()
   setTimeout(() => {
-    showErrorAlert(messageOverride != null ? messageOverride : err)
+    showErrorAlert(messageOverride !== null && messageOverride !== undefined ? messageOverride : err)
   }, 100)
 }
 

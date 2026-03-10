@@ -222,7 +222,7 @@ const App = props => {
       console.log('[Modality] API full response status:', res?.status)
       console.log('[Modality] API full response data type:', Array.isArray(res?.data) ? 'array' : typeof res?.data)
       console.log('[Modality] API full response data (entire payload):', JSON.stringify(res?.data))
-      const isSuccess = res?.status === 200 && res?.data != null
+      const isSuccess = res?.status === 200 && res?.data !== null && res?.data !== undefined
       const isErrorBody =
         res?.data && typeof res.data === 'object' && res.data.success === false
       let raw = []

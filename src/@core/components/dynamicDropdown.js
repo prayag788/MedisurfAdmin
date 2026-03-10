@@ -69,7 +69,7 @@ const DynamicDropdown = ({
     if (isMulti && controlledValue && Array.isArray(controlledValue)) {
       const formatted = controlledValue
         .map(item => {
-          if (item == null) return null
+          if (item === null || item === undefined) return null
           if (typeof item === 'string') {
             return { value: item, _id: item, label: item }
           }
