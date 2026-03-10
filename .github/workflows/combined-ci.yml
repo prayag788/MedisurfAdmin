@@ -20,6 +20,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Check Cerebras Models
+        run: |
+          echo "Checking available Cerebras models..."
+          curl -X GET "https://api.cerebras.ai/v1/models" \
+            -H "Authorization: Bearer ${{ secrets.CEREBRAS_API_KEY }}" \
+            -H "Content-Type: application/json" || echo "Failed to get models"
+      
       - name: Test Cerebras API
         run: |
           curl -X POST "https://api.cerebras.ai/v1/chat/completions" \
@@ -36,17 +43,24 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
           OPENAI_API_BASE: https://api.cerebras.ai/v1
-          OPENAI_MODEL: llama3.1-8b
+          OPENAI_MODEL: llama3.1-70b
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONFIG.MODEL: llama3.1-70b
           CONFIG.VERBOSITY: "2"
           CONFIG.PR_REVIEWER.AUTO_REVIEW: "true"
           CONFIG.PR_REVIEWER.INLINE_CODE_COMMENTS: "true"
+          CONFIG.PR_REVIEWER.NUM_CODE_SUGGESTIONS: "2"
+          CONFIG.GITHUB.PUBLISH_OUTPUT: "true"
+          CONFIG.GITHUB.PUBLISH_REVIEW: "true"
           
       - name: Debug PR Agent
         if: always()
         run: |
           echo "PR Agent completed"
-          echo "Check PR comments for review results"
+          echo "Checking if PR Agent created any comments..."
+          gh pr view ${{ github.event.pull_request.number }} --json comments --jq '.comments[] | select(.author.login == "github-actions[bot]") | .body'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   format:
     runs-on: ubuntu-latest
