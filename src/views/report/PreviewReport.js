@@ -24,7 +24,8 @@ import {
 'reactstrap';
 import { ChevronDown, Eye, Trash, X } from 'react-feather';
 import { Editor } from '@tinymce/tinymce-react';
-import DataTable from 'react-data-table-component';import Pagination from "swiper/modules/pagination/pagination.js";
+import DataTable from 'react-data-table-component';
+import { Pagination } from 'swiper/modules';
 // for using swiper this setting is only support with swiper@7.3.1
 import { Swiper, SwiperSlide } from 'swiper/react';
 import axios from 'axios';

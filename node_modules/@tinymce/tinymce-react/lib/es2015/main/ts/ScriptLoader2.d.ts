@@ -5,6 +5,6 @@ export interface ScriptItem {
     defer?: boolean;
 }
 export declare const ScriptLoader: {
-    loadList: (doc: Document, items: ScriptItem[], delay: number, success: () => void, failure?: ((err: unknown) => void) | undefined) => void;
+    loadList: (doc: Document, items: ScriptItem[], delay: number, success: () => void, failure?: (err: unknown) => void) => void;
     reinitialize: () => void;
 };

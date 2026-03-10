@@ -152,6 +152,7 @@
     "@babel/preset-react": "^7.26.3",
     "@types/sortablejs": "^1.10.6",
     "assert": "^2.1.0",
+    "babel-jest": "^29.7.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.1",
     "eslint": "^9.39.4",
@@ -165,6 +166,7 @@
     "globals": "^17.4.0",
     "https-browserify": "^1.0.0",
     "husky": "^9.1.6",
+    "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^15.2.10",
     "os-browserify": "^0.3.0",
     "prettier": "^3.3.3",
@@ -193,6 +195,8 @@
   "homepage": "",
   "jest": {
     "moduleNameMapper": {
+      "^.+\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/__mocks__/fileMock.js",
+      "^.+\\.(css|scss|sass)$": "identity-obj-proxy",
       "^@src/(.*)$": "<rootDir>/src/$1",
       "^@assets/(.*)$": "<rootDir>/src/@core/assets/$1",
       "^@components/(.*)$": "<rootDir>/src/@core/components/$1",
@@ -203,11 +207,20 @@
       "^@utils/(.*)$": "<rootDir>/src/utils/$1",
       "^@utils$": "<rootDir>/src/utils/index.js",
       "^@hooks/(.*)$": "<rootDir>/src/utility/hooks/$1",
-      "^@fake-db/(.*)$": "<rootDir>/src/@fake-db/$1"
-    }
-    ,
+      "^@fake-db/(.*)$": "<rootDir>/src/@fake-db/$1",
+      "^sweetalert2$": "<rootDir>/__mocks__/sweetalert2.js",
+      "^sweetalert2-react-content$": "<rootDir>/__mocks__/sweetalert2-react-content.js",
+      "^axios$": "<rootDir>/__mocks__/axios.js",
+      "^react-redux$": "<rootDir>/__mocks__/react-redux.js"
+    },
+    "transform": {
+      "^.+\\.(js|mjs|jsx|ts|tsx)$": "babel-jest"
+    },
     "transformIgnorePatterns": [
       "node_modules/(?!(axios)/)"
+    ],
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
     ]
   }
 }

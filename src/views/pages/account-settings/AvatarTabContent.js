@@ -18,7 +18,8 @@ import axios from 'axios';
 // centralized alerts
 import { useEffect, useState } from 'react';
 // removed inline toast components in favor of utils/toast
-import ROLES from '@configs/roles';import Pagination from "swiper/modules/pagination/pagination.js";
+import ROLES from '@configs/roles';
+import { Pagination } from 'swiper/modules';
 // for using swiper this setting is only support with swiper@7.3.1
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
