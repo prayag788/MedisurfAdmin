@@ -205,5 +205,9 @@
       "^@hooks/(.*)$": "<rootDir>/src/utility/hooks/$1",
       "^@fake-db/(.*)$": "<rootDir>/src/@fake-db/$1"
     }
+    ,
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios)/)"
+    ]
   }
 }
