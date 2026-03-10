@@ -89,8 +89,7 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
     }
 
     if (!formData.from_name) newErrors.from_name = 'From name is required'
-    if (!formData.from_address)
-      newErrors.from_address = 'From address is required'
+    if (!formData.from_address) newErrors.from_address = 'From address is required'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -136,8 +135,7 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
         })
 
         const result = await response.json()
-        if (!response.ok)
-          throw new Error(result.error || 'Failed to save Gmail config')
+        if (!response.ok) throw new Error(result.error || 'Failed to save Gmail config')
         showSuccessAlert('Gmail configuration saved successfully!')
       } else if (emailType === 'mailgun') {
         const mailgunData = {
@@ -159,8 +157,7 @@ const EmailConfigurationTabContent = ({ activeTab }) => {
         })
 
         const result = await response.json()
-        if (!response.ok)
-          throw new Error(result.error || 'Failed to save Mailgun config')
+        if (!response.ok) throw new Error(result.error || 'Failed to save Mailgun config')
         showSuccessAlert('Mailgun configuration saved successfully!')
       }
     } catch (err) {

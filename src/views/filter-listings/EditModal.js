@@ -70,16 +70,12 @@ const EditModel = ({ open, handleModal, editData, updateUser }) => {
             .string()
             .max(25, 'Filter name cannot be longer than 25 characters.')
             .required('Filter name is required!'),
-          clinicNames: yup
-            .array()
-            .of(
-              yup
-                .object()
-                .shape({
-                  _id: yup.string().required(),
-                  clinicName: yup.string().required(),
-                })
-            ),
+          clinicNames: yup.array().of(
+            yup.object().shape({
+              _id: yup.string().required(),
+              clinicName: yup.string().required(),
+            })
+          ),
           status: yup.number().required('Status is a required field'),
           modality: yup.array().of(
             yup.object().shape({

@@ -53,16 +53,12 @@ const FilterModal = ({ open, toggle, style }) => {
         .string()
         .max(25, 'Filter name cannot be longer than 25 characters.')
         .required('Filter name is required!'),
-      clinicNames: yup
-        .array()
-        .of(
-          yup
-            .object()
-            .shape({
-              _id: yup.string().required(),
-              clinicName: yup.string().required(),
-            })
-        ),
+      clinicNames: yup.array().of(
+        yup.object().shape({
+          _id: yup.string().required(),
+          clinicName: yup.string().required(),
+        })
+      ),
       status: yup.object().required('Status is required!'),
       modality: yup.array().of(
         yup.object().shape({

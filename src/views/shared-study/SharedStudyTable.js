@@ -489,8 +489,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
           serializeErrForLog(err),
           err
         )
-        if (err?.stack)
-          console.error(LOG, 'GET download error stack', err.stack)
+        if (err?.stack) console.error(LOG, 'GET download error stack', err.stack)
         showDownloadError(err)
       }
     }
@@ -529,8 +528,7 @@ const SharedStudyTable = ({ toggleAuth }) => {
         serializeErrForLog(error),
         error
       )
-      if (error?.stack)
-        console.error(LOG, 'POST prepare error stack', error.stack)
+      if (error?.stack) console.error(LOG, 'POST prepare error stack', error.stack)
       showDownloadError(error)
     }
   }

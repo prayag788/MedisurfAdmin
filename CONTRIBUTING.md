@@ -34,6 +34,7 @@ npm run build
 ```
 
 CI notes
+
 - The `format` job intentionally fails if formatting changes are required — do not rely on CI to auto-commit formatting.
 - Required checks: `format`, `semgrep`, `build`, `codeql`. The repository should enable branch protection to require these checks pass before merging.
 

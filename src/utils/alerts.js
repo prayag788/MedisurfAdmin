@@ -107,8 +107,7 @@ export const getErrorMessage = (err, fallback = 'Please Try Again Later!') => {
         const firstError = errorData.error[0]
         if (firstError && firstError.msg) {
           const msg = firstError.msg
-          if (typeof msg === 'object' && msg !== null && msg.message)
-            return String(msg.message)
+          if (typeof msg === 'object' && msg !== null && msg.message) return String(msg.message)
           return typeof msg === 'string' ? msg : fallback
         }
       }
