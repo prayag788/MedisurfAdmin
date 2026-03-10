@@ -9,11 +9,11 @@ import { Editor } from '@tinymce/tinymce-react'
 import { showLoadingAlert, hideLoadingAlert } from '../../utils/alerts'
 import {
   showToastSuccess,
-  showToastError,
-} from '../../utils/toast'
+  showToastError } from
+'../../utils/toast'
 import axios from 'axios'
-import { Button as MButton, FormGroup as FormGroupMui } from '@mui/material'
-import 'tinymce/plugins/image'
+import { Button as MButton, FormGroup as FormGroupMui } from '@mui/material'; try { require("tinymce/plugins/image") } catch (e) {}
+
 
 // ** Third Party Components
 import {
@@ -28,8 +28,8 @@ import {
   CardHeader,
   CardTitle,
   CardBody,
-  Card,
-} from 'reactstrap'
+  Card } from
+'reactstrap'
 
 import Breadcrumbs from '@components/breadcrumbs'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -51,18 +51,18 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     name: '',
     text: '',
     status: '1',
-    default: false,
+    default: false
   })
   const [editorValue, setEditorValue] = useState('')
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewText, setPreviewText] = useState('')
 
   const NewSchema = yup.object().shape({
-    name: yup
-      .string('Name should be a string')
-      .max(25, 'Name cannot be longer than 25 characters.')
-      .required('Name is required!'),
-    text: yup.string().required('layout text is required!'),
+    name: yup.
+    string('Name should be a string').
+    max(25, 'Name cannot be longer than 25 characters.').
+    required('Name is required!'),
+    text: yup.string().required('layout text is required!')
   })
 
   const {
@@ -70,15 +70,15 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     formState: { errors },
     handleSubmit,
     setValue,
-    clearErrors,
+    clearErrors
   } = useForm({ mode: 'onSubmit', resolver: yupResolver(NewSchema) })
 
-  const inputHandler = e => {
+  const inputHandler = (e) => {
     const name = e.target.name
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
-    
-    setFormData(prev => ({ ...prev, [name]: value }))
-    
+
+    setFormData((prev) => ({ ...prev, [name]: value }))
+
     if (value && value.toString().trim()) {
       clearErrors(name)
     }
@@ -90,7 +90,7 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     setPreviewText(templatePreview)
   }
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     try {
       showLoadingAlert()
       data.status = form_data.status
@@ -106,12 +106,12 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
     }
   }
 
-  const handleVaribaleClick = tag => {
+  const handleVaribaleClick = (tag) => {
     const editor = editorRef.current
     editor.insertContent(`{{${tag}}}`)
   }
 
-  const handleSampleReportChange = report => {
+  const handleSampleReportChange = (report) => {
     let content = StandardTemplete
     if (report === 'classic') {
       content = ClassicTemplete
@@ -144,8 +144,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
       <Breadcrumbs
         breadCrumbTitle="Report template"
         breadCrumbParent="Report Template"
-        breadCrumbActive="Add"
-      />
+        breadCrumbActive="Add" />
+      
       <Row>
         <Col sm="12" md="6" lg="6">
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -160,8 +160,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                 invalid={errors?.name && true}
                 placeholder="Template name"
                 value={form_data.name}
-                onChange={inputHandler}
-              />
+                onChange={inputHandler} />
+              
               {errors?.name && <FormFeedback>{errors.name.message}</FormFeedback>}
             </FormGroup>
 
@@ -175,8 +175,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                 id="text"
                 {...register('text', { required: true })}
                 invalid={errors?.text && true}
-                onChange={inputHandler}
-              />
+                onChange={inputHandler} />
+              
               <Editor
                 onInit={(evt, editor) => {
                   editorRef.current = editor
@@ -198,59 +198,59 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   menubar: true,
                   branding: false,
                   plugins: [
-                    'advlist',
-                    'autolink',
-                    'lists',
-                    'link',
-                    'charmap',
-                    'preview',
-                    'anchor',
-                    'searchreplace',
-                    'visualblocks',
-                    'code',
-                    'insertdatetime',
-                    'table',
-                    'help',
-                    'wordcount',
-                    'image',
-                  ],
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'insertdatetime',
+                  'table',
+                  'help',
+                  'wordcount',
+                  'image'],
+
                   toolbar:
-                    'undo redo | formatselect | code ' +
-                    'bold italic backcolor | alignleft aligncenter ' +
-                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                    'removeformat | help | image',
+                  'undo redo | formatselect | code ' +
+                  'bold italic backcolor | alignleft aligncenter ' +
+                  'alignright alignjustify | bullist numlist outdent indent | ' +
+                  'removeformat | help | image',
                   content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                   placeholder: `Anything entered here will be added to the report layout chosen from the report template.`,
-                  setup: editor => {
-                    editor.on('keydown', e => {
+                  setup: (editor) => {
+                    editor.on('keydown', (e) => {
                       handleAutoLogout()
                     })
-                  },
-                }}
-              />
+                  }
+                }} />
+              
 
-              {errors && errors.text && (
-                <div>
+              {errors && errors.text &&
+              <div>
                   <span className="is-invalid"></span>{' '}
                   <FormFeedback>{errors.text.message}</FormFeedback>
                 </div>
-              )}
+              }
             </FormGroup>
 
             <FormGroupMui row>
               <FormControlLabel
                 label="Mark as default"
                 control={
-                  <Checkbox
-                    {...register('default', { required: true })}
-                    checked={form_data.default}
-                    onChange={inputHandler}
-                    id="default"
-                    name="default"
-                    color="primary"
-                  />
-                }
-              />
+                <Checkbox
+                  {...register('default', { required: true })}
+                  checked={form_data.default}
+                  onChange={inputHandler}
+                  id="default"
+                  name="default"
+                  color="primary" />
+
+                } />
+              
             </FormGroupMui>
 
             <FormGroup>
@@ -264,13 +264,13 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                 {...register('status', { required: true })}
                 invalid={errors?.status && true}
                 value={form_data.status}
-                onChange={inputHandler}
-              >
-                {STATUS_OPTIONS.map(option => (
-                  <option key={option.value} value={option.value}>
+                onChange={inputHandler}>
+                
+                {STATUS_OPTIONS.map((option) =>
+                <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
-                ))}
+                )}
               </Input>
               {errors?.status && <FormFeedback>{errors.status.message}</FormFeedback>}
             </FormGroup>
@@ -296,8 +296,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     id="sample_template"
                     name="sample_template"
                     type="select"
-                    onChange={e => handleSampleReportChange(e.target.value)}
-                  >
+                    onChange={(e) => handleSampleReportChange(e.target.value)}>
+                    
                     <option value="standard"> Standard </option>
                     <option value="classic"> Classic </option>
                   </Input>
@@ -321,8 +321,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('patient_name')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     patient_name
                   </MButton>
                 </Col>
@@ -330,8 +330,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('patient_ID')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     patient_ID
                   </MButton>
                 </Col>
@@ -339,8 +339,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('patient_DOB')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     patient_DOB
                   </MButton>
                 </Col>
@@ -348,8 +348,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('patient_age')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     patient_age
                   </MButton>
                 </Col>
@@ -357,8 +357,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('patient_sex')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     patient_sex
                   </MButton>
                 </Col>
@@ -366,8 +366,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('location')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     location
                   </MButton>
                 </Col>
@@ -375,8 +375,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('study_type')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     study_type
                   </MButton>
                 </Col>
@@ -384,8 +384,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('study_date')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     study_date
                   </MButton>
                 </Col>
@@ -393,8 +393,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('service_date')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     service_date
                   </MButton>
                 </Col>
@@ -403,8 +403,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     variant="tonal"
                     onClick={() => handleVaribaleClick('exam_description')}
                     type="button"
-                    title="Study/Exam description (from edit dialog)"
-                  >
+                    title="Study/Exam description (from edit dialog)">
+                    
                     exam_description
                   </MButton>
                 </Col>
@@ -413,8 +413,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     variant="tonal"
                     onClick={() => handleVaribaleClick('study_description')}
                     type="button"
-                    title="Same as exam_description – Study Description from edit"
-                  >
+                    title="Same as exam_description – Study Description from edit">
+                    
                     study_description
                   </MButton>
                 </Col>
@@ -422,8 +422,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('referring_physician')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     referring_physician
                   </MButton>
                 </Col>
@@ -431,8 +431,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('attendant')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     attendant
                   </MButton>
                 </Col>
@@ -440,8 +440,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('radiologist')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     radiologist
                   </MButton>
                 </Col>
@@ -450,8 +450,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                     variant="tonal"
                     onClick={() => handleVaribaleClick('title_of_report')}
                     type="button"
-                    title="Report title / Reason for Exam"
-                  >
+                    title="Report title / Reason for Exam">
+                    
                     title_of_report
                   </MButton>
                 </Col>
@@ -459,8 +459,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('radiologist_diagnosis')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     radiologist_diagnosis
                   </MButton>
                 </Col>
@@ -468,8 +468,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('report_addendum')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     report_addendum
                   </MButton>
                 </Col>
@@ -477,8 +477,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('dicom_images')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     dicom_images
                   </MButton>
                 </Col>
@@ -486,8 +486,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('electronic_sign')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     electronic_sign
                   </MButton>
                 </Col>
@@ -495,8 +495,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('Log_in_URL')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     Log_in_URL
                   </MButton>
                 </Col>
@@ -504,8 +504,8 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
                   <MButton
                     variant="tonal"
                     onClick={() => handleVaribaleClick('Website_URL')}
-                    type="button"
-                  >
+                    type="button">
+                    
                     Website_URL
                   </MButton>
                 </Col>
@@ -517,10 +517,10 @@ const AddNew = ({ addUser, open, handleModal, newUserId }) => {
       <TemplatePreview
         previewOpen={previewOpen}
         setPreviewOpen={setPreviewOpen}
-        previewText={previewText}
-      />
-    </Fragment>
-  )
+        previewText={previewText} />
+      
+    </Fragment>)
+
 }
 
 export default AddNew

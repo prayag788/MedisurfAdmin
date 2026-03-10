@@ -190,5 +190,20 @@
     "not dead",
     "not op_mini all"
   ],
-  "homepage": ""
+  "homepage": "",
+  "jest": {
+    "moduleNameMapper": {
+      "^@src/(.*)$": "<rootDir>/src/$1",
+      "^@assets/(.*)$": "<rootDir>/src/@core/assets/$1",
+      "^@components/(.*)$": "<rootDir>/src/@core/components/$1",
+      "^@layouts/(.*)$": "<rootDir>/src/@core/layouts/$1",
+      "^@store/(.*)$": "<rootDir>/src/redux/$1",
+      "^@styles/(.*)$": "<rootDir>/src/@core/scss/$1",
+      "^@configs/(.*)$": "<rootDir>/src/configs/$1",
+      "^@utils/(.*)$": "<rootDir>/src/utils/$1",
+      "^@utils$": "<rootDir>/src/utils/index.js",
+      "^@hooks/(.*)$": "<rootDir>/src/utility/hooks/$1",
+      "^@fake-db/(.*)$": "<rootDir>/src/@fake-db/$1"
+    }
+  }
 }
