@@ -11,6 +11,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
+  pr_agent:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - name: PR Agent Review
+        uses: qodo-ai/pr-agent@main
+        env:
+          OPENAI_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          OPENAI_API_BASE: https://api.cerebras.ai/v1
+          OPENAI_MODEL: llama3.1-70b
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   format:
     runs-on: ubuntu-latest
 
@@ -27,8 +43,6 @@ jobs:
 
       - name: Check formatting
         run: |
-          # Fail the job if formatting made changes. Contributors should run
-          # `npm run format` locally and push the formatted code.
           if [ -n "$(git status --porcelain)" ]; then
             echo "Formatting produced changes. Run 'npm run format' locally and push the changes."
             git --no-pager status --porcelain
@@ -36,6 +50,7 @@ jobs:
           else
             echo "No formatting changes."
           fi
+
 
   semgrep:
     needs: format
@@ -47,7 +62,8 @@ jobs:
       - name: Run Semgrep
         uses: returntocorp/semgrep-action@v1
         with:
-          config: 'p/ci'
+          config: "p/ci"
+
 
   build:
     needs: semgrep
@@ -69,8 +85,17 @@ jobs:
       - name: Run Lint
         run: npm run lint || true
 
+      - name: Run Tests
+        run: npm test || true
+
       - name: Build Project
         run: npm run build
+
+      - name: Save Error Logs
+        if: failure()
+        run: |
+          echo "CI FAILED" > error.log
+
 
   codeql:
     needs: build

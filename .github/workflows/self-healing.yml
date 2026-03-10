@@ -1,0 +1,56 @@
+name: Self Healing CI
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+
+  ai_fix:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          pip install openai
+
+      - name: Run AI Fix Script
+        run: python scripts/ai_fix.py
+
+      - name: Commit Fix
+        run: |
+          git config user.name "ai-ci-bot"
+          git config user.email "ai-bot@github.com"
+
+          git checkout -b ai-auto-fix || git checkout ai-auto-fix
+
+          git add .
+          git commit -m "AI automatic fix for CI failure" || echo "No changes"
+
+          git push origin ai-auto-fix
+
+      - name: Create Pull Request
+        run: |
+          gh pr create \
+            --title "AI Automatic Fix for CI Failure" \
+            --body "This PR was generated automatically by the self-healing CI pipeline." \
+            --base main \
+            --head ai-auto-fix
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
