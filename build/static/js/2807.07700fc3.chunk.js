@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkmedisurf_health_unified_admin_panel=self.webpackChunkmedisurf_health_unified_admin_panel||[]).push([[2807],{62807(e,i,a){a.r(i),a.d(i,{default:()=>d});a(16911);var s=a(29196),n=a(36663);const d=()=>(0,n.jsx)(s.C5,{to:"/clinic-admin/api-tools/sync-studies",replace:!0})}}]);
-//# sourceMappingURL=2807.07700fc3.chunk.js.map
