@@ -36,7 +36,7 @@
     "@tinymce/tinymce-react": "^6.3.0",
     "@uppy/react": "1.10.8",
     "animate.css": "4.1.1",
-    "apexcharts": "^3.54.1",
+    "apexcharts": "^5.10.3",
     "availity-reactstrap-validation-safe": "2.6.1",
     "axios": "^1.13.6",
     "axios-mock-adapter": "^1.22.0",
